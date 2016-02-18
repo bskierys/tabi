@@ -10,12 +10,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.ipebk.tabi.App;
-import pl.ipebk.tabi.database.DatabaseOpenHelper;
+import pl.ipebk.tabi.database.openHelper.DatabaseHelperInterface;
+import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.utils.Provider;
 import pl.ipebk.tabi.utils.Stopwatch;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    protected DatabaseOpenHelper databaseHelper;
+    protected DatabaseHelperInterface databaseHelper;
     protected Stopwatch stopwatch;
 
     @Override protected void onCreate(Bundle savedInstanceState) {

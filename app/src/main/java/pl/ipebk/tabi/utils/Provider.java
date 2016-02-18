@@ -7,16 +7,19 @@ package pl.ipebk.tabi.utils;
 
 import android.content.Context;
 
-import pl.ipebk.tabi.database.DatabaseOpenHelper;
+import pl.ipebk.tabi.database.openHelper.DatabaseHelperInterface;
+import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 
 public class Provider {
-    private DatabaseOpenHelper databaseHelper;
+    private DatabaseHelperInterface databaseHelper;
 
-    public Provider(Context context){
+    public Provider(Context context) {
+        // to create database from scratch use DatabaseTestOpenHelper
+        // to copy database from assets use DatabaseOpenHelper
         databaseHelper = new DatabaseOpenHelper(context);
     }
 
-    public DatabaseOpenHelper getDatabaseHelper() {
+    public DatabaseHelperInterface getDatabaseHelper() {
         return databaseHelper;
     }
 }

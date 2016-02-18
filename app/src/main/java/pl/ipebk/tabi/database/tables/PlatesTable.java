@@ -30,9 +30,7 @@ public class PlatesTable extends Table<Plate> {
             + TABLE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TABLE_COLUMNS[1] + " INTEGER NOT NULL, "
             + TABLE_COLUMNS[2] + " TEXT, "
-            + TABLE_COLUMNS[3] + " TEXT, "
-            + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + COLUMN_ID + ")"
-            + " ON DELETE CASCADE );";
+            + TABLE_COLUMNS[3] + " TEXT );";
 
     @Override public String getTableName() {
         return TABLE_NAME;
@@ -48,6 +46,7 @@ public class PlatesTable extends Table<Plate> {
 
     @Override public Plate cursorToModel(Cursor cursor) {
         Plate plate = new Plate();
+        plate.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
         plate.setPlaceId(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID)));
         plate.setPattern(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE)));
         plate.setEnd(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE_END)));

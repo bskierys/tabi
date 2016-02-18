@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/sienna_300</color>
+    <color name="colorPrimary">@color/sienna_400</color>
     <color name="colorPrimaryDark">@color/sienna_600</color>
     <color name="colorAccent">@color/light_blue_400</color>
 

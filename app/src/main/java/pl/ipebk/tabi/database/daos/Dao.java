@@ -8,6 +8,7 @@ package pl.ipebk.tabi.database.daos;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -45,16 +46,6 @@ public abstract class Dao<E extends ModelInterface> {
         model.setId(id);
         if (id < 0) Log.e(TAG, "Unable to insert entity " + type.toString());
         else Log.d(TAG, "Inserted entity " + type.toString() + " with id: " + Long.toString(id));
-    }
-
-    public E addEntity(E model) {
-        ContentValues values = table.modelToContentValues(model);
-        Long id = db.insert(table.getTableName(), null, values);
-        model.setId(id);
-        if (id < 0) Log.e(TAG, "Unable to insert entity " + type.toString());
-        else Log.d(TAG, "Inserted entity " + type.toString() + " with id: " + Long.toString(id));
-
-        return model;
     }
 
     /**
@@ -122,13 +113,20 @@ public abstract class Dao<E extends ModelInterface> {
      * @return Entity with given id or null if not present.
      */
     public E getById(Long id) {
-        E model = null;
         String selection = Table.COLUMN_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(), selection, selectionArgs, null, null, null);
+        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
+                selection, selectionArgs, null, null, null);
+        return getModelForCursor(cursor);
+    }
+
+    protected E getModelForCursor(Cursor cursor) {
+        E model = null;
         if (cursor != null) {
-            if (cursor.moveToFirst()) model = table.cursorToModel(cursor);
+            if (cursor.moveToFirst()){
+                model = table.cursorToModel(cursor);
+            }
             cursor.close();
         }
         return model;
@@ -140,19 +138,24 @@ public abstract class Dao<E extends ModelInterface> {
      * @return List of all entities from database. Empty list if there are no objects in table.
      */
     public List<E> getAll() {
-        List<E> list = new ArrayList<>();
-        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(), null, null, null, null, null);
+        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
+                null, null, null, null, null);
+        return getListOfModelsForCursor(cursor);
+    }
+
+    @NonNull protected List<E> getListOfModelsForCursor(Cursor cursor) {
+        List<E> models = new ArrayList<>();
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 E model = table.cursorToModel(cursor);
-                list.add(model);
+                models.add(model);
                 cursor.moveToNext();
             }
             cursor.close();
         }
-        list.removeAll(Collections.singleton(null));
-        return list;
+        models.removeAll(Collections.singleton(null));
+        return models;
     }
 
     /**

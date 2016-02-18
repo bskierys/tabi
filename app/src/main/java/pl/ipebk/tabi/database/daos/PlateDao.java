@@ -21,43 +21,49 @@ public class PlateDao extends Dao<Plate> {
     }
 
     public List<Plate> getPlatesForPlaceId(long placeId) {
-        List<Plate> plates = new ArrayList<>();
         String selection = PlatesTable.COLUMN_PLACE_ID + " = ?";
         String[] selectionArgs = {Long.toString(placeId)};
 
         Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
                 selection, selectionArgs, null, null, null);
 
-        if (cursor != null) {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                Plate model = table.cursorToModel(cursor);
-                plates.add(model);
-                cursor.moveToNext();
-            }
-            cursor.close();
-        }
-        return plates;
+        return getListOfModelsForCursor(cursor);
     }
 
+    /**
+     * Checks if given plate is already in database. If so, updates it,
+     * if no, adds new one.
+     *
+     * @param plate Instance of {@link Plate} to add or update
+     */
     public void updateOrAdd(Plate plate) {
-        String whereClause = String.format(" %s = ? ", PlatesTable.COLUMN_PLATE);
+        String whereClause = String.format(" %s = ? AND %s = ? AND ",
+                PlatesTable.COLUMN_PLATE, PlatesTable.COLUMN_PLACE_ID);
         List<String> whereParams = new ArrayList<>();
         whereParams.add(plate.getPattern());
+        whereParams.add(Long.toString(plate.getPlaceId()));
 
         if (plate.getEnd() == null) {
-            whereClause += PlatesTable.COLUMN_PLATE_END + " is null ";
+            whereClause += PlatesTable.COLUMN_PLATE_END + " IS NULL ";
         } else {
             whereClause += String.format(" %s = ? ", PlatesTable.COLUMN_PLATE_END);
             whereParams.add(plate.getEnd());
         }
 
-        if (db.update(table.getTableName(), table.modelToContentValues(plate),
-                whereClause, whereParams.toArray(new String[whereParams.size()])) == 0) {
+        int rowsUpdated = db.update(table.getTableName(), table.modelToContentValues(plate),
+                whereClause, whereParams.toArray(new String[whereParams.size()]));
+
+        if (rowsUpdated == 0) {
             add(plate);
         }
     }
 
+    /**
+     * Checks if given plates are already in database. If so, updates it,
+     * if no, adds new ones.
+     *
+     * @param plates List of {@link Plate} to add or update
+     */
     public void updateOrAdd(List<Plate> plates) {
         for (Plate plate : plates) {
             updateOrAdd(plate);

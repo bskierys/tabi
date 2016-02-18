@@ -12,6 +12,7 @@ public class SearchHistory implements ModelInterface {
     private Place place;
     private String plate;
     private Date timeSearched;
+    private SearchType searchType;
 
     @Override public long getId() {
         return id;
@@ -43,5 +44,19 @@ public class SearchHistory implements ModelInterface {
 
     public void setTimeSearched(Date timeSearched) {
         this.timeSearched = timeSearched;
+    }
+
+    public SearchType getSearchType() {
+        return searchType;
+    }
+
+    public void setSearchType(SearchType searchType) {
+        this.searchType = searchType;
+    }
+
+    public enum SearchType {
+        PLATE,
+        PLACE,
+        UNKNOWN
     }
 }
