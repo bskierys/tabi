@@ -30,3 +30,6 @@ SELECT *, 2 as grp FROM places where search_phrase like "sw%" ) as t
 
 GROUP  BY _id
 ORDER  BY MIN(grp) asc, place_type asc, place_name collate localized asc;
+
+-- wyszukiwanie w historii
+SELECT * FROM search_history WHERE place_type = 1 GROUP BY place_id HAVING time_searched = MAX(time_searched);

@@ -17,8 +17,10 @@ public class SearchHistoryDaoTest extends DatabaseTest {
     @MediumTest public void testGetHistoryForPlates() {
         Place place = constructPlace("PLACE", "TAB", Place.Type.POWIAT_CITY);
         Place plate = constructPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
+        Place plate2 = constructPlace("PLATE", "TAB2", Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(place);
         databaseHelper.getPlaceDao().add(plate);
+        databaseHelper.getPlaceDao().add(plate2);
 
         SearchHistory placeHistory = new SearchHistory();
         placeHistory.setPlace(place);
@@ -31,7 +33,12 @@ public class SearchHistoryDaoTest extends DatabaseTest {
         plateHistory.setSearchType(SearchHistory.SearchType.PLATE);
         plateHistory.setTimeSearched(new Date(0));
         databaseHelper.getSearchHistoryDao().add(plateHistory);
-        databaseHelper.getSearchHistoryDao().add(plateHistory);
+
+        SearchHistory plateHistory2 = new SearchHistory();
+        plateHistory2.setPlace(plate2);
+        plateHistory2.setSearchType(SearchHistory.SearchType.PLATE);
+        plateHistory2.setTimeSearched(new Date(0));
+        databaseHelper.getSearchHistoryDao().add(plateHistory2);
 
         List<SearchHistory> historyList = databaseHelper.getSearchHistoryDao()
                 .getHistoryListForType(SearchHistory.SearchType.PLATE, null);
@@ -44,10 +51,10 @@ public class SearchHistoryDaoTest extends DatabaseTest {
     }
 
     @MediumTest public void testGetHistoryOrderAndLimit() {
-        Place plate = constructPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
-        databaseHelper.getPlaceDao().add(plate);
-
         for (int i = 0; i < 5; i++) {
+            Place plate = constructPlace("PLATE_" + Integer.toString(i), "BAT", Place.Type.POWIAT_CITY);
+            databaseHelper.getPlaceDao().add(plate);
+
             SearchHistory history = new SearchHistory();
             history.setPlace(plate);
             history.setSearchType(SearchHistory.SearchType.PLATE);
@@ -67,5 +74,25 @@ public class SearchHistoryDaoTest extends DatabaseTest {
             assertTrue(historyDate.before(lastOne));
             lastOne = historyDate;
         }
+    }
+
+    @MediumTest public void testOnlyOnePlaceInHistoryWithSamePlate() {
+        Place plate = constructPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
+        databaseHelper.getPlaceDao().add(plate);
+
+        for (int i = 0; i < 5; i++) {
+            SearchHistory history = new SearchHistory();
+            history.setPlace(plate);
+            history.setSearchType(SearchHistory.SearchType.PLATE);
+            history.setTimeSearched(new Date(i));
+            databaseHelper.getSearchHistoryDao().add(history);
+        }
+
+        List<SearchHistory> historyList = databaseHelper.getSearchHistoryDao()
+                .getHistoryListForType(SearchHistory.SearchType.PLATE, null);
+
+        assertEquals(1, historyList.size());
+        assertEquals(4, historyList.get(0).getTimeSearched().getTime());
+
     }
 }

@@ -35,9 +35,11 @@ public class SearchHistoryDao extends Dao<SearchHistory> {
         }
 
         String orderBy = SearchHistoryTable.COLUMN_TIME_SEARCHED + " DESC";
+        String groupBy = SearchHistoryTable.COLUMN_PLACE_ID;
+        String having = String.format(" %1$s = max( %1$s ) ", SearchHistoryTable.COLUMN_TIME_SEARCHED);
 
         Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
-                selection, selectionArgs, null, null, orderBy, limited);
+                selection, selectionArgs, groupBy, having, orderBy, limited);
 
         return cursor;
     }
