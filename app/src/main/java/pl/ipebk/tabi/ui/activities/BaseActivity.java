@@ -3,7 +3,7 @@
 * date: 2016-02-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.ui;
+package pl.ipebk.tabi.ui.activities;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

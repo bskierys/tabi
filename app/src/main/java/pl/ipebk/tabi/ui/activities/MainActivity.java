@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.ui;
+package pl.ipebk.tabi.ui.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.ui.activities.BaseActivity;
 import pl.ipebk.tabi.utils.Stopwatch;
 
 public class MainActivity extends BaseActivity {
