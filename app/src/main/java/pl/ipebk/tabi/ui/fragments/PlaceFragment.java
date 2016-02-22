@@ -1,6 +1,7 @@
 package pl.ipebk.tabi.ui.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,12 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.ui.fragments.dummy.DummyContent.DummyItem;
+import pl.ipebk.tabi.utils.Provider;
 
 /**
  * A fragment representing a list of Items.
@@ -30,7 +29,7 @@ public class PlaceFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private List<Place> places;
+    private Cursor placeCursor;
 
     private PlaceRecyclerViewAdapter adapter;
 
@@ -54,11 +53,11 @@ public class PlaceFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(places == null){
-            places = new ArrayList<>();
-        }
 
-        adapter = new PlaceRecyclerViewAdapter(places, mListener);
+        Provider provider = ((App) getActivity().getApplicationContext()).getProvider();
+
+        adapter = new PlaceRecyclerViewAdapter(getActivity(), placeCursor,
+                provider.getDatabaseHelper().getPlateDao(), mListener);
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -79,25 +78,19 @@ public class PlaceFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            if (places.size() > 0) {
-                adapter.swapItems(places);
+            if (placeCursor != null) {
+                adapter.changeCursor(placeCursor);
             }
             recyclerView.setAdapter(adapter);
         }
         return view;
     }
 
-    public void setPlaces(List<Place> places) {
-        if (this.places == null) {
-            this.places = new ArrayList<>();
-        } else {
-            this.places.clear();
-        }
-
-        this.places = places;
+    public void setPlaceCursor(Cursor placeCursor) {
+        this.placeCursor = placeCursor;
 
         if (adapter != null) {
-            this.adapter.swapItems(places);
+            this.adapter.changeCursor(placeCursor);
         }
     }
 
@@ -130,6 +123,6 @@ public class PlaceFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Place place);
     }
 }

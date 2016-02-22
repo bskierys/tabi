@@ -7,12 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 
-import java.util.List;
-
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.ui.fragments.PlaceFragment;
-import pl.ipebk.tabi.ui.fragments.dummy.DummyContent;
 import pl.ipebk.tabi.utils.Stopwatch;
 
 public class SearchActivity extends BaseActivity implements PlaceFragment.OnListFragmentInteractionListener {
@@ -55,10 +52,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
     }
 
     @Override protected void onDatabasePrepared(Stopwatch.ElapsedTime elapsedTime) {
-        List<Place> plates = databaseHelper.getPlaceDao().getPlaceListForPlateStart("Z", 10);
-        List<Place> places = databaseHelper.getPlaceDao().getPlaceListByName("z", 10);
-        searchPlacesFragment.setPlaces(places);
-        searchPlatesFragment.setPlaces(plates);
+        searchPlacesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesByName("z", null));
+        searchPlatesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesForPlateStart("Z", null));
     }
 
     private PlaceFragment getFragment(int position) {
@@ -76,7 +71,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
         return null;
     }
 
-    @Override public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    @Override public void onListFragmentInteraction(Place place) {
 
     }
 

@@ -10,5 +10,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
+    android:scrollbars="vertical"
     tools:context="pl.ipebk.tabi.ui.fragments.PlaceFragment"
     tools:listitem="@layout/fragment_place"/>

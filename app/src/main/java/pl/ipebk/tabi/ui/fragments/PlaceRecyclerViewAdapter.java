@@ -1,44 +1,36 @@
 package pl.ipebk.tabi.ui.fragments;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.database.daos.PlateDao;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.ui.fragments.dummy.DummyContent.DummyItem;
+import pl.ipebk.tabi.database.tables.PlacesTable;
+import pl.ipebk.tabi.ui.adapters.CursorRecyclerViewAdapter;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link PlaceFragment.OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecyclerViewAdapter.ViewHolder> {
-    private List<Place> mValues;
+public class PlaceRecyclerViewAdapter extends CursorRecyclerViewAdapter<PlaceRecyclerViewAdapter.ViewHolder> {
+
+    PlacesTable placesTable;
     private PlaceFragment.OnListFragmentInteractionListener mListener;
 
-    public PlaceRecyclerViewAdapter(List<Place> items, PlaceFragment.OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public PlaceRecyclerViewAdapter(Context context, Cursor cursor, PlateDao plateDao,
+                                    PlaceFragment.OnListFragmentInteractionListener listener) {
+        super(context, cursor);
         mListener = listener;
-    }
-
-    public void swapItems(List<Place> places){
-        if(mValues==null){
-            mValues = new ArrayList<>();
-        }else {
-            this.mValues.clear();
-        }
-
-        this.mValues = places;
-        notifyDataSetChanged();
+        placesTable = new PlacesTable();
+        placesTable.setPlateDao(plateDao);
     }
 
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,11 +39,11 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
         return new ViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(final ViewHolder holder, int position) {
-        Place place = mValues.get(position);
+    @Override public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
+        Place place = placesTable.cursorToModel(cursor);
         Plate plate = place.getPlates().get(0);
         String plateText = plate.getPattern();
-        if(plate.getEnd()!=null){
+        if (plate.getEnd() != null) {
             plateText += "&#8230;" + plate.getEnd();
         }
 
@@ -73,10 +65,6 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
         });
     }
 
-    @Override public int getItemCount() {
-        return mValues.size();
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         View mView;
         @Bind(R.id.place_name) TextView placeName;
@@ -88,7 +76,7 @@ public class PlaceRecyclerViewAdapter extends RecyclerView.Adapter<PlaceRecycler
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            ButterKnife.bind(this,view);
+            ButterKnife.bind(this, view);
         }
     }
 }
