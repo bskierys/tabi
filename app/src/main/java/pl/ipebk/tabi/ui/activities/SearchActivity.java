@@ -6,15 +6,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.ui.fragments.PlaceFragment;
+import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
 
-public class SearchActivity extends BaseActivity implements PlaceFragment.OnListFragmentInteractionListener {
-
-
+public class SearchActivity extends BaseActivity implements PlaceFragment.OnListFragmentInteractionListener, TextWatcher {
+    @Bind(R.id.search_phrase) EditText searchPhrase;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -26,7 +31,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private PlaceFragment searchPlacesFragment;
     private PlaceFragment searchPlatesFragment;
-
+    private SpellCorrector spellCorrector;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -36,6 +41,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
+
+        spellCorrector = new SpellCorrector();
+
+        searchPhrase.addTextChangedListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,11 +59,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
 
         searchPlatesFragment = getFragment(0);
         searchPlacesFragment = getFragment(1);
-    }
-
-    @Override protected void onDatabasePrepared(Stopwatch.ElapsedTime elapsedTime) {
-        searchPlacesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesByName("z", null));
-        searchPlatesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesForPlateStart("Z", null));
     }
 
     private PlaceFragment getFragment(int position) {
@@ -72,6 +77,21 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
     }
 
     @Override public void onListFragmentInteraction(Place place) {
+
+    }
+
+    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String rawPhrase = charSequence.toString();
+        String phrase = spellCorrector.cleanForSearch(rawPhrase);
+        searchPlacesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesByName(phrase, null));
+        searchPlatesFragment.setPlaceCursor(databaseHelper.getPlaceDao().getPlacesForPlateStart(phrase.toUpperCase(), null));
+    }
+
+    @Override public void afterTextChanged(Editable editable) {
 
     }
 
