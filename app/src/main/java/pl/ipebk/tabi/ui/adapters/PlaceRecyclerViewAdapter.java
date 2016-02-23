@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.ui.fragments;
+package pl.ipebk.tabi.ui.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,7 +15,7 @@ import pl.ipebk.tabi.database.daos.PlateDao;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.tables.PlacesTable;
-import pl.ipebk.tabi.ui.adapters.CursorRecyclerViewAdapter;
+import pl.ipebk.tabi.ui.fragments.PlaceFragment;
 
 /**
  * TODO: Replace the implementation with code for your data type.
@@ -39,12 +39,12 @@ public class PlaceRecyclerViewAdapter extends CursorRecyclerViewAdapter<PlaceRec
         return new ViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
+    @Override public void onBindViewHolder(final ViewHolder holder, Cursor cursor) {
         Place place = placesTable.cursorToModel(cursor);
         Plate plate = place.getPlates().get(0);
         String plateText = plate.getPattern();
         if (plate.getEnd() != null) {
-            plateText += "&#8230;" + plate.getEnd();
+            plateText += "..." + plate.getEnd();
         }
 
         holder.place = place;
@@ -59,7 +59,7 @@ public class PlaceRecyclerViewAdapter extends CursorRecyclerViewAdapter<PlaceRec
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    //mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onListFragmentInteraction(holder.place);
                 }
             }
         });

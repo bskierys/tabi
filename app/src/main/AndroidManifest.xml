@@ -24,6 +24,15 @@
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".ui.activities.DetailsActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".ui.activities.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.ipebk.tabi.ui.activities.SearchActivity"/>
+        </activity>
     </application>
 
 </manifest>

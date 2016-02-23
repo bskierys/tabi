@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.ui.adapters.PlaceRecyclerViewAdapter;
 import pl.ipebk.tabi.utils.Provider;
 
 /**

@@ -1,5 +1,6 @@
 package pl.ipebk.tabi.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +17,6 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.ui.fragments.PlaceFragment;
 import pl.ipebk.tabi.utils.SpellCorrector;
-import pl.ipebk.tabi.utils.Stopwatch;
 
 public class SearchActivity extends BaseActivity implements PlaceFragment.OnListFragmentInteractionListener, TextWatcher {
     @Bind(R.id.search_phrase) EditText searchPhrase;
@@ -77,7 +77,9 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.OnList
     }
 
     @Override public void onListFragmentInteraction(Place place) {
-
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, place.getId());
+        startActivity(intent);
     }
 
     @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
