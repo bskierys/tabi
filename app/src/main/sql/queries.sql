@@ -1,7 +1,7 @@
 -- wyszukiwanie po tablicy
-select places._id, places.place_name, places.plate, places.plate_end from 
+select places._id, places.place_name, places.plate, places.plate_end, k.searched_plate, k.searched_plate_end from
 	-- wybierz id miejsc o odpowiednich tablicach {
-	(select m.ID as ID from 
+	(select m.ID as ID, m.plate as searched_plate, m.plate_end as searched_plate_end from
 		-- pobiera wszystkie tablice zarówno podstawowe jak i dodatkowe w jednakowej formie jako tablicę łączoną {
 		(select _id as ID, plate, plate_end from places where has_own_plate = 1 
 		union 

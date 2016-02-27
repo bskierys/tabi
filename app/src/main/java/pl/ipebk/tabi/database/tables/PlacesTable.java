@@ -7,8 +7,6 @@ package pl.ipebk.tabi.database.tables;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -16,8 +14,8 @@ import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.daos.PlateDao;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.Voivodeship;
 import pl.ipebk.tabi.utils.SpellCorrector;
+import timber.log.Timber;
 
 public class PlacesTable extends Table<Place> {
     public static final String COLUMN_NAME = "place_name";
@@ -30,6 +28,8 @@ public class PlacesTable extends Table<Place> {
     public static final String COLUMN_PLATE = "plate";
     public static final String COLUMN_PLATE_END = "plate_end";
     public static final String COLUMN_HAS_OWN_PLATE = "has_own_plate";
+    public static final String COLUMN_SEARCHED_PLATE = "searched_plate";
+    public static final String COLUMN_SEARCHED_PLATE_END = "searched_plate_end";
 
     public static final String TABLE_NAME = "places";
 
@@ -115,7 +115,7 @@ public class PlacesTable extends Table<Place> {
             plates.add(0, mainPlate);
             place.setPlates(plates);
         } else {
-            Log.e(TAG, "Plate dao is not set");
+            Timber.e("Plate dao is not set");
         }
 
         place.setHasOwnPlate(cursor.getInt(cursor.getColumnIndex(COLUMN_HAS_OWN_PLATE)) == 1);
@@ -147,7 +147,7 @@ public class PlacesTable extends Table<Place> {
             Plate mainPlate = model.getPlates().get(0);
             model.getPlates().remove(0);
 
-            for(Plate plate: model.getPlates()){
+            for (Plate plate : model.getPlates()) {
                 plate.setPlaceId(nextRowId);
             }
 
@@ -160,26 +160,5 @@ public class PlacesTable extends Table<Place> {
         values.put(COLUMN_HAS_OWN_PLATE, model.isHasOwnPlate());
 
         return values;
-    }
-
-    @NonNull public Voivodeship cursorToVoivodeship(Cursor cursor) {
-        Voivodeship voivodeship = new Voivodeship();
-        voivodeship.setName(cursor.getString(cursor.getColumnIndex(COLUMN_VOIVODESHIP)));
-
-        int plateIndex = cursor.getColumnIndex(COLUMN_PLATE);
-        if (!cursor.isNull(plateIndex)) {
-            String plate = cursor.getString(plateIndex);
-            Character plateStart = plate.charAt(0);
-            voivodeship.setPlateStart(plateStart);
-        }
-
-        int placeTypeIndex = cursor.getColumnIndex(COLUMN_PLACE_TYPE);
-        if (!cursor.isNull(placeTypeIndex)) {
-            voivodeship.setType(Place.Type.values()[cursor.getInt(placeTypeIndex)]);
-        } else {
-            voivodeship.setType(Place.Type.UNSPECIFIED);
-        }
-
-        return voivodeship;
     }
 }

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="ui.activities.SearchActivity">
+    tools:context=".ui.search.SearchActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -24,21 +24,18 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <EditText
-                android:id="@+id/search_phrase"
+                android:id="@+id/editTxt_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:inputType="textNoSuggestions"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    <include layout="@layout/content_search"/>
 
 </android.support.design.widget.CoordinatorLayout>

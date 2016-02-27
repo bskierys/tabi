@@ -9,12 +9,11 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import java.text.CollationKey;
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.Voivodeship;
+import pl.ipebk.tabi.ui.main.CategoryListItem;
 
 public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testGetVoivodeships() {
@@ -38,25 +37,28 @@ public class PlaceDaoTest extends DatabaseTest {
         databaseHelper.getPlaceDao().add(special2);
         databaseHelper.getPlaceDao().add(special3);
 
-        List<Voivodeship> categories = databaseHelper.getPlaceDao().getVoivodeships();
+        databaseHelper.getPlaceDao().getVoivodeshipsObservable()
+                .mapToList(CategoryListItem::new)
+                .subscribe(voivodeships -> {
+                    assertEquals(6, voivodeships.size());
 
-        assertEquals(6, categories.size());
-        // check if voivodeships are before specials
-        for (int i = 0; i < 3; i++) {
-            assertEquals(Place.Type.VOIVODE_CITY, categories.get(i).getType());
-            assertEquals(Place.Type.SPECIAL, categories.get(i + 3).getType());
-        }
+                    // check if voivodeships are before specials
+                    for (int i = 0; i < 3; i++) {
+                        assertEquals(Place.Type.VOIVODE_CITY, voivodeships.get(i).getType());
+                        assertEquals(Place.Type.SPECIAL, voivodeships.get(i + 3).getType());
+                    }
 
-        // check order of voivodeships
-        String lastOne = categories.get(0).getName();
-        for (int i = 1; i < 3; i++) {
-            Voivodeship voivodeship = categories.get(i);
-            CollationKey key = collator.getCollationKey(voivodeship.getName());
-            int compare = key.compareTo(collator.getCollationKey(lastOne));
+                    // check order of voivodeships
+                    String lastOne = voivodeships.get(0).getName();
+                    for (int i = 1; i < 3; i++) {
+                        CategoryListItem categoryListItem = voivodeships.get(i);
+                        CollationKey key = collator.getCollationKey(categoryListItem.getName());
+                        int compare = key.compareTo(collator.getCollationKey(lastOne));
 
-            assertTrue(compare > 0);
-            lastOne = voivodeship.getName();
-        }
+                        assertTrue(compare > 0);
+                        lastOne = categoryListItem.getName();
+                    }
+                });
     }
 
     @MediumTest public void testGetPlaceForOnlyOnePlate() {
@@ -180,7 +182,7 @@ public class PlaceDaoTest extends DatabaseTest {
         assertEquals(limit, foundPlaces.size());
     }
 
-    @MediumTest public void testSearchPlacesSortOrderByType(){
+    @MediumTest public void testSearchPlacesSortOrderByType() {
         String dummyPlate = "AAA";
         databaseHelper.getPlaceDao().add(constructPlace("świdnica", dummyPlate, Place.Type.VOIVODE_CITY));
         databaseHelper.getPlaceDao().add(constructPlace("świdnico", dummyPlate, Place.Type.TOWN));
@@ -189,23 +191,23 @@ public class PlaceDaoTest extends DatabaseTest {
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", null);
 
-        assertEquals(4,foundPlaces.size());
+        assertEquals(4, foundPlaces.size());
 
         int lastOne = foundPlaces.get(0).getType().ordinal();
-        for(int i = 1 ; i<4;i++){
+        for (int i = 1; i < 4; i++) {
             int typeOrdinal = foundPlaces.get(i).getType().ordinal();
-            assertTrue(typeOrdinal>=lastOne);
+            assertTrue(typeOrdinal >= lastOne);
         }
     }
 
-    @MediumTest public void testSearchPlacesSortOrderByName(){
+    @MediumTest public void testSearchPlacesSortOrderByName() {
         String dummyPlate = "AAA";
         databaseHelper.getPlaceDao().add(constructPlace("śwarądz", dummyPlate, Place.Type.TOWN));
         databaseHelper.getPlaceDao().add(constructPlace("świnoujście", dummyPlate, Place.Type.TOWN));
         databaseHelper.getPlaceDao().add(constructPlace("śokołów", dummyPlate, Place.Type.TOWN));
         databaseHelper.getPlaceDao().add(constructPlace("śókołów", dummyPlate, Place.Type.TOWN));
 
-        List<Place> places = databaseHelper.getPlaceDao().getPlaceListByName("ś",null);
+        List<Place> places = databaseHelper.getPlaceDao().getPlaceListByName("ś", null);
 
         Collator collator = Collator.getInstance();
 

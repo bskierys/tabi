@@ -13,9 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
  * Base class for all database tables. It consists of basic methods for all tables.
  */
 public abstract class Table<E> {
-
     public static final String COLUMN_ID = "_id";
-    protected static final String TAG = "TABI.Database";
 
     public abstract String getTableName();
 
@@ -40,7 +38,7 @@ public abstract class Table<E> {
     /**
      * Converts database cursor to desired entity.
      *
-     * @param cursor    Instance of {@link android.database.Cursor}. Must be opened, moved to first object and closed afterwards.
+     * @param cursor Instance of {@link android.database.Cursor}. Must be opened, moved to first object and closed afterwards.
      * @return Entity from database.
      */
     public abstract E cursorToModel(Cursor cursor);

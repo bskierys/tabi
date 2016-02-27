@@ -7,12 +7,12 @@ package pl.ipebk.tabi.database.tables;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import java.util.Date;
 
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.SearchHistory;
+import timber.log.Timber;
 
 public class SearchHistoryTable extends Table<SearchHistory> {
     public static final String COLUMN_PLACE_ID = "place_id";
@@ -66,7 +66,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
         if (placeDao != null) {
             history.setPlace(placeDao.getById(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID))));
         } else {
-            Log.e(TAG, "Place dao is not set");
+            Timber.e("Place dao is not set");
         }
 
         history.setPlate(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE)));
@@ -88,12 +88,12 @@ public class SearchHistoryTable extends Table<SearchHistory> {
         if (model.getPlace() != null) {
             values.put(COLUMN_PLACE_ID, model.getPlace().getId());
         } else {
-            Log.e(TAG, "Place is not set in history");
+            Timber.e("Place is not set in history");
         }
         if (model.getTimeSearched() != null) {
             values.put(COLUMN_TIME_SEARCHED, model.getTimeSearched().getTime());
         } else {
-            Log.e(TAG, "time searched is not set in history");
+            Timber.e("time searched is not set in history");
         }
         values.put(COLUMN_PLATE, model.getPlate());
 

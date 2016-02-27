@@ -12,5 +12,6 @@ package pl.ipebk.tabi.database.models;
  */
 public interface ModelInterface {
     long getId();
+
     void setId(long id);
 }

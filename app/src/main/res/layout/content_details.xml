@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="pl.ipebk.tabi.ui.activities.DetailsActivity"
+    tools:context=".ui.details.DetailsActivity"
     android:orientation="vertical"
     tools:showIn="@layout/activity_details">
     <LinearLayout
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/place_name"
+            android:id="@+id/txt_place_name"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textAppearance="?attr/textAppearanceListItem"/>
 
         <TextView
-            android:id="@+id/plate"
+            android:id="@+id/txt_plate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_margin"
@@ -41,7 +41,7 @@
         android:src="@color/grey_800"/>
 
     <TextView
-        android:id="@+id/voivodeship"
+        android:id="@+id/txt_voivodeship"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
@@ -49,7 +49,7 @@
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <TextView
-        android:id="@+id/powiat"
+        android:id="@+id/txt_powiat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
@@ -58,7 +58,7 @@
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <TextView
-        android:id="@+id/gmina"
+        android:id="@+id/txt_gmina"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"

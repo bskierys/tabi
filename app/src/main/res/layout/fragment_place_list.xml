@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/list"
-    android:name="pl.ipebk.tabi.ui.fragments.PlaceFragment"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,7 +7,32 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    app:layoutManager="LinearLayoutManager"
-    android:scrollbars="vertical"
-    tools:context="pl.ipebk.tabi.ui.fragments.PlaceFragment"
-    tools:listitem="@layout/fragment_place"/>
+    tools:context=".ui.search.PlaceFragment"
+    android:name="pl.ipebk.tabi.ui.fragments.PlaceFragment">
+
+    <TextView
+        android:id="@+id/txt_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_margin="16dp"/>
+
+    <ProgressBar
+        android:id="@+id/progress_search"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/place_list"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/row_place_list"/>
+</RelativeLayout>
+

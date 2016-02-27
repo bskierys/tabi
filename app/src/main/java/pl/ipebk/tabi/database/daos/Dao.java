@@ -7,10 +7,12 @@ package pl.ipebk.tabi.database.daos;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
+
+import com.squareup.sqlbrite.BriteDatabase;
+import com.squareup.sqlbrite.QueryObservable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,20 +20,27 @@ import java.util.List;
 
 import pl.ipebk.tabi.database.models.ModelInterface;
 import pl.ipebk.tabi.database.tables.Table;
+import timber.log.Timber;
 
 /**
  * Base class for all daos. Typical methods should work for all basic data types.
  * Some methods are not implemented - just part of HMA interface.
  */
 public abstract class Dao<E extends ModelInterface> {
-    protected static final String TAG = "mHMA.Database";
     protected final Class<E> type;
     protected Table<E> table;
-    protected SQLiteDatabase db;
+    protected BriteDatabase db;
 
-    public Dao(Class<E> type, SQLiteDatabase database) {
+    public Dao(Class<E> type, BriteDatabase database) {
         this.type = type;
         this.db = database;
+    }
+
+    /**
+     * @return Table representing this table in database for easy mapping
+     */
+    public Table<E> getTable() {
+        return table;
     }
 
     /**
@@ -42,10 +51,13 @@ public abstract class Dao<E extends ModelInterface> {
      */
     public void add(E model) {
         ContentValues values = table.modelToContentValues(model);
-        Long id = db.insert(table.getTableName(), null, values);
+        Long id = db.insert(table.getTableName(), values);
         model.setId(id);
-        if (id < 0) Log.e(TAG, "Unable to insert entity " + type.toString());
-        else Log.d(TAG, "Inserted entity " + type.toString() + " with id: " + Long.toString(id));
+        if (id < 0) {
+            Timber.e("Unable to insert entity %s", type.toString());
+        } else {
+            Timber.d("Inserted entity %s with id: %d", type.toString(), id);
+        }
     }
 
     /**
@@ -55,20 +67,22 @@ public abstract class Dao<E extends ModelInterface> {
      */
     public void addList(List<E> models) {
         List<Long> ids = new ArrayList<>();
-        db.beginTransaction();
+        BriteDatabase.Transaction transaction = db.newTransaction();
         try {
             for (E model : models) {
                 ContentValues values = table.modelToContentValues(model);
-                Long id = db.insert(table.getTableName(), null, values);
-                if (id < 0) Log.e(TAG, "Unable to insert entity " + type.toString());
-                else
-                    Log.d(TAG, "Inserted entity " + type.toString() + " with id: " + Long.toString(id));
+                Long id = db.insert(table.getTableName(), values);
+                if (id < 0) {
+                    Timber.e("Unable to insert entity %s", type.toString());
+                } else {
+                    Timber.d("Inserted entity %s with id: %d", type.toString(), id);
+                }
                 model.setId(id);
                 ids.add(id);
             }
-            db.setTransactionSuccessful();
+            transaction.markSuccessful();
         } finally {
-            db.endTransaction();
+            transaction.end();
         }
     }
 
@@ -79,9 +93,11 @@ public abstract class Dao<E extends ModelInterface> {
      */
     public void delete(Long id) {
         int rowsAffected = db.delete(table.getTableName(), Table.COLUMN_ID + " = " + id, null);
-        if (rowsAffected < 1)
-            Log.e(TAG, "Unable to delete entity " + type.toString() + " with id: " + Long.toString(id));
-        else Log.d(TAG, "Deleted entity " + type.toString() + " with id: " + Long.toString(id));
+        if (rowsAffected < 1) {
+            Timber.e("Unable to delete entity %s with id: %d", type.toString(), id);
+        } else {
+            Timber.d("Deleted entity %s with id: %d", type.toString(), id);
+        }
     }
 
     /**
@@ -91,8 +107,9 @@ public abstract class Dao<E extends ModelInterface> {
      */
     public void deleteList(List<Long> ids) {
         String args = TextUtils.join(", ", ids);
-        int rowsAffected = db.delete(table.getTableName(), Table.COLUMN_ID + " IN (?) ", new String[]{args});
-        Log.d(TAG, "Rows deleted: " + Integer.toString(rowsAffected));
+        int rowsAffected = db.delete(table.getTableName(),
+                Table.COLUMN_ID + " IN (?) ", args);
+        Timber.d("Rows deleted: %d", rowsAffected);
     }
 
     /**
@@ -101,9 +118,21 @@ public abstract class Dao<E extends ModelInterface> {
      * @return Number of rows deleted.
      */
     public int deleteAll() {
-        int rowsAffected = db.delete(table.getTableName(), "1", null);
-        Log.d(TAG, "Rows deleted: " + Integer.toString(rowsAffected));
+        int rowsAffected = db.delete(table.getTableName(), "1");
+        Timber.d("Rows deleted: %d", rowsAffected);
         return rowsAffected;
+    }
+
+    @NonNull protected String getQualifiedColumnsCommaSeparated() {
+        String commaSeparated = "";
+        String[] columns = table.getQualifiedColumns();
+        for (int i = 0; i < columns.length; i++) {
+            commaSeparated += columns[i];
+            if (i != columns.length - 1) {
+                commaSeparated += ", ";
+            }
+        }
+        return commaSeparated;
     }
 
     /**
@@ -116,15 +145,33 @@ public abstract class Dao<E extends ModelInterface> {
         String selection = Table.COLUMN_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
-        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
-                selection, selectionArgs, null, null, null);
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), selection, null, null, null, null);
+
+        Cursor cursor = db.query(sql, selectionArgs);
         return getModelForCursor(cursor);
+    }
+
+    /**
+     * Gets element fom database of specific kind and id.
+     *
+     * @param id Id of an entity to look for.
+     * @return Observable of entity with given id or null if not present.
+     */
+    public QueryObservable getByIdObservable(Long id) {
+        String selection = Table.COLUMN_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), selection, null, null, null, null);
+
+        return db.createQuery(table.getTableName(), sql, selectionArgs);
     }
 
     protected E getModelForCursor(Cursor cursor) {
         E model = null;
         if (cursor != null) {
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 model = table.cursorToModel(cursor);
             }
             cursor.close();
@@ -138,9 +185,21 @@ public abstract class Dao<E extends ModelInterface> {
      * @return List of all entities from database. Empty list if there are no objects in table.
      */
     public List<E> getAll() {
-        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
-                null, null, null, null, null);
-        return getListOfModelsForCursor(cursor);
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), null, null, null, null, null);
+        return getListOfModelsForCursor(db.query(sql));
+    }
+
+    /**
+     * Gets all entities from database.
+     *
+     * @return Observable of list of all entities from database.
+     * Empty list if there are no objects in table.
+     */
+    public QueryObservable getAllObservable() {
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), null, null, null, null, null);
+        return db.createQuery(table.getTableName(), sql);
     }
 
     @NonNull protected List<E> getListOfModelsForCursor(Cursor cursor) {
@@ -178,9 +237,9 @@ public abstract class Dao<E extends ModelInterface> {
             String selection = Table.COLUMN_ID + " = ?";
             String[] selectionArgs = {String.valueOf(id)};
             int rowsAffected = db.update(table.getTableName(), values, selection, selectionArgs);
-            Log.d(TAG, "Rows updated: " + Integer.toString(rowsAffected));
+            Timber.d("Rows updated: %d", rowsAffected);
         } else {
-            Log.d(TAG, "Update: Unable to update. Object has no id");
+            Timber.e("Update: Unable to update. Object has no id");
         }
         return model;
     }

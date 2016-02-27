@@ -6,7 +6,9 @@
 package pl.ipebk.tabi.database.daos;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
+
+import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.tables.PlatesTable;
 
 public class PlateDao extends Dao<Plate> {
-    public PlateDao(SQLiteDatabase database) {
+    public PlateDao(BriteDatabase database) {
         super(Plate.class, database);
         table = new PlatesTable();
     }
@@ -24,9 +26,10 @@ public class PlateDao extends Dao<Plate> {
         String selection = PlatesTable.COLUMN_PLACE_ID + " = ?";
         String[] selectionArgs = {Long.toString(placeId)};
 
-        Cursor cursor = db.query(table.getTableName(), table.getQualifiedColumns(),
-                selection, selectionArgs, null, null, null);
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), selection, null, null, null, null);
 
+        Cursor cursor = db.query(sql, selectionArgs);
         return getListOfModelsForCursor(cursor);
     }
 

@@ -1,8 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    def globalConfiguration = rootProject.extensions.getByName("ext")
+
+    compileSdkVersion globalConfiguration.getAt("androidCompileSdkVersion")
+    buildToolsVersion globalConfiguration.getAt("androidBuildToolsVersion")
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -27,12 +31,30 @@ android {
     }
 
     defaultConfig {
-        applicationId "pl.ipebk.tabi"
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "0.0.1"
+        applicationId globalConfiguration.getAt("androidApplicationId")
+        minSdkVersion globalConfiguration.getAt("androidMinSdkVersion")
+        targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
+        versionCode globalConfiguration.getAt("androidVersionCode")
+        versionName globalConfiguration.getAt("androidVersionName")
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            outputs.upToDateWhen { false }
+            showStandardStreams = true
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -43,11 +65,51 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    def mobileDependencies = rootProject.ext.mobileDependencies
+
+    // Android
+    compile mobileDependencies.appcompat
+    compile mobileDependencies.support
+    compile mobileDependencies.design
+    compile mobileDependencies.recyclerView
+
+    // RxJava
+    compile mobileDependencies.rxjava
+    compile mobileDependencies.rxandroid
+
+    // butterknife
+    compile mobileDependencies.butterKnife
+
+    // otto
+    compile mobileDependencies.otto
+
+    // timber
+    compile mobileDependencies.timber
+
+    // sqlite
+    compile mobileDependencies.sqliteAssetHelper
+    compile mobileDependencies.sqlbrite
+
+    // dagger
+    compile mobileDependencies.dagger
+    apt mobileDependencies.daggerCompiler
+    provided mobileDependencies.javaxAnnotation
+
+    // unit
+    testCompile mobileDependencies.junit
+    testCompile mobileDependencies.mockito
+
+    // integration
+    androidTestCompile mobileDependencies.mockito
+    androidTestCompile mobileDependencies.dexmaker
+    androidTestCompile mobileDependencies.dexmaker_mockito
+    androidTestCompile(mobileDependencies.testrules) {
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile(mobileDependencies.espresso) {
+        exclude module: 'support-annotations'
+    }
+    androidTestCompile(mobileDependencies.testrunner) {
+        exclude module: 'support-annotations'
+    }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package pl.ipebk.tabi.ui.adapters;
+package pl.ipebk.tabi.ui.custom;
 
 import android.content.Context;
 import android.database.Cursor;
