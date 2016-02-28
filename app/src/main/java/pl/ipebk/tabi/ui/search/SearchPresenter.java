@@ -10,6 +10,8 @@ import android.support.v4.util.Pair;
 
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.manager.DataManager;
@@ -23,6 +25,9 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class SearchPresenter extends BasePresenter<SearchMvpView> {
+    private static final long QUICK_LIST_RENDERING_DELAY = 300;
+    private static final long FULL_LIST_RENDERING_DELAY = 0;
+
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
     private Subscription searchSubscription;
@@ -58,17 +63,17 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void quickSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, 3);
+        searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
     }
 
     public void deepSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, null);
+        searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
         getMvpView().hideKeyboard();
     }
     //endregion
 
     //region Search
-    private void searchForRawTextWithLimit(String rawPhrase, Integer limit) {
+    private void searchForRawTextWithLimit(String rawPhrase, Integer limit, long delay) {
         checkViewAttached();
         if (searchSubscription != null) {
             searchSubscription.unsubscribe();
@@ -76,6 +81,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
         searchSubscription = Observable.just(rawPhrase)
                 .subscribeOn(Schedulers.computation())
+                .delay(delay, TimeUnit.MILLISECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(spellCorrector::cleanForSearch)
                 .doOnUnsubscribe(() -> getMvpView().hideLoading())
@@ -93,6 +99,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             stopwatch.reset();
 
             getObservableForSearchWithinTwoQueries(s, limit)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(this::showSearchResults);
         }
     }
@@ -100,14 +108,10 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private Observable<Pair<Cursor, Cursor>> getObservableForSearchWithinTwoQueries(String phrase, Integer limit) {
         Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
                 .getPlaceDao().getPlacesForPlateStart(phrase, limit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(SqlBrite.Query::run);
 
         Observable<Cursor> placesCursorObservable = dataManager.getDatabaseHelper()
                 .getPlaceDao().getPlacesByName(phrase, limit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(SqlBrite.Query::run);
 
         return Observable.zip(platesCursorObservable,
@@ -118,8 +122,9 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         Cursor platesCursor = cursorCursorPair.first;
         Cursor placesCursor = cursorCursorPair.second;
 
-        getMvpView().hideLoading();
+        Timber.d("Search query took: %s", stopwatch.getElapsedTimeString());
 
+        stopwatch.reset();
         if (platesCursor.getCount() > 0) {
             getMvpView().showPlacesInPlatesSection(platesCursor);
         } else {
@@ -132,7 +137,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             getMvpView().showEmptyStateInPlacesSection();
         }
 
-        Timber.d("Search query took: %s", stopwatch.getElapsedTimeString());
+        getMvpView().hideLoading();
+        Timber.d("Rendering layout took: %s", stopwatch.getElapsedTimeString());
     }
     //endregion
 }
