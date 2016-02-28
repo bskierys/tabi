@@ -3,7 +3,10 @@ package pl.ipebk.tabi.ui.details;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -18,11 +21,13 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView {
     public final static String PARAM_PLACE_ID = "param_place_id";
 
     @Inject DetailsPresenter presenter;
+    @Inject Picasso picasso;
     @Bind(R.id.txt_place_name) TextView placeNameView;
     @Bind(R.id.txt_plate) TextView plateView;
     @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
     @Bind(R.id.txt_powiat) TextView powiatView;
     @Bind(R.id.txt_gmina) TextView gminaView;
+    @Bind(R.id.img_map) ImageView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,5 +60,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView {
         voivodeshipView.setText(place.getVoivodeship());
         powiatView.setText(place.getPowiat());
         gminaView.setText(place.getGmina());
+    }
+
+    // TODO: 2016-02-28 how to do it properly with rx and mvp?
+    @Override public void showMap(String url) {
+        picasso.load(url).fit().error(R.color.red_300)
+                .placeholder(R.color.grey_300).into(mapView);
     }
 }

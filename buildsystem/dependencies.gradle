@@ -49,6 +49,8 @@ ext {
     butterKnifeVersion = '7.0.1'
     ottoVersion = '1.3.8'
     timberVersion = '4.1.1'
+    picassoVersion = '2.5.2'
+    okhttpVersion = '3.2.0'
     dexmakerVersion = '1.1'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
@@ -76,6 +78,10 @@ ext {
 
             // timber
             timber            : "com.jakewharton.timber:timber:${timberVersion}",
+
+            // image downloading
+            picasso           : "com.squareup.picasso:picasso:${picassoVersion}",
+            okhttp            : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
 
             // Dagger
             javaxAnnotation   : "org.glassfish:javax.annotation:${javaxAnnotationVersion}",

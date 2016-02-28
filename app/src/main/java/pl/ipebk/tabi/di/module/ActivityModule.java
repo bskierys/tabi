@@ -8,10 +8,16 @@ package pl.ipebk.tabi.di.module;
 import android.app.Activity;
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ActivityContext;
+import pl.ipebk.tabi.di.PerActivity;
 import pl.ipebk.tabi.utils.SpellCorrector;
+import timber.log.Timber;
 
 @Module
 public class ActivityModule {
@@ -25,8 +31,15 @@ public class ActivityModule {
         return activity;
     }
 
-    @Provides @ActivityContext Context providesContext() {
+    @Provides @ActivityContext Context provideContext() {
         return activity;
+    }
+
+    // TODO: 2016-02-28 inject as singleton
+    @Provides Picasso providePicasso(){
+        return new Picasso.Builder(activity)
+                .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))
+                .build();
     }
 
     @Provides SpellCorrector provideSpellCorrector() {

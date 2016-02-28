@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.manager;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

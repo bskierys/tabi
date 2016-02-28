@@ -65,4 +65,9 @@
         android:layout_marginRight="@dimen/text_margin"
         android:layout_marginBottom="16dp"
         android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <ImageView android:id="@+id/img_map"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:src="@color/grey_400"/>
 </LinearLayout>

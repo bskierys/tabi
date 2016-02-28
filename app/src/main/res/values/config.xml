@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_maps_api_key">AIzaSyDJB9tjzFGFuiTniBcCSiblwGIf0ayct8Q</string>
+    <string name="config_maps_api_key_server">AIzaSyBDzMjoxGueyBEWPMgUaZwtwO6DmCZ9k-U</string>
+    <string name="config_maps_api_key_example">AIzaSyCYRZ6Bm0y84pXzQyGdeTtpOBG2MLz4uDc</string>
+</resources>

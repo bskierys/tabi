@@ -10,4 +10,6 @@ import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface DetailsMvpView extends MvpView {
     void showPlace(Place place);
+
+    void showMap(String url);
 }

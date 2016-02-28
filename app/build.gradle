@@ -86,6 +86,10 @@ dependencies {
     // timber
     compile mobileDependencies.timber
 
+    // image downloading
+    compile mobileDependencies.picasso
+    compile mobileDependencies.okhttp
+
     // sqlite
     compile mobileDependencies.sqliteAssetHelper
     compile mobileDependencies.sqlbrite
