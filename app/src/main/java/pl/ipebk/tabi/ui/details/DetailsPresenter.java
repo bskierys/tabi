@@ -10,7 +10,6 @@ import android.content.Context;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
@@ -51,10 +50,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
     private void loadMap(Place place) {
-        String googleApiUrl = "https://maps.googleapis.com/maps/api/staticmap?center="
-                + "Mielec,mielecki,podkarpackie,polska&zoom=13&size=600x300&maptype=roadmap"
-                + "&key=" + context.getString(R.string.config_maps_api_key);
-        String fakeUrl = "http://stressfree.pl/wp-content/uploads/2012/05/nasze_makaron.jpg";
-        getMvpView().showMap(fakeUrl);
+        String placeKey = place.getName() + "," + place.getGmina() + ","
+                + place.getPowiat() + "," + place.getVoivodeship() + "," + "Polska";
+        placeKey = placeKey.replace(" ", "+");
+        String googleApiUrl = "http://maps.googleapis.com/maps/api/staticmap?center="
+                + placeKey + "&zoom=13&size=600x300&maptype=roadmap";
+        getMvpView().showMap(googleApiUrl);
     }
 }
