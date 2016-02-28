@@ -45,8 +45,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId) {
-        getMvpView().goToPlaceDetails(placeId);
+    public void placeSelected(long placeId, String searchedPlate) {
+        getMvpView().goToPlaceDetails(placeId, searchedPlate);
     }
 
     public void loadInitialStateForPlaces() {

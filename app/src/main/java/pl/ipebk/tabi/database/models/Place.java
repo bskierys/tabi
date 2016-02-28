@@ -81,6 +81,19 @@ public class Place implements ModelInterface {
         this.hasOwnPlate = hasOwnPlate;
     }
 
+    @Override public String toString(){
+        return getName() + "," + getGmina() + ","
+                + getPowiat() + "," + getVoivodeship();
+    }
+
+    public Plate getMainPlate(){
+        if(plates!=null && plates.size()>0){
+            return plates.get(0);
+        }else {
+            return null;
+        }
+    }
+
     public enum Type {
         VOIVODE_CITY,
         POWIAT_CITY,

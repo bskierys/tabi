@@ -30,5 +30,5 @@ public interface SearchMvpView extends MvpView {
 
     void hideKeyboard();
 
-    void goToPlaceDetails(long placeId);
+    void goToPlaceDetails(long placeId,String searchedText);
 }

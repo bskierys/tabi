@@ -73,7 +73,7 @@ public class PlaceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position))));
+                (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position),type)));
 
         hideProgress();
         hideText();
@@ -142,7 +142,7 @@ public class PlaceFragment extends Fragment {
      * activity.
      */
     public interface onPlaceClickedListener {
-        void onPlaceClicked(long placeId);
+        void onPlaceClicked(long placeId,SearchHistory.SearchType type);
 
         void onFragmentViewCreated(SearchHistory.SearchType type);
     }

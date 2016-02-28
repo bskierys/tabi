@@ -79,8 +79,12 @@ public class SearchActivity extends BaseActivity implements TextWatcher,
         return false;
     }
 
-    @Override public void onPlaceClicked(long placeId) {
-        presenter.placeSelected(placeId);
+    @Override public void onPlaceClicked(long placeId, SearchHistory.SearchType type) {
+        String searchedPlate = null;
+        if (type == SearchHistory.SearchType.PLATE) {
+            searchedPlate = searchEditText.getText().toString();
+        }
+        presenter.placeSelected(placeId, searchedPlate);
     }
 
     @Override public void onFragmentViewCreated(SearchHistory.SearchType type) {
@@ -128,9 +132,10 @@ public class SearchActivity extends BaseActivity implements TextWatcher,
         }
     }
 
-    @Override public void goToPlaceDetails(long placeId) {
+    @Override public void goToPlaceDetails(long placeId, String searchedPlate) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId);
+        intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         startActivity(intent);
     }
 

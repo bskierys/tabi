@@ -42,4 +42,12 @@ public class Plate implements ModelInterface {
     public void setEnd(String end) {
         this.end = end;
     }
+
+    @Override public String toString() {
+        String result = pattern;
+        if (end != null) {
+            result += "..." + end;
+        }
+        return result;
+    }
 }

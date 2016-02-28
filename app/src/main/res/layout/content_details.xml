@@ -68,10 +68,33 @@
         android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <ImageView
-        android:id="@+id/img_map"
+    <TextView
+        android:id="@+id/txt_additional"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:scaleType="centerCrop"
-        android:src="@color/grey_400"/>
+        android:layout_height="250dp">
+        <ImageView
+            android:id="@+id/img_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@color/grey_400"/>
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/img_pin"
+            android:layout_width="36dp"
+            android:layout_height="72dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitStart"
+            android:src="@drawable/location"/>
+    </RelativeLayout>
+
 </LinearLayout>
