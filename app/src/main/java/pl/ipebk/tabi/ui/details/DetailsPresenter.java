@@ -11,6 +11,8 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 
+import com.ogaclejapan.rx.binding.RxProperty;
+
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -20,19 +22,23 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
+    private static final float MAP_SCALE_FACTOR = 0.75F;
+
     private DataManager dataManager;
     private Context context;
-    private Place place;
+    private RxProperty<Place> place;
     private String searchedPlate;
 
     @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
         this.dataManager = dataManager;
         this.context = activity;
+        place = RxProperty.create();
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -62,7 +68,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     // TODO: 2016-02-27 same method as in search rows
     // TODO: 2016-02-28 refactor
     private void showPlace(Place place) {
-        this.place = place;
+        this.place.set(place);
 
         Plate plate = null;
         int searchedPlateIndex = 0;
@@ -113,30 +119,45 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         getMvpView().showGmina(place.getGmina());
         getMvpView().showAdditionalInfo(additionalText);
 
-        loadMap();
+        //loadMap();
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
-    private void loadMap() {
+    public void loadMap(int width, int height) {
+        Observable<Place> placeObservable;
+
+        if (place.get() == null) {
+            placeObservable = place.asObservable();
+        } else {
+            placeObservable = Observable.just(place.get());
+        }
+
+        placeObservable.filter(p->p!=null)
+                .subscribe(p -> getMvpView()
+                        .showMap(getMapUrl(p, width, height)));
+    }
+
+    private Uri getMapUrl(Place place, int width, int height) {
+        String size = String.format(Locale.getDefault(),"%dx%d", (int) (width * MAP_SCALE_FACTOR),
+                (int) (height * MAP_SCALE_FACTOR));
         String language = Locale.getDefault().getLanguage();
         String placeName = (place.toString() + "," + context.getString(R.string.maps_country))
                 .replace(" ", "+");
-        // TODO: 2016-02-28 find optimal image size programatically
-        Uri googleApiUri = new Uri.Builder().scheme("http")
+
+        return new Uri.Builder().scheme("http")
                 .authority("maps.googleapis.com")
                 .appendPath("maps")
                 .appendPath("api")
                 .appendPath("staticmap")
                 .appendQueryParameter("center", placeName)
                 .appendQueryParameter("zoom", Integer.toString(9))
-                .appendQueryParameter("size", "600x300")
+                .appendQueryParameter("size", size)
                 .appendQueryParameter("maptype", "roadmap")
-                .appendQueryParameter("language",language)
+                .appendQueryParameter("language", language)
                 .build();
-        getMvpView().showMap(googleApiUri);
     }
 
-    public float convertPixelsToDp(float px){
+    public float convertPixelsToDp(float px) {
         //http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();

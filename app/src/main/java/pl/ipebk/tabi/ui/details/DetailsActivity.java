@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -17,6 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
+import rx.Subscriber;
+import timber.log.Timber;
 
 public class DetailsActivity extends BaseActivity implements DetailsMvpView, Callback {
     public final static String PARAM_PLACE_ID = "param_place_id";
@@ -33,8 +36,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_map) ImageView mapView;
     @Bind(R.id.img_pin) ImageView pinView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -51,6 +53,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         if (placeId > 0) {
             presenter.loadPlace(placeId, searchedPlate);
         }
+
+        mapView.post(() -> presenter.loadMap(mapView.getWidth(), mapView.getHeight()));
     }
 
     @Override public void showPlaceName(String name) {

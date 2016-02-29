@@ -57,6 +57,7 @@ ext {
     robolectricVerion = '3.0'
     rxJavaVersion = '1.1.1'
     rxAndroidVersion = '1.1.0'
+    rxBindingVersion = '0.4.0';
 
     mobileDependencies = [
             // Android
@@ -69,6 +70,7 @@ ext {
             // RxJava
             rxjava            : "io.reactivex:rxjava:${rxJavaVersion}",
             rxandroid         : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            rxbinding         : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
 
             // ButterKnife
             butterKnife       : "com.jakewharton:butterknife:${butterKnifeVersion}",

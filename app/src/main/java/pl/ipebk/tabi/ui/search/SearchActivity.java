@@ -18,6 +18,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -26,9 +29,10 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
+import rx.functions.Func1;
 
-public class SearchActivity extends BaseActivity implements TextWatcher,
-        PlaceFragment.onPlaceClickedListener, SearchMvpView, TextView.OnEditorActionListener {
+public class SearchActivity extends BaseActivity implements
+        PlaceFragment.onPlaceClickedListener, SearchMvpView {
     private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
     private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
 
@@ -47,16 +51,18 @@ public class SearchActivity extends BaseActivity implements TextWatcher,
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         setSupportActionBar(toolbar);
+        presenter.attachView(this);
 
-        searchEditText.addTextChangedListener(this);
-        searchEditText.setOnEditorActionListener(this);
+        RxTextView.textChanges(searchEditText)
+                .subscribe(text->presenter.quickSearchForText(text.toString()));
+        RxTextView.editorActionEvents(searchEditText)
+                .filter(event->event.actionId()==EditorInfo.IME_ACTION_SEARCH)
+                .subscribe(e->presenter.deepSearchForText(searchEditText.getText().toString()));
 
         searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
 
         searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
         searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
-
-        presenter.attachView(this);
     }
 
     @Override
@@ -66,19 +72,6 @@ public class SearchActivity extends BaseActivity implements TextWatcher,
     }
 
     //region View callbacks
-    @Override public void onTextChanged(CharSequence charSequence, int start,
-                                        int before, int count) {
-        presenter.quickSearchForText(charSequence.toString());
-    }
-
-    @Override public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        if (i == EditorInfo.IME_ACTION_SEARCH) {
-            presenter.deepSearchForText(textView.getText().toString());
-            return true;
-        }
-        return false;
-    }
-
     @Override public void onPlaceClicked(long placeId, SearchHistory.SearchType type) {
         String searchedPlate = null;
         if (type == SearchHistory.SearchType.PLATE) {
@@ -170,16 +163,6 @@ public class SearchActivity extends BaseActivity implements TextWatcher,
             }
         }
         return null;
-    }
-
-    //region Unused
-    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-    }
-    //endregion
-
-    @Override public void afterTextChanged(Editable editable) {
-
     }
 
     /**

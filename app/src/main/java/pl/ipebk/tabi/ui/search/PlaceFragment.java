@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.widget.RxAdapterView;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
