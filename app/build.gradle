@@ -77,7 +77,6 @@ dependencies {
     compile mobileDependencies.rxjava
     compile mobileDependencies.rxandroid
     compile mobileDependencies.rxbinding
-    compile 'com.ogaclejapan:rxbinding:1.2.0'
 
     // butterknife
     compile mobileDependencies.butterKnife

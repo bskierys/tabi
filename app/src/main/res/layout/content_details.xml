@@ -77,10 +77,31 @@
         android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="88dp"
+            android:id="@+id/btn_google_it"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="88dp"
+            android:id="@+id/btn_voivodeship"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="88dp"
+            android:id="@+id/btn_map"/>
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
         <ImageView
             android:id="@+id/img_map"
             android:layout_width="match_parent"

@@ -11,8 +11,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 
-import com.ogaclejapan.rx.binding.RxProperty;
-
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -25,20 +23,21 @@ import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
-    private static final float MAP_SCALE_FACTOR = 0.75F;
-
     private DataManager dataManager;
     private Context context;
-    private RxProperty<Place> place;
+    private Place place;
+    private BehaviorSubject<Place> placeSubject;
     private String searchedPlate;
 
     @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
         this.dataManager = dataManager;
         this.context = activity;
-        place = RxProperty.create();
+
+        placeSubject = BehaviorSubject.create();
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -68,7 +67,8 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     // TODO: 2016-02-27 same method as in search rows
     // TODO: 2016-02-28 refactor
     private void showPlace(Place place) {
-        this.place.set(place);
+        this.place = place;
+        placeSubject.onNext(place);
 
         Plate plate = null;
         int searchedPlateIndex = 0;
@@ -118,28 +118,29 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         getMvpView().showPowiat(place.getPowiat());
         getMvpView().showGmina(place.getGmina());
         getMvpView().showAdditionalInfo(additionalText);
-
-        //loadMap();
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
     public void loadMap(int width, int height) {
         Observable<Place> placeObservable;
 
-        if (place.get() == null) {
-            placeObservable = place.asObservable();
+        if (place == null) {
+            placeObservable = placeSubject.asObservable();
         } else {
-            placeObservable = Observable.just(place.get());
+            placeObservable = Observable.just(place);
         }
 
-        placeObservable.filter(p->p!=null)
+        placeObservable.filter(p -> p != null)
                 .subscribe(p -> getMvpView()
                         .showMap(getMapUrl(p, width, height)));
     }
 
     private Uri getMapUrl(Place place, int width, int height) {
-        String size = String.format(Locale.getDefault(),"%dx%d", (int) (width * MAP_SCALE_FACTOR),
-                (int) (height * MAP_SCALE_FACTOR));
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int widthInDp = (int) (width / metrics.density);
+        int heightInDp = (int) (height / metrics.density);
+
+        String size = String.format(Locale.getDefault(), "%dx%d",widthInDp ,heightInDp);
         String language = Locale.getDefault().getLanguage();
         String placeName = (place.toString() + "," + context.getString(R.string.maps_country))
                 .replace(" ", "+");
@@ -155,13 +156,5 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                 .appendQueryParameter("maptype", "roadmap")
                 .appendQueryParameter("language", language)
                 .build();
-    }
-
-    public float convertPixelsToDp(float px) {
-        //http://stackoverflow.com/questions/4605527/converting-pixels-to-dp
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / (metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return dp;
     }
 }
