@@ -24,6 +24,8 @@ public interface SearchMvpView extends MvpView {
 
     void hideEmptyStateInPlacesSection();
 
+    void setSearchText(String searchText);
+
     void showLoading();
 
     void hideLoading();

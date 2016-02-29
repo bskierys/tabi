@@ -84,17 +84,20 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="88dp"
-            android:id="@+id/btn_google_it"/>
+            android:id="@+id/btn_google_it"
+            android:text="G"/>
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="88dp"
-            android:id="@+id/btn_voivodeship"/>
+            android:id="@+id/btn_voivodeship"
+            android:text="V"/>
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="88dp"
-            android:id="@+id/btn_map"/>
+            android:id="@+id/btn_map"
+            android:text="M"/>
     </LinearLayout>
 
 

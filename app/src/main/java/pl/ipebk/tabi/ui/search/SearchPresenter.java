@@ -27,11 +27,14 @@ import timber.log.Timber;
 public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private static final long QUICK_LIST_RENDERING_DELAY = 300;
     private static final long FULL_LIST_RENDERING_DELAY = 0;
+    private static final int FULLY_LOADED_VIEW_CONST = 2;
 
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
     private Subscription searchSubscription;
     private Stopwatch stopwatch = new Stopwatch();
+    private int loadedViews = 0;
+    private String lastSearched;
 
     @Inject public SearchPresenter(DataManager dataManager, SpellCorrector spellCorrector) {
         this.dataManager = dataManager;
@@ -43,10 +46,10 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     @Override public void detachView() {
-        super.detachView();
         if (searchSubscription != null) {
             searchSubscription.unsubscribe();
         }
+        super.detachView();
     }
 
     //region public methods
@@ -55,22 +58,53 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void loadInitialStateForPlaces() {
-        getMvpView().showEmptyStateInPlacesSection();
+        incrementLoadedViews();
+        if (lastSearched != null && isViewCreated()) {
+            getMvpView().setSearchText(lastSearched);
+            deepSearchForText(lastSearched);
+        } else {
+            getMvpView().showEmptyStateInPlacesSection();
+        }
+    }
+
+    private void incrementLoadedViews() {
+        if (loadedViews < FULLY_LOADED_VIEW_CONST) {
+            loadedViews++;
+        }
     }
 
     public void loadInitialStateForPlates() {
-        getMvpView().showEmptyStateInPlatesSection();
+        incrementLoadedViews();
+        if (lastSearched != null && isViewCreated()) {
+            getMvpView().setSearchText(lastSearched);
+            deepSearchForText(lastSearched);
+        } else {
+            getMvpView().showEmptyStateInPlatesSection();
+        }
     }
 
     public void quickSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
+        if (isViewCreated()) {
+            searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
+        } else {
+            Timber.d("View is not created. Abandon search");
+        }
     }
 
     public void deepSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
-        getMvpView().hideKeyboard();
+        this.lastSearched = rawPhrase;
+        if (isViewCreated()) {
+            searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
+            getMvpView().hideKeyboard();
+        } else {
+            Timber.d("View is not created. Abandon search");
+        }
     }
     //endregion
+
+    private boolean isViewCreated() {
+        return loadedViews == FULLY_LOADED_VIEW_CONST;
+    }
 
     //region Search
     private void searchForRawTextWithLimit(String rawPhrase, Integer limit, long delay) {
@@ -85,7 +119,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(spellCorrector::cleanForSearch)
                 .doOnUnsubscribe(() -> getMvpView().hideLoading())
-                .subscribe(s -> beginSearchForCleaned(limit, s));
+                .subscribe(s -> beginSearchForCleaned(limit, s),
+                        e -> Timber.e("Error during searching for places", e));
     }
 
     private void beginSearchForCleaned(Integer limit, String s) {

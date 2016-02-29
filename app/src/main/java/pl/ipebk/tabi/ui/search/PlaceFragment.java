@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding.widget.RxAdapterView;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
@@ -31,6 +29,7 @@ public class PlaceFragment extends Fragment {
     @Bind(R.id.place_list) RecyclerView recyclerView;
 
     private SearchHistory.SearchType type;
+    private boolean viewCreated;
     private Cursor placeCursor;
     private PlaceRecyclerViewAdapter adapter;
     private onPlaceClickedListener placeClickedListener;
@@ -55,6 +54,7 @@ public class PlaceFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new PlaceRecyclerViewAdapter(getActivity(), placeCursor);
+        viewCreated = false;
 
         if (getArguments() != null) {
             int typeOrdinal = getArguments().getInt(ARG_FRAGMENT_TYPE);
@@ -75,15 +75,20 @@ public class PlaceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position),type)));
+                (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position), type)));
 
         hideProgress();
         hideText();
         hideList();
 
         placeClickedListener.onFragmentViewCreated(type);
+        viewCreated = true;
 
         return view;
+    }
+
+    public boolean isViewCreated() {
+        return viewCreated;
     }
 
     public void setData(Cursor placeCursor) {
@@ -144,7 +149,7 @@ public class PlaceFragment extends Fragment {
      * activity.
      */
     public interface onPlaceClickedListener {
-        void onPlaceClicked(long placeId,SearchHistory.SearchType type);
+        void onPlaceClicked(long placeId, SearchHistory.SearchType type);
 
         void onFragmentViewCreated(SearchHistory.SearchType type);
     }

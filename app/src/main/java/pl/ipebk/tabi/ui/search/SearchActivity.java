@@ -9,17 +9,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import javax.inject.Inject;
 
@@ -29,13 +24,12 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
-import rx.functions.Func1;
 
 public class SearchActivity extends BaseActivity implements
         PlaceFragment.onPlaceClickedListener, SearchMvpView {
+    public static final String PARAM_SEARCH_TEXT = "param_search_text";
     private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
     private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
-
     @Inject SearchPresenter presenter;
     @Bind(R.id.editTxt_search) EditText searchEditText;
     @Bind(R.id.pager_search) ViewPager searchPager;
@@ -53,11 +47,20 @@ public class SearchActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         presenter.attachView(this);
 
+        String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
+        if (textToSearch != null) {
+            presenter.deepSearchForText(textToSearch);
+        }
+
         RxTextView.textChanges(searchEditText)
-                .subscribe(text->presenter.quickSearchForText(text.toString()));
+                .subscribe(text -> {
+                    presenter.quickSearchForText(text.toString());
+                });
         RxTextView.editorActionEvents(searchEditText)
-                .filter(event->event.actionId()==EditorInfo.IME_ACTION_SEARCH)
-                .subscribe(e->presenter.deepSearchForText(searchEditText.getText().toString()));
+                .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
+                .subscribe(e -> {
+                    presenter.deepSearchForText(searchEditText.getText().toString());
+                });
 
         searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
 
@@ -91,28 +94,43 @@ public class SearchActivity extends BaseActivity implements
 
     //region Mvp View methods
     @Override public void showPlacesInPlacesSection(Cursor cursor) {
-        searchPlacesFragment.setData(cursor);
-        searchPlacesFragment.showList();
+        if (searchPlacesFragment.isViewCreated()) {
+            searchPlacesFragment.setData(cursor);
+            searchPlacesFragment.showList();
+        }
     }
 
     @Override public void showEmptyStateInPlacesSection() {
-        searchPlacesFragment.showText("Nothing to see here");
-        searchPlacesFragment.hideList();
+        if (searchPlacesFragment.isViewCreated()) {
+            searchPlacesFragment.showText("Nothing to see here");
+            searchPlacesFragment.hideList();
+        }
     }
 
     @Override public void hideEmptyStateInPlacesSection() {
-        searchPlacesFragment.hideText();
-        searchPlacesFragment.showList();
+        if (searchPlacesFragment.isViewCreated()) {
+            searchPlacesFragment.hideText();
+            searchPlacesFragment.showList();
+        }
+    }
+
+    @Override public void setSearchText(String searchText) {
+        searchEditText.setText(searchText.toLowerCase());
+        searchEditText.setSelection(searchText.length());
     }
 
     @Override public void showLoading() {
-        searchPlacesFragment.showProgress();
-        searchPlatesFragment.showProgress();
+        if (searchPlacesFragment.isViewCreated() && searchPlatesFragment.isViewCreated()) {
+            searchPlacesFragment.showProgress();
+            searchPlatesFragment.showProgress();
+        }
     }
 
     @Override public void hideLoading() {
-        searchPlacesFragment.hideProgress();
-        searchPlatesFragment.hideProgress();
+        if (searchPlacesFragment.isViewCreated() && searchPlatesFragment.isViewCreated()) {
+            searchPlacesFragment.hideProgress();
+            searchPlatesFragment.hideProgress();
+        }
     }
 
     @Override public void hideKeyboard() {
@@ -133,18 +151,24 @@ public class SearchActivity extends BaseActivity implements
     }
 
     @Override public void showEmptyStateInPlatesSection() {
-        searchPlatesFragment.showText("Nic nie znalazłem");
-        searchPlatesFragment.hideList();
+        if (searchPlatesFragment.isViewCreated()) {
+            searchPlatesFragment.showText("Nic nie znalazłem");
+            searchPlatesFragment.hideList();
+        }
     }
 
     @Override public void hideEmptyStateInPlatesSection() {
-        searchPlatesFragment.hideText();
-        searchPlatesFragment.showList();
+        if (searchPlatesFragment.isViewCreated()) {
+            searchPlatesFragment.hideText();
+            searchPlatesFragment.showList();
+        }
     }
 
     @Override public void showPlacesInPlatesSection(Cursor cursor) {
-        searchPlatesFragment.setData(cursor);
-        searchPlatesFragment.showList();
+        if (searchPlatesFragment.isViewCreated()) {
+            searchPlatesFragment.setData(cursor);
+            searchPlatesFragment.showList();
+        }
     }
     //endregion
 

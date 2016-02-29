@@ -7,7 +7,6 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.util.DisplayMetrics;
 
@@ -21,6 +20,7 @@ import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
@@ -49,6 +49,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void loadPlace(long id, String searchedPlate) {
+        getMvpView().disableActionButtons();
         if (searchedPlate != null) {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
@@ -69,6 +70,8 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private void showPlace(Place place) {
         this.place = place;
         placeSubject.onNext(place);
+
+        getMvpView().enableActionButtons();
 
         Plate plate = null;
         int searchedPlateIndex = 0;
@@ -120,6 +123,22 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         getMvpView().showAdditionalInfo(additionalText);
     }
 
+    public void showMoreForVoivodeship() {
+        Character firstLetter = place.getMainPlate().getPattern().charAt(0);
+        getMvpView().goToSearchForPhrase(firstLetter.toString());
+    }
+
+    public void showOnMap() {
+        String placeName = place.toString() + "," + context.getString(R.string.maps_country);
+        String rawUri = "geo:0,0?q=" + placeName;
+
+        getMvpView().startMap(Uri.parse(rawUri));
+    }
+
+    public void searchInGoogle() {
+        getMvpView().startWebSearch(place.toString() + "," + context.getString(R.string.maps_country));
+    }
+
     // TODO: 2016-02-27 move methods from presenter to dataManager
     public void loadMap(int width, int height) {
         Observable<Place> placeObservable;
@@ -130,9 +149,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             placeObservable = Observable.just(place);
         }
 
-        placeObservable.filter(p -> p != null)
-                .subscribe(p -> getMvpView()
-                        .showMap(getMapUrl(p, width, height)));
+        Subscription sub = placeObservable.filter(p -> p != null)
+                .subscribe(p -> {
+                    getMvpView().showMap(getMapUrl(p, width, height));
+                });
+        placeObservable.doOnNext(p -> sub.unsubscribe());
     }
 
     private Uri getMapUrl(Place place, int width, int height) {
@@ -140,10 +161,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         int widthInDp = (int) (width / metrics.density);
         int heightInDp = (int) (height / metrics.density);
 
-        String size = String.format(Locale.getDefault(), "%dx%d",widthInDp ,heightInDp);
+        String size = String.format(Locale.getDefault(), "%dx%d", widthInDp, heightInDp);
         String language = Locale.getDefault().getLanguage();
-        String placeName = (place.toString() + "," + context.getString(R.string.maps_country))
-                .replace(" ", "+");
+        String placeName = place.toString() + "," + context.getString(R.string.maps_country);
 
         return new Uri.Builder().scheme("http")
                 .authority("maps.googleapis.com")

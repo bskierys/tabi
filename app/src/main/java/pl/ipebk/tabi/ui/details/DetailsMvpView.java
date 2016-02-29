@@ -17,5 +17,10 @@ public interface DetailsMvpView extends MvpView {
     void showPowiat(String powiat);
     void showVoivodeship(String voivodeship);
     void showAdditionalInfo(String additionalInfo);
-    void showMap(Uri url);
+    void showMap(Uri uri);
+    void enableActionButtons();
+    void disableActionButtons();
+    void goToSearchForPhrase(String phrase);
+    void startMap(Uri uri);
+    void startWebSearch(String searchPhrase);
 }
