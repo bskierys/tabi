@@ -23,6 +23,7 @@ import butterknife.OnClick;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.search.SearchActivity;
+import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 public class DetailsActivity extends BaseActivity implements DetailsMvpView, Callback {
@@ -52,14 +53,22 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        BehaviorSubject<Integer> mapWidthStream = BehaviorSubject.create();
+        BehaviorSubject<Integer> mapHeightStream = BehaviorSubject.create();
+
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
         if (placeId > 0) {
-            presenter.loadPlace(placeId, searchedPlate);
+            presenter.loadPlace(placeId, searchedPlate,
+                    mapWidthStream.asObservable(),
+                    mapHeightStream.asObservable());
         }
 
-        mapView.post(() -> presenter.loadMap(mapView.getWidth(), mapView.getHeight()));
+        mapView.post(() -> {
+            mapHeightStream.onNext(mapView.getHeight());
+            mapWidthStream.onNext(mapView.getWidth());
+        });
     }
 
     @Override

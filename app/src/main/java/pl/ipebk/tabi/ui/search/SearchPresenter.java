@@ -118,7 +118,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                 .delay(delay, TimeUnit.MILLISECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(spellCorrector::cleanForSearch)
-                .doOnUnsubscribe(() -> getMvpView().hideLoading())
                 .subscribe(s -> beginSearchForCleaned(limit, s),
                         e -> Timber.e("Error during searching for places", e));
     }
@@ -130,7 +129,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         } else {
             getMvpView().hideEmptyStateInPlacesSection();
             getMvpView().hideEmptyStateInPlatesSection();
-            getMvpView().showLoading();
             stopwatch.reset();
 
             getObservableForSearchWithinTwoQueries(s, limit)
@@ -172,7 +170,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             getMvpView().showEmptyStateInPlacesSection();
         }
 
-        getMvpView().hideLoading();
         Timber.d("Rendering layout took: %s", stopwatch.getElapsedTimeString());
     }
     //endregion

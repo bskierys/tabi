@@ -48,7 +48,8 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         super.detachView();
     }
 
-    public void loadPlace(long id, String searchedPlate) {
+    public void loadPlace(long id, String searchedPlate, Observable<Integer> mapWidthStream,
+                          Observable<Integer> mapHeightStream) {
         getMvpView().disableActionButtons();
         if (searchedPlate != null) {
             this.searchedPlate = searchedPlate.toUpperCase();
@@ -63,6 +64,24 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::showPlace);
+
+        Observable<Place> placeStream = dataManager.getDatabaseHelper().getPlaceDao()
+                .getByIdObservable(id)
+                .mapToOne(cursor ->
+                        dataManager.getDatabaseHelper()
+                                .getPlaceDao().getTable()
+                                .cursorToModel(cursor));
+
+        placeStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showPlace);
+
+        Observable<Uri> loadMapStream = Observable.combineLatest(placeStream, mapWidthStream,
+                mapHeightStream, this::getMapUrl);
+
+        loadMapStream.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(uri -> getMvpView().showMap(uri));
     }
 
     // TODO: 2016-02-27 same method as in search rows
@@ -140,24 +159,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
-    public void loadMap(int width, int height) {
-        Observable<Place> placeObservable;
-
-        if (place == null) {
-            placeObservable = placeSubject.asObservable();
-        } else {
-            placeObservable = Observable.just(place);
-        }
-
-        Subscription sub = placeObservable.filter(p -> p != null)
-                .subscribe(p -> {
-                    getMvpView().showMap(getMapUrl(p, width, height));
-                });
-        placeObservable.doOnNext(p -> sub.unsubscribe());
-    }
-
     private Uri getMapUrl(Place place, int width, int height) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+
+        int scale = getScale(metrics.density);
+
         int widthInDp = (int) (width / metrics.density);
         int heightInDp = (int) (height / metrics.density);
 
@@ -172,9 +178,15 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                 .appendPath("staticmap")
                 .appendQueryParameter("center", placeName)
                 .appendQueryParameter("zoom", Integer.toString(9))
+                .appendQueryParameter("scale", Integer.toString(scale))
                 .appendQueryParameter("size", size)
                 .appendQueryParameter("maptype", "roadmap")
                 .appendQueryParameter("language", language)
                 .build();
+    }
+
+    private int getScale(float density) {
+        if (density < 2.0f) return 1;
+        else return 2;
     }
 }

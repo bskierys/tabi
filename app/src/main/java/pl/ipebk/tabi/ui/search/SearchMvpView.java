@@ -26,10 +26,6 @@ public interface SearchMvpView extends MvpView {
 
     void setSearchText(String searchText);
 
-    void showLoading();
-
-    void hideLoading();
-
     void hideKeyboard();
 
     void goToPlaceDetails(long placeId,String searchedText);

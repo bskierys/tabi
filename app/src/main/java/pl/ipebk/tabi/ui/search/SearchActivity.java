@@ -119,20 +119,6 @@ public class SearchActivity extends BaseActivity implements
         searchEditText.setSelection(searchText.length());
     }
 
-    @Override public void showLoading() {
-        if (searchPlacesFragment.isViewCreated() && searchPlatesFragment.isViewCreated()) {
-            searchPlacesFragment.showProgress();
-            searchPlatesFragment.showProgress();
-        }
-    }
-
-    @Override public void hideLoading() {
-        if (searchPlacesFragment.isViewCreated() && searchPlatesFragment.isViewCreated()) {
-            searchPlacesFragment.hideProgress();
-            searchPlatesFragment.hideProgress();
-        }
-    }
-
     @Override public void hideKeyboard() {
         View view = this.getCurrentFocus();
 
