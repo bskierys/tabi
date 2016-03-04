@@ -33,7 +33,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private final SpellCorrector spellCorrector;
     private Subscription searchSubscription;
     private Stopwatch stopwatch = new Stopwatch();
-    private int loadedViews = 0;
     private String lastSearched;
 
     @Inject public SearchPresenter(DataManager dataManager, SpellCorrector spellCorrector) {
@@ -57,9 +56,13 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         getMvpView().goToPlaceDetails(placeId, searchedPlate);
     }
 
+    public void startInitialSearchForText(String searchText) {
+        getMvpView().setSearchText(searchText);
+        deepSearchForText(searchText);
+    }
+
     public void loadInitialStateForPlaces() {
-        incrementLoadedViews();
-        if (lastSearched != null && isViewCreated()) {
+        if (lastSearched != null) {
             getMvpView().setSearchText(lastSearched);
             deepSearchForText(lastSearched);
         } else {
@@ -67,15 +70,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         }
     }
 
-    private void incrementLoadedViews() {
-        if (loadedViews < FULLY_LOADED_VIEW_CONST) {
-            loadedViews++;
-        }
-    }
-
     public void loadInitialStateForPlates() {
-        incrementLoadedViews();
-        if (lastSearched != null && isViewCreated()) {
+        if (lastSearched != null) {
             getMvpView().setSearchText(lastSearched);
             deepSearchForText(lastSearched);
         } else {
@@ -84,27 +80,15 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void quickSearchForText(String rawPhrase) {
-        if (isViewCreated()) {
-            searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
-        } else {
-            Timber.d("View is not created. Abandon search");
-        }
+        searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
     }
 
     public void deepSearchForText(String rawPhrase) {
         this.lastSearched = rawPhrase;
-        if (isViewCreated()) {
-            searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
-            getMvpView().hideKeyboard();
-        } else {
-            Timber.d("View is not created. Abandon search");
-        }
+        searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
+        getMvpView().hideKeyboard();
     }
     //endregion
-
-    private boolean isViewCreated() {
-        return loadedViews == FULLY_LOADED_VIEW_CONST;
-    }
 
     //region Search
     private void searchForRawTextWithLimit(String rawPhrase, Integer limit, long delay) {

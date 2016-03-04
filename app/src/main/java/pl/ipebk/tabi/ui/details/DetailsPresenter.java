@@ -20,7 +20,6 @@ import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
@@ -30,14 +29,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private DataManager dataManager;
     private Context context;
     private Place place;
-    private BehaviorSubject<Place> placeSubject;
     private String searchedPlate;
 
     @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
         this.dataManager = dataManager;
         this.context = activity;
-
-        placeSubject = BehaviorSubject.create();
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -88,7 +84,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     // TODO: 2016-02-28 refactor
     private void showPlace(Place place) {
         this.place = place;
-        placeSubject.onNext(place);
 
         getMvpView().enableActionButtons();
 

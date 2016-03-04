@@ -24,12 +24,16 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
+import rx.Observable;
+import rx.subjects.BehaviorSubject;
 
 public class SearchActivity extends BaseActivity implements
         PlaceFragment.onPlaceClickedListener, SearchMvpView {
     public static final String PARAM_SEARCH_TEXT = "param_search_text";
     private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
     private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
+    private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
+
     @Inject SearchPresenter presenter;
     @Bind(R.id.editTxt_search) EditText searchEditText;
     @Bind(R.id.pager_search) ViewPager searchPager;
@@ -37,6 +41,8 @@ public class SearchActivity extends BaseActivity implements
 
     private PlaceFragment searchPlacesFragment;
     private PlaceFragment searchPlatesFragment;
+
+    private BehaviorSubject<Integer> viewCreationSubject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,9 @@ public class SearchActivity extends BaseActivity implements
         setSupportActionBar(toolbar);
         presenter.attachView(this);
 
+        viewCreationSubject = BehaviorSubject.create();
+
         String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
-        if (textToSearch != null) {
-            presenter.deepSearchForText(textToSearch);
-        }
 
         RxTextView.textChanges(searchEditText)
                 .subscribe(text -> {
@@ -66,6 +71,14 @@ public class SearchActivity extends BaseActivity implements
 
         searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
         searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
+
+        Observable<String> initialSearchStream = Observable
+                .combineLatest(viewCreationSubject.asObservable().scan((a, b) -> a + b)
+                                .filter(fragmentsCreated -> fragmentsCreated == TOTAL_NUMBER_OF_FRAGMENTS),
+                        Observable.just(textToSearch), (fragmentsCreated, searchText) -> searchText)
+                .filter(text -> text != null);
+
+        initialSearchStream.subscribe(searchText -> presenter.startInitialSearchForText(searchText));
     }
 
     @Override
@@ -75,6 +88,7 @@ public class SearchActivity extends BaseActivity implements
     }
 
     //region View callbacks
+    // TODO: 2016-03-04 move searchType from searchHistory
     @Override public void onPlaceClicked(long placeId, SearchHistory.SearchType type) {
         String searchedPlate = null;
         if (type == SearchHistory.SearchType.PLATE) {
@@ -84,11 +98,7 @@ public class SearchActivity extends BaseActivity implements
     }
 
     @Override public void onFragmentViewCreated(SearchHistory.SearchType type) {
-        if (type == SearchHistory.SearchType.PLACE) {
-            presenter.loadInitialStateForPlaces();
-        } else if (type == SearchHistory.SearchType.PLATE) {
-            presenter.loadInitialStateForPlates();
-        }
+        viewCreationSubject.onNext(1);
     }
     //endregion
 
@@ -198,8 +208,7 @@ public class SearchActivity extends BaseActivity implements
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return TOTAL_NUMBER_OF_FRAGMENTS;
         }
     }
     //endregion

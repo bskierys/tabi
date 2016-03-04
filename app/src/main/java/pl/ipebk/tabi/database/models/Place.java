@@ -81,15 +81,16 @@ public class Place implements ModelInterface {
         this.hasOwnPlate = hasOwnPlate;
     }
 
-    @Override public String toString(){
+    @Override public String toString() {
         return getName() + "," + getGmina() + ","
                 + getPowiat() + "," + getVoivodeship();
     }
 
-    public Plate getMainPlate(){
-        if(plates!=null && plates.size()>0){
+    // TODO: 2016-03-04 test 
+    public Plate getMainPlate() {
+        if (plates != null && plates.size() > 0) {
             return plates.get(0);
-        }else {
+        } else {
             return null;
         }
     }
