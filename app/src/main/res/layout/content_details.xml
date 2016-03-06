@@ -32,6 +32,14 @@
         android:layout_height="1dp"
         android:src="@color/grey_800"/>
 
+    <ImageView
+        android:id="@+id/img_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:src="@drawable/tabi_embarrassed"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/txt_voivodeship"
         android:layout_width="wrap_content"
@@ -94,6 +102,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/wrap_map"
         style="@style/Details.Map">
 
         <ImageView

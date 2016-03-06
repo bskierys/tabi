@@ -3,6 +3,8 @@ package pl.ipebk.tabi.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import javax.inject.Inject;
@@ -17,6 +19,7 @@ import pl.ipebk.tabi.ui.search.SearchActivity;
 public class MainActivity extends BaseActivity implements MainMvpView {
     @Inject MainPresenter presenter;
     @Bind(R.id.txt_prompt) TextView promptView;
+    @Bind(R.id.img_loading) ImageView loadingView;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +45,12 @@ public class MainActivity extends BaseActivity implements MainMvpView {
 
     //region Mvp view methods
     @Override public void showLoading() {
+        loadingView.setVisibility(View.VISIBLE);
         promptView.setText("Preparing database");
     }
 
     @Override public void hideLoading() {
+        loadingView.setVisibility(View.INVISIBLE);
         promptView.setText("");
     }
 

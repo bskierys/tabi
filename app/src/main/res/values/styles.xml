@@ -17,9 +17,19 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="Activity">
-        <item name="android:background">@color/white</item>
+    <style name="AppTheme.Placeholder" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/loading_screen</item>
     </style>
+
+    <style name="Activity">
+        <item name="android:background">@color/grey_100</item>
+    </style>
+
+    <!--  MAIN  -->
+    <style name="Main" parent="Activity"/>
+
+    <!--  Search  -->
+    <style name="Search" parent="Activity"/>
 
     <!--  DETAILS  -->
     <style name="Details" parent="Activity"/>

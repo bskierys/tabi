@@ -55,20 +55,30 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                 .getDatabaseHelper().getPlaceDao()
                 .getByIdObservable(id);
 
-        placeStream.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showPlace);
+        Observable<Place> standardPlaceStream = placeStream
+                .filter(p -> p.getType() != Place.Type.SPECIAL);
 
-        Observable<Uri> loadMapStream = Observable.combineLatest(placeStream, mapWidthStream,
+        standardPlaceStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showStandardPlace);
+
+        Observable<Uri> loadMapStream = Observable.combineLatest(standardPlaceStream, mapWidthStream,
                 mapHeightStream, this::getMapUrl);
 
         loadMapStream.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(uri -> getMvpView().showMap(uri));
+
+        Observable<Place> specialPlaceStream = placeStream
+                .filter(p -> p.getType() == Place.Type.SPECIAL);
+
+        specialPlaceStream.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showSpecialPlace);
     }
 
     // TODO: 2016-02-27 same method as in search rows
-    private void showPlace(Place place) {
+    private void showStandardPlace(Place place) {
         this.place = place;
 
         getMvpView().enableActionButtons();
@@ -94,6 +104,20 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                     getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
                     getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
                 });
+    }
+
+    private void showSpecialPlace(Place place) {
+        this.place = place;
+        getMvpView().showPlaceName(place.getName());
+        getMvpView().showPlaceHolder();
+
+        Observable<Place> placeStream = Observable.just(place);
+
+        placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
+                .filter(p -> p != null).map(Plate::toString)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
     }
 
     @NonNull private String getAdditionalInfo(Place place) {

@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -94,22 +95,30 @@ public class DetailsActivityTest {
 
         details.launchActivity(intent);
 
-        // check place name
-        onView(withId(R.id.txt_place_name)).check(matches(isDisplayed()));
-        onView(withId(R.id.txt_place_name)).check(matches(withText(name)));
+        try{
+            // wait for view to load
+            wait(1000L);
 
-        // other texts
-        onView(withId(R.id.txt_plate)).check(matches(isDisplayed()));
+            // check place name
+            onView(withId(R.id.txt_place_name)).check(matches(isDisplayed()));
+            onView(withId(R.id.txt_place_name)).check(matches(withText(name)));
 
-        // not displayed views
-        onView(withId(R.id.txt_voivodeship)).check(doesNotExist());
-        onView(withId(R.id.txt_powiat)).check(doesNotExist());
-        onView(withId(R.id.txt_gmina)).check(doesNotExist());
-        onView(withId(R.id.txt_additional)).check(doesNotExist());
-        onView(withId(R.id.btn_google_it)).check(doesNotExist());
-        onView(withId(R.id.btn_map)).check(doesNotExist());
-        onView(withId(R.id.btn_voivodeship)).check(doesNotExist());
-        onView(withId(R.id.img_map)).check(doesNotExist());
+            // other texts
+            onView(withId(R.id.txt_plate)).check(matches(isDisplayed()));
+
+            // not displayed views
+            onView(withId(R.id.txt_voivodeship)).check(doesNotExist());
+            onView(withId(R.id.txt_powiat)).check(doesNotExist());
+            onView(withId(R.id.txt_gmina)).check(doesNotExist());
+            onView(withId(R.id.txt_additional)).check(doesNotExist());
+            onView(withId(R.id.btn_google_it)).check(doesNotExist());
+            onView(withId(R.id.btn_map)).check(doesNotExist());
+            onView(withId(R.id.btn_voivodeship)).check(doesNotExist());
+            onView(withId(R.id.img_map)).check(doesNotExist());
+        }catch (Exception e){
+            // gotcha
+            Assert.fail();
+        }
     }
 
     @Test public void testActivitySurvivesScreenOrientationChange() {
@@ -149,7 +158,7 @@ public class DetailsActivityTest {
 
         onView(withId(R.id.btn_google_it)).perform(click());
 
-        intended(hasAction(Intent.ACTION_WEB_SEARCH));
+        Intents.intended(hasAction(Intent.ACTION_WEB_SEARCH));
 
         Intents.release();*/
     }

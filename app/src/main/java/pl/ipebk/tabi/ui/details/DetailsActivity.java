@@ -40,6 +40,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.txt_additional) TextView additionalInfoView;
     @Bind(R.id.img_map) ImageView mapView;
     @Bind(R.id.img_pin) ImageView pinView;
+    @Bind(R.id.img_placeholder) ImageView placeHolder;
+    @Bind(R.id.wrap_map) View mapWrapper;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +148,16 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
         intent.putExtra(SearchManager.QUERY, searchPhrase);
         startActivity(intent);
+    }
+
+    @Override public void showPlaceHolder() {
+        placeHolder.setVisibility(View.VISIBLE);
+        mapWrapper.setVisibility(View.GONE);
+        voivodeshipView.setVisibility(View.GONE);
+        powiatView.setVisibility(View.GONE);
+        gminaView.setVisibility(View.GONE);
+        additionalInfoView.setVisibility(View.GONE);
+        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.GONE));
     }
 
     //region Picasso callback methods

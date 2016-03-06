@@ -25,4 +25,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="Go"/>
+
+    <ImageView android:id="@+id/img_loading"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:scaleType="centerInside"
+               android:src="@drawable/loading_screen"/>
 </RelativeLayout>
