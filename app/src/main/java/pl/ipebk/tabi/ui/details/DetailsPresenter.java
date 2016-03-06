@@ -24,6 +24,7 @@ import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private DataManager dataManager;

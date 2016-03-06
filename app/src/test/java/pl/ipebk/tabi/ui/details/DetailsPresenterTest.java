@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.ipebk.tabi.database.daos.PlaceDao;
@@ -35,6 +36,7 @@ public class DetailsPresenterTest {
     private DetailsPresenter detailsPresenter;
 
     @Before public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(this);
         DatabaseOpenHelper mockOpenHelper = mock(DatabaseOpenHelper.class);
         when(mockOpenHelper.getPlaceDao()).thenReturn(mockPlaceDao);
         DataManager mockDataManager = mock(DataManager.class);
@@ -53,11 +55,9 @@ public class DetailsPresenterTest {
     }
 
     @After public void tearDown() throws Exception {
-        //detailsPresenter.detachView();
+        detailsPresenter.detachView();
     }
 
-    // TODO: 2016-03-06 more tests
-    // TODO: 2016-03-06 why place is loaded fails
     @Test public void testPlaceIsLoaded() {
         String name = "Malbork";
         Place malbork = TestDataFactory.makePlace(name);

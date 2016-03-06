@@ -71,8 +71,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         });
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected void onDestroy() {
         super.onDestroy();
         presenter.detachView();
     }

@@ -6,8 +6,10 @@
 package pl.ipebk.tabi.ui.base;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import icepick.Icepick;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.di.component.ActivityComponent;
 import pl.ipebk.tabi.di.component.DaggerActivityComponent;
@@ -30,13 +32,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         return activityComponent;
     }
 
-    @Override public void startActivity(Intent intent){
-        super.startActivity(intent);
-        overridePendingTransition(0,0);
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
-    @Override public void onBackPressed(){
+    @Override public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
+    @Override public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 }

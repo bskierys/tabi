@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.test.common;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +42,16 @@ public class TestDataFactory {
     }
 
     public static Place makePlace(String placeName) {
+        Place place = getTemplatePlace(placeName);
+
+        place.setType(Place.Type.VOIVODE_CITY);
+        place.setPowiat("powiat");
+        place.setGmina("gmina");
+
+        return place;
+    }
+
+    @NonNull private static Place getTemplatePlace(String placeName) {
         Place place = new Place();
         place.setName(placeName);
 
@@ -54,12 +66,15 @@ public class TestDataFactory {
         }
 
         place.setPlates(getListOfPlates(patterns));
-        place.setType(Place.Type.VOIVODE_CITY);
-        place.setPowiat("powiat");
-        place.setVoivodeship("voivodeship");
-        place.setGmina("gmina");
         place.setHasOwnPlate(true);
+        place.setVoivodeship("voivodeship");
         place.setId(random.nextLong());
+        return place;
+    }
+
+    public static Place makeSpecialPlace(String placeName) {
+        Place place = getTemplatePlace(placeName);
+        place.setType(Place.Type.SPECIAL);
 
         return place;
     }

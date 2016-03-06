@@ -25,6 +25,7 @@
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://clojars.org/repo/" }
     }
 }
 
@@ -53,6 +54,7 @@ ext {
     picassoVersion = '2.5.2'
     okhttpVersion = '3.2.0'
     dexmakerVersion = '1.1'
+    icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
     robolectricVerion = '3.0'
@@ -84,6 +86,10 @@ ext {
             // timber
             timber            : "com.jakewharton.timber:timber:${timberVersion}",
 
+            // icepick
+            icepick           : "frankiesardo:icepick:${icepickVersion}",
+            icepickProcessor  : "frankiesardo:icepick-processor:${icepickVersion}",
+
             // image downloading
             picasso           : "com.squareup.picasso:picasso:${picassoVersion}",
             okhttp            : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
@@ -108,5 +114,6 @@ ext {
             dexmaker_mockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
             testrunner        : "com.android.support.test:runner:${androidTestVersion}",
             espresso          : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+            espressointents    : "com.android.support.test.espresso:espresso-intents:${espressoVersion}",
     ]
 }

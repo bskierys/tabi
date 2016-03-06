@@ -118,6 +118,10 @@ dependencies {
     compile mobileDependencies.picasso
     compile mobileDependencies.okhttp
 
+    // icepick
+    compile mobileDependencies.icepick
+    provided mobileDependencies.icepickProcessor
+
     // sqlite
     compile mobileDependencies.sqliteAssetHelper
     compile mobileDependencies.sqlbrite
@@ -143,7 +147,15 @@ dependencies {
     androidTestCompile(mobileDependencies.espresso) {
         exclude module: 'support-annotations'
     }
+    androidTestCompile(mobileDependencies.espressointents) {
+        exclude module: 'support-annotations'
+    }
     androidTestCompile(mobileDependencies.testrunner) {
         exclude module: 'support-annotations'
     }
+}
+
+// Log out test results to console
+tasks.matching {it instanceof Test}.all {
+    testLogging.events = ["failed", "passed", "skipped"]
 }
