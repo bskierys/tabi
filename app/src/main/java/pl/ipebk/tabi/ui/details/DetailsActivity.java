@@ -113,7 +113,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         additionalInfoView.setText(additionalInfo);
     }
 
-    // TODO: 2016-02-28 how to do it properly with rx and mvp?
     @Override public void showMap(Uri uri) {
         picasso.load(uri).fit().centerCrop().error(R.color.red_300)
                 .placeholder(R.color.grey_300).into(mapView, this);

@@ -14,6 +14,8 @@ import java.util.List;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.ui.main.CategoryListItem;
+import rx.Observable;
+import rx.functions.Func1;
 
 public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testGetVoivodeships() {
@@ -38,7 +40,6 @@ public class PlaceDaoTest extends DatabaseTest {
         databaseHelper.getPlaceDao().add(special3);
 
         databaseHelper.getPlaceDao().getVoivodeshipsObservable()
-                .mapToList(CategoryListItem::new)
                 .subscribe(voivodeships -> {
                     assertEquals(6, voivodeships.size());
 

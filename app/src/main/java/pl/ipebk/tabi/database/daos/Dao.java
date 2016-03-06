@@ -13,13 +13,16 @@ import android.text.TextUtils;
 
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.QueryObservable;
+import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import pl.ipebk.tabi.database.models.ModelInterface;
+import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.tables.Table;
+import rx.Observable;
 import timber.log.Timber;
 
 /**
@@ -158,14 +161,15 @@ public abstract class Dao<E extends ModelInterface> {
      * @param id Id of an entity to look for.
      * @return Observable of entity with given id or null if not present.
      */
-    public QueryObservable getByIdObservable(Long id) {
+    public Observable<E> getByIdObservable(Long id) {
         String selection = Table.COLUMN_ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
         String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
                 table.getQualifiedColumns(), selection, null, null, null, null);
 
-        return db.createQuery(table.getTableName(), sql, selectionArgs);
+        return db.createQuery(table.getTableName(), sql, selectionArgs)
+                .mapToOne(cursor -> table.cursorToModel(cursor));
     }
 
     protected E getModelForCursor(Cursor cursor) {
@@ -196,13 +200,31 @@ public abstract class Dao<E extends ModelInterface> {
      * @return Observable of list of all entities from database.
      * Empty list if there are no objects in table.
      */
-    public QueryObservable getAllObservable() {
+    public Observable<List<E>> getAllObservable() {
         String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
                 table.getQualifiedColumns(), null, null, null, null, null);
-        return db.createQuery(table.getTableName(), sql);
+        return db.createQuery(table.getTableName(), sql)
+                .mapToList(cursor -> table.cursorToModel(cursor));
     }
 
-    @NonNull protected List<E> getListOfModelsForCursor(Cursor cursor) {
+    /**
+     * Gets all entities from database.
+     *
+     * @return Observable of cursor of all entities from database.
+     * Empty list if there are no objects in table.
+     */
+    public Observable<Cursor> getAllCursorObservable() {
+        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
+                table.getQualifiedColumns(), null, null, null, null, null);
+        return db.createQuery(table.getTableName(), sql).map(SqlBrite.Query::run);
+    }
+
+    /**
+     * Maps cursor to list of models
+     * @param cursor cursor of appropriate models
+     * @return List of models of appropriate type
+     */
+    @NonNull public List<E> getListOfModelsForCursor(Cursor cursor) {
         List<E> models = new ArrayList<>();
         if (cursor != null) {
             cursor.moveToFirst();

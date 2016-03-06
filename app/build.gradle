@@ -1,6 +1,17 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.4.2'
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.getkeepsafe.dexcount'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -36,6 +47,7 @@ android {
         targetSdkVersion globalConfiguration.getAt("androidTargetSdkVersion")
         versionCode globalConfiguration.getAt("androidVersionCode")
         versionName globalConfiguration.getAt("androidVersionName")
+        testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
     }
 
     compileOptions {
@@ -59,6 +71,21 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            versionNameSuffix " Debug"
+            debuggable true
+        }
+    }
+
+    sourceSets {
+        def commonTestDir = 'src/commonTest/java'
+        test {
+            java.srcDir commonTestDir
+        }
+        androidTest {
+            java.srcDir commonTestDir
         }
     }
 }
@@ -98,6 +125,8 @@ dependencies {
     // dagger
     compile mobileDependencies.dagger
     apt mobileDependencies.daggerCompiler
+    testApt mobileDependencies.daggerCompiler
+    androidTestApt mobileDependencies.daggerCompiler
     provided mobileDependencies.javaxAnnotation
 
     // unit

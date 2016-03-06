@@ -1,5 +1,13 @@
 <resources>
-    <string name="maps_country">Polska</string>
+    <!--  DETAILS  -->
+    <string name="details_gmina">gmina</string>
+    <string name="details_powiat">powiat</string>
+    <string name="details_voivodeship">województwo</string>
+    <string name="details_additional_town">miasto</string>
+    <string name="details_additional_part_of_town">część miasta</string>
+    <string name="details_additional_village">wioska</string>
+    <string name="details_additional_other_plates">inne tablice</string>
+    <string name="details_country">Polska</string>
 
     <string name="app_name">Tabi</string>
     <string name="action_settings">Settings</string>

@@ -43,6 +43,24 @@ public class Plate implements ModelInterface {
         this.end = end;
     }
 
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Plate plate = (Plate) o;
+
+        if (placeId != plate.placeId) return false;
+        if (!pattern.equals(plate.pattern)) return false;
+        return end != null ? end.equals(plate.end) : plate.end == null;
+    }
+
+    @Override public int hashCode() {
+        int result = (int) (placeId ^ (placeId >>> 32));
+        result = 31 * result + pattern.hashCode();
+        result = 31 * result + (end != null ? end.hashCode() : 0);
+        return result;
+    }
+
     @Override public String toString() {
         String result = pattern;
         if (end != null) {

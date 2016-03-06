@@ -10,12 +10,12 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.util.Pair;
 
 import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.QueryObservable;
 
 import java.util.List;
 
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;
+import rx.Observable;
 
 public class SearchHistoryDao extends Dao<SearchHistory> {
     public SearchHistoryDao(BriteDatabase database, PlaceDao placeDao) {
@@ -29,9 +29,10 @@ public class SearchHistoryDao extends Dao<SearchHistory> {
      * @param limit nummber of history rows to return. Null to ignore
      * @return Search history for given type ordered be time descending.
      */
-    public QueryObservable getHistoryForType(SearchHistory.SearchType type, Integer limit) {
+    public Observable<List<SearchHistory>> getHistoryForType(SearchHistory.SearchType type, Integer limit) {
         Pair<String, String[]> sql = getHistoryListForTypeSql(type, limit);
-        return db.createQuery(table.getTableName(), sql.first, sql.second);
+        return db.createQuery(table.getTableName(), sql.first, sql.second)
+                .mapToList(cursor -> table.cursorToModel(cursor));
     }
 
     /**

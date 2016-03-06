@@ -5,6 +5,7 @@
 */
 package pl.ipebk.tabi.ui.base;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.ipebk.tabi.App;
@@ -27,5 +28,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                     .build();
         }
         return activityComponent;
+    }
+
+    @Override public void startActivity(Intent intent){
+        super.startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
+    @Override public void onBackPressed(){
+        super.onBackPressed();
+        overridePendingTransition(0,0);
     }
 }

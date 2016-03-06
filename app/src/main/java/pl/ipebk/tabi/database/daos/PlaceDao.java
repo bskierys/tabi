@@ -11,6 +11,7 @@ import android.support.v4.util.Pair;
 
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.QueryObservable;
+import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.tables.PlacesTable;
 import pl.ipebk.tabi.database.tables.PlatesTable;
 import pl.ipebk.tabi.ui.main.CategoryListItem;
+import rx.Observable;
 import timber.log.Timber;
 
 public class PlaceDao extends Dao<Place> {
@@ -33,9 +35,10 @@ public class PlaceDao extends Dao<Place> {
      * voivodeships and special categories sorted by type (voivodeships first) and
      * by localized name.
      */
-    public QueryObservable getVoivodeshipsObservable() {
+    public Observable<List<CategoryListItem>> getVoivodeshipsObservable() {
         Pair<String, String[]> sql = getVoivodeshipsSql();
-        return db.createQuery(table.getTableName(), sql.first, sql.second);
+        return db.createQuery(table.getTableName(), sql.first, sql.second)
+                .mapToList(CategoryListItem::new);
     }
 
     private Pair<String, String[]> getVoivodeshipsSql() {
@@ -79,9 +82,9 @@ public class PlaceDao extends Dao<Place> {
      * limited and is sorted firstly by plate length (two letter plates are more important
      * for user and comes first) and then alphabetically.
      */
-    public QueryObservable getPlacesForPlateStart(String plateStart, Integer limit) {
+    public Observable<Cursor> getPlacesForPlateStart(String plateStart, Integer limit) {
         Pair<String, String[]> sql = getPlacesForPlateStartSql(plateStart, limit);
-        return db.createQuery(table.getTableName(), sql.first, sql.second);
+        return db.createQuery(table.getTableName(), sql.first, sql.second).map(SqlBrite.Query::run);
     }
 
     /**
@@ -159,9 +162,9 @@ public class PlaceDao extends Dao<Place> {
      * outcome with diacritics will be higher on a list. List is sorted also by place type (larger
      * cities tend to be searched more often) and alphabetically.
      */
-    public QueryObservable getPlacesByName(String nameStart, Integer limit) {
+    public Observable<Cursor> getPlacesByName(String nameStart, Integer limit) {
         Pair<String, String[]> sql = getPlaceListByNameSql(nameStart, limit);
-        return db.createQuery(table.getTableName(), sql.first, sql.second);
+        return db.createQuery(table.getTableName(), sql.first, sql.second).map(SqlBrite.Query::run);
     }
 
     /**

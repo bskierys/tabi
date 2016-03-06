@@ -7,7 +7,9 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
@@ -22,8 +24,6 @@ import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rx.subjects.BehaviorSubject;
-import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private DataManager dataManager;
@@ -51,22 +51,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
-        dataManager.getDatabaseHelper().getPlaceDao()
-                .getByIdObservable(id)
-                .mapToOne(cursor ->
-                        dataManager.getDatabaseHelper()
-                                .getPlaceDao().getTable()
-                                .cursorToModel(cursor))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showPlace);
-
-        Observable<Place> placeStream = dataManager.getDatabaseHelper().getPlaceDao()
-                .getByIdObservable(id)
-                .mapToOne(cursor ->
-                        dataManager.getDatabaseHelper()
-                                .getPlaceDao().getTable()
-                                .cursorToModel(cursor));
+        Observable<Place> placeStream = dataManager
+                .getDatabaseHelper().getPlaceDao()
+                .getByIdObservable(id);
 
         placeStream.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -81,60 +68,52 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     // TODO: 2016-02-27 same method as in search rows
-    // TODO: 2016-02-28 refactor
     private void showPlace(Place place) {
         this.place = place;
 
         getMvpView().enableActionButtons();
 
-        Plate plate = null;
-        int searchedPlateIndex = 0;
-        if (searchedPlate == null) {
-            plate = place.getMainPlate();
-        } else {
-            int i = 0;
-            while (plate == null && i < place.getPlates().size()) {
-                if (place.getPlates().get(i).getPattern().startsWith(searchedPlate)) {
-                    plate = place.getPlates().get(i);
-                    searchedPlateIndex = i;
-                }
-                i++;
-            }
-        }
+        Observable<Place> placeStream = Observable.just(place);
 
-        // TODO: 2016-02-28 finding plate move to place model
-        if (plate == null) {
-            Timber.e("Cannot find plate");
-            return;
-        }
+        placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
+                .filter(p -> p != null).map(Plate::toString)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
 
-        String additionalText = "";
+        placeStream.map(p -> getAdditionalInfo(place))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(additionalText -> getMvpView().showAdditionalInfo(additionalText));
+
+        placeStream.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(p -> {
+                    getMvpView().showPlaceName(p.getName());
+                    getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) + " " + p.getVoivodeship());
+                    getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
+                    getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
+                });
+    }
+
+    @NonNull private String getAdditionalInfo(Place place) {
+        String placeType = "";
         if (place.getType().ordinal() < Place.Type.PART_OF_TOWN.ordinal()) {
-            additionalText += "miasto";
+            placeType = context.getString(R.string.details_additional_town);
         } else if (place.getType() == Place.Type.PART_OF_TOWN) {
-            additionalText += "część miasta " + place.getGmina();
+            placeType = context.getString(R.string.details_additional_part_of_town)
+                    + " " + place.getGmina();
         } else if (place.getType() == Place.Type.VILLAGE) {
-            additionalText += "wioska";
+            placeType = context.getString(R.string.details_additional_village);
         }
 
+        String otherPlates = "";
         if (place.getPlates().size() > 1) {
-            additionalText += ", inne tablice: ";
-            for (int i = 0; i < place.getPlates().size(); i++) {
-                if (i != searchedPlateIndex) {
-                    additionalText += place.getPlates().get(i).toString();
-                    if (i != place.getPlates().size() - 1) {
-                        additionalText += ", ";
-                    }
-                }
-            }
+            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)
+                    + ": " + place.platesToStringExceptMatchingPattern(searchedPlate);
         }
 
-        getMvpView().showPlaceName(place.getName());
-        getMvpView().showSearchedPlate(plate.toString());
-        getMvpView().showVoivodeship(place.getVoivodeship());
-        getMvpView().showPowiat(place.getPowiat());
-        getMvpView().showGmina(place.getGmina());
-        getMvpView().showAdditionalInfo(additionalText);
+        return placeType + otherPlates;
     }
 
     public void showMoreForVoivodeship() {
@@ -143,19 +122,20 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void showOnMap() {
-        String placeName = place.toString() + "," + context.getString(R.string.maps_country);
+        String placeName = place.toString() + "," + context.getString(R.string.details_country);
         String rawUri = "geo:0,0?q=" + placeName;
 
         getMvpView().startMap(Uri.parse(rawUri));
     }
 
     public void searchInGoogle() {
-        getMvpView().startWebSearch(place.toString() + "," + context.getString(R.string.maps_country));
+        getMvpView().startWebSearch(place.toString() + "," + context.getString(R.string.details_country));
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
     private Uri getMapUrl(Place place, int width, int height) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        Resources res = context.getResources();
+        DisplayMetrics metrics = res.getDisplayMetrics();
 
         int scale = getScale(metrics.density);
 
@@ -164,22 +144,33 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
         String size = String.format(Locale.getDefault(), "%dx%d", widthInDp, heightInDp);
         String language = Locale.getDefault().getLanguage();
-        String placeName = place.toString() + "," + context.getString(R.string.maps_country);
+        String placeName = place.toString() + "," + context.getString(R.string.details_country);
 
-        return new Uri.Builder().scheme("http")
-                .authority("maps.googleapis.com")
-                .appendPath("maps")
-                .appendPath("api")
-                .appendPath("staticmap")
-                .appendQueryParameter("center", placeName)
-                .appendQueryParameter("zoom", Integer.toString(9))
-                .appendQueryParameter("scale", Integer.toString(scale))
-                .appendQueryParameter("size", size)
-                .appendQueryParameter("maptype", "roadmap")
-                .appendQueryParameter("language", language)
-                .build();
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http");
+        builder.authority("maps.googleapis.com");
+        builder.appendPath("maps");
+        builder.appendPath("api");
+        builder.appendPath("staticmap");
+        builder.appendQueryParameter("center", placeName);
+        builder.appendQueryParameter("zoom", Integer.toString(9));
+        builder.appendQueryParameter("scale", Integer.toString(scale));
+        builder.appendQueryParameter("size", size);
+        builder.appendQueryParameter("maptype", "roadmap");
+        builder.appendQueryParameter("language", language);
+
+        return builder.build();
     }
 
+    /**
+     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5,
+     * xhdpi -> 2.0, xxhdpi -> 3.0, xxxhdpi -> 4.0. Scale for map should match
+     * these values. Unfortunately non-premium users can only scale up to 2,
+     * so we use this method as computing helper.
+     *
+     * @param density Android pixel density
+     * @return Google static maps api scale
+     */
     private int getScale(float density) {
         if (density < 2.0f) return 1;
         else return 2;

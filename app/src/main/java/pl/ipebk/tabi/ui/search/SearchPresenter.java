@@ -62,21 +62,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void loadInitialStateForPlaces() {
-        if (lastSearched != null) {
-            getMvpView().setSearchText(lastSearched);
-            deepSearchForText(lastSearched);
-        } else {
             getMvpView().showEmptyStateInPlacesSection();
-        }
     }
 
     public void loadInitialStateForPlates() {
-        if (lastSearched != null) {
-            getMvpView().setSearchText(lastSearched);
-            deepSearchForText(lastSearched);
-        } else {
             getMvpView().showEmptyStateInPlatesSection();
-        }
     }
 
     public void quickSearchForText(String rawPhrase) {
@@ -124,12 +114,10 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     private Observable<Pair<Cursor, Cursor>> getObservableForSearchWithinTwoQueries(String phrase, Integer limit) {
         Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
-                .getPlaceDao().getPlacesForPlateStart(phrase, limit)
-                .map(SqlBrite.Query::run);
+                .getPlaceDao().getPlacesForPlateStart(phrase, limit);
 
         Observable<Cursor> placesCursorObservable = dataManager.getDatabaseHelper()
-                .getPlaceDao().getPlacesByName(phrase, limit)
-                .map(SqlBrite.Query::run);
+                .getPlaceDao().getPlacesByName(phrase, limit);
 
         return Observable.zip(platesCursorObservable,
                 placesCursorObservable, Pair<Cursor, Cursor>::new);
