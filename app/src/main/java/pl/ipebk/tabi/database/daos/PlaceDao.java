@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.util.Pair;
 
 import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.List;

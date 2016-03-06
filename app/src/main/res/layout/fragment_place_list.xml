@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:name="pl.ipebk.tabi.ui.fragments.PlaceFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,15 +8,14 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    tools:context=".ui.search.PlaceFragment"
-    android:name="pl.ipebk.tabi.ui.fragments.PlaceFragment">
+    tools:context=".ui.search.PlaceFragment">
 
     <TextView
         android:id="@+id/txt_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp"
+        android:textSize="18sp"/>
 
     <ProgressBar
         android:id="@+id/progress_search"
@@ -28,10 +28,10 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/place_list"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
+        android:visibility="gone"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/row_place_list"/>
 </RelativeLayout>

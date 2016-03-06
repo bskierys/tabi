@@ -2,7 +2,7 @@ package pl.ipebk.tabi.utils;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TabiTreeTest {
     @Test public void testCreateTag() throws Exception {
@@ -10,9 +10,9 @@ public class TabiTreeTest {
         String className = "com.ipebk.tabi.utils.helpers.SearchMvpViewPresenterHelper";
         String expected = "tbi.hlpr.prsntr.vw.mvp.srch";
 
-        StackTraceElement element = new StackTraceElement(className,"fakeMethod","fakeFile",67);
+        StackTraceElement element = new StackTraceElement(className, "fakeMethod", "fakeFile", 67);
         String actual = tree.createStackElementTag(element);
 
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 }

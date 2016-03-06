@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 import pl.ipebk.tabi.database.models.ModelInterface;
-import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.tables.Table;
 import rx.Observable;
 import timber.log.Timber;
@@ -221,6 +219,7 @@ public abstract class Dao<E extends ModelInterface> {
 
     /**
      * Maps cursor to list of models
+     *
      * @param cursor cursor of appropriate models
      * @return List of models of appropriate type
      */

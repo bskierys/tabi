@@ -13,15 +13,16 @@
     tools:context=".ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView android:id="@+id/txt_prompt"
+    <TextView
+        android:id="@+id/txt_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
 
     <Button
         android:id="@+id/btn_go"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:text="Go"/>
 </RelativeLayout>

@@ -32,8 +32,7 @@ public class ApplicationTestModule {
         mApplication = application;
     }
 
-    @Provides
-    Application provideApplication() {
+    @Provides Application provideApplication() {
         return mApplication;
     }
 
@@ -47,7 +46,9 @@ public class ApplicationTestModule {
         return new Bus();
     }
 
-    /************* MOCKS *************/
+    /*************
+     * MOCKS
+     *************/
 
     @Provides
     @Singleton DataManager provideDataManager() {

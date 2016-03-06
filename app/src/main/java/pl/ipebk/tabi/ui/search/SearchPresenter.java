@@ -8,8 +8,6 @@ package pl.ipebk.tabi.ui.search;
 import android.database.Cursor;
 import android.support.v4.util.Pair;
 
-import com.squareup.sqlbrite.SqlBrite;
-
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -62,11 +60,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void loadInitialStateForPlaces() {
-            getMvpView().showEmptyStateInPlacesSection();
+        getMvpView().showEmptyStateInPlacesSection();
     }
 
     public void loadInitialStateForPlates() {
-            getMvpView().showEmptyStateInPlatesSection();
+        getMvpView().showEmptyStateInPlatesSection();
     }
 
     public void quickSearchForText(String rawPhrase) {

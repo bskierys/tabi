@@ -10,12 +10,9 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ActivityContext;
-import pl.ipebk.tabi.di.PerActivity;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import timber.log.Timber;
 
@@ -36,7 +33,7 @@ public class ActivityModule {
     }
 
     // TODO: 2016-02-28 inject as singleton
-    @Provides Picasso providePicasso(){
+    @Provides Picasso providePicasso() {
         return new Picasso.Builder(activity)
                 .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))
                 .build();

@@ -2,9 +2,6 @@ package pl.ipebk.tabi.database.models;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import pl.ipebk.tabi.test.common.TestDataFactory;
 
 import static org.junit.Assert.assertEquals;

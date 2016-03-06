@@ -14,8 +14,6 @@ import java.util.List;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.ui.main.CategoryListItem;
-import rx.Observable;
-import rx.functions.Func1;
 
 public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testGetVoivodeships() {
