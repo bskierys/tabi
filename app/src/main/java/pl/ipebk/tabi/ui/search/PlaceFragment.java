@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.custom.RecyclerItemClickListener;
@@ -76,6 +77,8 @@ public class PlaceFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                 (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position), type)));
+
+        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
 
         hideProgress();
         hideText();

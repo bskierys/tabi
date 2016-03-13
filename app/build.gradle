@@ -108,6 +108,9 @@ dependencies {
     // butterknife
     compile mobileDependencies.butterKnife
 
+    // overscroll - add to dependencies
+    compile 'me.everything:overscroll-decor-android:1.0.1'
+
     // otto
     compile mobileDependencies.otto
 
