@@ -13,18 +13,23 @@
     tools:context=".ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <pl.ipebk.tabi.ui.custom.FontTextView
         android:id="@+id/txt_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:text="Hello World!"
+        android:textSize="34sp"
+        android:textColor="#333333"
+        android:layout_centerHorizontal="true"
+        app:fontFamily="bebas"/>
 
-    <Button
+    <pl.ipebk.tabi.ui.custom.FontButton
         android:id="@+id/btn_go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Go"/>
+        android:text="Go"
+        app:fontFamily="bebas"/>
 
     <ImageView android:id="@+id/img_loading"
                android:layout_width="match_parent"

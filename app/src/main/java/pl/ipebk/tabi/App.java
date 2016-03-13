@@ -11,6 +11,7 @@ import android.content.Context;
 import pl.ipebk.tabi.di.component.ApplicationComponent;
 import pl.ipebk.tabi.di.component.DaggerApplicationComponent;
 import pl.ipebk.tabi.di.module.ApplicationModule;
+import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.TabiTree;
 import timber.log.Timber;
 

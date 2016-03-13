@@ -22,6 +22,7 @@ import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.test.common.TestDataFactory;
 import pl.ipebk.tabi.test.common.rules.TestComponentRule;
 import pl.ipebk.tabi.util.OrientationChangeAction;
+import pl.ipebk.tabi.util.VisibilityAssertions;
 import rx.Observable;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -31,6 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static pl.ipebk.tabi.util.VisibilityAssertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -86,7 +88,7 @@ public class DetailsActivityTest {
 
     @Test public void testSpecialCategoryDisplaysCorrectly() {
         String name = "Central Anticorruption Bureau";
-        Place special = TestDataFactory.makePlace(name);
+        Place special = TestDataFactory.makeSpecialPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(special));
 
@@ -95,30 +97,21 @@ public class DetailsActivityTest {
 
         details.launchActivity(intent);
 
-        try{
-            // wait for view to load
-            wait(1000L);
+        onView(withId(R.id.txt_place_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.txt_place_name)).check(matches(withText(name)));
 
-            // check place name
-            onView(withId(R.id.txt_place_name)).check(matches(isDisplayed()));
-            onView(withId(R.id.txt_place_name)).check(matches(withText(name)));
+        // other texts
+        onView(withId(R.id.txt_plate)).check(matches(isDisplayed()));
 
-            // other texts
-            onView(withId(R.id.txt_plate)).check(matches(isDisplayed()));
-
-            // not displayed views
-            onView(withId(R.id.txt_voivodeship)).check(doesNotExist());
-            onView(withId(R.id.txt_powiat)).check(doesNotExist());
-            onView(withId(R.id.txt_gmina)).check(doesNotExist());
-            onView(withId(R.id.txt_additional)).check(doesNotExist());
-            onView(withId(R.id.btn_google_it)).check(doesNotExist());
-            onView(withId(R.id.btn_map)).check(doesNotExist());
-            onView(withId(R.id.btn_voivodeship)).check(doesNotExist());
-            onView(withId(R.id.img_map)).check(doesNotExist());
-        }catch (Exception e){
-            // gotcha
-            Assert.fail();
-        }
+        // not displayed views
+        onView(withId(R.id.txt_voivodeship)).check(isGone());
+        onView(withId(R.id.txt_powiat)).check(isGone());
+        onView(withId(R.id.txt_gmina)).check(isGone());
+        onView(withId(R.id.txt_additional)).check(isGone());
+        onView(withId(R.id.btn_google_it)).check(isGone());
+        onView(withId(R.id.btn_map)).check(isGone());
+        onView(withId(R.id.btn_voivodeship)).check(isGone());
+        onView(withId(R.id.wrap_map)).check(isGone());
     }
 
     @Test public void testActivitySurvivesScreenOrientationChange() {

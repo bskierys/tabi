@@ -24,7 +24,7 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <EditText
+            <pl.ipebk.tabi.ui.custom.FontEditText
                 android:id="@+id/editTxt_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,7 +32,8 @@
                 android:layout_marginRight="16dp"
                 android:background="@android:color/transparent"
                 android:imeOptions="actionSearch"
-                android:inputType="textNoSuggestions"/>
+                android:inputType="textNoSuggestions"
+                app:fontFamily="montserrat"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

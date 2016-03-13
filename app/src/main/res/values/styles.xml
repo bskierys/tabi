@@ -25,6 +25,13 @@
         <item name="android:background">@color/grey_100</item>
     </style>
 
+    <declare-styleable name="Fonts">
+        <!-- using android's -->
+        <attr name="android:textStyle" />
+        <!-- our custom attribute -->
+        <attr name="fontFamily" format="string" />
+    </declare-styleable>
+
     <!--  MAIN  -->
     <style name="Main" parent="Activity"/>
 

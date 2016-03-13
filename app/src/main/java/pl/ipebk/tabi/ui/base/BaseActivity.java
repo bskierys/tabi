@@ -11,9 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import icepick.Icepick;
 import pl.ipebk.tabi.App;
+import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.di.component.ActivityComponent;
 import pl.ipebk.tabi.di.component.DaggerActivityComponent;
 import pl.ipebk.tabi.di.module.ActivityModule;
+import pl.ipebk.tabi.utils.FontManager;
 
 /**
  * Base Activity for all activities across application.
@@ -35,6 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+        FontManager.getInstance().initialize(this, R.xml.fonts);
     }
 
     @Override public void startActivity(Intent intent) {
