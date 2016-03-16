@@ -39,7 +39,9 @@
     <style name="Search" parent="Activity"/>
 
     <!--  DETAILS  -->
-    <style name="Details" parent="Activity"/>
+    <style name="Details" parent="Activity">
+        <item name="android:background">@color/grey_600</item>
+    </style>
 
     <style name="Details.Map">
         <item name="android:layout_width">match_parent</item>

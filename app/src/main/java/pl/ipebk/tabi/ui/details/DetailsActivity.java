@@ -2,12 +2,15 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
@@ -20,9 +23,11 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
+import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
+import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
@@ -43,6 +48,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_pin) ImageView pinView;
     @Bind(R.id.img_placeholder) ImageView placeHolder;
     @Bind(R.id.wrap_map) View mapWrapper;
+    @Bind(R.id.scroll_container) ScrollView scrollContainer;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,16 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         presenter.attachView(this);
+
+        float marginOffset = getResources().getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
+
+        ObservableVerticalOverScrollBounceEffectDecorator decorator = new ObservableVerticalOverScrollBounceEffectDecorator(new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f,
+                VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK, -1);
+
+        decorator.getReleaseEventStream()
+                .filter(scroll -> scroll != null)
+                .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
+                .subscribe(scroll -> onBackPressed());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

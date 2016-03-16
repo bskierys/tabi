@@ -78,8 +78,6 @@ public class PlaceFragment extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
                 (v, position) -> placeClickedListener.onPlaceClicked(adapter.getItemId(position), type)));
 
-        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
-
         hideProgress();
         hideText();
         hideList();

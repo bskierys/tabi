@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -14,7 +13,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
+import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.search.SearchActivity;
@@ -23,7 +23,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
     @Inject MainPresenter presenter;
     @Bind(R.id.txt_prompt) TextView promptView;
     @Bind(R.id.img_loading) ImageView loadingView;
-    @Bind(R.id.scrollView) ScrollView scrollView;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +31,6 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
-
-        OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
         presenter.attachView(this);
     }
