@@ -2,11 +2,9 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,8 +60,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
         float marginOffset = getResources().getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
 
-        ObservableVerticalOverScrollBounceEffectDecorator decorator = new ObservableVerticalOverScrollBounceEffectDecorator(new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f,
-                VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK, -1);
+        ObservableVerticalOverScrollBounceEffectDecorator decorator =
+                new ObservableVerticalOverScrollBounceEffectDecorator(
+                        new ScrollViewOverScrollDecorAdapter(scrollContainer),
+                        3f, VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK, -1
+                );
 
         decorator.getReleaseEventStream()
                 .filter(scroll -> scroll != null)
