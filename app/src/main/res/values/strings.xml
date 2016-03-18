@@ -8,6 +8,12 @@
     <string name="details_additional_village">wioska</string>
     <string name="details_additional_other_plates">inne tablice</string>
     <string name="details_country">Polska</string>
+    <string name="details_doodle_loading_header">Poczekaj chwilę&#8230;</string>
+    <string name="details_doodle_loading_description">Zaznaczam teren</string>
+    <string name="details_doodle_error_header">Ojej, ojej, ojej!</string>
+    <string name="details_doodle_error_description">Nie mogę dotrzeć do lokacji</string>
+    <string name="details_doodle_empty_header">Nic tu nie ma</string>
+    <string name="details_doodle_empty_description">Chociaż całkiem możliwe, że coś było, ale to zjadłem&#8230;</string>
 
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>

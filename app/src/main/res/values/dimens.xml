@@ -2,11 +2,18 @@
     <!--  DOODLE DEFAULT  -->
     <dimen name="Doodle.Height.Space.Before">16dp</dimen>
     <dimen name="Doodle.Height.Space.After">16dp</dimen>
-    <dimen name="Doodle.Text.Header">24sp</dimen>
+    <dimen name="Doodle.Text.Header">32sp</dimen>
     <dimen name="Doodle.Text.Description">14sp</dimen>
+    <dimen name="Doodle.Height.Default">150dp</dimen>
+    <dimen name="Doodle.Width.Default">300dp</dimen>
 
     <dimen name="Details.Height.Map">200dp</dimen>
+    <dimen name="Details.Height.Placeholder">200dp</dimen>
     <dimen name="Details.Height.Release.Scroll">48dp</dimen>
+    <dimen name="Details.Height.Doodle.Map.Space.Before">16dp</dimen>
+    <dimen name="Details.Height.Doodle.Map.Space.After">16dp</dimen>
+    <dimen name="Details.Height.Doodle.Empty.Space.Before">48dp</dimen>
+    <dimen name="Details.Height.Doodle.Empty.Space.After">40dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

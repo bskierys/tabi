@@ -5,4 +5,9 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/Details.Height.Map</item>
     </style>
+
+    <style name="Details.Placeholder">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/Details.Height.Placeholder</item>
+    </style>
 </resources>

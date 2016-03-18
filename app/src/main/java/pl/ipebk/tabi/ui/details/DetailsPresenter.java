@@ -59,22 +59,23 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                 .filter(p -> p.getType() != Place.Type.SPECIAL);
 
         standardPlaceStream.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showStandardPlace);
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(this::showStandardPlace);
 
-        Observable<Uri> loadMapStream = Observable.combineLatest(standardPlaceStream, mapWidthStream,
-                mapHeightStream, this::getMapUrl);
+        Observable<Uri> loadMapStream = Observable
+                .combineLatest(standardPlaceStream, mapWidthStream,
+                               mapHeightStream, this::getMapUrl);
 
         loadMapStream.subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(uri -> getMvpView().showMap(uri));
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .subscribe(uri -> getMvpView().showMap(uri));
 
         Observable<Place> specialPlaceStream = placeStream
                 .filter(p -> p.getType() == Place.Type.SPECIAL);
 
         specialPlaceStream.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showSpecialPlace);
+                          .observeOn(AndroidSchedulers.mainThread())
+                          .subscribe(this::showSpecialPlace);
     }
 
     // TODO: 2016-02-27 same method as in search rows
@@ -86,24 +87,28 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         Observable<Place> placeStream = Observable.just(place);
 
         placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
-                .filter(p -> p != null).map(Plate::toString)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
+                   .filter(p -> p != null).map(Plate::toString)
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
 
         placeStream.map(p -> getAdditionalInfo(place))
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(additionalText -> getMvpView().showAdditionalInfo(additionalText));
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(additionalText -> getMvpView().showAdditionalInfo(additionalText));
 
         placeStream.subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(p -> {
-                    getMvpView().showPlaceName(p.getName());
-                    getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) + " " + p.getVoivodeship());
-                    getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
-                    getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
-                });
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(p -> {
+                       getMvpView().showPlaceName(p.getName());
+                       getMvpView().showVoivodeship(
+                               context.getString(R.string.details_voivodeship) + " " + p
+                                       .getVoivodeship());
+                       getMvpView().showPowiat(
+                               context.getString(R.string.details_powiat) + " " + p.getPowiat());
+                       getMvpView().showGmina(
+                               context.getString(R.string.details_gmina) + " " + p.getGmina());
+                   });
     }
 
     private void showSpecialPlace(Place place) {
@@ -114,10 +119,10 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         Observable<Place> placeStream = Observable.just(place);
 
         placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
-                .filter(p -> p != null).map(Plate::toString)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
+                   .filter(p -> p != null).map(Plate::toString)
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
     }
 
     @NonNull private String getAdditionalInfo(Place place) {
@@ -146,14 +151,15 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void showOnMap() {
-        String placeName = place.toString() + "," + context.getString(R.string.details_country);
+        String placeName = place + "," + context.getString(R.string.details_country);
         String rawUri = "geo:0,0?q=" + placeName;
 
         getMvpView().startMap(Uri.parse(rawUri));
     }
 
     public void searchInGoogle() {
-        getMvpView().startWebSearch(place.toString() + "," + context.getString(R.string.details_country));
+        getMvpView().startWebSearch(
+                place + "," + context.getString(R.string.details_country));
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
@@ -168,7 +174,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
         String size = String.format(Locale.getDefault(), "%dx%d", widthInDp, heightInDp);
         String language = Locale.getDefault().getLanguage();
-        String placeName = place.toString() + "," + context.getString(R.string.details_country);
+        String placeName = place + "," + context.getString(R.string.details_country);
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http");
@@ -187,16 +193,18 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     /**
-     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5,
-     * xhdpi -> 2.0, xxhdpi -> 3.0, xxxhdpi -> 4.0. Scale for map should match
-     * these values. Unfortunately non-premium users can only scale up to 2,
-     * so we use this method as computing helper.
+     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5, xhdpi -> 2.0, xxhdpi ->
+     * 3.0, xxxhdpi -> 4.0. Scale for map should match these values. Unfortunately non-premium users
+     * can only scale up to 2, so we use this method as computing helper.
      *
      * @param density Android pixel density
      * @return Google static maps api scale
      */
     private int getScale(float density) {
-        if (density < 2.0f) return 1;
-        else return 2;
+        if (density < 2.0f) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 }

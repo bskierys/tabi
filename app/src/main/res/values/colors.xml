@@ -16,7 +16,7 @@
     <color name="sienna_900">#b33319</color>
 
     <!--  grey scale palette  -->
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFF</color>
     <color name="black">#000</color>
 
