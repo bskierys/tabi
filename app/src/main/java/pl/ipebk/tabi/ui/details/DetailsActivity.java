@@ -2,6 +2,9 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +30,8 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
+import pl.ipebk.tabi.utils.DoodleDrawable;
+import pl.ipebk.tabi.utils.DoodleDrawableConfig;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
@@ -48,6 +53,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.wrap_map) View mapWrapper;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
+
+    Bitmap doodle;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,8 +140,17 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showMap(Uri uri) {
+
+        DoodleDrawableConfig doodleImage = new DoodleDrawableConfig.Builder(this)
+                .imageResource(R.drawable.tabi_map_loading)
+                .headerText("Poczekaj chwilę")
+                .descriptionText("Zaznac").build();
+        //mapView.setImageBitmap(doodleImage.draw());
+        //mapView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+
+        Drawable d = new DoodleDrawable(doodleImage,this);
         picasso.load(uri).fit().centerCrop().error(R.color.red_300)
-                .placeholder(R.color.grey_300).into(mapView, this);
+               .placeholder(d).into(mapView, this);
     }
 
     @Override public void enableActionButtons() {
