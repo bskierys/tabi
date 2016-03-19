@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Details.Map">
+    <style name="Map">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/Details.Height.Map</item>
     </style>
 
-    <style name="Details.Placeholder">
+    <style name="Placeholder">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/Details.Height.Placeholder</item>
+        <item name="android:layout_height">200dp</item>
     </style>
 </resources>

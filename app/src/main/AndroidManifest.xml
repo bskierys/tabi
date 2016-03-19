@@ -30,7 +30,7 @@
             android:name=".ui.details.DetailsActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".ui.search.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.search.SearchActivity"/>

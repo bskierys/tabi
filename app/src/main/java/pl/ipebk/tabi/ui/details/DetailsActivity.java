@@ -2,12 +2,17 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -91,10 +96,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         }
 
         mapView.post(() -> {
-            mapHeightStream.onNext(mapView.getHeight() - mapView.getPaddingBottom() - mapView
-                    .getPaddingTop());
-            mapWidthStream.onNext(mapView.getWidth() - mapView.getPaddingLeft() - mapView
-                    .getPaddingRight());
+            mapHeightStream.onNext(mapView.getMeasuredHeight());
+            mapWidthStream.onNext(mapView.getMeasuredWidth());
         });
     }
 
@@ -208,9 +211,12 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     private void setPlaceHolderImage() {
+        int height = placeHolder.getHeight();
+        int width = placeHolder.getWidth();
+
         DoodleDrawableConfig.Builder doodleBuilder = new DoodleDrawableConfig.Builder(this)
-                .height(placeHolder.getHeight()-placeHolder.getPaddingTop()-placeHolder.getPaddingBottom())
-                .width(placeHolder.getWidth()-placeHolder.getPaddingRight()-placeHolder.getPaddingLeft())
+                .height(height - placeHolder.getPaddingTop() - placeHolder.getPaddingBottom())
+                .width(width - placeHolder.getPaddingRight() - placeHolder.getPaddingLeft())
                 .spaceBeforeImage(getResources().getDimensionPixelOffset(
                         R.dimen.Details_Height_Doodle_Empty_Space_Before))
                 .spaceAfterImage(getResources().getDimensionPixelOffset(

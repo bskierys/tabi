@@ -40,10 +40,7 @@
 
     <ImageView
         android:id="@+id/img_placeholder"
-        style="@style/Details.Placeholder"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:scaleType="centerInside"
+        style="@style/Placeholder"
         android:visibility="gone"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
@@ -109,7 +106,7 @@
 
     <RelativeLayout
         android:id="@+id/wrap_map"
-        style="@style/Details.Map">
+        style="@style/Map">
 
         <ImageView
             android:id="@+id/img_map"
