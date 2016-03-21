@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-03-18
+* date: 2016-03-20
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.utils;
@@ -11,10 +11,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
@@ -27,11 +26,11 @@ import pl.ipebk.tabi.R;
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class DoodleDrawable extends Drawable {
+public class DoodleBitmapProvider {
     private static final int ALPHA_OPAQUE = 255;
     private static final int ALPHA_TRANSPARENT = 0;
 
-    private DoodleDrawableConfig config;
+    private final DoodleDrawableConfig config;
     private Resources resources;
 
     private final TextPaint headerPaint = new TextPaint();
@@ -44,7 +43,18 @@ public class DoodleDrawable extends Drawable {
     private Bitmap originalImage;
     private float scale;
 
-    public DoodleDrawable(DoodleDrawableConfig config) {
+    private Rect bounds;
+    private final Canvas canvas = new Canvas();
+
+    public Rect getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(int left, int top, int right, int bottom) {
+        this.bounds = new Rect(left, top, right, bottom);
+    }
+
+    public DoodleBitmapProvider(DoodleDrawableConfig config) {
         this.config = config;
         this.resources = config.context.getResources();
 
@@ -72,19 +82,9 @@ public class DoodleDrawable extends Drawable {
         descriptionPaint.setTypeface(montserrat);
     }
 
-    @Override public void draw(Canvas canvas) {
+    public void preComputeScale() {
         setBounds(0, 0, config.width, config.height);
 
-        if(scale == 0.f){
-            preComputeScale();
-        }
-
-        Rect doodleBounds = drawDoodle(canvas);
-        drawHeader(canvas, doodleBounds);
-        drawDescription(canvas, doodleBounds);
-    }
-
-    public void preComputeScale() {
         originalImage = BitmapFactory.decodeResource(resources, config.imageResource);
 
         int doodleHeight = originalImage.getHeight();
@@ -139,6 +139,29 @@ public class DoodleDrawable extends Drawable {
         }else {
             scale = 1.f;
         }
+    }
+
+    public Bitmap draw() {
+        if(scale == 0.f){
+            preComputeScale();
+        }
+
+        final Bitmap bitmap = Bitmap.createBitmap(getBounds().width(),
+                                                  getBounds().height(),
+                                                  Bitmap.Config.ARGB_8888);
+
+        final Canvas c = canvas;
+        canvas.setBitmap(bitmap);
+
+        Rect doodleBounds = drawDoodle(c);
+        drawHeader(c, doodleBounds);
+        drawDescription(c, doodleBounds);
+
+        return bitmap;
+    }
+
+    public Drawable asDrawable() {
+        return new BitmapDrawable(resources,draw());
     }
 
     private Rect drawDoodle(Canvas canvas) {
@@ -215,20 +238,20 @@ public class DoodleDrawable extends Drawable {
     private List<String> getLines(String text, Paint paint){
         Rect textBounds = new Rect();
 
-            StringTokenizer tok = new StringTokenizer(text, " ");
-            StringBuilder output = new StringBuilder(text.length());
-            List<String> lines = new ArrayList<>();
-            while (tok.hasMoreTokens()) {
-                String word = tok.nextToken();
+        StringTokenizer tok = new StringTokenizer(text, " ");
+        StringBuilder output = new StringBuilder(text.length());
+        List<String> lines = new ArrayList<>();
+        while (tok.hasMoreTokens()) {
+            String word = tok.nextToken();
 
-                if (getTextWidth(output+" "+word,paint,textBounds) > config.width) {
-                    lines.add(output.toString());
-                    output = new StringBuilder(text.length());
-                }
-                output.append(word);
-                output.append(" ");
+            if (getTextWidth(output+" "+word,paint,textBounds) > config.width) {
+                lines.add(output.toString());
+                output = new StringBuilder(text.length());
             }
-            lines.add(output.toString());
+            output.append(word);
+            output.append(" ");
+        }
+        lines.add(output.toString());
 
         return lines;
     }
@@ -236,23 +259,5 @@ public class DoodleDrawable extends Drawable {
     private int getTextWidth(String text, Paint paint,Rect bounds){
         paint.getTextBounds(text,0,text.length(),bounds);
         return bounds.width();
-    }
-
-    @Override public void setAlpha(int alpha) {
-        this.alpha = alpha;
-    }
-
-    @Override public void setColorFilter(ColorFilter colorFilter) {
-        this.colorFilter = colorFilter;
-    }
-
-    @Override public int getOpacity() {
-        if (alpha == ALPHA_OPAQUE) {
-            return PixelFormat.OPAQUE;
-        } else if (alpha == ALPHA_TRANSPARENT) {
-            return PixelFormat.TRANSPARENT;
-        } else {
-            return PixelFormat.TRANSLUCENT;
-        }
     }
 }

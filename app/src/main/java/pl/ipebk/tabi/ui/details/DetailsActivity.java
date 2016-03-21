@@ -2,17 +2,14 @@ package pl.ipebk.tabi.ui.details;
 
 import android.app.SearchManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -20,6 +17,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -30,10 +28,14 @@ import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorat
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
+import pl.ipebk.tabi.ui.custom.ObservableImageView;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
-import pl.ipebk.tabi.utils.DoodleDrawable;
+import pl.ipebk.tabi.utils.DoodleBitmapProvider;
 import pl.ipebk.tabi.utils.DoodleDrawableConfig;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
@@ -49,9 +51,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.txt_powiat) TextView powiatView;
     @Bind(R.id.txt_gmina) TextView gminaView;
     @Bind(R.id.txt_additional) TextView additionalInfoView;
-    @Bind(R.id.img_map) ImageView mapView;
+    @Bind(R.id.img_map) ObservableImageView mapView;
     @Bind(R.id.img_pin) ImageView pinView;
-    @Bind(R.id.img_placeholder) ImageView placeHolder;
+    @Bind(R.id.img_placeholder) ObservableImageView placeHolder;
     @Bind(R.id.wrap_map) View mapWrapper;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
@@ -65,13 +67,19 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         getActivityComponent().inject(this);
         presenter.attachView(this);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        prepareOverScroll();
+        loadData();
+    }
+
+    private void prepareOverScroll() {
         float marginOffset = getResources()
                 .getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
 
         ObservableVerticalOverScrollBounceEffectDecorator decorator =
                 new ObservableVerticalOverScrollBounceEffectDecorator(
-                        new ScrollViewOverScrollDecorAdapter(scrollContainer),
-                        3f,
+                        new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f,
                         VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK,
                         -1
                 );
@@ -80,11 +88,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                  .filter(scroll -> scroll != null)
                  .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
                  .subscribe(scroll -> onBackPressed());
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        PublishSubject<Integer> mapWidthStream = PublishSubject.create();
-        PublishSubject<Integer> mapHeightStream = PublishSubject.create();
+    private void loadData() {
+        final PublishSubject<Integer> mapWidthStream = PublishSubject.create();
+        final PublishSubject<Integer> mapHeightStream = PublishSubject.create();
 
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
@@ -95,9 +103,15 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                                 mapHeightStream.asObservable());
         }
 
-        mapView.post(() -> {
-            mapHeightStream.onNext(mapView.getMeasuredHeight());
-            mapWidthStream.onNext(mapView.getMeasuredWidth());
+        mapView.getBoundsStream().filter(bounds -> bounds.height() > 0).subscribe(bounds -> {
+            mapView.post(() -> {
+                int totalHeight = mapView.getHeight()
+                        - mapView.getPaddingBottom() - mapView.getPaddingTop();
+                int totalWidth = mapView.getWidth()
+                        - mapView.getPaddingLeft() - mapView.getPaddingRight();
+                mapHeightStream.onNext(totalHeight);
+                mapWidthStream.onNext(totalWidth);
+            });
         });
     }
 
@@ -163,8 +177,26 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 .descriptionText(getString(R.string.details_doodle_error_description))
                 .build();
 
-        picasso.load(uri).fit().centerCrop().error(new DoodleDrawable(errorImageConfig))
-               .placeholder(new DoodleDrawable(loadingImageConfig)).into(mapView, this);
+        Observable.combineLatest(getProviderObservableForConfig(loadingImageConfig),
+                                 getProviderObservableForConfig(errorImageConfig),
+                                 Pair<DoodleBitmapProvider, DoodleBitmapProvider>::new)
+                  .subscribeOn(Schedulers.computation())
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(pair -> loadImageWithPicasso(uri, pair.first.asDrawable(),
+                                                          pair.second.asDrawable()));
+    }
+
+    private Observable<DoodleBitmapProvider> getProviderObservableForConfig(
+            DoodleDrawableConfig config) {
+        return Observable.just(config).map(DoodleBitmapProvider::new)
+                         .doOnNext(DoodleBitmapProvider::preComputeScale);
+    }
+
+    private void loadImageWithPicasso(Uri uri, Drawable loading, Drawable error) {
+        picasso.load(uri).fit().centerCrop()
+               .error(error)
+               .placeholder(loading)
+               .into(mapView, this);
     }
 
     @Override public void enableActionButtons() {
@@ -199,7 +231,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showPlaceHolder() {
-        placeHolder.post(this::setPlaceHolderImage);
+        placeHolder.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                   .debounce(100, TimeUnit.MILLISECONDS)
+                   .subscribe(bounds -> {
+                       placeHolder.post(this::setPlaceHolderImage);
+                   });
 
         placeHolder.setVisibility(View.VISIBLE);
         mapWrapper.setVisibility(View.GONE);
@@ -228,7 +264,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 .descriptionText(getString(R.string.details_doodle_empty_description))
                 .build();
 
-        placeHolder.setImageDrawable(new DoodleDrawable(placeholderImageConfig));
+        Observable.just(placeholderImageConfig).map(DoodleBitmapProvider::new)
+                  .doOnNext(DoodleBitmapProvider::preComputeScale)
+                  .subscribeOn(Schedulers.computation())
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(provider -> placeHolder.setImageBitmap(provider.draw()));
     }
 
     //region Picasso callback methods

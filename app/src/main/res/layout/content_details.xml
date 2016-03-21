@@ -38,7 +38,7 @@
         android:layout_height="1dp"
         android:src="@color/grey_800"/>
 
-    <ImageView
+    <pl.ipebk.tabi.ui.custom.ObservableImageView
         android:id="@+id/img_placeholder"
         style="@style/Placeholder"
         android:visibility="gone"/>
@@ -108,7 +108,7 @@
         android:id="@+id/wrap_map"
         style="@style/Map">
 
-        <ImageView
+        <pl.ipebk.tabi.ui.custom.ObservableImageView
             android:id="@+id/img_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

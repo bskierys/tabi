@@ -63,8 +63,8 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                            .subscribe(this::showStandardPlace);
 
         Observable<Uri> loadMapStream = Observable
-                .combineLatest(standardPlaceStream, mapWidthStream,
-                               mapHeightStream, this::getMapUrl);
+                .combineLatest(standardPlaceStream, mapWidthStream.filter(w -> w > 0),
+                               mapHeightStream.filter(h -> h > 0), this::getMapUrl);
 
         loadMapStream.subscribeOn(Schedulers.computation())
                      .observeOn(AndroidSchedulers.mainThread())
@@ -101,13 +101,10 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(p -> {
                        getMvpView().showPlaceName(p.getName());
-                       getMvpView().showVoivodeship(
-                               context.getString(R.string.details_voivodeship) + " " + p
-                                       .getVoivodeship());
-                       getMvpView().showPowiat(
-                               context.getString(R.string.details_powiat) + " " + p.getPowiat());
-                       getMvpView().showGmina(
-                               context.getString(R.string.details_gmina) + " " + p.getGmina());
+                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship)
+                                                            +" " + p.getVoivodeship());
+                       getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
+                       getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
                    });
     }
 
@@ -130,16 +127,15 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         if (place.getType().ordinal() < Place.Type.PART_OF_TOWN.ordinal()) {
             placeType = context.getString(R.string.details_additional_town);
         } else if (place.getType() == Place.Type.PART_OF_TOWN) {
-            placeType = context.getString(R.string.details_additional_part_of_town)
-                    + " " + place.getGmina();
+            placeType = context.getString(R.string.details_additional_part_of_town)+ " " + place.getGmina();
         } else if (place.getType() == Place.Type.VILLAGE) {
             placeType = context.getString(R.string.details_additional_village);
         }
 
         String otherPlates = "";
         if (place.getPlates().size() > 1) {
-            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)
-                    + ": " + place.platesToStringExceptMatchingPattern(searchedPlate);
+            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)+ ": "
+                    + place.platesToStringExceptMatchingPattern(searchedPlate);
         }
 
         return placeType + otherPlates;
@@ -158,8 +154,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void searchInGoogle() {
-        getMvpView().startWebSearch(
-                place + "," + context.getString(R.string.details_country));
+        getMvpView().startWebSearch(place + "," + context.getString(R.string.details_country));
     }
 
     // TODO: 2016-02-27 move methods from presenter to dataManager
