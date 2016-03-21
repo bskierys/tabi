@@ -31,8 +31,7 @@ import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableImageView;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
-import pl.ipebk.tabi.utils.DoodleBitmapProvider;
-import pl.ipebk.tabi.utils.DoodleDrawableConfig;
+import pl.ipebk.tabi.utils.DoodleImage;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -157,7 +156,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showMap(Uri uri) {
-        DoodleDrawableConfig.Builder doodleBuilder = new DoodleDrawableConfig.Builder(this)
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
                 .spaceBeforeImage(getResources().getDimensionPixelOffset(
@@ -165,31 +164,26 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 .spaceAfterImage(getResources().getDimensionPixelOffset(
                         R.dimen.Details_Height_Doodle_Map_Space_After));
 
-        DoodleDrawableConfig loadingImageConfig = doodleBuilder
+        DoodleImage loadingDoodle = doodleBuilder
                 .imageResource(R.drawable.tabi_map_loading)
                 .headerText(getString(R.string.details_doodle_loading_header))
                 .descriptionText(getString(R.string.details_doodle_loading_description))
                 .build();
 
-        DoodleDrawableConfig errorImageConfig = doodleBuilder
+        DoodleImage errorDoodle = doodleBuilder
                 .imageResource(R.drawable.tabi_map_error)
                 .headerText(getString(R.string.details_doodle_error_header))
                 .descriptionText(getString(R.string.details_doodle_error_description))
                 .build();
 
-        Observable.combineLatest(getProviderObservableForConfig(loadingImageConfig),
-                                 getProviderObservableForConfig(errorImageConfig),
-                                 Pair<DoodleBitmapProvider, DoodleBitmapProvider>::new)
+        Observable.combineLatest(
+                Observable.just(loadingDoodle).doOnNext(DoodleImage::preComputeScale),
+                Observable.just(errorDoodle).doOnNext(DoodleImage::preComputeScale),
+                Pair<DoodleImage, DoodleImage>::new)
                   .subscribeOn(Schedulers.computation())
                   .observeOn(AndroidSchedulers.mainThread())
                   .subscribe(pair -> loadImageWithPicasso(uri, pair.first.asDrawable(),
                                                           pair.second.asDrawable()));
-    }
-
-    private Observable<DoodleBitmapProvider> getProviderObservableForConfig(
-            DoodleDrawableConfig config) {
-        return Observable.just(config).map(DoodleBitmapProvider::new)
-                         .doOnNext(DoodleBitmapProvider::preComputeScale);
     }
 
     private void loadImageWithPicasso(Uri uri, Drawable loading, Drawable error) {
@@ -250,7 +244,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         int height = placeHolder.getHeight();
         int width = placeHolder.getWidth();
 
-        DoodleDrawableConfig.Builder doodleBuilder = new DoodleDrawableConfig.Builder(this)
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(height - placeHolder.getPaddingTop() - placeHolder.getPaddingBottom())
                 .width(width - placeHolder.getPaddingRight() - placeHolder.getPaddingLeft())
                 .spaceBeforeImage(getResources().getDimensionPixelOffset(
@@ -258,17 +252,16 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 .spaceAfterImage(getResources().getDimensionPixelOffset(
                         R.dimen.Details_Height_Doodle_Empty_Space_After));
 
-        DoodleDrawableConfig placeholderImageConfig = doodleBuilder
+        DoodleImage placeholderDoodle = doodleBuilder
                 .imageResource(R.drawable.tabi_placeholder)
                 .headerText(getString(R.string.details_doodle_empty_header))
                 .descriptionText(getString(R.string.details_doodle_empty_description))
                 .build();
 
-        Observable.just(placeholderImageConfig).map(DoodleBitmapProvider::new)
-                  .doOnNext(DoodleBitmapProvider::preComputeScale)
+        Observable.just(placeholderDoodle).doOnNext(DoodleImage::preComputeScale)
                   .subscribeOn(Schedulers.computation())
                   .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(provider -> placeHolder.setImageBitmap(provider.draw()));
+                  .subscribe(doodle -> placeHolder.setImageBitmap(doodle.draw()));
     }
 
     //region Picasso callback methods
