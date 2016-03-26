@@ -19,7 +19,7 @@ public class PlaceTest {
 
     @Test public void testGetMainPlate() throws Exception {
         String mainPlatePattern = "TAB";
-        Place malbork = TestDataFactory.makeMalbork(mainPlatePattern, "BAT", "GAP");
+        Place malbork = TestDataFactory.createPlaceWithPlates(mainPlatePattern, "BAT", "GAP");
 
         Plate mainPlate = malbork.getMainPlate();
 
@@ -29,7 +29,7 @@ public class PlaceTest {
 
     @Test public void testGetPlateMatchingPatternFullPlate() {
         String plateToFind = "KK";
-        Place malbork = TestDataFactory.makeMalbork("KR", plateToFind, "KM");
+        Place malbork = TestDataFactory.createPlaceWithPlates("KR", plateToFind, "KM");
 
         Plate plate = malbork.getPlateMatchingPattern(plateToFind);
 
@@ -38,7 +38,7 @@ public class PlaceTest {
 
     @Test public void testGetPlateMatchingPatternOneLetter() {
         String plateToFind = "KR";
-        Place malbork = TestDataFactory.makeMalbork(plateToFind, "KK", "KM");
+        Place malbork = TestDataFactory.createPlaceWithPlates(plateToFind, "KK", "KM");
 
         Plate plate = malbork.getPlateMatchingPattern("K");
 
@@ -47,7 +47,7 @@ public class PlaceTest {
 
     @Test public void testGetPlateMatchingPatternNull() {
         String mainPlatePattern = "TAB";
-        Place malbork = TestDataFactory.makeMalbork(mainPlatePattern, "BAT", "GAP");
+        Place malbork = TestDataFactory.createPlaceWithPlates(mainPlatePattern, "BAT", "GAP");
 
         Plate plate = malbork.getPlateMatchingPattern(null);
 
@@ -56,7 +56,7 @@ public class PlaceTest {
 
     @Test public void testPlatesToString() {
         String plateToFind = "KR";
-        Place malbork = TestDataFactory.makeMalbork(plateToFind, "KK");
+        Place malbork = TestDataFactory.createPlaceWithPlates(plateToFind, "KK");
 
         String expected = "KR, KK";
         String actual = malbork.platesToString();
@@ -66,7 +66,7 @@ public class PlaceTest {
 
     @Test public void testPlatesToStringExceptMatching() {
         String plateToFind = "KR";
-        Place malbork = TestDataFactory.makeMalbork(plateToFind, "KK", "KM");
+        Place malbork = TestDataFactory.createPlaceWithPlates(plateToFind, "KK", "KM");
 
         String expected = "KR, KK";
         String actual = malbork.platesToStringExceptMatchingPattern("KM");

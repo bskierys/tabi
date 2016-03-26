@@ -19,7 +19,7 @@ import pl.ipebk.tabi.database.models.Plate;
  * The aim of this class is to help setting up test fixtures.
  */
 public class TestDataFactory {
-    public static Place makeMalbork(String... patterns) {
+    public static Place createPlaceWithPlates(String... patterns) {
         Place malbork = new Place();
         malbork.setName("Malbork");
         malbork.setPlates(getListOfPlates(patterns));
@@ -35,13 +35,33 @@ public class TestDataFactory {
         return plates;
     }
 
-    private static Plate createPlate(String pattern) {
+    public static Plate createPlate(String pattern) {
         Plate plate = new Plate();
         plate.setPattern(pattern);
         return plate;
     }
 
-    public static Place makePlace(String placeName) {
+    public static Place createStandardPlace(String name, String plateStart, Place.Type categoryType) {
+        Place place = new Place();
+        place.setVoivodeship(name);
+        place.setName(name);
+        place.setType(categoryType);
+        place.setHasOwnPlate(true);
+        List<Plate> plates = new ArrayList<>();
+        Plate plate = new Plate();
+
+        if (plateStart == null) {
+            plate.setPattern(name + name + name);
+        } else {
+            plate.setPattern(plateStart);
+        }
+
+        plates.add(plate);
+        place.setPlates(plates);
+        return place;
+    }
+
+    public static Place createStandardPlace(String placeName) {
         Place place = getTemplatePlace(placeName);
 
         place.setType(Place.Type.VOIVODE_CITY);
@@ -72,7 +92,7 @@ public class TestDataFactory {
         return place;
     }
 
-    public static Place makeSpecialPlace(String placeName) {
+    public static Place createSpecialPlace(String placeName) {
         Place place = getTemplatePlace(placeName);
         place.setType(Place.Type.SPECIAL);
 

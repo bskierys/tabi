@@ -49,6 +49,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }, () -> {
                     getMvpView().hideLoading();
                     getMvpView().showTime(stopwatch.getElapsedTimeString());
+                    Timber.d("Initializing time: %s", stopwatch.getElapsedTimeString());
                 });
     }
 

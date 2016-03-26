@@ -25,7 +25,6 @@ import timber.log.Timber;
 
 /**
  * Base class for all daos. Typical methods should work for all basic data types.
- * Some methods are not implemented - just part of HMA interface.
  */
 public abstract class Dao<E extends ModelInterface> {
     protected final Class<E> type;

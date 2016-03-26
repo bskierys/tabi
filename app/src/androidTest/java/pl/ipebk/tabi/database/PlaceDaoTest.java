@@ -13,6 +13,7 @@ import java.util.List;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
+import pl.ipebk.tabi.test.common.TestDataFactory;
 import pl.ipebk.tabi.ui.main.CategoryListItem;
 
 public class PlaceDaoTest extends DatabaseTest {
@@ -23,19 +24,12 @@ public class PlaceDaoTest extends DatabaseTest {
         String voivodeshipName2 = "Ś";
         String voivodeshipName3 = "Z";
 
-        Place voivodeship1 = constructPlace(voivodeshipName1, null, Place.Type.VOIVODE_CITY);
-        Place voivodeship2 = constructPlace(voivodeshipName2, null, Place.Type.VOIVODE_CITY);
-        Place voivodeship3 = constructPlace(voivodeshipName3, null, Place.Type.VOIVODE_CITY);
-        Place special1 = constructPlace(voivodeshipName1, null, Place.Type.SPECIAL);
-        Place special2 = constructPlace(voivodeshipName2, null, Place.Type.SPECIAL);
-        Place special3 = constructPlace(voivodeshipName3, null, Place.Type.SPECIAL);
-
-        databaseHelper.getPlaceDao().add(voivodeship1);
-        databaseHelper.getPlaceDao().add(voivodeship2);
-        databaseHelper.getPlaceDao().add(voivodeship3);
-        databaseHelper.getPlaceDao().add(special1);
-        databaseHelper.getPlaceDao().add(special2);
-        databaseHelper.getPlaceDao().add(special3);
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName1, null, Place.Type.VOIVODE_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName2, null, Place.Type.VOIVODE_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName3, null, Place.Type.VOIVODE_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName1, null, Place.Type.SPECIAL));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName2, null, Place.Type.SPECIAL));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName3, null, Place.Type.SPECIAL));
 
         databaseHelper.getPlaceDao().getVoivodeshipsObservable()
                 .subscribe(voivodeships -> {
@@ -62,11 +56,11 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testGetPlaceForOnlyOnePlate() {
         String plateStartToFind = "TAB";
-        Place placeToFind = constructPlace(plateStartToFind, plateStartToFind, Place.Type.POWIAT_CITY);
+        Place placeToFind = TestDataFactory.createStandardPlace(plateStartToFind, plateStartToFind, Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeToFind);
 
         String plateStartNotToFind = "BAT";
-        Place placeNotToFind = constructPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeNotToFind);
 
         List<Place> foundPlates = databaseHelper.getPlaceDao()
@@ -87,7 +81,7 @@ public class PlaceDaoTest extends DatabaseTest {
         assertEquals(1, nextRowId);
 
         String plateStartToFind = "TAB";
-        Place place = constructPlace(plateStartToFind, plateStartToFind, Place.Type.POWIAT_CITY);
+        Place place = TestDataFactory.createStandardPlace(plateStartToFind, plateStartToFind, Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(place);
         nextRowId = databaseHelper.getPlaceDao().getNextRowId();
 
@@ -97,9 +91,10 @@ public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testGetPlaceForAdditionalPlate() {
         String plateStartToFind = "TAB";
         String plateStartNotToFind = "BAT";
-        Place placeNotToFind = constructPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeNotToFind);
-        Place placeToFind = constructPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+
+        Place placeToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
         Plate plate = new Plate();
         plate.setPattern(plateStartToFind);
         placeToFind.getPlates().add(plate);
@@ -117,11 +112,11 @@ public class PlaceDaoTest extends DatabaseTest {
     }
 
     @MediumTest public void testGetByPlateIsSortedProperly() {
-        Place twoLetter1 = constructPlace("1", "AA", Place.Type.POWIAT_CITY);
-        Place twoLetter2 = constructPlace("2", "AZ", Place.Type.POWIAT_CITY);
-        Place threeLetter1 = constructPlace("3", "AAA", Place.Type.POWIAT_CITY);
-        Place threeLetter2 = constructPlace("4", "AWW", Place.Type.POWIAT_CITY);
-        Place threeLetter3 = constructPlace("5", "AZZ", Place.Type.POWIAT_CITY);
+        Place twoLetter1 = TestDataFactory.createStandardPlace("1", "AA", Place.Type.POWIAT_CITY);
+        Place twoLetter2 = TestDataFactory.createStandardPlace("2", "AZ", Place.Type.POWIAT_CITY);
+        Place threeLetter1 = TestDataFactory.createStandardPlace("3", "AAA", Place.Type.POWIAT_CITY);
+        Place threeLetter2 = TestDataFactory.createStandardPlace("4", "AWW", Place.Type.POWIAT_CITY);
+        Place threeLetter3 = TestDataFactory.createStandardPlace("5", "AZZ", Place.Type.POWIAT_CITY);
 
         databaseHelper.getPlaceDao().add(twoLetter1);
         databaseHelper.getPlaceDao().add(twoLetter2);
@@ -155,25 +150,25 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesWithDiacritics() {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(constructPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(constructPlace("swirzyce", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(constructPlace("doboszyce", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("swirzyce", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("doboszyce", dummyPlate, Place.Type.POWIAT_CITY));
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", null);
-        assertTrue(foundPlaces.size() > 0);
+        assertTrue(!foundPlaces.isEmpty());
         assertEquals("świdnica", foundPlaces.get(0).getName());
 
         foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("swid", null);
-        assertTrue(foundPlaces.size() > 0);
+
+        assertTrue(!foundPlaces.isEmpty());
         assertEquals("świdnica", foundPlaces.get(0).getName());
     }
 
     @MediumTest public void testSearchPlacesLimit() {
-        // TODO: 2016-02-17 copy-paste
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(constructPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(constructPlace("świdnico", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(constructPlace("świdnice", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnico", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type.POWIAT_CITY));
 
         int limit = 2;
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", limit);
@@ -183,10 +178,10 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesSortOrderByType() {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(constructPlace("świdnica", dummyPlate, Place.Type.VOIVODE_CITY));
-        databaseHelper.getPlaceDao().add(constructPlace("świdnico", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(constructPlace("świdnice", dummyPlate, Place.Type.VILLAGE));
-        databaseHelper.getPlaceDao().add(constructPlace("świdnicy", dummyPlate, Place.Type.SPECIAL));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.VOIVODE_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnico", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type.VILLAGE));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnicy", dummyPlate, Place.Type.SPECIAL));
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", null);
 
@@ -201,10 +196,10 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesSortOrderByName() {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(constructPlace("śwarądz", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(constructPlace("świnoujście", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(constructPlace("śokołów", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(constructPlace("śókołów", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śwarądz", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świnoujście", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śokołów", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śókołów", dummyPlate, Place.Type.TOWN));
 
         List<Place> places = databaseHelper.getPlaceDao().getPlaceListByName("ś", null);
 

@@ -12,9 +12,7 @@ import android.widget.TextView;
 import pl.ipebk.tabi.utils.FontDecorator;
 
 /**
- * TextView with custom fonts.
- * Custom font may be applied by fontFamily attribute
- * or by {@link FontDecorator}
+ * TextView with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
  */
 public class FontTextView extends TextView {
     public FontTextView(Context context) {
@@ -29,5 +27,13 @@ public class FontTextView extends TextView {
     public FontTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         FontDecorator.initFromAttributes(this, context, attrs);
+    }
+
+    public void setCustomFont(String fontFamily) {
+        FontDecorator.setCustomFont(this, fontFamily);
+    }
+
+    public void setCustomFont(String fontFamily, int style) {
+        FontDecorator.setCustomFont(this, fontFamily, style);
     }
 }

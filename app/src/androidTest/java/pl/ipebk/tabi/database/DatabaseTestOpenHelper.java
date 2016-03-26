@@ -3,7 +3,7 @@
 * date: 2016-02-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database.openHelper;
+package pl.ipebk.tabi.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +15,7 @@ import com.squareup.sqlbrite.SqlBrite;
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.daos.PlateDao;
 import pl.ipebk.tabi.database.daos.SearchHistoryDao;
+import pl.ipebk.tabi.database.openHelper.DatabaseHelperInterface;
 import pl.ipebk.tabi.database.tables.PlacesTable;
 import pl.ipebk.tabi.database.tables.PlatesTable;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;

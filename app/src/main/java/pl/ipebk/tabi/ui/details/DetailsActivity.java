@@ -32,6 +32,7 @@ import pl.ipebk.tabi.ui.custom.ObservableImageView;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.utils.DoodleImage;
+import pl.ipebk.tabi.utils.Stopwatch;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -57,7 +58,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
 
+    private final Stopwatch stopwatch = new Stopwatch();
+
     @Override protected void onCreate(Bundle savedInstanceState) {
+        stopwatch.reset();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -70,6 +74,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
         prepareOverScroll();
         loadData();
+
+        Timber.d("Activity creation time: %s", stopwatch.getElapsedTimeString());
     }
 
     private void prepareOverScroll() {
@@ -102,7 +108,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                                 mapHeightStream.asObservable());
         }
 
-        mapView.getBoundsStream().filter(bounds -> bounds.height() > 0).subscribe(bounds -> {
+        mapView.getBoundsStream().filter(bounds -> bounds.height() > 0)
+               .first().subscribe(bounds -> {
             mapView.post(() -> {
                 int totalHeight = mapView.getHeight()
                         - mapView.getPaddingBottom() - mapView.getPaddingTop();
@@ -187,6 +194,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     private void loadImageWithPicasso(Uri uri, Drawable loading, Drawable error) {
+        stopwatch.reset();
         picasso.load(uri).fit().centerCrop()
                .error(error)
                .placeholder(loading)
@@ -226,8 +234,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Override public void showPlaceHolder() {
         placeHolder.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                   .debounce(100, TimeUnit.MILLISECONDS)
-                   .subscribe(bounds -> {
+                   .first().subscribe(bounds -> {
                        placeHolder.post(this::setPlaceHolderImage);
                    });
 
@@ -267,6 +274,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     //region Picasso callback methods
     @Override public void onSuccess() {
         pinView.setVisibility(View.VISIBLE);
+        Timber.d("Map loading time: %s", stopwatch.getElapsedTimeString());
     }
 
     @Override public void onError() {

@@ -59,7 +59,7 @@ public class DoodleImage {
 
         initPaintingFields();
     }
-
+    // TODO: 2016-03-26 this need to be somehow tested
     /**
      * Creates default doodle image <br /> <b>Default values:</b> <ul> <li>headerText =
      * R.string.doodle_default_header</li> <li>descriptionText = R.string

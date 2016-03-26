@@ -23,13 +23,16 @@ import rx.Observable;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DetailsPresenterTest {
-    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new RxSchedulersOverrideRule();
+    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new
+            RxSchedulersOverrideRule();
     @Mock DetailsMvpView mockMvpView;
     @Mock PlaceDao mockPlaceDao;
     @Mock Activity mockContext;
@@ -58,9 +61,9 @@ public class DetailsPresenterTest {
         detailsPresenter.detachView();
     }
 
-    @Test public void testPlaceIsLoaded() {
+    @Test public void testStandardPlaceIsLoaded() {
         String name = "Malbork";
-        Place malbork = TestDataFactory.makePlace(name);
+        Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
@@ -72,12 +75,30 @@ public class DetailsPresenterTest {
         verify(mockMvpView).showPowiat(anyString());
         verify(mockMvpView).showGmina(anyString());
         verify(mockMvpView).showAdditionalInfo(anyString());
-        verify(mockMvpView).showMap(any());
+        verify(mockMvpView, atMost(2)).showMap(any());
+    }
+
+    @Test public void testSpecialPlaceIsLoaded() {
+        String name = "Malbork";
+        Place malbork = TestDataFactory.createSpecialPlace(name);
+
+        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
+
+        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+
+        verify(mockMvpView).showPlaceName(name);
+        verify(mockMvpView).showSearchedPlate(anyString());
+        verify(mockMvpView).showPlaceHolder();
+        verify(mockMvpView, never()).showVoivodeship(anyString());
+        verify(mockMvpView, never()).showPowiat(anyString());
+        verify(mockMvpView, never()).showGmina(anyString());
+        verify(mockMvpView, never()).showAdditionalInfo(anyString());
+        verify(mockMvpView, never()).showMap(any());
     }
 
     @Test public void testShowOnMap() {
         String name = "Malbork";
-        Place malbork = TestDataFactory.makePlace(name);
+        Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
@@ -89,7 +110,7 @@ public class DetailsPresenterTest {
 
     @Test public void testSearchInGoogle() {
         String name = "Malbork";
-        Place malbork = TestDataFactory.makePlace(name);
+        Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
@@ -101,7 +122,7 @@ public class DetailsPresenterTest {
 
     @Test public void testShowVoivodeship() {
         String name = "Malbork";
-        Place malbork = TestDataFactory.makePlace(name);
+        Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));

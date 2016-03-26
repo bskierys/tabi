@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 

@@ -59,7 +59,7 @@ public class PlateDaoTest extends DatabaseTest {
         List<Plate> plates = databaseHelper.getPlateDao().getPlatesForPlaceId(placeToFindId);
 
         assertNotNull(plates);
-        assertTrue(plates.size() > 0);
+        assertTrue(!plates.isEmpty());
         assertEquals(2, plates.size());
         assertEquals(PLATE1, plates.get(0).getPattern());
     }

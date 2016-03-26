@@ -12,9 +12,7 @@ import android.widget.Button;
 import pl.ipebk.tabi.utils.FontDecorator;
 
 /**
- * Button with custom fonts.
- * Custom font may be applied by fontFamily attribute
- * or by {@link FontDecorator}
+ * Button with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
  */
 public class FontButton extends Button {
     public FontButton(Context context) {
@@ -29,5 +27,13 @@ public class FontButton extends Button {
     public FontButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         FontDecorator.initFromAttributes(this, context, attrs);
+    }
+
+    public void setCustomFont(String fontFamily) {
+        FontDecorator.setCustomFont(this, fontFamily);
+    }
+
+    public void setCustomFont(String fontFamily, int style) {
+        FontDecorator.setCustomFont(this, fontFamily, style);
     }
 }

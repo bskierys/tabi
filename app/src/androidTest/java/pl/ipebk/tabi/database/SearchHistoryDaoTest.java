@@ -12,12 +12,13 @@ import java.util.List;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.test.common.TestDataFactory;
 
 public class SearchHistoryDaoTest extends DatabaseTest {
     @MediumTest public void testGetHistoryForPlates() {
-        Place place = constructPlace("PLACE", "TAB", Place.Type.POWIAT_CITY);
-        Place plate = constructPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
-        Place plate2 = constructPlace("PLATE", "TAB2", Place.Type.POWIAT_CITY);
+        Place place = TestDataFactory.createStandardPlace("PLACE", "TAB", Place.Type.POWIAT_CITY);
+        Place plate = TestDataFactory.createStandardPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
+        Place plate2 = TestDataFactory.createStandardPlace("PLATE", "TAB2", Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(place);
         databaseHelper.getPlaceDao().add(plate);
         databaseHelper.getPlaceDao().add(plate2);
@@ -52,7 +53,7 @@ public class SearchHistoryDaoTest extends DatabaseTest {
 
     @MediumTest public void testGetHistoryOrderAndLimit() {
         for (int i = 0; i < 5; i++) {
-            Place plate = constructPlace("PLATE_" + Integer.toString(i), "BAT", Place.Type.POWIAT_CITY);
+            Place plate = TestDataFactory.createStandardPlace("PLATE_" + Integer.toString(i), "BAT", Place.Type.POWIAT_CITY);
             databaseHelper.getPlaceDao().add(plate);
 
             SearchHistory history = new SearchHistory();
@@ -77,7 +78,7 @@ public class SearchHistoryDaoTest extends DatabaseTest {
     }
 
     @MediumTest public void testOnlyOnePlaceInHistoryWithSamePlate() {
-        Place plate = constructPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
+        Place plate = TestDataFactory.createStandardPlace("PLATE", "BAT", Place.Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(plate);
 
         for (int i = 0; i < 5; i++) {
