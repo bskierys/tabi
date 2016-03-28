@@ -98,6 +98,7 @@ dependencies {
     compile mobileDependencies.appcompat
     compile mobileDependencies.support
     compile mobileDependencies.design
+    compile mobileDependencies.cardview
     compile mobileDependencies.recyclerView
 
     // RxJava

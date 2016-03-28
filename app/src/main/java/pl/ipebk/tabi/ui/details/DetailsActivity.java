@@ -1,13 +1,17 @@
 package pl.ipebk.tabi.ui.details;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -56,6 +60,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_placeholder) ObservableImageView placeHolder;
     @Bind(R.id.wrap_map) View mapWrapper;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
+    @Bind(R.id.card_panel) CardView panelCard;
     @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
 
     private final Stopwatch stopwatch = new Stopwatch();
@@ -119,6 +124,27 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 mapWidthStream.onNext(totalWidth);
             });
         });
+    }
+
+    @Override protected void onStart() {
+        super.onStart();
+
+        // TODO: 2016-03-28 refactor. Maybe xml?
+        AnimatorSet scaleAnimator = new AnimatorSet();
+        ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(panelCard, "scaleX", 0.9F, 1F);
+        ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(panelCard, "scaleY", 0.9F, 1F);
+        scaleAnimator.play(scaleXAnimator).with(scaleYAnimator);
+        scaleAnimator.setDuration(300);
+
+        float elevation = getResources().getDimensionPixelSize(R.dimen.Details_Elevation_Button);
+        ObjectAnimator elevationAnimator = ObjectAnimator.ofFloat(panelCard, "cardElevation", 0f, elevation);
+        ObjectAnimator fadeAnimator = ObjectAnimator.ofFloat(panelCard, "alpha", 0f, 1f);
+        fadeAnimator.setDuration(100L);
+        AnimatorSet panelAnimation = new AnimatorSet();
+        panelAnimation.play(elevationAnimator).with(fadeAnimator).with(scaleAnimator);
+        panelAnimation.setInterpolator(new DecelerateInterpolator());
+        panelAnimation.setDuration(300L);
+        panelAnimation.start();
     }
 
     @Override protected void onDestroy() {
@@ -233,8 +259,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showPlaceHolder() {
+        stopwatch.reset();
         placeHolder.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                   .first().subscribe(bounds -> {
+                   .sample(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
                        placeHolder.post(this::setPlaceHolderImage);
                    });
 
@@ -244,6 +271,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         powiatView.setVisibility(View.GONE);
         gminaView.setVisibility(View.GONE);
         additionalInfoView.setVisibility(View.GONE);
+        panelCard.setVisibility(View.GONE);
         ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.GONE));
     }
 
@@ -268,7 +296,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Observable.just(placeholderDoodle).doOnNext(DoodleImage::preComputeScale)
                   .subscribeOn(Schedulers.computation())
                   .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(doodle -> placeHolder.setImageBitmap(doodle.draw()));
+                  .subscribe(doodle -> {
+                      placeHolder.setImageBitmap(doodle.draw());
+                      Timber.d("Rendering placeholder took: %s", stopwatch.getElapsedTimeString());
+                  });
     }
 
     //region Picasso callback methods

@@ -33,11 +33,10 @@
         android:textSize="34sp"
         app:fontFamily="bebas"/>
 
-    <pl.ipebk.tabi.ui.custom.FontButton
+    <Button
         android:id="@+id/btn_go"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Go"
-        app:fontFamily="bebas"/>
+        android:text="Go"/>
 </RelativeLayout>

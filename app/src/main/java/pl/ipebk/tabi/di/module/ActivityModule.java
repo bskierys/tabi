@@ -19,9 +19,13 @@ import timber.log.Timber;
 @Module
 public class ActivityModule {
     private Activity activity;
+    private Picasso picasso;
 
     public ActivityModule(Activity activity) {
         this.activity = activity;
+        picasso = new Picasso.Builder(activity)
+                .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))
+                .build();
     }
 
     @Provides Activity provideActivity() {
@@ -32,11 +36,8 @@ public class ActivityModule {
         return activity;
     }
 
-    // TODO: 2016-02-28 inject as singleton
     @Provides Picasso providePicasso() {
-        return new Picasso.Builder(activity)
-                .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))
-                .build();
+        return picasso;
     }
 
     @Provides SpellCorrector provideSpellCorrector() {

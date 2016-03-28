@@ -33,10 +33,13 @@
     </style>
 
     <declare-styleable name="Fonts">
-        <!-- using android's -->
         <attr name="android:textStyle" />
-        <!-- our custom attribute -->
         <attr name="fontFamily" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="DetailsButton">
+        <attr name="text" format="string"/>
+        <attr name="doodle" format="reference"/>
     </declare-styleable>
 
     <!--  MAIN  -->
@@ -60,6 +63,14 @@
     <style name="Placeholder">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="DetailsButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
 </resources>

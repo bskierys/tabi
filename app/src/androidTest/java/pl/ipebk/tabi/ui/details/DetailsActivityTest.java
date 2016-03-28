@@ -2,11 +2,10 @@ package pl.ipebk.tabi.ui.details;
 
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.intent.Intents;
-import android.support.test.espresso.intent.matcher.IntentMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +22,6 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.test.common.TestDataFactory;
 import pl.ipebk.tabi.test.common.rules.TestComponentRule;
-import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.util.OrientationChangeAction;
 import rx.Observable;
 
@@ -33,13 +31,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyString;
-import static pl.ipebk.tabi.util.VisibilityAssertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static android.support.test.espresso.action.ViewActions.*;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.*;
+import static pl.ipebk.tabi.util.VisibilityAssertions.isGone;
 
 @RunWith(AndroidJUnit4.class)
 public class DetailsActivityTest {
@@ -47,7 +41,7 @@ public class DetailsActivityTest {
             new TestComponentRule(InstrumentationRegistry.getTargetContext());
     public final ActivityTestRule<DetailsActivity> details =
             new ActivityTestRule<>(DetailsActivity.class, false, false);
-    
+
     // TestComponentRule needs to go first to make sure the Dagger ApplicationTestComponent is set
     // in the Application before any Activity is launched.
     @Rule public final TestRule chain = RuleChain.outerRule(component).around(details);
@@ -59,6 +53,20 @@ public class DetailsActivityTest {
         DatabaseOpenHelper databaseHelper = mock(DatabaseOpenHelper.class);
         when(databaseHelper.getPlaceDao()).thenReturn(mockPlaceDao);
         when(component.getMockDataManager().getDatabaseHelper()).thenReturn(databaseHelper);
+    }
+
+    @Test public void isViewAttachedAfterCreation() {
+        String name = "Malbork";
+        Place malbork = TestDataFactory.createStandardPlace(name);
+
+        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
+
+        Intent intent = new Intent(component.getContext(), DetailsActivity.class);
+        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, 1L);
+
+        DetailsActivity detailsActivity = details.launchActivity(intent);
+
+        Assert.assertTrue(detailsActivity.presenter.isViewAttached());
     }
 
     @Test public void testPlaceDisplaysOnScreen() {
@@ -139,69 +147,5 @@ public class DetailsActivityTest {
 
         // map
         onView(withId(R.id.img_map)).check(matches(isDisplayed()));
-    }
-
-    // TODO: 2016-03-06 finish tests
-    // TODO: 2016-03-26 test attaching detaching presenter
-    @Test public void testStartsWebSearch() {
-        Intents.init();
-
-        String name = "Malbork";
-        Place malbork = TestDataFactory.createStandardPlace(name);
-
-        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-
-        Intent intent = new Intent(component.getContext(), DetailsActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, 1L);
-
-        details.launchActivity(intent);
-
-        onView(withId(R.id.btn_google_it)).perform(click());
-
-        Intents.intended(hasAction(Intent.ACTION_WEB_SEARCH));
-
-        Intents.release();
-    }
-
-    @Test public void testStartMaps() {
-        Intents.init();
-
-        String name = "Malbork";
-        Place malbork = TestDataFactory.createStandardPlace(name);
-
-        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-
-        Intent intent = new Intent(component.getContext(), DetailsActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, 1L);
-
-        details.launchActivity(intent);
-
-        onView(withId(R.id.btn_map)).perform(click());
-
-        Intents.intended(hasAction(Intent.ACTION_VIEW));
-        Intents.intended(toPackage("com.google.android.apps.maps"));
-
-        Intents.release();
-    }
-
-    @Test public void testStartSearchActivity() {
-        Intents.init();
-
-        String name = "Malbork";
-        Place malbork = TestDataFactory.createStandardPlace(name);
-
-        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-
-        Intent intent = new Intent(component.getContext(), DetailsActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, 1L);
-
-        details.launchActivity(intent);
-
-        onView(withId(R.id.btn_voivodeship)).perform(click());
-
-        Intents.intended(hasComponent(SearchActivity.class.getName()));
-        Intents.intended(hasExtra(SearchActivity.PARAM_SEARCH_TEXT,anyString()));
-
-        Intents.release();
     }
 }

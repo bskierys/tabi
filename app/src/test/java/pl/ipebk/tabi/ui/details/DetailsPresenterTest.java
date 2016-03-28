@@ -31,8 +31,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DetailsPresenterTest {
-    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new
-            RxSchedulersOverrideRule();
+    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new RxSchedulersOverrideRule();
     @Mock DetailsMvpView mockMvpView;
     @Mock PlaceDao mockPlaceDao;
     @Mock Activity mockContext;
@@ -64,6 +63,9 @@ public class DetailsPresenterTest {
     @Test public void testStandardPlaceIsLoaded() {
         String name = "Malbork";
         Place malbork = TestDataFactory.createStandardPlace(name);
+        malbork.setVoivodeship(name + "1");
+        malbork.setPowiat(name + "2");
+        malbork.setGmina(name + "3");
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
@@ -71,9 +73,9 @@ public class DetailsPresenterTest {
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showSearchedPlate(anyString());
-        verify(mockMvpView).showVoivodeship(anyString());
-        verify(mockMvpView).showPowiat(anyString());
-        verify(mockMvpView).showGmina(anyString());
+        verify(mockMvpView).showVoivodeship(name + "1");
+        verify(mockMvpView).showPowiat(name + "2");
+        verify(mockMvpView).showGmina(name + "3");
         verify(mockMvpView).showAdditionalInfo(anyString());
         verify(mockMvpView, atMost(2)).showMap(any());
     }

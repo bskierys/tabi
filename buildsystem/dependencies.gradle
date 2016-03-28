@@ -68,6 +68,7 @@ ext {
             appcompat         : "com.android.support:appcompat-v7:${androidSupportVersion}",
             support           : "com.android.support:support-v4:${androidSupportVersion}",
             design            : "com.android.support:design:${androidSupportVersion}",
+            cardview          : "com.android.support:cardview-v7:${androidSupportVersion}",
             recyclerView      : "com.android.support:recyclerview-v7:${androidSupportVersion}",
             supportannotations: "com.android.support:support-annotations:${androidSupportVersion}",
 
@@ -114,6 +115,6 @@ ext {
             dexmaker_mockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
             testrunner        : "com.android.support.test:runner:${androidTestVersion}",
             espresso          : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
-            espressointents    : "com.android.support.test.espresso:espresso-intents:${espressoVersion}",
+            espressointents   : "com.android.support.test.espresso:espresso-intents:${espressoVersion}",
     ]
 }

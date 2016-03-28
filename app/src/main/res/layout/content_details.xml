@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
+        app:fontFamily="montserrat"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
@@ -58,6 +59,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
+        app:fontFamily="montserrat"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
@@ -67,6 +69,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
+        app:fontFamily="montserrat"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
@@ -76,33 +79,51 @@
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="@dimen/text_margin"
         android:layout_marginRight="@dimen/text_margin"
+        app:fontFamily="montserrat"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
-    <LinearLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_panel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="@dimen/Details.Height.Button"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:cardCornerRadius="2dp"
+        android:alpha="0">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_google_it"
-            android:layout_width="0dp"
-            android:layout_height="88dp"
-            android:layout_weight="1"
-            android:text="G"/>
+            <pl.ipebk.tabi.ui.details.DetailsButton
+                android:id="@+id/btn_google_it"
+                style="@style/DetailsButton"
+                app:doodle="@drawable/dic_google"
+                app:text="WIĘCEJ"/>
 
-        <Button
-            android:id="@+id/btn_voivodeship"
-            android:layout_width="0dp"
-            android:layout_height="88dp"
-            android:layout_weight="1"
-            android:text="V"/>
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:src="@color/grey_200"/>
 
-        <Button
-            android:id="@+id/btn_map"
-            android:layout_width="0dp"
-            android:layout_height="88dp"
-            android:layout_weight="1"
-            android:text="M"/>
-    </LinearLayout>
+            <pl.ipebk.tabi.ui.details.DetailsButton
+                android:id="@+id/btn_voivodeship"
+                style="@style/DetailsButton"
+                app:doodle="@drawable/dic_voivodeship"
+                app:text="WOJEWÓDZTWO"/>
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:src="@color/grey_200"/>
+
+            <pl.ipebk.tabi.ui.details.DetailsButton
+                android:id="@+id/btn_map"
+                style="@style/DetailsButton"
+                app:doodle="@drawable/dic_maps"
+                app:text="MAPY"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <RelativeLayout
         android:id="@+id/wrap_map"
