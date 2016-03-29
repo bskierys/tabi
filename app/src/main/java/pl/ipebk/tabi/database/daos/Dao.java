@@ -92,7 +92,7 @@ public abstract class Dao<E extends ModelInterface> {
      * @param id
      */
     public void delete(Long id) {
-        int rowsAffected = db.delete(table.getTableName(), Table.COLUMN_ID + " = " + id, null);
+        int rowsAffected = db.delete(table.getTableName(), Table.COLUMN_ID + " = " + id);
         if (rowsAffected < 1) {
             Timber.e("Unable to delete entity %s with id: %d", type.toString(), id);
         } else {

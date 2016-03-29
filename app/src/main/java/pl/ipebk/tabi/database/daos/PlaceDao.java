@@ -60,7 +60,7 @@ public class PlaceDao extends Dao<Place> {
 
     public int getNextRowId() {
         String query = "SELECT MAX(" + PlacesTable.COLUMN_ID + ") FROM " + table.getTableName();
-        Cursor cursor = db.query(query, null);
+        Cursor cursor = db.query(query);
         int maxNumber = 0;
 
         if (cursor != null) {
