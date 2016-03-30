@@ -90,11 +90,7 @@ public class SearchActivity extends BaseActivity implements
     //region View callbacks
     // TODO: 2016-03-04 move searchType from searchHistory
     @Override public void onPlaceClicked(long placeId, SearchHistory.SearchType type) {
-        String searchedPlate = null;
-        if (type == SearchHistory.SearchType.PLATE) {
-            searchedPlate = searchEditText.getText().toString();
-        }
-        presenter.placeSelected(placeId, searchedPlate);
+        presenter.placeSelected(placeId, searchEditText.getText().toString(), type);
     }
 
     @Override public void onFragmentViewCreated(SearchHistory.SearchType type) {
@@ -139,10 +135,11 @@ public class SearchActivity extends BaseActivity implements
         }
     }
 
-    @Override public void goToPlaceDetails(long placeId, String searchedPlate) {
+    @Override public void goToPlaceDetails(long placeId, String searchedPlate, SearchHistory.SearchType searchType) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
+        intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
         startActivity(intent);
     }
 

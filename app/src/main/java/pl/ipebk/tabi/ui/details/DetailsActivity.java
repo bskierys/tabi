@@ -31,6 +31,7 @@ import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableImageView;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
@@ -46,9 +47,11 @@ import timber.log.Timber;
 public class DetailsActivity extends BaseActivity implements DetailsMvpView, Callback {
     public final static String PARAM_PLACE_ID = "param_place_id";
     public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
+    public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
+    @Bind(R.id.txt_searched) TextView searchedTextView;
     @Bind(R.id.txt_place_name) TextView placeNameView;
     @Bind(R.id.txt_plate) TextView plateView;
     @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
@@ -74,8 +77,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         presenter.attachView(this);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         prepareOverScroll();
         loadData();
@@ -107,8 +108,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
+        SearchHistory.SearchType searchType = SearchHistory.SearchType.values()
+                [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchHistory.SearchType.UNKNOWN.ordinal())];
         if (placeId > 0) {
-            presenter.loadPlace(placeId, searchedPlate,
+            presenter.loadPlace(placeId, searchedPlate, searchType,
                                 mapWidthStream.asObservable(),
                                 mapHeightStream.asObservable());
         }
@@ -152,6 +155,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.detachView();
     }
 
+    @OnClick(R.id.btn_back) public void onBackButton(){
+        // TODO: 2016-03-30 better back behaviour
+        onBackPressed();
+    }
+
     @OnClick(R.id.btn_google_it) public void onSearchMore() {
         presenter.searchInGoogle();
     }
@@ -164,11 +172,15 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.showOnMap();
     }
 
+    @Override public void showSearchedText(String searchedText) {
+        searchedTextView.setText(searchedText);
+    }
+
     @Override public void showPlaceName(String name) {
         placeNameView.setText(name);
     }
 
-    @Override public void showSearchedPlate(String plate) {
+    @Override public void showPlate(String plate) {
         plateView.setText(plate);
     }
 

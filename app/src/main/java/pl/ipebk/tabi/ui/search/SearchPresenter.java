@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.SpellCorrector;
@@ -50,8 +51,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId, String searchedPlate) {
-        getMvpView().goToPlaceDetails(placeId, searchedPlate);
+    public void placeSelected(long placeId, String searchedPlate, SearchHistory.SearchType searchType) {
+        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType);
     }
 
     public void startInitialSearchForText(String searchText) {

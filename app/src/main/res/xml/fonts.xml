@@ -16,7 +16,7 @@
             <name>montserrat</name>
         </nameset>
         <fileset>
-            <file>fonts/Montserrat-Regular.ttf</file>
+            <file>fonts/Montserrat-Regular.otf</file>
         </fileset>
     </family>
 </familyset>

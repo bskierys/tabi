@@ -7,6 +7,7 @@ package pl.ipebk.tabi.ui.search;
 
 import android.database.Cursor;
 
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface SearchMvpView extends MvpView {
@@ -28,5 +29,5 @@ public interface SearchMvpView extends MvpView {
 
     void hideKeyboard();
 
-    void goToPlaceDetails(long placeId, String searchedText);
+    void goToPlaceDetails(long placeId, String searchedText, SearchHistory.SearchType searchType);
 }

@@ -11,7 +11,6 @@ import android.content.Context;
 import pl.ipebk.tabi.di.component.ApplicationComponent;
 import pl.ipebk.tabi.di.component.DaggerApplicationComponent;
 import pl.ipebk.tabi.di.module.ApplicationModule;
-import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.TabiTree;
 import timber.log.Timber;
 
@@ -39,8 +38,8 @@ public class App extends Application {
     public ApplicationComponent getAppComponent() {
         if (component == null) {
             component = DaggerApplicationComponent.builder()
-                    .applicationModule(getApplicationModule())
-                    .build();
+                                                  .applicationModule(getApplicationModule())
+                                                  .build();
         }
         return component;
     }

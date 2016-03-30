@@ -13,13 +13,13 @@ import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
@@ -45,10 +45,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         super.detachView();
     }
 
-    public void loadPlace(long id, String searchedPlate, Observable<Integer> mapWidthStream,
-                          Observable<Integer> mapHeightStream) {
+    public void loadPlace(long id, String searchedPlate, SearchHistory.SearchType searchType,
+                          Observable<Integer> mapWidthStream, Observable<Integer> mapHeightStream) {
         getMvpView().disableActionButtons();
-        if (searchedPlate != null) {
+        getMvpView().showSearchedText(searchedPlate);
+        if (searchedPlate != null && searchType == SearchHistory.SearchType.PLATE) {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
@@ -91,7 +92,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .filter(p -> p != null).map(Plate::toString)
                    .subscribeOn(Schedulers.computation())
                    .observeOn(AndroidSchedulers.mainThread())
-                   .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
+                   .subscribe(plateText -> getMvpView().showPlate(plateText));
 
         placeStream.map(p -> getAdditionalInfo(place))
                    .subscribeOn(Schedulers.computation())
@@ -120,7 +121,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .filter(p -> p != null).map(Plate::toString)
                    .subscribeOn(Schedulers.computation())
                    .observeOn(AndroidSchedulers.mainThread())
-                   .subscribe(plateText -> getMvpView().showSearchedPlate(plateText));
+                   .subscribe(plateText -> getMvpView().showPlate(plateText));
     }
 
     @NonNull private String getAdditionalInfo(Place place) {

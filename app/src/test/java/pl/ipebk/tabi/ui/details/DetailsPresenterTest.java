@@ -72,7 +72,7 @@ public class DetailsPresenterTest {
         detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
-        verify(mockMvpView).showSearchedPlate(anyString());
+        verify(mockMvpView).showPlate(anyString());
         verify(mockMvpView).showVoivodeship(name + "1");
         verify(mockMvpView).showPowiat(name + "2");
         verify(mockMvpView).showGmina(name + "3");
@@ -89,7 +89,7 @@ public class DetailsPresenterTest {
         detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
-        verify(mockMvpView).showSearchedPlate(anyString());
+        verify(mockMvpView).showPlate(anyString());
         verify(mockMvpView).showPlaceHolder();
         verify(mockMvpView, never()).showVoivodeship(anyString());
         verify(mockMvpView, never()).showPowiat(anyString());

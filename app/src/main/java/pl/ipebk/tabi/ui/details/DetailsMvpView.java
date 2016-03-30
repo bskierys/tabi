@@ -10,9 +10,11 @@ import android.net.Uri;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface DetailsMvpView extends MvpView {
+    void showSearchedText(String searchedText);
+
     void showPlaceName(String name);
 
-    void showSearchedPlate(String plate);
+    void showPlate(String plate);
 
     void showGmina(String gmina);
 

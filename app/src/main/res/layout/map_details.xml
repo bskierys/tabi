@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="44dp">
+
+    <pl.ipebk.tabi.ui.custom.ObservableImageView
+        android:id="@+id/img_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_200"
+        android:contentDescription="fill me"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/img_pin"
+        android:layout_width="36dp"
+        android:layout_height="72dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="fill me"
+        android:scaleType="fitStart"
+        android:src="@drawable/dic_location"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:src="@color/grey_300"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="fill me"
+            android:src="@color/white"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:src="@color/grey_300"/>
+    </RelativeLayout>
+</RelativeLayout>
