@@ -8,6 +8,8 @@ package pl.ipebk.tabi.database.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.ipebk.tabi.database.base.ModelInterface;
+
 public class Place implements ModelInterface {
     private long id;
     private String name;
@@ -100,8 +102,8 @@ public class Place implements ModelInterface {
 
     /**
      * @param pattern Start of pattern to search for.
-     * @return First plate that starts with given pattern. Main plate if null given.
-     * Null if none matches pattern.
+     * @return First plate that starts with given pattern. Main plate if
+     * null given or if none matches pattern.
      */
     public Plate getPlateMatchingPattern(String pattern) {
         Plate plate = null;
@@ -115,6 +117,10 @@ public class Place implements ModelInterface {
                 }
                 i++;
             }
+        }
+
+        if(plate == null){
+            plate = getMainPlate();
         }
 
         return plate;
@@ -147,7 +153,7 @@ public class Place implements ModelInterface {
     private String platesToString(List<Plate> plates) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < plates.size(); i++) {
-            builder.append(plates.get(i).toString());
+            builder.append(plates.get(i));
             if (i != plates.size() - 1) {
                 builder.append(", ");
             }

@@ -14,6 +14,7 @@ import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.List;
 
+import pl.ipebk.tabi.database.base.Dao;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.tables.PlacesTable;
 import pl.ipebk.tabi.database.tables.PlatesTable;

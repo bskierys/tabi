@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_panel"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+    android:id="@+id/card_panel"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/Details.Height.Button"
+    android:layout_marginLeft="@dimen/Details.Margin.Outer"
+    android:layout_marginRight="@dimen/Details.Margin.Outer"
+    android:alpha="0"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/Details.Radius.Panel"
+    tools:ignore="contentDescription">
+
+    <ImageView style="@style/Divider.Horizontal"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/Details.Height.Button"
-        app:cardBackgroundColor="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:cardCornerRadius="1dp"
-        android:alpha="0">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:src="@color/grey_300"/>
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <pl.ipebk.tabi.ui.details.DetailsButton
+            android:id="@+id/btn_google_it"
+            style="@style/Details_Button"
+            app:doodle="@drawable/dic_google"
+            app:text="@string/details_button_google_it"/>
 
-            <pl.ipebk.tabi.ui.details.DetailsButton
-                android:id="@+id/btn_google_it"
-                style="@style/Details_Button"
-                app:doodle="@drawable/dic_google"
-                app:text="WIĘCEJ"/>
+        <ImageView style="@style/Divider.Vertical"/>
 
-            <ImageView
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:src="@color/grey_300"
-                android:contentDescription="fill me and give me a style"/>
+        <pl.ipebk.tabi.ui.details.DetailsButton
+            android:id="@+id/btn_voivodeship"
+            style="@style/Details_Button"
+            app:doodle="@drawable/dic_voivodeship"
+            app:text="@string/details_button_voivodeship"/>
 
-            <pl.ipebk.tabi.ui.details.DetailsButton
-                android:id="@+id/btn_voivodeship"
-                style="@style/Details_Button"
-                app:doodle="@drawable/dic_voivodeship"
-                app:text="WOJEWÓDZTWO"/>
+        <ImageView style="@style/Divider.Vertical"/>
 
-            <ImageView
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:src="@color/grey_300"
-                android:contentDescription="fill me and give me a style"/>
-
-            <pl.ipebk.tabi.ui.details.DetailsButton
-                android:id="@+id/btn_map"
-                style="@style/Details_Button"
-                app:doodle="@drawable/dic_maps"
-                app:text="MAPY"/>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <pl.ipebk.tabi.ui.details.DetailsButton
+            android:id="@+id/btn_map"
+            style="@style/Details_Button"
+            app:doodle="@drawable/dic_maps"
+            app:text="@string/details_button_maps"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

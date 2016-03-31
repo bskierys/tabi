@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.database.models;
 
+import pl.ipebk.tabi.database.base.ModelInterface;
+
 public class Plate implements ModelInterface {
     private long id;
     private long placeId;
@@ -44,13 +46,21 @@ public class Plate implements ModelInterface {
     }
 
     @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Plate plate = (Plate) o;
 
-        if (placeId != plate.placeId) return false;
-        if (!pattern.equals(plate.pattern)) return false;
+        if (placeId != plate.placeId) {
+            return false;
+        }
+        if (!pattern.equals(plate.pattern)) {
+            return false;
+        }
         return end != null ? end.equals(plate.end) : plate.end == null;
     }
 

@@ -3,7 +3,7 @@
 * date: 2016-02-09
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database.daos;
+package pl.ipebk.tabi.database.base;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import pl.ipebk.tabi.database.models.ModelInterface;
-import pl.ipebk.tabi.database.tables.Table;
 import rx.Observable;
 import timber.log.Timber;
 

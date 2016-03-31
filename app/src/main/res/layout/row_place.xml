@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+              android:elevation="2dp"
+              android:orientation="vertical"
+              android:paddingBottom="16dp"
+              tools:ignore="contentDescription">
+
+    <ImageView
+        style="@style/Divider.Horizontal"
+        android:layout_marginBottom="16dp"
+        android:src="@color/grey_400"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/Details.Margin.Outer"
+        android:paddingRight="@dimen/Details.Margin.Outer">
+
+        <include layout="@layout/row_place_name"/>
+    </LinearLayout>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_voivodeship"
+        style="@style/Details_Text.Description.Search"/>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_powiat"
+        style="@style/Details_Text.Description.Search"/>
+</LinearLayout>

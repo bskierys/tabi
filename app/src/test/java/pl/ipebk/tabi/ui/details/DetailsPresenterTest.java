@@ -10,11 +10,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.test.common.TestDataFactory;
@@ -69,13 +71,14 @@ public class DetailsPresenterTest {
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, "k", SearchHistory.SearchType.PLATE, Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate(anyString());
-        verify(mockMvpView).showVoivodeship(name + "1");
-        verify(mockMvpView).showPowiat(name + "2");
-        verify(mockMvpView).showGmina(name + "3");
+        verify(mockMvpView).showVoivodeship(Mockito.contains(name + "1"));
+        verify(mockMvpView).showPowiat(Mockito.contains(name + "2"));
+        verify(mockMvpView).showGmina(Mockito.contains(name + "3"));
+        verify(mockMvpView).showSearchedText("k");
         verify(mockMvpView).showAdditionalInfo(anyString());
         verify(mockMvpView, atMost(2)).showMap(any());
     }
@@ -86,7 +89,7 @@ public class DetailsPresenterTest {
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchHistory.SearchType.PLATE, Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate(anyString());
@@ -103,7 +106,7 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchHistory.SearchType.PLATE, Observable.just(1), Observable.just(1));
 
         detailsPresenter.showOnMap();
 
@@ -115,7 +118,7 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchHistory.SearchType.PLATE, Observable.just(1), Observable.just(1));
 
         detailsPresenter.searchInGoogle();
 
@@ -127,7 +130,7 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchHistory.SearchType.PLATE, Observable.just(1), Observable.just(1));
 
         detailsPresenter.showMoreForVoivodeship();
         Character searchPhrase = malbork.getMainPlate().getPattern().charAt(0);

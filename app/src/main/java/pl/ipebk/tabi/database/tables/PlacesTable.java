@@ -10,6 +10,7 @@ import android.database.Cursor;
 
 import java.util.List;
 
+import pl.ipebk.tabi.database.base.Table;
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.daos.PlateDao;
 import pl.ipebk.tabi.database.models.Place;

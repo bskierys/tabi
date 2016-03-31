@@ -7,6 +7,8 @@ package pl.ipebk.tabi.database.models;
 
 import java.util.Date;
 
+import pl.ipebk.tabi.database.base.ModelInterface;
+
 public class SearchHistory implements ModelInterface {
     private long id;
     private Place place;

@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-03-20
+* date: 2016-03-31
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.ui.custom;
@@ -8,31 +8,31 @@ package pl.ipebk.tabi.ui.custom;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 
 import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
- * Dimple {@link ImageView} that allows to observe it's bounds through Rx observable.
+ * Simple {@link FrameLayout} that allows to observe it's bounds through Rx observable.
  */
-public class ObservableImageView extends ImageView {
+public class ObservableSizeLayout extends FrameLayout {
     private Rect bounds;
     private PublishSubject<Rect> boundsStream;
 
-    public ObservableImageView(Context context) {
+    public ObservableSizeLayout(Context context) {
         super(context);
 
         init();
     }
 
-    public ObservableImageView(Context context, AttributeSet attrs) {
+    public ObservableSizeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init();
     }
 
-    public ObservableImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ObservableSizeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();

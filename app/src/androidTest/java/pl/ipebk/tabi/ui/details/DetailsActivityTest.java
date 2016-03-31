@@ -125,7 +125,7 @@ public class DetailsActivityTest {
         onView(withId(R.id.btn_google_it)).check(isGone());
         onView(withId(R.id.btn_map)).check(isGone());
         onView(withId(R.id.btn_voivodeship)).check(isGone());
-        onView(withId(R.id.wrap_map)).check(isGone());
+        onView(withId(R.id.map_with_panel)).check(isGone());
     }
 
     @Test public void testActivitySurvivesScreenOrientationChange() {

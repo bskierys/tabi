@@ -13,6 +13,7 @@ import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
 
+import pl.ipebk.tabi.database.base.Dao;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;
 import rx.Observable;

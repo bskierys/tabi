@@ -1,4 +1,8 @@
 <resources>
+    <!--  PREVIEWS  -->
+    <string name="preview_place_name">Białogard</string>
+    <string name="preview_plate">ZBI</string>
+
     <!--  DETAILS  -->
     <string name="details_gmina">gmina</string>
     <string name="details_powiat">powiat</string>
@@ -14,6 +18,9 @@
     <string name="details_doodle_error_description">Nie mogę dotrzeć do lokacji</string>
     <string name="details_doodle_empty_header">Nic tu nie ma</string>
     <string name="details_doodle_empty_description">Chociaż całkiem możliwe, że coś było, ale to zjadłem&#8230;</string>
+    <string name="details_button_voivodeship">WOJEWÓDZTWO</string>
+    <string name="details_button_google_it">WIĘCEJ</string>
+    <string name="details_button_maps">MAPY</string>
 
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>

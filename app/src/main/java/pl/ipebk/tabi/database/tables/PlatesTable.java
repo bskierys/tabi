@@ -8,6 +8,7 @@ package pl.ipebk.tabi.database.tables;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import pl.ipebk.tabi.database.base.Table;
 import pl.ipebk.tabi.database.models.Plate;
 
 public class PlatesTable extends Table<Plate> {

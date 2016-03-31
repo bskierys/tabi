@@ -5,56 +5,37 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               tools:context=".ui.details.DetailsActivity"
+              tools:ignore="contentDescription"
               tools:showIn="@layout/activity_details">
 
-    <LinearLayout
+    <pl.ipebk.tabi.ui.custom.ObservableSizeLayout
+        android:id="@+id/wrap_place_header"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:gravity="top"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/ic_row"
-            android:layout_width="16dp"
-            android:layout_height="20dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_doodle_search"
-            android:contentDescription="fill me"/>
-        
-        <pl.ipebk.tabi.ui.custom.FontTextView
-            android:id="@+id/txt_place_name"
-            android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:text="Białogard"
-            style="@style/Details_Text.Header"/>
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/Details.Margin.Outer">
 
-        <pl.ipebk.tabi.ui.custom.FontTextView
-            android:id="@+id/txt_plate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ZBI"
-            style="@style/Details_Text.Header"/>
-    </LinearLayout>
+            <include layout="@layout/row_place_name"/>
+        </LinearLayout>
+    </pl.ipebk.tabi.ui.custom.ObservableSizeLayout>
+
+    <ImageView style="@style/Divider.Horizontal"/>
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:src="@color/grey_300"
-        android:contentDescription="fill me"/>
-
-    <pl.ipebk.tabi.ui.custom.ObservableImageView
         android:id="@+id/img_placeholder"
-        style="@style/Details_Placeholder"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:contentDescription="@string/description_placeholder"
         android:visibility="gone"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
         android:id="@+id/txt_voivodeship"
-        android:layout_marginTop="24dp"
-        style="@style/Details_Text.Description"/>
+        style="@style/Details_Text.Description"
+        android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"/>
 
     <pl.ipebk.tabi.ui.custom.FontTextView
         android:id="@+id/txt_powiat"
@@ -66,13 +47,15 @@
 
     <pl.ipebk.tabi.ui.custom.FontTextView
         android:id="@+id/txt_additional"
-        android:layout_marginBottom="24dp"
-        style="@style/Details_Text.Description"/>
+        style="@style/Details_Text.Description"
+        android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"/>
 
     <RelativeLayout
-        android:id="@+id/wrap_map"
+        android:id="@+id/map_with_panel"
         style="@style/Details_Map_Wrapper">
+
         <include layout="@layout/panel_details"/>
+
         <include layout="@layout/map_details"/>
     </RelativeLayout>
 </LinearLayout>

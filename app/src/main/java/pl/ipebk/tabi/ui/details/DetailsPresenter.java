@@ -47,8 +47,10 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
     public void loadPlace(long id, String searchedPlate, SearchHistory.SearchType searchType,
                           Observable<Integer> mapWidthStream, Observable<Integer> mapHeightStream) {
+
         getMvpView().disableActionButtons();
         getMvpView().showSearchedText(searchedPlate);
+
         if (searchedPlate != null && searchType == SearchHistory.SearchType.PLATE) {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
@@ -103,8 +105,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(p -> {
                        getMvpView().showPlaceName(p.getName());
-                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship)
-                                                            +" " + p.getVoivodeship());
+                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) +" " + p.getVoivodeship());
                        getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
                        getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
                    });
@@ -159,7 +160,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         getMvpView().startWebSearch(place + "," + context.getString(R.string.details_country));
     }
 
-    // TODO: 2016-02-27 move methods from presenter to dataManager
     private Uri getMapUrl(Place place, int width, int height) {
         Resources res = context.getResources();
         DisplayMetrics metrics = res.getDisplayMetrics();

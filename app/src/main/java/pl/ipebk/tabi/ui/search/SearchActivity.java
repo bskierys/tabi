@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -36,6 +37,7 @@ public class SearchActivity extends BaseActivity implements
 
     @Inject SearchPresenter presenter;
     @Bind(R.id.editTxt_search) EditText searchEditText;
+    @Bind(R.id.txt_searched) TextView searchedText;
     @Bind(R.id.pager_search) ViewPager searchPager;
     @Bind(R.id.toolbar) Toolbar toolbar;
 
@@ -54,6 +56,7 @@ public class SearchActivity extends BaseActivity implements
         presenter.attachView(this);
 
         viewCreationSubject = BehaviorSubject.create();
+        searchedText.setVisibility(View.GONE);
 
         String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
 

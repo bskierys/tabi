@@ -3,7 +3,7 @@
 * date: 2016-02-09
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database.models;
+package pl.ipebk.tabi.database.base;
 
 /**
  * Interface that should be implemented by every model class that

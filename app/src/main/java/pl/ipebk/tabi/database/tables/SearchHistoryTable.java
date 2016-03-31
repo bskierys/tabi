@@ -10,6 +10,7 @@ import android.database.Cursor;
 
 import java.util.Date;
 
+import pl.ipebk.tabi.database.base.Table;
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import timber.log.Timber;

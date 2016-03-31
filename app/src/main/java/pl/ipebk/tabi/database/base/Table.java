@@ -3,7 +3,7 @@
 * date: 2016-02-09
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database.tables;
+package pl.ipebk.tabi.database.base;
 
 import android.content.ContentValues;
 import android.database.Cursor;
