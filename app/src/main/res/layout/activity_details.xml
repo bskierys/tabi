@@ -17,6 +17,11 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/black_30"/>
+
         <ScrollView
             android:id="@+id/scroll_container"
             style="@style/Details"

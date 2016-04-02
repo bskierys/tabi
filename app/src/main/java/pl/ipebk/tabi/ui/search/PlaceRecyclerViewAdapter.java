@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -31,7 +32,13 @@ public class PlaceRecyclerViewAdapter extends CursorRecyclerViewAdapter<PlaceRec
         return new ViewHolder(view);
     }
 
-    @Override public void onBindViewHolder(ViewHolder holder, Cursor cursor) {
+    @Override public void onBindViewHolder(ViewHolder holder, Cursor cursor, int position) {
+        if (position == getItemCount() - 1) {
+            holder.shadow.setVisibility(View.VISIBLE);
+        } else {
+            holder.shadow.setVisibility(View.GONE);
+        }
+
         Observable<PlaceListItem> placeStream = Observable.just(cursor).map(PlaceListItem::new);
 
         Observable<PlaceListItem> standardPlaceStream = placeStream.filter(p -> p.getPlaceType() != Place.Type.SPECIAL);
@@ -79,6 +86,7 @@ public class PlaceRecyclerViewAdapter extends CursorRecyclerViewAdapter<PlaceRec
         @Bind(R.id.txt_plate) TextView plateView;
         @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
         @Bind(R.id.txt_powiat) TextView powiatView;
+        @Bind(R.id.shadow) ImageView shadow;
 
         public ViewHolder(View view) {
             super(view);
