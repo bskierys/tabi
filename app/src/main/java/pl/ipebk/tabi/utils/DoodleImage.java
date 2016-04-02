@@ -24,9 +24,8 @@ import java.util.StringTokenizer;
 import pl.ipebk.tabi.R;
 
 /**
- * Class that draws doodle image along with header and description. This class is build by builder.
- * If you do not supply builder with all data, default values will be used. Check out implementation
- * of builder class for full details.
+ * Class that draws doodle image along with header and description. This class is build by builder. If you do not supply
+ * builder with all data, default values will be used. Check out implementation of builder class for full details.
  */
 public class DoodleImage {
     final String headerText;
@@ -36,6 +35,8 @@ public class DoodleImage {
     final int spaceAfterImage;
     final int width;
     final int height;
+    final Typeface headerFont;
+    final Typeface descriptionFont;
     final Resources resources;
 
     private final TextPaint headerPaint = new TextPaint();
@@ -45,7 +46,7 @@ public class DoodleImage {
     private List<String> headerLines;
     private List<String> descriptionLines;
     private Bitmap originalImage;
-    private float scale;
+    float scale;
 
     public DoodleImage(final Builder builder) {
         this.headerText = builder.headerText;
@@ -55,36 +56,34 @@ public class DoodleImage {
         this.spaceAfterImage = builder.spaceAfterImage;
         this.width = builder.width;
         this.height = builder.height;
+        this.headerFont = builder.headerFont;
+        this.descriptionFont = builder.descriptionFont;
         this.resources = builder.context.getResources();
 
         initPaintingFields();
     }
-    // TODO: 2016-03-26 this need to be somehow tested
+
     /**
      * Creates default doodle image <br /> <b>Default values:</b> <ul> <li>headerText =
-     * R.string.doodle_default_header</li> <li>descriptionText = R.string
-     * .doodle_default_description</li>
-     * <li>imageResource = R.drawable.tabi_placeholder</li> <li>spaceBeforeImage =
-     * R.dimen.Doodle_Height_Space_Before</li> <li>spaceAfterImage = R.dimen
-     * .Doodle_Height_Space_After</li>
-     * <li>width = R.dimen.Doodle_Width_Default</li> <li>height = R.dimen.Doodle_Height_Default</li>
-     * </ul>
+     * R.string.doodle_default_header</li> <li>descriptionText = R.string .doodle_default_description</li>
+     * <li>imageResource = R.drawable.tabi_placeholder</li> <li>spaceBeforeImage = R.dimen
+     * .Doodle_Height_Space_Before</li>
+     * <li>spaceAfterImage = R.dimen .Doodle_Height_Space_After</li> <li>width = R.dimen.Doodle_Width_Default</li>
+     * <li>height = R.dimen.Doodle_Height_Default</li> </ul>
      */
     public static DoodleImage createDefault(Context context) {
         return new Builder(context).build();
     }
 
     private void initPaintingFields() {
-        Typeface bebas = FontManager.getInstance().get("bebas", Typeface.NORMAL);
         float headerTextSize = resources.getDimensionPixelSize(R.dimen.Doodle_Text_Header);
         int headerFontColor = resources.getColor(R.color.grey_850);
         headerPaint.setColor(headerFontColor);
         headerPaint.setTextSize(headerTextSize);
         headerPaint.setTextAlign(Paint.Align.CENTER);
         headerPaint.setAntiAlias(true);
-        headerPaint.setTypeface(bebas);
+        headerPaint.setTypeface(headerFont);
 
-        Typeface montserrat = FontManager.getInstance().get("montserrat", Typeface.NORMAL);
         float descriptionTextSize = resources
                 .getDimensionPixelSize(R.dimen.Doodle_Text_Description);
         int descriptionFontColor = resources.getColor(R.color.grey_700);
@@ -92,11 +91,11 @@ public class DoodleImage {
         descriptionPaint.setTextSize(descriptionTextSize);
         descriptionPaint.setTextAlign(Paint.Align.CENTER);
         descriptionPaint.setAntiAlias(true);
-        descriptionPaint.setTypeface(montserrat);
+        descriptionPaint.setTypeface(descriptionFont);
     }
 
     /**
-     * Method for pre-computation boundries of image to draw it faster when times come
+     * Method for pre-computation bounds of image to draw it faster when times come
      */
     public void preComputeScale() {
         originalImage = BitmapFactory.decodeResource(resources, imageResource);
@@ -140,10 +139,9 @@ public class DoodleImage {
     }
 
     /**
-     * Draws doodle along with description and header and returns bitmap. This method is not
-     * perfectly optimized so you can help it by performing pre-computation off the main thread.
-     * Just call {@link #preComputeScale()} from another thread and then call this one from main
-     * thread.
+     * Draws doodle along with description and header and returns bitmap. This method is not perfectly optimized so you
+     * can help it by performing pre-computation off the main thread. Just call {@link #preComputeScale()} from another
+     * thread and then call this one from main thread.
      */
     public Bitmap draw() {
         if (scale == 0.f) {
@@ -196,7 +194,7 @@ public class DoodleImage {
         return doodleBounds;
     }
 
-    private void drawHeader(Canvas canvas, Rect doodleBounds) {
+    protected void drawHeader(Canvas canvas, Rect doodleBounds) {
         if (scale != 1) {
             headerPaint.setTextSize(scale * headerPaint.getTextSize());
         }
@@ -212,7 +210,7 @@ public class DoodleImage {
         }
     }
 
-    private void drawDescription(Canvas canvas, Rect doodleBounds) {
+    protected void drawDescription(Canvas canvas, Rect doodleBounds) {
         if (scale != 1) {
             descriptionPaint.setTextSize(scale * descriptionPaint.getTextSize());
         }
@@ -228,7 +226,7 @@ public class DoodleImage {
         }
     }
 
-    private List<String> getLines(String text, Paint paint) {
+    protected List<String> getLines(String text, Paint paint) {
         Rect textBounds = new Rect();
 
         StringTokenizer tok = new StringTokenizer(text, " ");
@@ -265,6 +263,8 @@ public class DoodleImage {
         private int spaceAfterImage;
         private int width;
         private int height;
+        private Typeface headerFont;
+        private Typeface descriptionFont;
         private Context context;
 
         public Builder(Context context) {
@@ -312,9 +312,8 @@ public class DoodleImage {
         }
 
         /**
-         * Width of image to be computed. If image is smaller it will be drawn inside of canvas. If
-         * image is larger it will be rescalled with default margin around whole. Default:
-         * R.dimen.Doodle_Width_Default
+         * Width of image to be computed. If image is smaller it will be drawn inside of canvas. If image is larger it
+         * will be rescalled with default margin around whole. Default: R.dimen.Doodle_Width_Default
          */
         public Builder width(int width) {
             this.width = width;
@@ -322,12 +321,27 @@ public class DoodleImage {
         }
 
         /**
-         * Height of image to be computed. If image is smaller it will be drawn inside of canvas. If
-         * image is larger it will be rescalled with default margin around whole. Default:
-         * R.dimen.Doodle_Height_Default
+         * Height of image to be computed. If image is smaller it will be drawn inside of canvas. If image is larger it
+         * will be rescalled with default margin around whole. Default: R.dimen.Doodle_Height_Default
          */
         public Builder height(int height) {
             this.height = height;
+            return this;
+        }
+
+        /**
+         * Font to draw header with. Default: Bebas
+         */
+        public Builder headerFont(Typeface headerFont) {
+            this.headerFont = headerFont;
+            return this;
+        }
+
+        /**
+         * Font to draw description with. Default: Montserrat
+         */
+        public Builder descriptionFont(Typeface descriptionFont) {
+            this.descriptionFont = descriptionFont;
             return this;
         }
 
@@ -351,20 +365,24 @@ public class DoodleImage {
                 imageResource = R.drawable.tabi_placeholder;
             }
             if (spaceBeforeImage == 0) {
-                spaceBeforeImage = context.getResources().getDimensionPixelOffset(
+                spaceBeforeImage = context.getResources().getDimensionPixelSize(
                         R.dimen.Doodle_Height_Space_Before);
             }
             if (spaceAfterImage == 0) {
-                spaceAfterImage = context.getResources().getDimensionPixelOffset(
+                spaceAfterImage = context.getResources().getDimensionPixelSize(
                         R.dimen.Doodle_Height_Space_After);
             }
             if (width == 0) {
-                width = context.getResources()
-                               .getDimensionPixelOffset(R.dimen.Doodle_Width_Default);
+                width = context.getResources().getDimensionPixelSize(R.dimen.Doodle_Width_Default);
             }
             if (height == 0) {
-                height = context.getResources()
-                                .getDimensionPixelOffset(R.dimen.Doodle_Height_Default);
+                height = context.getResources().getDimensionPixelSize(R.dimen.Doodle_Height_Default);
+            }
+            if (headerFont == null) {
+                headerFont = FontManager.getInstance().get("bebas", Typeface.NORMAL);
+            }
+            if (descriptionFont == null) {
+                descriptionFont = FontManager.getInstance().get("montserrat", Typeface.NORMAL);
             }
         }
     }

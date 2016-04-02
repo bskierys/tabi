@@ -32,6 +32,7 @@
     <dimen name="Details.Margin.Description.Vertical">5dp</dimen>
     <dimen name="Details.Margin.Description.Horizontal">24dp</dimen>
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
+    <dimen name="Details.Elevation">3dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

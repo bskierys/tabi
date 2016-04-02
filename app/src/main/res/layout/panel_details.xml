@@ -22,7 +22,7 @@
         <pl.ipebk.tabi.ui.details.DetailsButton
             android:id="@+id/btn_google_it"
             style="@style/Details_Button"
-            app:doodle="@drawable/dic_google"
+            app:doodle="@drawable/dic_google_it"
             app:text="@string/details_button_google_it"/>
 
         <ImageView style="@style/Divider.Vertical"/>
