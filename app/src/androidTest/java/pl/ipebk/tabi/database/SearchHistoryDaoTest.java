@@ -12,6 +12,7 @@ import java.util.List;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.test.common.TestDataFactory;
 
 public class SearchHistoryDaoTest extends DatabaseTest {
@@ -25,24 +26,24 @@ public class SearchHistoryDaoTest extends DatabaseTest {
 
         SearchHistory placeHistory = new SearchHistory();
         placeHistory.setPlace(place);
-        placeHistory.setSearchType(SearchHistory.SearchType.PLACE);
+        placeHistory.setSearchType(SearchType.PLACE);
         placeHistory.setTimeSearched(new Date(0));
         databaseHelper.getSearchHistoryDao().add(placeHistory);
 
         SearchHistory plateHistory = new SearchHistory();
         plateHistory.setPlace(plate);
-        plateHistory.setSearchType(SearchHistory.SearchType.PLATE);
+        plateHistory.setSearchType(SearchType.PLATE);
         plateHistory.setTimeSearched(new Date(0));
         databaseHelper.getSearchHistoryDao().add(plateHistory);
 
         SearchHistory plateHistory2 = new SearchHistory();
         plateHistory2.setPlace(plate2);
-        plateHistory2.setSearchType(SearchHistory.SearchType.PLATE);
+        plateHistory2.setSearchType(SearchType.PLATE);
         plateHistory2.setTimeSearched(new Date(0));
         databaseHelper.getSearchHistoryDao().add(plateHistory2);
 
         List<SearchHistory> historyList = databaseHelper.getSearchHistoryDao()
-                .getHistoryListForType(SearchHistory.SearchType.PLATE, null);
+                                                        .getHistoryListForType(SearchType.PLATE, null);
 
         assertEquals(2, historyList.size());
 
@@ -53,19 +54,20 @@ public class SearchHistoryDaoTest extends DatabaseTest {
 
     @MediumTest public void testGetHistoryOrderAndLimit() {
         for (int i = 0; i < 5; i++) {
-            Place plate = TestDataFactory.createStandardPlace("PLATE_" + Integer.toString(i), "BAT", Place.Type.POWIAT_CITY);
+            Place plate = TestDataFactory.createStandardPlace("PLATE_" + Integer.toString(i), "BAT", Place.Type
+                    .POWIAT_CITY);
             databaseHelper.getPlaceDao().add(plate);
 
             SearchHistory history = new SearchHistory();
             history.setPlace(plate);
-            history.setSearchType(SearchHistory.SearchType.PLATE);
+            history.setSearchType(SearchType.PLATE);
             history.setTimeSearched(new Date(i));
             databaseHelper.getSearchHistoryDao().add(history);
         }
 
         int limit = 4;
         List<SearchHistory> historyList = databaseHelper.getSearchHistoryDao()
-                .getHistoryListForType(SearchHistory.SearchType.PLATE, limit);
+                                                        .getHistoryListForType(SearchType.PLATE, limit);
 
         assertEquals(limit, historyList.size());
 
@@ -84,16 +86,15 @@ public class SearchHistoryDaoTest extends DatabaseTest {
         for (int i = 0; i < 5; i++) {
             SearchHistory history = new SearchHistory();
             history.setPlace(plate);
-            history.setSearchType(SearchHistory.SearchType.PLATE);
+            history.setSearchType(SearchType.PLATE);
             history.setTimeSearched(new Date(i));
             databaseHelper.getSearchHistoryDao().add(history);
         }
 
         List<SearchHistory> historyList = databaseHelper.getSearchHistoryDao()
-                .getHistoryListForType(SearchHistory.SearchType.PLATE, null);
+                                                        .getHistoryListForType(SearchType.PLATE, null);
 
         assertEquals(1, historyList.size());
         assertEquals(4, historyList.get(0).getTimeSearched().getTime());
-
     }
 }

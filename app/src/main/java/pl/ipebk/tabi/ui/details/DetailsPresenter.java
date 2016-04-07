@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import rx.Observable;
@@ -45,13 +45,13 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         super.detachView();
     }
 
-    public void loadPlace(long id, String searchedPlate, SearchHistory.SearchType searchType,
+    public void loadPlace(long id, String searchedPlate, SearchType searchType,
                           Observable<Integer> mapWidthStream, Observable<Integer> mapHeightStream) {
 
         getMvpView().disableActionButtons();
         getMvpView().showSearchedText(searchedPlate);
 
-        if (searchedPlate != null && searchType == SearchHistory.SearchType.PLATE) {
+        if (searchedPlate != null && searchType == SearchType.PLATE) {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
@@ -105,7 +105,8 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(p -> {
                        getMvpView().showPlaceName(p.getName());
-                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) +" " + p.getVoivodeship());
+                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) + " " + p
+                               .getVoivodeship());
                        getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
                        getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
                    });
@@ -130,14 +131,14 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         if (place.getType().ordinal() < Place.Type.PART_OF_TOWN.ordinal()) {
             placeType = context.getString(R.string.details_additional_town);
         } else if (place.getType() == Place.Type.PART_OF_TOWN) {
-            placeType = context.getString(R.string.details_additional_part_of_town)+ " " + place.getGmina();
+            placeType = context.getString(R.string.details_additional_part_of_town) + " " + place.getGmina();
         } else if (place.getType() == Place.Type.VILLAGE) {
             placeType = context.getString(R.string.details_additional_village);
         }
 
         String otherPlates = "";
         if (place.getPlates().size() > 1) {
-            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)+ ": "
+            otherPlates = ", " + context.getString(R.string.details_additional_other_plates) + ": "
                     + place.platesToStringExceptMatchingPattern(searchedPlate);
         }
 
@@ -190,9 +191,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     /**
-     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5, xhdpi -> 2.0, xxhdpi ->
-     * 3.0, xxxhdpi -> 4.0. Scale for map should match these values. Unfortunately non-premium users
-     * can only scale up to 2, so we use this method as computing helper.
+     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5, xhdpi -> 2.0, xxhdpi -> 3.0, xxxhdpi -> 4.0.
+     * Scale for map should match these values. Unfortunately non-premium users can only scale up to 2, so we use this
+     * method as computing helper.
      *
      * @param density Android pixel density
      * @return Google static maps api scale

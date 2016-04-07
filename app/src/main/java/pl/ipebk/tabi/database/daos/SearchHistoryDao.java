@@ -15,6 +15,7 @@ import java.util.List;
 
 import pl.ipebk.tabi.database.base.Dao;
 import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;
 import rx.Observable;
 
@@ -26,28 +27,28 @@ public class SearchHistoryDao extends Dao<SearchHistory> {
     }
 
     /**
-     * @param type  {@link pl.ipebk.tabi.database.models.SearchHistory.SearchType} to filter history
+     * @param type {@link pl.ipebk.tabi.database.models.SearchType} to filter history
      * @param limit nummber of history rows to return. Null to ignore
      * @return Search history for given type ordered be time descending.
      */
-    public Observable<List<SearchHistory>> getHistoryForType(SearchHistory.SearchType type, Integer limit) {
+    public Observable<List<SearchHistory>> getHistoryForType(SearchType type, Integer limit) {
         Pair<String, String[]> sql = getHistoryListForTypeSql(type, limit);
         return db.createQuery(table.getTableName(), sql.first, sql.second)
-                .mapToList(cursor -> table.cursorToModel(cursor));
+                 .mapToList(cursor -> table.cursorToModel(cursor));
     }
 
     /**
-     * @param type  {@link pl.ipebk.tabi.database.models.SearchHistory.SearchType} to filter history
+     * @param type {@link pl.ipebk.tabi.database.models.SearchType} to filter history
      * @param limit nummber of history rows to return. Null to ignore
      * @return Search history for given type ordered be time descending.
      */
-    public List<SearchHistory> getHistoryListForType(SearchHistory.SearchType type, Integer limit) {
+    public List<SearchHistory> getHistoryListForType(SearchType type, Integer limit) {
         Pair<String, String[]> sql = getHistoryListForTypeSql(type, limit);
         Cursor cursor = db.query(sql.first, sql.second);
         return getListOfModelsForCursor(cursor);
     }
 
-    private Pair<String, String[]> getHistoryListForTypeSql(SearchHistory.SearchType type, Integer limit) {
+    private Pair<String, String[]> getHistoryListForTypeSql(SearchType type, Integer limit) {
         String selection = SearchHistoryTable.COLUMN_SEARCH_TYPE + " = ?";
         String[] selectionArgs = {Integer.toString(type.ordinal())};
 
@@ -61,7 +62,8 @@ public class SearchHistoryDao extends Dao<SearchHistory> {
         String having = String.format(" %1$s = max( %1$s ) ", SearchHistoryTable.COLUMN_TIME_SEARCHED);
 
         String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
-                table.getQualifiedColumns(), selection, groupBy, having, orderBy, limited);
+                                                         table.getQualifiedColumns(), selection, groupBy, having,
+                                                         orderBy, limited);
 
         return new Pair<>(sql, selectionArgs);
     }

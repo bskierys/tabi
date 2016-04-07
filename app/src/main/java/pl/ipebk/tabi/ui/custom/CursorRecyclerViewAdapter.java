@@ -16,26 +16,24 @@
  */
 package pl.ipebk.tabi.ui.custom;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.support.v7.widget.RecyclerView;
 
+import timber.log.Timber;
+
 /**
- * Implementation of {@link android.support.v7.widget.RecyclerView.Adapter } designed to
- * pull data directly from database cursor.
- * <a href="https://gist.github.com/skyfishjy/443b7448f59be978bc59">original source</a>
+ * Implementation of {@link android.support.v7.widget.RecyclerView.Adapter } designed to pull data directly from
+ * database cursor. <a href="https://gist.github.com/skyfishjy/443b7448f59be978bc59">original source</a>
  */
 public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-    private Context context;
     private Cursor cursor;
     private boolean dataValid;
     private int rowIdColumn;
 
     private DataSetObserver dataSetObserver;
 
-    public CursorRecyclerViewAdapter(Context context, Cursor cursor) {
-        this.context = context;
+    public CursorRecyclerViewAdapter(Cursor cursor) {
         this.cursor = cursor;
         dataValid = cursor != null;
         rowIdColumn = dataValid ? this.cursor.getColumnIndex("_id") : -1;
@@ -71,17 +69,18 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
 
     @Override public void onBindViewHolder(VH viewHolder, int position) {
         if (!dataValid) {
-            throw new IllegalStateException("this should only be called when the cursor is valid");
+            Timber.w("BindViewHolder called with not valid cursor");
+            return;
         }
         if (!cursor.moveToPosition(position)) {
-            throw new IllegalStateException("couldn't move cursor to position " + position);
+            Timber.w("couldn't move cursor to position %d", position);
+            return;
         }
         onBindViewHolder(viewHolder, cursor, position);
     }
 
     /**
-     * Change the underlying cursor to a new cursor. If there is an existing cursor it will be
-     * closed.
+     * Change the underlying cursor to a new cursor. If there is an existing cursor it will be closed.
      */
     public void changeCursor(Cursor cursor) {
         Cursor old = swapCursor(cursor);
@@ -91,9 +90,8 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     }
 
     /**
-     * Swap in a new Cursor, returning the old Cursor.  Unlike
-     * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
-     * closed.
+     * Swap in a new Cursor, returning the old Cursor.  Unlike {@link #changeCursor(Cursor)}, the returned old Cursor is
+     * <em>not</em> closed.
      */
     public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == cursor) {

@@ -17,15 +17,6 @@
         android:layout_margin="16dp"
         android:textSize="18sp"/>
 
-    <ProgressBar
-        android:id="@+id/progress_search"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:indeterminate="true"/>
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/place_list"
         android:layout_width="match_parent"

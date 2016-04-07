@@ -22,15 +22,16 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
-public class SearchActivity extends BaseActivity implements
-        PlaceFragment.onPlaceClickedListener, SearchMvpView {
+public class SearchActivity extends BaseActivity implements PlaceFragment.onPlaceClickedListener, SearchMvpView {
     public static final String PARAM_SEARCH_TEXT = "param_search_text";
+    public static final int EVENT_ID_HEADER_ALL = 2654;
+
     private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
     private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
     private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
@@ -61,14 +62,14 @@ public class SearchActivity extends BaseActivity implements
         String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
 
         RxTextView.textChanges(searchEditText)
-                .subscribe(text -> {
-                    presenter.quickSearchForText(text.toString());
-                });
+                  .subscribe(text -> {
+                      presenter.quickSearchForText(text.toString());
+                  });
         RxTextView.editorActionEvents(searchEditText)
-                .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
-                .subscribe(e -> {
-                    presenter.deepSearchForText(searchEditText.getText().toString());
-                });
+                  .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
+                  .subscribe(e -> {
+                      presenter.deepSearchForText(searchEditText.getText().toString());
+                  });
 
         searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
 
@@ -77,8 +78,9 @@ public class SearchActivity extends BaseActivity implements
 
         Observable<String> initialSearchStream = Observable
                 .combineLatest(viewCreationSubject.asObservable().scan((a, b) -> a + b)
-                                .filter(fragmentsCreated -> fragmentsCreated == TOTAL_NUMBER_OF_FRAGMENTS),
-                        Observable.just(textToSearch), (fragmentsCreated, searchText) -> searchText)
+                                                  .filter(fragmentsCreated -> fragmentsCreated ==
+                                                          TOTAL_NUMBER_OF_FRAGMENTS),
+                               Observable.just(textToSearch), (fragmentsCreated, searchText) -> searchText)
                 .filter(text -> text != null);
 
         initialSearchStream.subscribe(searchText -> presenter.startInitialSearchForText(searchText));
@@ -91,21 +93,37 @@ public class SearchActivity extends BaseActivity implements
     }
 
     //region View callbacks
-    // TODO: 2016-03-04 move searchType from searchHistory
-    @Override public void onPlaceClicked(long placeId, SearchHistory.SearchType type) {
-        presenter.placeSelected(placeId, searchEditText.getText().toString(), type);
+    @Override public void onPlaceClicked(long placeId, SearchType type) {
+        if (placeId > 0) {
+            presenter.placeSelected(placeId, searchEditText.getText().toString(), type);
+        }
     }
 
-    @Override public void onFragmentViewCreated(SearchHistory.SearchType type) {
+    @Override public void onHeaderClicked(int eventId) {
+        if (EVENT_ID_HEADER_ALL == eventId) {
+            presenter.deepSearchForText(searchEditText.getText().toString());
+        }
+    }
+
+    @Override public void onFragmentViewCreated(SearchType type) {
         viewCreationSubject.onNext(1);
     }
     //endregion
 
     //region Mvp View methods
-    @Override public void showPlacesInPlacesSection(Cursor cursor) {
+    @Override public void showFullSearchInPlacesSection(Cursor cursor) {
         if (searchPlacesFragment.isViewCreated()) {
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
+            searchPlacesFragment.showFullHeaders();
+        }
+    }
+
+    @Override public void showBestSearchInPlacesSection(Cursor cursor) {
+        if (searchPlacesFragment.isViewCreated()) {
+            searchPlacesFragment.setData(cursor);
+            searchPlacesFragment.showList();
+            searchPlacesFragment.showQuickHeaders();
         }
     }
 
@@ -138,7 +156,7 @@ public class SearchActivity extends BaseActivity implements
         }
     }
 
-    @Override public void goToPlaceDetails(long placeId, String searchedPlate, SearchHistory.SearchType searchType) {
+    @Override public void goToPlaceDetails(long placeId, String searchedPlate, SearchType searchType) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
@@ -160,10 +178,19 @@ public class SearchActivity extends BaseActivity implements
         }
     }
 
-    @Override public void showPlacesInPlatesSection(Cursor cursor) {
+    @Override public void showFullSearchInPlatesSection(Cursor cursor) {
         if (searchPlatesFragment.isViewCreated()) {
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
+            searchPlatesFragment.showFullHeaders();
+        }
+    }
+
+    @Override public void showBestSearchInPlatesSection(Cursor cursor) {
+        if (searchPlatesFragment.isViewCreated()) {
+            searchPlatesFragment.setData(cursor);
+            searchPlatesFragment.showList();
+            searchPlatesFragment.showQuickHeaders();
         }
     }
     //endregion
@@ -173,21 +200,21 @@ public class SearchActivity extends BaseActivity implements
     private PlaceFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
-        if (savedFragment != null) return (PlaceFragment) savedFragment;
-        else {
+        if (savedFragment != null) {
+            return (PlaceFragment) savedFragment;
+        } else {
             switch (position) {
                 case SEARCH_PLATES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchHistory.SearchType.PLATE);
+                    return PlaceFragment.newInstance(SearchType.PLATE);
                 case SEARCH_PLACES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchHistory.SearchType.PLACE);
+                    return PlaceFragment.newInstance(SearchType.PLACE);
             }
         }
         return null;
     }
 
     /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 

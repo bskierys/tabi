@@ -13,6 +13,7 @@ import java.util.Date;
 import pl.ipebk.tabi.database.base.Table;
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import timber.log.Timber;
 
 public class SearchHistoryTable extends Table<SearchHistory> {
@@ -38,7 +39,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
             + TABLE_COLUMNS[1] + " INTEGER NOT NULL, "
             + TABLE_COLUMNS[2] + " TEXT, "
             + TABLE_COLUMNS[3] + " INTEGER NOT NULL, "
-            + TABLE_COLUMNS[4] + " INTEGER DEFAULT " + Integer.toString(SearchHistory.SearchType.UNKNOWN.ordinal()) + ", "
+            + TABLE_COLUMNS[4] + " INTEGER DEFAULT " + Integer.toString(SearchType.UNKNOWN.ordinal()) + ", "
             + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + COLUMN_ID + ")"
             + " ON DELETE CASCADE );";
 
@@ -74,10 +75,10 @@ public class SearchHistoryTable extends Table<SearchHistory> {
         history.setTimeSearched(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_TIME_SEARCHED))));
 
         int type = cursor.getInt(cursor.getColumnIndex(COLUMN_SEARCH_TYPE));
-        if (type >= SearchHistory.SearchType.values().length) {
-            history.setSearchType(SearchHistory.SearchType.UNKNOWN);
+        if (type >= SearchType.values().length) {
+            history.setSearchType(SearchType.UNKNOWN);
         } else {
-            history.setSearchType(SearchHistory.SearchType.values()[type]);
+            history.setSearchType(SearchType.values()[type]);
         }
 
         return history;
@@ -99,7 +100,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
         values.put(COLUMN_PLATE, model.getPlate());
 
         if (model.getSearchType() == null) {
-            values.put(COLUMN_SEARCH_TYPE, SearchHistory.SearchType.UNKNOWN.ordinal());
+            values.put(COLUMN_SEARCH_TYPE, SearchType.UNKNOWN.ordinal());
         } else {
             values.put(COLUMN_SEARCH_TYPE, model.getSearchType().ordinal());
         }

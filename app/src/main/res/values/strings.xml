@@ -22,6 +22,12 @@
     <string name="details_button_google_it">WIĘCEJ</string>
     <string name="details_button_maps">MAPY</string>
 
+    <!--  SEARCH  -->
+    <string name="search_header_best">NAJLEPSZE WYNIKI</string>
+    <string name="search_header_all">WSZYSTKIE WYNIKI</string>
+    <string name="search_header_click">KLIKNIJ ABY WYSZUKAĆ WIĘCEJ</string>
+    <string name="search_header_suggestions">PODPOWIEDZI</string>
+
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>
     <string name="doodle_default_description">A to peszek</string>

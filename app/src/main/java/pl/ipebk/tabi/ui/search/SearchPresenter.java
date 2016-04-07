@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.SpellCorrector;
@@ -27,6 +27,9 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private static final long QUICK_LIST_RENDERING_DELAY = 300;
     private static final long FULL_LIST_RENDERING_DELAY = 0;
     private static final int FULLY_LOADED_VIEW_CONST = 2;
+
+    private static final int SEARCH_TYPE_QUICK = 28;
+    private static final int SEARCH_TYPE_FULL = 82;
 
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
@@ -51,7 +54,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId, String searchedPlate, SearchHistory.SearchType searchType) {
+    public void placeSelected(long placeId, String searchedPlate, SearchType searchType) {
         getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType);
     }
 
@@ -69,33 +72,35 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void quickSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, 3, QUICK_LIST_RENDERING_DELAY);
+        searchForRawTextWithLimit(rawPhrase, 3, SEARCH_TYPE_QUICK);
     }
 
     public void deepSearchForText(String rawPhrase) {
         this.lastSearched = rawPhrase;
-        searchForRawTextWithLimit(rawPhrase, null, FULL_LIST_RENDERING_DELAY);
+        searchForRawTextWithLimit(rawPhrase, null, SEARCH_TYPE_FULL);
         getMvpView().hideKeyboard();
     }
     //endregion
 
     //region Search
-    private void searchForRawTextWithLimit(String rawPhrase, Integer limit, long delay) {
+    private void searchForRawTextWithLimit(String rawPhrase, Integer limit, int searchType) {
         checkViewAttached();
         if (searchSubscription != null) {
             searchSubscription.unsubscribe();
         }
 
+        long delay = searchType == SEARCH_TYPE_QUICK ? QUICK_LIST_RENDERING_DELAY : FULL_LIST_RENDERING_DELAY;
+
         searchSubscription = Observable.just(rawPhrase)
-                .subscribeOn(Schedulers.computation())
-                .delay(delay, TimeUnit.MILLISECONDS, Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(spellCorrector::cleanForSearch)
-                .subscribe(s -> beginSearchForCleaned(limit, s),
-                        e -> Timber.e("Error during searching for places", e));
+                                       .subscribeOn(Schedulers.computation())
+                                       .delay(delay, TimeUnit.MILLISECONDS, Schedulers.computation())
+                                       .observeOn(AndroidSchedulers.mainThread())
+                                       .map(spellCorrector::cleanForSearch)
+                                       .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
+                                                  e -> Timber.e("Error during searching for places", e));
     }
 
-    private void beginSearchForCleaned(Integer limit, String s) {
+    private void beginSearchForCleaned(Integer limit, String s, int searchType) {
         if (s == null || s.equals("")) {
             loadInitialStateForPlaces();
             loadInitialStateForPlates();
@@ -107,22 +112,22 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             getObservableForSearchWithinTwoQueries(s, limit)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::showSearchResults);
+                    .subscribe(results -> showSearchResults(results, searchType));
         }
     }
 
     private Observable<Pair<Cursor, Cursor>> getObservableForSearchWithinTwoQueries(String phrase, Integer limit) {
         Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
-                .getPlaceDao().getPlacesForPlateStart(phrase, limit);
+                                                               .getPlaceDao().getPlacesForPlateStart(phrase, limit);
 
         Observable<Cursor> placesCursorObservable = dataManager.getDatabaseHelper()
-                .getPlaceDao().getPlacesByName(phrase, limit);
+                                                               .getPlaceDao().getPlacesByName(phrase, limit);
 
         return Observable.zip(platesCursorObservable,
-                placesCursorObservable, Pair<Cursor, Cursor>::new);
+                              placesCursorObservable, Pair<Cursor, Cursor>::new);
     }
 
-    private void showSearchResults(Pair<Cursor, Cursor> cursorCursorPair) {
+    private void showSearchResults(Pair<Cursor, Cursor> cursorCursorPair, int searchType) {
         Cursor platesCursor = cursorCursorPair.first;
         Cursor placesCursor = cursorCursorPair.second;
 
@@ -130,13 +135,21 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
         stopwatch.reset();
         if (platesCursor.getCount() > 0) {
-            getMvpView().showPlacesInPlatesSection(platesCursor);
+            if (searchType == SEARCH_TYPE_QUICK) {
+                getMvpView().showBestSearchInPlatesSection(platesCursor);
+            } else if (searchType == SEARCH_TYPE_FULL) {
+                getMvpView().showFullSearchInPlatesSection(platesCursor);
+            }
         } else {
             getMvpView().showEmptyStateInPlatesSection();
         }
 
         if (placesCursor.getCount() > 0) {
-            getMvpView().showPlacesInPlacesSection(placesCursor);
+            if (searchType == SEARCH_TYPE_QUICK) {
+                getMvpView().showBestSearchInPlacesSection(placesCursor);
+            } else if (searchType == SEARCH_TYPE_FULL) {
+                getMvpView().showFullSearchInPlacesSection(placesCursor);
+            }
         } else {
             getMvpView().showEmptyStateInPlacesSection();
         }

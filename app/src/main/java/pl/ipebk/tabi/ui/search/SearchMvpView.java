@@ -7,7 +7,7 @@ package pl.ipebk.tabi.ui.search;
 
 import android.database.Cursor;
 
-import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface SearchMvpView extends MvpView {
@@ -16,10 +16,14 @@ public interface SearchMvpView extends MvpView {
 
     void hideEmptyStateInPlatesSection();
 
-    void showPlacesInPlatesSection(Cursor cursor);
+    void showFullSearchInPlatesSection(Cursor cursor);
+
+    void showBestSearchInPlatesSection(Cursor cursor);
 
     // places section
-    void showPlacesInPlacesSection(Cursor cursor);
+    void showFullSearchInPlacesSection(Cursor cursor);
+
+    void showBestSearchInPlacesSection(Cursor cursor);
 
     void showEmptyStateInPlacesSection();
 
@@ -29,5 +33,5 @@ public interface SearchMvpView extends MvpView {
 
     void hideKeyboard();
 
-    void goToPlaceDetails(long placeId, String searchedText, SearchHistory.SearchType searchType);
+    void goToPlaceDetails(long placeId, String searchedText, SearchType searchType);
 }

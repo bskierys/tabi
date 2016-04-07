@@ -35,7 +35,7 @@ import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
@@ -77,7 +77,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_placeholder) ImageView placeHolder;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
 
-
     private final Stopwatch stopwatch = new Stopwatch();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Timber.d("Activity creation time: %s", stopwatch.getElapsedTimeString());
     }
 
-    private void clearPreviewLayout(){
+    private void clearPreviewLayout() {
         showPlaceName("");
         showGmina("");
         showPowiat("");
@@ -110,7 +109,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         float marginOffset = getResources()
                 .getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             scrollContainer.setElevation(getResources().getDimensionPixelSize(R.dimen.Details_Elevation));
         }
 
@@ -134,8 +133,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
-        SearchHistory.SearchType searchType = SearchHistory.SearchType.values()
-                [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchHistory.SearchType.UNKNOWN.ordinal())];
+        SearchType searchType = SearchType.values()
+                [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
         if (placeId > 0) {
             presenter.loadPlace(placeId, searchedPlate, searchType,
                                 mapWidthStream.asObservable(),
@@ -158,7 +157,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Override protected void onStart() {
         super.onStart();
 
-        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this,R.animator.panel_animation);
+        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.panel_animation);
         set.setInterpolator(new DecelerateInterpolator());
         set.setTarget(panelCard);
         set.start();
@@ -169,7 +168,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.detachView();
     }
 
-    @OnClick(R.id.btn_back) public void onBackButton(){
+    @OnClick(R.id.btn_back) public void onBackButton() {
         // TODO: 2016-03-30 better back behaviour
         onBackPressed();
     }
@@ -312,7 +311,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         int height = metrics.heightPixels - headerHeight;
         int width = metrics.widthPixels;
 
-        if(height > preferredPlaceholderSize){
+        if (height > preferredPlaceholderSize) {
             height = preferredPlaceholderSize;
         }
 
@@ -348,9 +347,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         return result;
     }
 
-    private int getActionBarSize(){
+    private int getActionBarSize() {
         final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
-                new int[] { android.R.attr.actionBarSize });
+                new int[]{android.R.attr.actionBarSize});
         int actionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();
 

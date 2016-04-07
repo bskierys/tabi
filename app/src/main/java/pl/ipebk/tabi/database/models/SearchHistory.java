@@ -55,10 +55,4 @@ public class SearchHistory implements ModelInterface {
     public void setSearchType(SearchType searchType) {
         this.searchType = searchType;
     }
-
-    public enum SearchType {
-        PLATE,
-        PLACE,
-        UNKNOWN
-    }
 }
