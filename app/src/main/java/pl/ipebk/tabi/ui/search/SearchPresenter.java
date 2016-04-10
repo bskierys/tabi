@@ -24,10 +24,6 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class SearchPresenter extends BasePresenter<SearchMvpView> {
-    private static final long QUICK_LIST_RENDERING_DELAY = 300;
-    private static final long FULL_LIST_RENDERING_DELAY = 0;
-    private static final int FULLY_LOADED_VIEW_CONST = 2;
-
     private static final int SEARCH_TYPE_QUICK = 28;
     private static final int SEARCH_TYPE_FULL = 82;
 
@@ -89,11 +85,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             searchSubscription.unsubscribe();
         }
 
-        long delay = searchType == SEARCH_TYPE_QUICK ? QUICK_LIST_RENDERING_DELAY : FULL_LIST_RENDERING_DELAY;
-
         searchSubscription = Observable.just(rawPhrase)
                                        .subscribeOn(Schedulers.computation())
-                                       .delay(delay, TimeUnit.MILLISECONDS, Schedulers.computation())
                                        .observeOn(AndroidSchedulers.mainThread())
                                        .map(spellCorrector::cleanForSearch)
                                        .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
@@ -105,8 +98,8 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             loadInitialStateForPlaces();
             loadInitialStateForPlates();
         } else {
-            getMvpView().hideEmptyStateInPlacesSection();
-            getMvpView().hideEmptyStateInPlatesSection();
+            //getMvpView().hideEmptyStateInPlacesSection();
+            //getMvpView().hideEmptyStateInPlatesSection();
             stopwatch.reset();
 
             getObservableForSearchWithinTwoQueries(s, limit)
@@ -135,6 +128,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
         stopwatch.reset();
         if (platesCursor.getCount() > 0) {
+            getMvpView().hideEmptyStateInPlatesSection();
             if (searchType == SEARCH_TYPE_QUICK) {
                 getMvpView().showBestSearchInPlatesSection(platesCursor);
             } else if (searchType == SEARCH_TYPE_FULL) {
@@ -145,6 +139,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         }
 
         if (placesCursor.getCount() > 0) {
+            getMvpView().hideEmptyStateInPlacesSection();
             if (searchType == SEARCH_TYPE_QUICK) {
                 getMvpView().showBestSearchInPlacesSection(placesCursor);
             } else if (searchType == SEARCH_TYPE_FULL) {

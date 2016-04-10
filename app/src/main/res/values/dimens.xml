@@ -34,7 +34,19 @@
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
     <dimen name="Details.Elevation">3dp</dimen>
 
-    <dimen name="Search.Height.Shadow">4dp</dimen>
+    <dimen name="Search.Text.Header">20sp</dimen>
+    <dimen name="Search.Height.Tabs">48dp</dimen>
+    <dimen name="Search.Height.Tabs.Underline">4dp</dimen>
+    <dimen name="Search.Height.Doodle">236dp</dimen>
+    <dimen name="Search.Height.Doodle.Space.Before">32dp</dimen>
+    <dimen name="Search.Height.Doodle.Space.After">24dp</dimen>
+    <dimen name="Search.Margin.Doodle">16dp</dimen>
+    <dimen name="Search.Margin.Row">16dp</dimen>
+    <dimen name="Search.Height.Row">96dp</dimen>
+    <dimen name="Search.Height.Header">44dp</dimen>
+    <dimen name="Search.Height.Header.Divider">2dp</dimen>
+
+    <dimen name="Shadows.Height.2dp">4dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

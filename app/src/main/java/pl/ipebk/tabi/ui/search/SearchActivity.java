@@ -3,6 +3,7 @@ package pl.ipebk.tabi.ui.search;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -25,7 +28,10 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
+import pl.ipebk.tabi.utils.DoodleImage;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
 public class SearchActivity extends BaseActivity implements PlaceFragment.onPlaceClickedListener, SearchMvpView {
@@ -41,11 +47,14 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
     @Bind(R.id.txt_searched) TextView searchedText;
     @Bind(R.id.pager_search) ViewPager searchPager;
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.indicator) SearchTabPageIndicator indicator;
 
     private PlaceFragment searchPlacesFragment;
     private PlaceFragment searchPlatesFragment;
 
     private BehaviorSubject<Integer> viewCreationSubject;
+    private Bitmap noResultsBitmap;
+    private DoodleImage noResultsDoodle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +65,38 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         setSupportActionBar(toolbar);
         presenter.attachView(this);
 
-        viewCreationSubject = BehaviorSubject.create();
-        searchedText.setVisibility(View.GONE);
+        prepareSearchToolbar();
+        preparePlaceFragments();
+        prepareDoodleImages();
+    }
 
+    private void preparePlaceFragments() {
         String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
 
+        viewCreationSubject = BehaviorSubject.create();
+
+        searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        indicator.setViewPager(searchPager);
+
+        searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
+        searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
+
+        Observable<Integer> viewCreationStream = viewCreationSubject.asObservable().scan((a, b) -> a + b).filter
+                (fragmentsCreated -> fragmentsCreated == TOTAL_NUMBER_OF_FRAGMENTS);
+
+        Observable<String> initialSearchStream = Observable
+                .combineLatest(viewCreationStream, Observable.just(textToSearch),
+                               (fragmentsCreated, searchText) -> searchText)
+                .filter(text -> text != null);
+
+        initialSearchStream.subscribe(searchText -> presenter.startInitialSearchForText(searchText));
+    }
+
+    private void prepareSearchToolbar() {
+        searchedText.setVisibility(View.GONE);
+
         RxTextView.textChanges(searchEditText)
+                  .debounce(300, TimeUnit.MILLISECONDS)
                   .subscribe(text -> {
                       presenter.quickSearchForText(text.toString());
                   });
@@ -70,20 +105,33 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                   .subscribe(e -> {
                       presenter.deepSearchForText(searchEditText.getText().toString());
                   });
+    }
 
-        searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+    private void prepareDoodleImages(){
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+                .height(getResources().getDimensionPixelSize(R.dimen.Search_Height_Doodle))
+                .spaceBeforeImage(getResources().getDimensionPixelSize(
+                        R.dimen.Search_Height_Doodle_Space_Before))
+                .spaceAfterImage(getResources().getDimensionPixelSize(
+                        R.dimen.Search_Height_Doodle_Space_After))
+                .minimalMargin(getResources().getDimensionPixelSize(R.dimen.Search_Margin_Doodle));
 
-        searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
-        searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
+        noResultsDoodle = doodleBuilder
+                .imageResource(R.drawable.tabi_search_empty)
+                .headerText(getString(R.string.search_doodle_no_results_header))
+                .descriptionText(getString(R.string.search_doodle_no_results_description))
+                .build();
+    }
 
-        Observable<String> initialSearchStream = Observable
-                .combineLatest(viewCreationSubject.asObservable().scan((a, b) -> a + b)
-                                                  .filter(fragmentsCreated -> fragmentsCreated ==
-                                                          TOTAL_NUMBER_OF_FRAGMENTS),
-                               Observable.just(textToSearch), (fragmentsCreated, searchText) -> searchText)
-                .filter(text -> text != null);
-
-        initialSearchStream.subscribe(searchText -> presenter.startInitialSearchForText(searchText));
+    private Observable<Bitmap> getNoResultsBitmap(){
+        if(noResultsBitmap!=null){
+            return Observable.just(noResultsBitmap);
+        }
+        return Observable.just(noResultsDoodle).subscribeOn(Schedulers.computation())
+                .doOnNext(DoodleImage::preComputeScale)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(DoodleImage::draw)
+                .doOnNext(bitmap -> noResultsBitmap = bitmap);
     }
 
     @Override
@@ -129,14 +177,15 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
 
     @Override public void showEmptyStateInPlacesSection() {
         if (searchPlacesFragment.isViewCreated()) {
-            searchPlacesFragment.showText("Nothing to see here");
+            getNoResultsBitmap().subscribe(searchPlacesFragment::showNoResultsImage);
+            searchPlacesFragment.setData(null);
             searchPlacesFragment.hideList();
         }
     }
 
     @Override public void hideEmptyStateInPlacesSection() {
         if (searchPlacesFragment.isViewCreated()) {
-            searchPlacesFragment.hideText();
+            searchPlacesFragment.hideNoResultsImage();
             searchPlacesFragment.showList();
         }
     }
@@ -166,14 +215,15 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
 
     @Override public void showEmptyStateInPlatesSection() {
         if (searchPlatesFragment.isViewCreated()) {
-            searchPlatesFragment.showText("Nic nie znalazłem");
+            getNoResultsBitmap().subscribe(searchPlatesFragment::showNoResultsImage);
+            searchPlatesFragment.setData(null);
             searchPlatesFragment.hideList();
         }
     }
 
     @Override public void hideEmptyStateInPlatesSection() {
         if (searchPlatesFragment.isViewCreated()) {
-            searchPlatesFragment.hideText();
+            searchPlatesFragment.hideNoResultsImage();
             searchPlatesFragment.showList();
         }
     }
@@ -231,6 +281,16 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                     return searchPlacesFragment;
             }
             return null;
+        }
+
+        @Override public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case SEARCH_PLATES_FRAGMENT_POSITION:
+                    return "PO TABLICY";
+                case SEARCH_PLACES_FRAGMENT_POSITION:
+                    return "PO MIEJSCU";
+            }
+            return "CZO TY CHCESZ?";
         }
 
         @Override

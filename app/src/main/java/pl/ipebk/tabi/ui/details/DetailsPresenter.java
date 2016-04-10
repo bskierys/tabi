@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 
 import java.util.Locale;
@@ -22,6 +21,7 @@ import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -31,10 +31,12 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private Context context;
     private Place place;
     private String searchedPlate;
+    private NameFormatHelper nameFormatHelper;
 
     @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
         this.dataManager = dataManager;
         this.context = activity;
+        this.nameFormatHelper = new NameFormatHelper(context);
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -82,7 +84,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                           .subscribe(this::showSpecialPlace);
     }
 
-    // TODO: 2016-02-27 same method as in search rows
     private void showStandardPlace(Place place) {
         this.place = place;
 
@@ -96,7 +97,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(plateText -> getMvpView().showPlate(plateText));
 
-        placeStream.map(p -> getAdditionalInfo(place))
+        placeStream.map(p -> nameFormatHelper.formatAdditionalInfo(place, searchedPlate))
                    .subscribeOn(Schedulers.computation())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(additionalText -> getMvpView().showAdditionalInfo(additionalText));
@@ -105,10 +106,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(p -> {
                        getMvpView().showPlaceName(p.getName());
-                       getMvpView().showVoivodeship(context.getString(R.string.details_voivodeship) + " " + p
-                               .getVoivodeship());
-                       getMvpView().showPowiat(context.getString(R.string.details_powiat) + " " + p.getPowiat());
-                       getMvpView().showGmina(context.getString(R.string.details_gmina) + " " + p.getGmina());
+                       getMvpView().showVoivodeship(nameFormatHelper.formatVoivodeship(p.getVoivodeship()));
+                       getMvpView().showPowiat(nameFormatHelper.formatPowiat(p.getPowiat()));
+                       getMvpView().showGmina(nameFormatHelper.formatGmina(p.getGmina()));
                    });
     }
 
@@ -124,30 +124,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                    .subscribeOn(Schedulers.computation())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(plateText -> getMvpView().showPlate(plateText));
-    }
-
-    @NonNull private String getAdditionalInfo(Place place) {
-        String placeType = "";
-        if (place.getType().ordinal() < Place.Type.PART_OF_TOWN.ordinal()) {
-            placeType = context.getString(R.string.details_additional_town);
-        } else if (place.getType() == Place.Type.PART_OF_TOWN) {
-            placeType = context.getString(R.string.details_additional_part_of_town) + " " + place.getGmina();
-        } else if (place.getType() == Place.Type.VILLAGE) {
-            placeType = context.getString(R.string.details_additional_village);
-        }
-
-        String otherPlates = "";
-        if (place.getPlates().size() > 1) {
-            otherPlates = ", " + context.getString(R.string.details_additional_other_plates) + ": "
-                    + place.platesToStringExceptMatchingPattern(searchedPlate);
-        }
-
-        return placeType + otherPlates;
-    }
-
-    public void showMoreForVoivodeship() {
-        Character firstLetter = place.getMainPlate().getPattern().charAt(0);
-        getMvpView().goToSearchForPhrase(firstLetter.toString());
     }
 
     public void showOnMap() {

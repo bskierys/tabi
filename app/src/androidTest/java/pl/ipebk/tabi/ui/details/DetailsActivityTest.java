@@ -94,7 +94,6 @@ public class DetailsActivityTest {
         // buttons
         onView(withId(R.id.btn_google_it)).check(matches(isDisplayed()));
         onView(withId(R.id.btn_map)).check(matches(isDisplayed()));
-        onView(withId(R.id.btn_voivodeship)).check(matches(isDisplayed()));
 
         // map
         onView(withId(R.id.img_map)).check(matches(isDisplayed()));
@@ -124,7 +123,6 @@ public class DetailsActivityTest {
         onView(withId(R.id.txt_additional)).check(isGone());
         onView(withId(R.id.btn_google_it)).check(isGone());
         onView(withId(R.id.btn_map)).check(isGone());
-        onView(withId(R.id.btn_voivodeship)).check(isGone());
         onView(withId(R.id.map_with_panel)).check(isGone());
     }
 

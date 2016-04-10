@@ -124,17 +124,4 @@ public class DetailsPresenterTest {
 
         verify(mockMvpView).startWebSearch(anyString());
     }
-
-    @Test public void testShowVoivodeship() {
-        String name = "Malbork";
-        Place malbork = TestDataFactory.createStandardPlace(name);
-
-        when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, Observable.just(1), Observable.just(1));
-
-        detailsPresenter.showMoreForVoivodeship();
-        Character searchPhrase = malbork.getMainPlate().getPattern().charAt(0);
-
-        verify(mockMvpView).goToSearchForPhrase(Character.toString(searchPhrase));
-    }
 }

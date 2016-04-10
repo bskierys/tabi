@@ -27,6 +27,8 @@
     <string name="search_header_all">WSZYSTKIE WYNIKI</string>
     <string name="search_header_click">KLIKNIJ ABY WYSZUKAĆ WIĘCEJ</string>
     <string name="search_header_suggestions">PODPOWIEDZI</string>
+    <string name="search_doodle_no_results_header">Brak wyników</string>
+    <string name="search_doodle_no_results_description">Chyba nie tego szukałem</string>
 
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>

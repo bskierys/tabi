@@ -40,6 +40,7 @@ import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.ui.search.SearchActivity;
+import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.Stopwatch;
 import rx.Observable;
@@ -58,6 +59,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     // toolbar
     @Bind(R.id.txt_searched) TextView searchedTextView;
     @Bind(R.id.editTxt_search) EditText searchedEditText;
+    @Bind(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
     // texts
     @Bind(R.id.txt_place_name) TextView placeNameView;
     @Bind(R.id.txt_plate) TextView plateView;
@@ -71,7 +73,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_pin) ImageView pinView;
     @Bind(R.id.map_with_panel) View mapAndPanel;
     @Bind(R.id.card_panel) CardView panelCard;
-    @Bind({R.id.btn_google_it, R.id.btn_voivodeship, R.id.btn_map}) List<Button> actionButtons;
+    @Bind({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
     @Bind(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @Bind(R.id.img_placeholder) ImageView placeHolder;
@@ -88,6 +90,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
         presenter.attachView(this);
+        toolbarIndicator.setVisibility(View.GONE);
 
         clearPreviewLayout();
         prepareOverScroll();
@@ -123,7 +126,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         decorator.getReleaseEventStream()
                  .filter(scroll -> scroll != null)
                  .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
-                 .subscribe(scroll -> onBackPressed());
+                 .subscribe(scroll -> Timber.d("Overscrolled"));
     }
 
     private void loadData() {
@@ -177,10 +180,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.searchInGoogle();
     }
 
-    @OnClick(R.id.btn_voivodeship) public void onShowMoreInVoivodeship() {
-        presenter.showMoreForVoivodeship();
-    }
-
     @OnClick(R.id.btn_map) public void onShowOnMap() {
         presenter.showOnMap();
     }
@@ -218,9 +217,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
-                .spaceBeforeImage(getResources().getDimensionPixelOffset(
+                .spaceBeforeImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Map_Space_Before))
-                .spaceAfterImage(getResources().getDimensionPixelOffset(
+                .spaceAfterImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Map_Space_After));
 
         DoodleImage loadingDoodle = doodleBuilder
@@ -318,9 +317,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(height - placeHolder.getPaddingTop() - placeHolder.getPaddingBottom())
                 .width(width - placeHolder.getPaddingRight() - placeHolder.getPaddingLeft())
-                .spaceBeforeImage(getResources().getDimensionPixelOffset(
+                .spaceBeforeImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Empty_Space_Before))
-                .spaceAfterImage(getResources().getDimensionPixelOffset(
+                .spaceAfterImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Empty_Space_After));
 
         DoodleImage placeholderDoodle = doodleBuilder

@@ -28,14 +28,6 @@
         <ImageView style="@style/Divider.Vertical"/>
 
         <pl.ipebk.tabi.ui.details.DetailsButton
-            android:id="@+id/btn_voivodeship"
-            style="@style/Details_Button"
-            app:doodle="@drawable/dic_voivodeship"
-            app:text="@string/details_button_voivodeship"/>
-
-        <ImageView style="@style/Divider.Vertical"/>
-
-        <pl.ipebk.tabi.ui.details.DetailsButton
             android:id="@+id/btn_map"
             style="@style/Details_Button"
             app:doodle="@drawable/dic_maps"

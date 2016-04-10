@@ -93,6 +93,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
+    compile project(':viewpagerindicator')
 
     // Android
     compile mobileDependencies.appcompat

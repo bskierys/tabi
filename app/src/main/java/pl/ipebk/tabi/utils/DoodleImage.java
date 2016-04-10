@@ -33,6 +33,7 @@ public class DoodleImage {
     final int imageResource;
     final int spaceBeforeImage;
     final int spaceAfterImage;
+    final int minimalMargin;
     final int width;
     final int height;
     final Typeface headerFont;
@@ -54,6 +55,7 @@ public class DoodleImage {
         this.imageResource = builder.imageResource;
         this.spaceBeforeImage = builder.spaceBeforeImage;
         this.spaceAfterImage = builder.spaceAfterImage;
+        this.minimalMargin = builder.minimalMargin;
         this.width = builder.width;
         this.height = builder.height;
         this.headerFont = builder.headerFont;
@@ -99,7 +101,6 @@ public class DoodleImage {
      */
     public void preComputeScale() {
         originalImage = BitmapFactory.decodeResource(resources, imageResource);
-        int minimalMargin = resources.getDimensionPixelOffset(R.dimen.Doodle_Margin_Minimal);
         Rect textBounds = new Rect();
 
         headerLines = getLines(headerText, headerPaint);
@@ -261,6 +262,7 @@ public class DoodleImage {
         private int imageResource;
         private int spaceBeforeImage;
         private int spaceAfterImage;
+        private int minimalMargin;
         private int width;
         private int height;
         private Typeface headerFont;
@@ -308,6 +310,14 @@ public class DoodleImage {
          */
         public Builder spaceAfterImage(int spaceAfterImage) {
             this.spaceAfterImage = spaceAfterImage;
+            return this;
+        }
+
+        /**
+         * Minimal margin around image
+         */
+        public Builder minimalMargin(int minimalMargin){
+            this.minimalMargin = minimalMargin;
             return this;
         }
 
@@ -371,6 +381,9 @@ public class DoodleImage {
             if (spaceAfterImage == 0) {
                 spaceAfterImage = context.getResources().getDimensionPixelSize(
                         R.dimen.Doodle_Height_Space_After);
+            }
+            if(minimalMargin == 0){
+                minimalMargin = context.getResources().getDimensionPixelSize(R.dimen.Doodle_Margin_Minimal);
             }
             if (width == 0) {
                 width = context.getResources().getDimensionPixelSize(R.dimen.Doodle_Width_Default);

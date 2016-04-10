@@ -4,4 +4,5 @@
     <string name="description_details_map_pin">Details map pin</string>
     <string name="description_back_button">Back button</string>
     <string name="description_placeholder">There is nothing more in here</string>
+    <string name="description_no_results">No results</string>
 </resources>

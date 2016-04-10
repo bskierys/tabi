@@ -2,6 +2,7 @@ package pl.ipebk.tabi.ui.search;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 import timber.log.Timber;
 
@@ -31,7 +33,7 @@ public class PlaceFragment extends Fragment {
     private static final int SECTION_FIRST_POSITION = 0;
     private static final int SECTION_SECOND_POSITION = 4;
 
-    @Bind(R.id.txt_prompt) TextView promptView;
+    @Bind(R.id.img_no_results) ImageView noResultsImage;
     @Bind(R.id.place_list) RecyclerView recyclerView;
 
     private SearchType type;
@@ -39,6 +41,7 @@ public class PlaceFragment extends Fragment {
     private Cursor placeCursor;
     private SectionedCursorRecyclerViewAdapter adapter;
     private onPlaceClickedListener placeClickedListener;
+    private NameFormatHelper nameFormatHelper;
 
     @SuppressWarnings("unused")
     public static PlaceFragment newInstance(SearchType type) {
@@ -64,6 +67,7 @@ public class PlaceFragment extends Fragment {
                                        Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_list, container, false);
         ButterKnife.bind(this, view);
+        nameFormatHelper = new NameFormatHelper(getActivity());
 
         if (placeCursor != null) {
             adapter.changeCursor(placeCursor);
@@ -72,7 +76,7 @@ public class PlaceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        hideText();
+        hideNoResultsImage();
         hideList();
 
         placeClickedListener.onFragmentViewCreated(type);
@@ -115,14 +119,14 @@ public class PlaceFragment extends Fragment {
         recyclerView.setVisibility(View.GONE);
     }
 
-    public void showText(String text) {
-        promptView.setVisibility(View.VISIBLE);
-        promptView.setText(text);
+    public void showNoResultsImage(Bitmap doodle){
+        noResultsImage.setImageBitmap(doodle);
+        noResultsImage.setVisibility(View.VISIBLE);
     }
 
-    public void hideText() {
-        promptView.setText("");
-        promptView.setVisibility(View.INVISIBLE);
+    public void hideNoResultsImage(){
+        noResultsImage.setImageBitmap(null);
+        noResultsImage.setVisibility(View.INVISIBLE);
     }
 
     @Override public void onAttach(Context context) {
@@ -148,7 +152,6 @@ public class PlaceFragment extends Fragment {
 
         void onHeaderClicked(int eventId);
 
-        // TODO: 2016-04-06 remove
         void onFragmentViewCreated(SearchType type);
     }
 
@@ -190,13 +193,11 @@ public class PlaceFragment extends Fragment {
                        .map(p -> getPlateString(p.getPlateStart(), p.getPlateEnd()))
                        .subscribe(plateText -> holder.plateView.setText(plateText));
 
-            // TODO: 2016-02-27 should be common with details view
             standardPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
                                .doOnNext(place -> holder.voivodeshipView.setText(
-                                       getActivity().getString(R.string.details_voivodeship) + " " + place
-                                               .getVoivodeship()))
+                                       nameFormatHelper.formatVoivodeship(place.getVoivodeship())))
                                .doOnNext(place -> holder.powiatView.setText(
-                                       getActivity().getString(R.string.details_powiat) + " " + place.getPowiat()))
+                                       nameFormatHelper.formatPowiat(place.getPowiat())))
                                .subscribe();
 
             specialPlaceStream.doOnNext(place -> holder.powiatView.setText(place.getVoivodeship()))

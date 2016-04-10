@@ -12,6 +12,7 @@
         android:id="@+id/wrap_place_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,8 +28,8 @@
 
     <ImageView
         android:id="@+id/img_placeholder"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/description_placeholder"
         android:visibility="gone"/>
 
@@ -54,8 +55,8 @@
         android:id="@+id/map_with_panel"
         style="@style/Details_Map_Wrapper">
 
-        <include layout="@layout/panel_details"/>
-
         <include layout="@layout/map_details"/>
+
+        <include layout="@layout/panel_details"/>
     </RelativeLayout>
 </LinearLayout>
