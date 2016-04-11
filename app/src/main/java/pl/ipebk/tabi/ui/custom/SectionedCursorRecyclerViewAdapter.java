@@ -86,11 +86,16 @@ public abstract class SectionedCursorRecyclerViewAdapter extends CursorRecyclerV
 
     /**
      * Removes section from given position.
+     *
      * @param position Position from which to remove section
      */
     public void removeSection(int position) {
         sections.remove(position);
-        sectionIndexes.remove(position);
+
+        int sectionIndexIndex = sectionIndexes.indexOf(position);
+        if (sectionIndexIndex > 0) {
+            sectionIndexes.remove(sectionIndexIndex);
+        }
         Collections.sort(sectionIndexes);
 
         itemRemoved(position);

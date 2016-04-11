@@ -8,8 +8,6 @@ package pl.ipebk.tabi.ui.search;
 import android.database.Cursor;
 import android.support.v4.util.Pair;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.database.models.SearchType;
@@ -24,8 +22,11 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class SearchPresenter extends BasePresenter<SearchMvpView> {
+    public static final Integer SEARCH_QUANTITY_QUICK = 3;
+    public static final Integer SEARCH_QUANTITY_FULL = null;
     private static final int SEARCH_TYPE_QUICK = 28;
     private static final int SEARCH_TYPE_FULL = 82;
+
 
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
@@ -68,12 +69,12 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void quickSearchForText(String rawPhrase) {
-        searchForRawTextWithLimit(rawPhrase, 3, SEARCH_TYPE_QUICK);
+        searchForRawTextWithLimit(rawPhrase, SEARCH_QUANTITY_QUICK, SEARCH_TYPE_QUICK);
     }
 
     public void deepSearchForText(String rawPhrase) {
         this.lastSearched = rawPhrase;
-        searchForRawTextWithLimit(rawPhrase, null, SEARCH_TYPE_FULL);
+        searchForRawTextWithLimit(rawPhrase, SEARCH_QUANTITY_FULL, SEARCH_TYPE_FULL);
         getMvpView().hideKeyboard();
     }
     //endregion
@@ -98,8 +99,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             loadInitialStateForPlaces();
             loadInitialStateForPlates();
         } else {
-            //getMvpView().hideEmptyStateInPlacesSection();
-            //getMvpView().hideEmptyStateInPlatesSection();
             stopwatch.reset();
 
             getObservableForSearchWithinTwoQueries(s, limit)

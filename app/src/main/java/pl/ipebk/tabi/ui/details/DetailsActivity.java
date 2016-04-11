@@ -106,6 +106,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         showVoivodeship("");
         showAdditionalInfo("");
         showPlate("");
+        placeNameView.setTextIsSelectable(true);
+        plateView.setTextIsSelectable(true);
     }
 
     private void prepareOverScroll() {

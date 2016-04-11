@@ -107,7 +107,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                   });
     }
 
-    private void prepareDoodleImages(){
+    private void prepareDoodleImages() {
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(getResources().getDimensionPixelSize(R.dimen.Search_Height_Doodle))
                 .spaceBeforeImage(getResources().getDimensionPixelSize(
@@ -123,15 +123,15 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                 .build();
     }
 
-    private Observable<Bitmap> getNoResultsBitmap(){
-        if(noResultsBitmap!=null){
+    private Observable<Bitmap> getNoResultsBitmap() {
+        if (noResultsBitmap != null) {
             return Observable.just(noResultsBitmap);
         }
         return Observable.just(noResultsDoodle).subscribeOn(Schedulers.computation())
-                .doOnNext(DoodleImage::preComputeScale)
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(DoodleImage::draw)
-                .doOnNext(bitmap -> noResultsBitmap = bitmap);
+                         .doOnNext(DoodleImage::preComputeScale)
+                         .observeOn(AndroidSchedulers.mainThread())
+                         .map(DoodleImage::draw)
+                         .doOnNext(bitmap -> noResultsBitmap = bitmap);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         if (searchPlacesFragment.isViewCreated()) {
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
-            searchPlacesFragment.showFullHeaders();
+            searchPlacesFragment.showFullHeaders(cursor.getCount());
         }
     }
 
@@ -232,7 +232,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         if (searchPlatesFragment.isViewCreated()) {
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
-            searchPlatesFragment.showFullHeaders();
+            searchPlatesFragment.showFullHeaders(cursor.getCount());
         }
     }
 
@@ -286,11 +286,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         @Override public CharSequence getPageTitle(int position) {
             switch (position) {
                 case SEARCH_PLATES_FRAGMENT_POSITION:
-                    return "PO TABLICY";
+                    return getString(R.string.search_tab_plate);
                 case SEARCH_PLACES_FRAGMENT_POSITION:
-                    return "PO MIEJSCU";
+                    return getString(R.string.search_tab_place);
             }
-            return "CZO TY CHCESZ?";
+            return getString(R.string.search_tab_unknown);
         }
 
         @Override

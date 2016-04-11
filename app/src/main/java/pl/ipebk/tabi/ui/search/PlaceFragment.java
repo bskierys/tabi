@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -103,8 +102,12 @@ public class PlaceFragment extends Fragment {
                            SearchActivity.EVENT_ID_HEADER_ALL);
     }
 
-    public void showFullHeaders() {
-        adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_all), null);
+    public void showFullHeaders(int outcomeCount) {
+        if (outcomeCount > SearchPresenter.SEARCH_QUANTITY_QUICK) {
+            adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_all), null);
+        }else {
+            adapter.removeSection(SECTION_SECOND_POSITION);
+        }
     }
 
     private void onHeaderClicked(int eventId) {
@@ -119,12 +122,12 @@ public class PlaceFragment extends Fragment {
         recyclerView.setVisibility(View.GONE);
     }
 
-    public void showNoResultsImage(Bitmap doodle){
+    public void showNoResultsImage(Bitmap doodle) {
         noResultsImage.setImageBitmap(doodle);
         noResultsImage.setVisibility(View.VISIBLE);
     }
 
-    public void hideNoResultsImage(){
+    public void hideNoResultsImage() {
         noResultsImage.setImageBitmap(null);
         noResultsImage.setVisibility(View.INVISIBLE);
     }

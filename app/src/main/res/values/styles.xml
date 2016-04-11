@@ -94,21 +94,19 @@
     </style>
 
     <style name="Details_Text.Header" parent="Details_Text">
-        <item name="android:textIsSelectable">true</item>
         <item name="android:textColor">@color/grey_850</item>
         <item name="android:textSize">@dimen/Details.Text.Header</item>
     </style>
 
     <style name="Details_Text.Description" parent="Details_Text">
-        <item name="android:textIsSelectable">true</item>
         <item name="android:textColor">@color/grey_600</item>
         <item name="android:textSize">@dimen/Details.Text.Description</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/Details.Margin.Description.Vertical</item>
-        <item name="android:layout_marginBottom">@dimen/Details.Margin.Description.Vertical</item>
+        <item name="android:layout_height">@dimen/Details.Height.Text.Description</item>
         <item name="android:layout_marginLeft">@dimen/Details.Margin.Right</item>
         <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:text">example text</item>
     </style>
 
@@ -121,6 +119,8 @@
     </style>
 
     <style name="Details_Text.Description.Search" parent="Details_Text.Description">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textIsSelectable">false</item>
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_marginBottom">2dp</item>
     </style>

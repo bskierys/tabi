@@ -30,9 +30,10 @@
     <dimen name="Details.Width.Row.Icon">16dp</dimen>
     <dimen name="Details.Margin.Right">56dp</dimen>
     <dimen name="Details.Margin.Description.Vertical">5dp</dimen>
-    <dimen name="Details.Margin.Description.Horizontal">24dp</dimen>
+    <dimen name="Details.Margin.Description.Horizontal">20dp</dimen>
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
     <dimen name="Details.Elevation">3dp</dimen>
+    <dimen name="Details.Height.Text.Description">22dp</dimen>
 
     <dimen name="Search.Text.Header">20sp</dimen>
     <dimen name="Search.Height.Tabs">48dp</dimen>
