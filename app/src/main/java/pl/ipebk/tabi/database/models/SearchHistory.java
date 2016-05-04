@@ -11,7 +11,7 @@ import pl.ipebk.tabi.database.base.ModelInterface;
 
 public class SearchHistory implements ModelInterface {
     private long id;
-    private Place place;
+    private long placeId;
     private String plate;
     private Date timeSearched;
     private SearchType searchType;
@@ -24,12 +24,12 @@ public class SearchHistory implements ModelInterface {
         this.id = id;
     }
 
-    public Place getPlace() {
-        return place;
+    public long getPlaceId() {
+        return placeId;
     }
 
-    public void setPlace(Place place) {
-        this.place = place;
+    public void setPlaceId(long placeId) {
+        this.placeId = placeId;
     }
 
     public String getPlate() {

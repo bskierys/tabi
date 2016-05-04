@@ -23,10 +23,9 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * This is test open helper. It is used to mock original helper in database tests
- * and to recreate database from SQL instead of copying it from assets.
- * It's code should be almost identical to original helper (exception:
- * onCreate and onUpgrade methods).
+ * This is test open helper. It is used to mock original helper in database tests and to recreate database from SQL
+ * instead of copying it from assets. It's code should be almost identical to original helper (exception: onCreate and
+ * onUpgrade methods).
  */
 public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements DatabaseHelperInterface {
     private static final String DATABASE_NAME = "tabi.db";
@@ -72,7 +71,7 @@ public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements Database
         }
 
         if (searchHistoryDao == null) {
-            searchHistoryDao = new SearchHistoryDao(briteDb, placeDao);
+            searchHistoryDao = new SearchHistoryDao(briteDb);
         }
     }
 

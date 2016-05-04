@@ -26,8 +26,7 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * Implementation of {@link android.database.sqlite.SQLiteOpenHelper}
- * Responsible for opening and managing database.
+ * Implementation of {@link android.database.sqlite.SQLiteOpenHelper} Responsible for opening and managing database.
  */
 @Singleton
 public class DatabaseOpenHelper extends SQLiteAssetHelper implements DatabaseHelperInterface {
@@ -75,7 +74,7 @@ public class DatabaseOpenHelper extends SQLiteAssetHelper implements DatabaseHel
         }
 
         if (searchHistoryDao == null) {
-            searchHistoryDao = new SearchHistoryDao(briteDb, placeDao);
+            searchHistoryDao = new SearchHistoryDao(briteDb);
         }
     }
 

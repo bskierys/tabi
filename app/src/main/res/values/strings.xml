@@ -32,6 +32,18 @@
     <string name="search_tab_unknown">CZO TY CHCESZ?</string>
     <string name="search_doodle_no_results_header">Brak wyników</string>
     <string name="search_doodle_no_results_description">Chyba nie tego szukałem</string>
+    <string name="search_question_where">gdzie to jest?</string>
+    <string name="search_question_plates">jakie tam som tablice?</string>
+    <string name="search_question_what">Co to za miejsce?</string>
+    <string name="search_random_question_0">chcesz się pobawić?</string>
+    <string name="search_random_question_1">co się dzieje?</string>
+    <string name="search_random_question_2">skąd klikash?</string>
+    <string name="search_random_question_3">która godzina?</string>
+    <string name="search_random_question_4">dokąd zmierzamy?</string>
+    <string name="search_random_question_5">ale o so chosi?</string>
+    <string name="search_random_question_6">gdzie jest Zbyszek?</string>
+    <string name="search_random_question_7">co się stało się?</string>
+    <string name="search_random_question_8">jaka jest stolica Bułgarii?</string>
 
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>

@@ -107,8 +107,8 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
                     R.styleable.SearchTabPageIndicator_android_textSize,
                     (int) defaultTextSize);
         }
-        // TODO: 2016-04-10 change to different attribute naming ("fontFamily" to be consistent)
-        String fontFamily = a.getString(R.styleable.SearchTabPageIndicator_typeface);
+
+        String fontFamily = a.getString(R.styleable.SearchTabPageIndicator_fontFamily);
         if (fontFamily != null && !isTestMode) {
             textPaint.setTypeface(FontManager.getInstance().get(fontFamily, Typeface.NORMAL));
         }
@@ -122,7 +122,6 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
                     R.styleable.SearchTabPageIndicator_lineHeight,
                     (int) defaultLineHeight);
         }
-
 
         textPaint.setTextSize(textSize);
 

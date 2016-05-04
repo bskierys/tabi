@@ -158,7 +158,7 @@ public class PlacesTable extends Table<Place> {
             values.put(COLUMN_PLATE_END, mainPlate.getEnd());
         }
 
-        values.put(COLUMN_HAS_OWN_PLATE, model.isHasOwnPlate());
+        values.put(COLUMN_HAS_OWN_PLATE, model.hasOwnPlate());
 
         return values;
     }

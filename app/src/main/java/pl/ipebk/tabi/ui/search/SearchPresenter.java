@@ -8,8 +8,12 @@ package pl.ipebk.tabi.ui.search;
 import android.database.Cursor;
 import android.support.v4.util.Pair;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
@@ -26,7 +30,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public static final Integer SEARCH_QUANTITY_FULL = null;
     private static final int SEARCH_TYPE_QUICK = 28;
     private static final int SEARCH_TYPE_FULL = 82;
-
+    private static final int HISTORY_SEARCH_NUMBER = 3;
 
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
@@ -51,8 +55,18 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId, String searchedPlate, SearchType searchType) {
+    public void placeSelected(long placeId, String searchedPlate, String plateClicked, SearchType searchType) {
         getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType);
+
+        // TODO: 2016-04-11 unit tests
+
+        Observable.just(new SearchHistory())
+                  .doOnNext(history -> history.setPlaceId(placeId))
+                  .doOnNext(history -> history.setPlate(plateClicked))
+                  .doOnNext(history -> history.setSearchType(searchType))
+                  .doOnNext(history -> history.setTimeSearched(Calendar.getInstance().getTime()))
+                  .observeOn(Schedulers.io())
+                  .subscribe(history -> dataManager.getDatabaseHelper().getSearchHistoryDao().updateOrAdd(history));
     }
 
     public void startInitialSearchForText(String searchText) {
@@ -60,12 +74,39 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         deepSearchForText(searchText);
     }
 
+    public void refreshSearch(){
+        if(lastSearched == null || lastSearched.equals("")){
+            loadInitialStateForPlaces();
+            loadInitialStateForPlates();
+        }
+    }
+
     public void loadInitialStateForPlaces() {
-        getMvpView().showEmptyStateInPlacesSection();
+        Stopwatch historyWatch = new Stopwatch();
+        historyWatch.reset();
+        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE)
+                   .filter(cursor -> cursor != null).first()
+                   .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .doOnNext(cursor -> getMvpView().hideEmptyStateInPlacesSection())
+                   .subscribe(cursor -> {
+                       getMvpView().showInitialSearchInPlacesSection(cursor);
+                       Timber.d("Loading search history for places took: %s", historyWatch.getElapsedTimeString());
+                   });
     }
 
     public void loadInitialStateForPlates() {
-        getMvpView().showEmptyStateInPlatesSection();
+        Stopwatch historyWatch = new Stopwatch();
+        historyWatch.reset();
+        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE)
+                   .filter(cursor -> cursor != null).first()
+                   .subscribeOn(Schedulers.io())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .doOnNext(cursor -> getMvpView().hideEmptyStateInPlatesSection())
+                   .subscribe(cursor -> {
+                       getMvpView().showInitialSearchInPlatesSection(cursor);
+                       Timber.d("Loading search history for plates took: %s", historyWatch.getElapsedTimeString());
+                   });
     }
 
     public void quickSearchForText(String rawPhrase) {
@@ -73,7 +114,6 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void deepSearchForText(String rawPhrase) {
-        this.lastSearched = rawPhrase;
         searchForRawTextWithLimit(rawPhrase, SEARCH_QUANTITY_FULL, SEARCH_TYPE_FULL);
         getMvpView().hideKeyboard();
     }
@@ -90,6 +130,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                                        .subscribeOn(Schedulers.computation())
                                        .observeOn(AndroidSchedulers.mainThread())
                                        .map(spellCorrector::cleanForSearch)
+                                       .doOnNext(cleanedText->lastSearched = cleanedText)
                                        .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
                                                   e -> Timber.e("Error during searching for places", e));
     }

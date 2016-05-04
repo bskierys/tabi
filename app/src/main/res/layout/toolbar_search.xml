@@ -63,7 +63,7 @@
                 app:fades="false"
                 app:lineHeight="@dimen/Search.Height.Tabs.Underline"
                 app:selectedTextColor="@color/colorPrimary"
-                app:typeface="bebas"/>
+                app:fontFamily="bebas"/>
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>

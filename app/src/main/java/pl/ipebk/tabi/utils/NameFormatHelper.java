@@ -7,14 +7,22 @@ package pl.ipebk.tabi.utils;
 
 import android.content.Context;
 
+import java.util.Random;
+
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
+import timber.log.Timber;
 
 /**
  * Helper class that handles readable text formatting for places.
  */
 public class NameFormatHelper {
+    private final static String RANDOM_QUESTION_RESOURCE_NAME = "search_random_question_";
+    private final static int RANDOM_QUESTION_MAX_VALUE = 8;
+    public final static String UNKNOWN_PLATE_CHARACTER = "???";
+
     private Context context;
+    private Random random = new Random();
 
     public NameFormatHelper(Context context) {
         this.context = context;
@@ -60,5 +68,29 @@ public class NameFormatHelper {
         }
 
         return placeType + otherPlates;
+    }
+
+    /**
+     * Returns random question for random search result. If you want to add another question please add another resource
+     * named search_random_question_{next_number} and increase max search number.
+     * In case of error it retrieves named search_random_question_0
+     */
+    public String getRandomQuestion() {
+        String packageName = context.getPackageName();
+        int randomQuestionNumber = random.nextInt(RANDOM_QUESTION_MAX_VALUE + 1);
+        String randomQuestionIdentifier = RANDOM_QUESTION_RESOURCE_NAME + Integer.toString(randomQuestionNumber);
+
+        String randomQuestion;
+        try {
+            int randomQuestionResourceId = context
+                    .getResources().getIdentifier(randomQuestionIdentifier, "string", packageName);
+            randomQuestion = context.getString(randomQuestionResourceId);
+        } catch (Exception e) {
+            Timber.e("Error retrieving for resource name %s", randomQuestionIdentifier);
+            randomQuestion = context.getString(R.string.search_random_question_0);
+            e.printStackTrace();
+        }
+
+        return randomQuestion;
     }
 }

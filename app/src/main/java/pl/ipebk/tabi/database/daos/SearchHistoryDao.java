@@ -5,6 +5,7 @@
 */
 package pl.ipebk.tabi.database.daos;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.support.v4.util.Pair;
@@ -18,12 +19,41 @@ import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;
 import rx.Observable;
+import timber.log.Timber;
 
 public class SearchHistoryDao extends Dao<SearchHistory> {
-    public SearchHistoryDao(BriteDatabase database, PlaceDao placeDao) {
+    public SearchHistoryDao(BriteDatabase database) {
         super(SearchHistory.class, database);
         table = new SearchHistoryTable();
-        ((SearchHistoryTable) table).setPlaceDao(placeDao);
+    }
+
+    /**
+     * Adds or updates existing history. History is updated if same place is searched in same SearchType. Updated fields
+     * are: plate and time searched, so place may pop in as recent searched.
+     *
+     * @param history Place to add or update in history.
+     */
+    public void updateOrAdd(SearchHistory history) {
+        ContentValues values = table.modelToContentValues(history);
+        String updateQuery = SearchHistoryTable.COLUMN_PLACE_ID + " = ? AND "
+                + SearchHistoryTable.COLUMN_SEARCH_TYPE + " = ? ";
+        String[] updateQueryArgs = {Long.toString(history.getPlaceId()),
+                Integer.toString(history.getSearchType().ordinal())};
+
+        int rowsAffected = db.update(table.getTableName(), values, updateQuery, updateQueryArgs);
+
+        if (rowsAffected <= 0) {
+            Timber.d("Inserting new Search history for placeId %d", history.getPlaceId());
+            Long id = db.insert(table.getTableName(), values);
+            history.setId(id);
+            if (id < 0) {
+                Timber.e("Unable to insert entity %s", type.toString());
+            } else {
+                Timber.d("Inserted SearchHistory with placeId: %d", history.getPlaceId());
+            }
+        } else {
+            Timber.d("Search history for placeId %d updated", history.getPlaceId());
+        }
     }
 
     /**

@@ -8,11 +8,15 @@ package pl.ipebk.tabi.test.common;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
+import pl.ipebk.tabi.database.models.SearchHistory;
+import pl.ipebk.tabi.database.models.SearchType;
 
 /**
  * Factory class that makes instances of data models with random field values.
@@ -39,6 +43,12 @@ public class TestDataFactory {
         Plate plate = new Plate();
         plate.setPattern(pattern);
         return plate;
+    }
+
+    public static Place createPlaceForType(Place.Type type, boolean hasOwnPlate){
+        Place place = createStandardPlace("1", "AAA", type);
+        place.setHasOwnPlate(hasOwnPlate);
+        return place;
     }
 
     public static Place createStandardPlace(String name, String plateStart, Place.Type categoryType) {
@@ -97,5 +107,14 @@ public class TestDataFactory {
         place.setType(Place.Type.SPECIAL);
 
         return place;
+    }
+
+    public static SearchHistory createSearchHistory(long placeId, SearchType type, long time){
+        SearchHistory history = new SearchHistory();
+        history.setPlaceId(placeId);
+        history.setPlate("TAB");
+        history.setSearchType(type);
+        history.setTimeSearched(new Date(time));
+        return history;
     }
 }

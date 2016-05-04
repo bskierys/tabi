@@ -56,8 +56,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
     private Bitmap noResultsBitmap;
     private DoodleImage noResultsDoodle;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
@@ -134,16 +133,20 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                          .doOnNext(bitmap -> noResultsBitmap = bitmap);
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected void onResume(){
+        super.onResume();
+        presenter.refreshSearch();
+    }
+
+    @Override protected void onDestroy() {
         super.onDestroy();
         presenter.detachView();
     }
 
     //region View callbacks
-    @Override public void onPlaceClicked(long placeId, SearchType type) {
+    @Override public void onPlaceClicked(long placeId, String plateClicked, SearchType type) {
         if (placeId > 0) {
-            presenter.placeSelected(placeId, searchEditText.getText().toString(), type);
+            presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type);
         }
     }
 
@@ -172,6 +175,14 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
             searchPlacesFragment.showQuickHeaders();
+        }
+    }
+
+    @Override public void showInitialSearchInPlacesSection(Cursor cursor) {
+        if (searchPlacesFragment.isViewCreated()) {
+            searchPlacesFragment.setData(cursor);
+            searchPlacesFragment.showList();
+            searchPlacesFragment.showHistoryHeaders();
         }
     }
 
@@ -211,6 +222,14 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
         startActivity(intent);
+    }
+
+    @Override public void showInitialSearchInPlatesSection(Cursor cursor) {
+        if (searchPlatesFragment.isViewCreated()) {
+            searchPlatesFragment.setData(cursor);
+            searchPlatesFragment.showList();
+            searchPlatesFragment.showHistoryHeaders();
+        }
     }
 
     @Override public void showEmptyStateInPlatesSection() {

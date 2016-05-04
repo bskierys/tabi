@@ -20,10 +20,14 @@ public interface SearchMvpView extends MvpView {
 
     void showBestSearchInPlatesSection(Cursor cursor);
 
+    void showInitialSearchInPlatesSection(Cursor cursor);
+
     // places section
     void showFullSearchInPlacesSection(Cursor cursor);
 
     void showBestSearchInPlacesSection(Cursor cursor);
+
+    void showInitialSearchInPlacesSection(Cursor cursor);
 
     void showEmptyStateInPlacesSection();
 

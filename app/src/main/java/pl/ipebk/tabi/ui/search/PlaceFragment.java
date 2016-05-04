@@ -38,7 +38,7 @@ public class PlaceFragment extends Fragment {
     private SearchType type;
     private boolean viewCreated;
     private Cursor placeCursor;
-    private SectionedCursorRecyclerViewAdapter adapter;
+    private PlaceItemAdapter adapter;
     private onPlaceClickedListener placeClickedListener;
     private NameFormatHelper nameFormatHelper;
 
@@ -97,17 +97,25 @@ public class PlaceFragment extends Fragment {
     }
 
     public void showQuickHeaders() {
+        adapter.setHistorical(false);
         adapter.addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_best), null);
         adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_click),
                            SearchActivity.EVENT_ID_HEADER_ALL);
     }
 
     public void showFullHeaders(int outcomeCount) {
+        adapter.setHistorical(false);
         if (outcomeCount > SearchPresenter.SEARCH_QUANTITY_QUICK) {
             adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_all), null);
-        }else {
+        } else {
             adapter.removeSection(SECTION_SECOND_POSITION);
         }
+    }
+
+    public void showHistoryHeaders() {
+        adapter.addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_suggestions), null);
+        adapter.removeSection(SECTION_SECOND_POSITION);
+        adapter.setHistorical(true);
     }
 
     private void onHeaderClicked(int eventId) {
@@ -151,7 +159,7 @@ public class PlaceFragment extends Fragment {
      * fragment to be communicated to the activity and potentially other fragments contained in that activity.
      */
     public interface onPlaceClickedListener {
-        void onPlaceClicked(long placeId, SearchType type);
+        void onPlaceClicked(long placeId, String plateClicked, SearchType type);
 
         void onHeaderClicked(int eventId);
 
@@ -159,8 +167,14 @@ public class PlaceFragment extends Fragment {
     }
 
     public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
+        private boolean historical = false;
+
         public PlaceItemAdapter(Cursor cursor) {
             super(cursor);
+        }
+
+        public void setHistorical(boolean historical) {
+            this.historical = historical;
         }
 
         @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {
@@ -175,6 +189,7 @@ public class PlaceFragment extends Fragment {
 
         @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
             ItemViewHolder holder = (ItemViewHolder) viewHolder;
+            int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
             // show shadow for last rows
             if (isSectionHeaderPosition(positionToSectionedPosition(position) + 1)
@@ -184,16 +199,22 @@ public class PlaceFragment extends Fragment {
                 holder.shadow.setVisibility(View.GONE);
             }
 
-            Observable<PlaceListItem> placeStream = Observable.just(cursor).map(PlaceListItem::new);
+            Observable<PlaceListItem> placeStream = Observable.just(cursor).first().map(PlaceListItem::new);
 
             Observable<PlaceListItem> standardPlaceStream = placeStream
-                    .filter(p -> p.getPlaceType() != Place.Type.SPECIAL);
+                    .filter(p -> p.getPlaceType().ordinal() < Place.Type.SPECIAL.ordinal());
             Observable<PlaceListItem> specialPlaceStream = placeStream
                     .filter(p -> p.getPlaceType() == Place.Type.SPECIAL);
+            Observable<PlaceListItem> randomPlaceStream = placeStream
+                    .filter(p -> p.getPlaceType() == Place.Type.RANDOM);
 
             placeStream.doOnNext(place -> holder.root.setOnClickListener(
-                    v -> placeClickedListener.onPlaceClicked(place.getPlaceId(), type)))
+                    v -> placeClickedListener.onPlaceClicked(
+                            place.getPlaceId(),
+                            getPlateString(place.getPlateStart(), place.getPlateEnd()),
+                            type)))
                        .map(p -> getPlateString(p.getPlateStart(), p.getPlateEnd()))
+                       .doOnNext(t -> holder.icon.setImageResource(iconResourceId))
                        .subscribe(plateText -> holder.plateView.setText(plateText));
 
             standardPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
@@ -209,6 +230,21 @@ public class PlaceFragment extends Fragment {
                               .doOnNext(name -> holder.voivodeshipView.setText(getPlaceSubName(name)))
                               .doOnError(error -> Timber.e("Error processing special place name: %s", error))
                               .subscribe();
+
+            if (type == SearchType.PLACE) {
+                randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
+                                 .doOnNext(place -> holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER))
+                                 .doOnNext(place -> holder.voivodeshipView.setText(getString(R.string.search_question_where)))
+                                 .doOnNext(place -> holder.powiatView.setText(getString(R.string.search_question_plates)))
+                                 .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
+                                 .subscribe();
+            } else if (type == SearchType.PLATE) {
+                randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(getString(R.string.search_question_what)))
+                                 .doOnNext(place -> holder.voivodeshipView.setText(getString(R.string.search_question_where)))
+                                 .doOnNext(place -> holder.powiatView.setText(nameFormatHelper.getRandomQuestion()))
+                                 .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
+                                 .subscribe();
+            }
         }
 
         private String getPlateString(String plateStart, String plateEnd) {
@@ -262,6 +298,7 @@ public class PlaceFragment extends Fragment {
             @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
             @Bind(R.id.txt_powiat) TextView powiatView;
             @Bind(R.id.shadow) ImageView shadow;
+            @Bind(R.id.ic_row) ImageView icon;
 
             public ItemViewHolder(View view) {
                 super(view);

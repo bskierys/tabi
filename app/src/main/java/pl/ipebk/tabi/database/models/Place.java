@@ -20,6 +20,10 @@ public class Place implements ModelInterface {
     private List<Plate> plates;
     private boolean hasOwnPlate;
 
+    public Place() {}
+
+    public Place(long id) { this.id = id; }
+
     @Override public long getId() {
         return id;
     }
@@ -76,7 +80,7 @@ public class Place implements ModelInterface {
         this.plates = plates;
     }
 
-    public boolean isHasOwnPlate() {
+    public boolean hasOwnPlate() {
         return hasOwnPlate;
     }
 
@@ -102,8 +106,7 @@ public class Place implements ModelInterface {
 
     /**
      * @param pattern Start of pattern to search for.
-     * @return First plate that starts with given pattern. Main plate if
-     * null given or if none matches pattern.
+     * @return First plate that starts with given pattern. Main plate if null given or if none matches pattern.
      */
     public Plate getPlateMatchingPattern(String pattern) {
         Plate plate = null;
@@ -119,7 +122,7 @@ public class Place implements ModelInterface {
             }
         }
 
-        if(plate == null){
+        if (plate == null) {
             plate = getMainPlate();
         }
 
@@ -135,8 +138,8 @@ public class Place implements ModelInterface {
 
     /**
      * @param pattern Start of pattern to search for.
-     * @return String representation of list of plates separated by commas.
-     * The one matching pattern is not included in this string
+     * @return String representation of list of plates separated by commas. The one matching pattern is not included in
+     * this string
      * @see {@link #getPlateMatchingPattern(String)}
      */
     public String platesToStringExceptMatchingPattern(String pattern) {
@@ -168,6 +171,7 @@ public class Place implements ModelInterface {
         PART_OF_TOWN,
         VILLAGE,
         SPECIAL,
+        RANDOM,
         UNSPECIFIED
     }
 }

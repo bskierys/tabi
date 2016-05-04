@@ -41,9 +41,11 @@
         <item name="android:background">@color/grey_100</item>
     </style>
 
+    <attr name="fontFamily" format="string" />
+
     <declare-styleable name="Fonts">
         <attr name="android:textStyle" />
-        <attr name="fontFamily" format="string" />
+        <attr name="fontFamily" />
     </declare-styleable>
 
     <declare-styleable name="DetailsButton">
@@ -59,7 +61,7 @@
         <!--  Color of standard (deselected) text  -->
         <attr name="android:textColor"/>
         <!--  Font family of text in tabs  -->
-        <attr name="typeface" format="string" />
+        <attr name="fontFamily" />
         <!--  Height of line under text that indicates selected tab  -->
         <attr name="lineHeight" format="dimension"/>
     </declare-styleable>
@@ -102,7 +104,8 @@
         <item name="android:textColor">@color/grey_600</item>
         <item name="android:textSize">@dimen/Details.Text.Description</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/Details.Height.Text.Description</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/Details.Height.Text.Description</item>
         <item name="android:layout_marginLeft">@dimen/Details.Margin.Right</item>
         <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
         <item name="android:textIsSelectable">true</item>

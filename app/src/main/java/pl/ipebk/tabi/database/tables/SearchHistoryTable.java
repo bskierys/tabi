@@ -11,7 +11,6 @@ import android.database.Cursor;
 import java.util.Date;
 
 import pl.ipebk.tabi.database.base.Table;
-import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.models.SearchType;
 import timber.log.Timber;
@@ -43,12 +42,6 @@ public class SearchHistoryTable extends Table<SearchHistory> {
             + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + COLUMN_ID + ")"
             + " ON DELETE CASCADE );";
 
-    private PlaceDao placeDao;
-
-    public void setPlaceDao(PlaceDao placeDao) {
-        this.placeDao = placeDao;
-    }
-
     @Override public String getTableName() {
         return TABLE_NAME;
     }
@@ -65,12 +58,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
         SearchHistory history = new SearchHistory();
         history.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
 
-        if (placeDao != null) {
-            history.setPlace(placeDao.getById(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID))));
-        } else {
-            Timber.e("Place dao is not set");
-        }
-
+        history.setPlaceId(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID)));
         history.setPlate(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE)));
         history.setTimeSearched(new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_TIME_SEARCHED))));
 
@@ -86,12 +74,8 @@ public class SearchHistoryTable extends Table<SearchHistory> {
 
     @Override public ContentValues modelToContentValues(SearchHistory model) {
         ContentValues values = new ContentValues();
+        values.put(COLUMN_PLACE_ID, model.getPlaceId());
 
-        if (model.getPlace() != null) {
-            values.put(COLUMN_PLACE_ID, model.getPlace().getId());
-        } else {
-            Timber.e("Place is not set in history");
-        }
         if (model.getTimeSearched() != null) {
             values.put(COLUMN_TIME_SEARCHED, model.getTimeSearched().getTime());
         } else {
