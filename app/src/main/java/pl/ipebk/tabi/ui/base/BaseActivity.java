@@ -18,8 +18,7 @@ import pl.ipebk.tabi.di.module.ActivityModule;
 import pl.ipebk.tabi.utils.FontManager;
 
 /**
- * Base Activity for all activities across application.
- * Provides method to help presenter injection
+ * Base Activity for all activities across application. Provides method to help presenter injection
  */
 public abstract class BaseActivity extends AppCompatActivity {
     private ActivityComponent activityComponent;
@@ -27,9 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
             activityComponent = DaggerActivityComponent.builder()
-                    .activityModule(new ActivityModule(this))
-                    .applicationComponent(App.get(this).getAppComponent())
-                    .build();
+                                                       .activityModule(new ActivityModule(this))
+                                                       .applicationComponent(App.get(this).getAppComponent())
+                                                       .build();
         }
         return activityComponent;
     }
@@ -38,6 +37,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
         FontManager.getInstance().initialize(this, R.xml.fonts);
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Icepick.saveInstanceState(this, outState);
     }
 
     @Override public void startActivity(Intent intent) {

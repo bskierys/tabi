@@ -24,6 +24,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import icepick.State;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
@@ -34,13 +36,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
-public class SearchActivity extends BaseActivity implements PlaceFragment.onPlaceClickedListener, SearchMvpView {
+public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceFragmentEventListener, SearchMvpView {
     public static final String PARAM_SEARCH_TEXT = "param_search_text";
+    public static final String PARAM_SHOW_KEYBOARD = "param_show_keyboard";
     public static final int EVENT_ID_HEADER_ALL = 2654;
 
     private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
     private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
     private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
+    private static final int KEYBOARD_SHOW_DELAY = 200;
 
     @Inject SearchPresenter presenter;
     @Bind(R.id.editTxt_search) EditText searchEditText;
@@ -69,28 +73,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         prepareDoodleImages();
     }
 
-    private void preparePlaceFragments() {
-        String textToSearch = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
-
-        viewCreationSubject = BehaviorSubject.create();
-
-        searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
-        indicator.setViewPager(searchPager);
-
-        searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
-        searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
-
-        Observable<Integer> viewCreationStream = viewCreationSubject.asObservable().scan((a, b) -> a + b).filter
-                (fragmentsCreated -> fragmentsCreated == TOTAL_NUMBER_OF_FRAGMENTS);
-
-        Observable<String> initialSearchStream = Observable
-                .combineLatest(viewCreationStream, Observable.just(textToSearch),
-                               (fragmentsCreated, searchText) -> searchText)
-                .filter(text -> text != null);
-
-        initialSearchStream.subscribe(searchText -> presenter.startInitialSearchForText(searchText));
-    }
-
     private void prepareSearchToolbar() {
         searchedText.setVisibility(View.GONE);
 
@@ -104,6 +86,16 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                   .subscribe(e -> {
                       presenter.deepSearchForText(searchEditText.getText().toString());
                   });
+    }
+
+    private void preparePlaceFragments() {
+        viewCreationSubject = BehaviorSubject.create();
+
+        searchPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        indicator.setViewPager(searchPager);
+
+        searchPlatesFragment = retainSearchFragment(SEARCH_PLATES_FRAGMENT_POSITION);
+        searchPlacesFragment = retainSearchFragment(SEARCH_PLACES_FRAGMENT_POSITION);
     }
 
     private void prepareDoodleImages() {
@@ -133,9 +125,30 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
                          .doOnNext(bitmap -> noResultsBitmap = bitmap);
     }
 
-    @Override protected void onResume(){
+    @Override protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override protected void onResume() {
         super.onResume();
         presenter.refreshSearch();
+        searchEditText.requestFocus();
+
+        boolean shouldShowKeyboard = getIntent().getBooleanExtra(PARAM_SHOW_KEYBOARD, false);
+        String searchText = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
+        getIntent().removeExtra(PARAM_SEARCH_TEXT);
+        if (searchText != null) {
+            presenter.startInitialSearchForText(searchText);
+        }
+
+        if (shouldShowKeyboard) {
+            searchEditText.postDelayed(() -> {
+                InputMethodManager keyboard = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                keyboard.showSoftInput(searchEditText, 0);
+            }, KEYBOARD_SHOW_DELAY);
+        }
     }
 
     @Override protected void onDestroy() {
@@ -143,10 +156,20 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         presenter.detachView();
     }
 
+    @OnClick(R.id.btn_back) public void onBackButton() {
+        // TODO: 2016-05-15 better back behaviour
+        onBackPressed();
+    }
+
+    @OnClick(R.id.btn_clear) public void onClearButton() {
+        presenter.clearSearch();
+    }
+
     //region View callbacks
-    @Override public void onPlaceClicked(long placeId, String plateClicked, SearchType type) {
+    @Override public void onPlaceItemClicked(long placeId, String plateClicked,
+                                             SearchType type, PlaceListItemType itemType) {
         if (placeId > 0) {
-            presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type);
+            presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type, itemType);
         }
     }
 
@@ -202,6 +225,10 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
     }
 
     @Override public void setSearchText(String searchText) {
+        if (searchText == null) {
+            searchText = "";
+        }
+
         searchEditText.setText(searchText.toLowerCase());
         searchEditText.setSelection(searchText.length());
     }
@@ -216,11 +243,13 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.onPlac
         }
     }
 
-    @Override public void goToPlaceDetails(long placeId, String searchedPlate, SearchType searchType) {
+    @Override public void goToPlaceDetails(long placeId, String searchedPlate,
+                                           SearchType searchType, PlaceListItemType itemType) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
+        intent.putExtra(DetailsActivity.PARAM_ITEM_TYPE, itemType);
         startActivity(intent);
     }
 

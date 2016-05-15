@@ -11,6 +11,7 @@ import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface SearchMvpView extends MvpView {
+    // TODO: 2016-05-14 clean it up
     // plates section
     void showEmptyStateInPlatesSection();
 
@@ -37,5 +38,5 @@ public interface SearchMvpView extends MvpView {
 
     void hideKeyboard();
 
-    void goToPlaceDetails(long placeId, String searchedText, SearchType searchType);
+    void goToPlaceDetails(long placeId, String searchedText, SearchType searchType, PlaceListItemType itemType);
 }

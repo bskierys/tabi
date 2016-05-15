@@ -32,5 +32,13 @@
             style="@style/Details_Button"
             app:doodle="@drawable/dic_maps"
             app:text="@string/details_button_maps"/>
+
+        <ImageView style="@style/Divider.Vertical"/>
+
+        <pl.ipebk.tabi.ui.details.DetailsButton
+            android:id="@+id/btn_copy"
+            style="@style/Details_Button"
+            app:doodle="@drawable/dic_copy"
+            app:text="@string/details_button_copy"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

@@ -39,7 +39,7 @@ public class PlaceFragment extends Fragment {
     private boolean viewCreated;
     private Cursor placeCursor;
     private PlaceItemAdapter adapter;
-    private onPlaceClickedListener placeClickedListener;
+    private PlaceFragmentEventListener placeClickedListener;
     private NameFormatHelper nameFormatHelper;
 
     @SuppressWarnings("unused")
@@ -142,10 +142,10 @@ public class PlaceFragment extends Fragment {
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onPlaceClickedListener) {
-            placeClickedListener = (onPlaceClickedListener) context;
+        if (context instanceof PlaceFragmentEventListener) {
+            placeClickedListener = (PlaceFragmentEventListener) context;
         } else {
-            throw new RuntimeException(context + " must implement onPlaceClickedListener");
+            throw new RuntimeException(context + " must implement PlaceFragmentEventListener");
         }
     }
 
@@ -158,8 +158,8 @@ public class PlaceFragment extends Fragment {
      * This interface must be implemented by activities that contain this fragment to allow an interaction in this
      * fragment to be communicated to the activity and potentially other fragments contained in that activity.
      */
-    public interface onPlaceClickedListener {
-        void onPlaceClicked(long placeId, String plateClicked, SearchType type);
+    public interface PlaceFragmentEventListener {
+        void onPlaceItemClicked(long placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
 
         void onHeaderClicked(int eventId);
 
@@ -167,7 +167,7 @@ public class PlaceFragment extends Fragment {
     }
 
     public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
-        private boolean historical = false;
+        private boolean historical;
 
         public PlaceItemAdapter(Cursor cursor) {
             super(cursor);
@@ -209,10 +209,11 @@ public class PlaceFragment extends Fragment {
                     .filter(p -> p.getPlaceType() == Place.Type.RANDOM);
 
             placeStream.doOnNext(place -> holder.root.setOnClickListener(
-                    v -> placeClickedListener.onPlaceClicked(
+                    v -> placeClickedListener.onPlaceItemClicked(
                             place.getPlaceId(),
                             getPlateString(place.getPlateStart(), place.getPlateEnd()),
-                            type)))
+                            type, place.getPlaceType() == Place.Type.RANDOM ? PlaceListItemType.RANDOM :
+                                    (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH))))
                        .map(p -> getPlateString(p.getPlateStart(), p.getPlateEnd()))
                        .doOnNext(t -> holder.icon.setImageResource(iconResourceId))
                        .subscribe(plateText -> holder.plateView.setText(plateText));

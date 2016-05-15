@@ -18,9 +18,10 @@
     <string name="details_doodle_error_description">Nie mogę dotrzeć do lokacji</string>
     <string name="details_doodle_empty_header">Nic tu nie ma</string>
     <string name="details_doodle_empty_description">Chociaż całkiem możliwe, że coś było, ale to zjadłem&#8230;</string>
-    <string name="details_button_voivodeship">WOJEWÓDZTWO</string>
     <string name="details_button_google_it">WIĘCEJ</string>
     <string name="details_button_maps">MAPY</string>
+    <string name="details_button_copy">SKOPIUJ</string>
+    <string name="details_info_copy_done">Skopiowano do schowka</string>
 
     <!--  SEARCH  -->
     <string name="search_header_best">NAJLEPSZE WYNIKI</string>

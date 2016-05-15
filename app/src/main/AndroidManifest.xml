@@ -24,6 +24,7 @@
         <activity
             android:name=".ui.search.SearchActivity"
             android:label="@string/title_activity_search"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>

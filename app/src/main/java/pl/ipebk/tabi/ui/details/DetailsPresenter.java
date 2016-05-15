@@ -6,6 +6,8 @@
 package pl.ipebk.tabi.ui.details;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -21,6 +23,7 @@ import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
+import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,11 +50,12 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         super.detachView();
     }
 
-    public void loadPlace(long id, String searchedPlate, SearchType searchType,
+    public void loadPlace(long id, String searchedPlate, SearchType searchType, PlaceListItemType itemType,
                           Observable<Integer> mapWidthStream, Observable<Integer> mapHeightStream) {
 
         getMvpView().disableActionButtons();
         getMvpView().showSearchedText(searchedPlate);
+        showPlaceIconBasedOnItemType(itemType);
 
         if (searchedPlate != null && searchType == SearchType.PLATE) {
             this.searchedPlate = searchedPlate.toUpperCase();
@@ -82,6 +86,18 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         specialPlaceStream.subscribeOn(Schedulers.io())
                           .observeOn(AndroidSchedulers.mainThread())
                           .subscribe(this::showSpecialPlace);
+    }
+
+    private void showPlaceIconBasedOnItemType(PlaceListItemType itemType) {
+        int iconResId = R.drawable.ic_doodle_search;
+
+        if(itemType == PlaceListItemType.HISTORICAL){
+            iconResId = R.drawable.ic_doodle_history;
+        } else if(itemType == PlaceListItemType.RANDOM){
+            iconResId = R.drawable.ic_doodle_random;
+        }
+
+        getMvpView().showPlaceIcon(iconResId);
     }
 
     private void showStandardPlace(Place place) {
@@ -127,14 +143,23 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void showOnMap() {
-        String placeName = place + "," + context.getString(R.string.details_country);
+        String placeName = nameFormatHelper.formatPlaceToSearch(place);
         String rawUri = "geo:0,0?q=" + placeName;
 
         getMvpView().startMap(Uri.parse(rawUri));
     }
 
     public void searchInGoogle() {
-        getMvpView().startWebSearch(place + "," + context.getString(R.string.details_country));
+        getMvpView().startWebSearch(nameFormatHelper.formatPlaceToSearch(place));
+    }
+
+    public void copyToClipboard() {
+        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        ClipData clip = ClipData.newPlainText(context.getPackageName(), nameFormatHelper.formatPlaceInfo(place));
+        clipboard.setPrimaryClip(clip);
+
+        getMvpView().showInfoMessage(context.getString(R.string.details_info_copy_done));
     }
 
     private Uri getMapUrl(Place place, int width, int height) {

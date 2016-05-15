@@ -10,6 +10,8 @@ import android.net.Uri;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface DetailsMvpView extends MvpView {
+    void showPlaceIcon(int iconResId);
+
     void showSearchedText(String searchedText);
 
     void showPlaceName(String name);
@@ -30,7 +32,7 @@ public interface DetailsMvpView extends MvpView {
 
     void disableActionButtons();
 
-    void goToSearchForPhrase(String phrase);
+    void showInfoMessage(String message);
 
     void startMap(Uri uri);
 

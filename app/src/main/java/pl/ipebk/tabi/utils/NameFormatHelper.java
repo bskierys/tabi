@@ -93,4 +93,29 @@ public class NameFormatHelper {
 
         return randomQuestion;
     }
+
+    /**
+     * Formats place data in readable way. Depends on localized names of regions.
+     * @param place Instance of {@link Place} to format.
+     */
+    public String formatPlaceInfo(Place place) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(place.getName());
+        builder.append(", ");
+        builder.append(formatVoivodeship(place.getVoivodeship()));
+        builder.append(", ");
+        builder.append(formatPowiat(place.getPowiat()));
+        builder.append(", ");
+        builder.append(formatGmina(place.getGmina()));
+        builder.append(", ");
+        builder.append(context.getString(R.string.details_country));
+        return builder.toString();
+    }
+
+    /**
+     * Formats place data into format that is understandable by search engines.
+     */
+    public String formatPlaceToSearch(Place place){
+        return place + "," + context.getString(R.string.details_country);
+    }
 }

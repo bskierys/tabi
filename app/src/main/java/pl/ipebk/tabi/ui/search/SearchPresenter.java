@@ -55,8 +55,9 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId, String searchedPlate, String plateClicked, SearchType searchType) {
-        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType);
+    public void placeSelected(long placeId, String searchedPlate, String plateClicked,
+                              SearchType searchType, PlaceListItemType itemType) {
+        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
 
         // TODO: 2016-04-11 unit tests
 
@@ -79,6 +80,13 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             loadInitialStateForPlaces();
             loadInitialStateForPlates();
         }
+    }
+
+    public void clearSearch(){
+        lastSearched = null;
+        getMvpView().setSearchText(null);
+        loadInitialStateForPlaces();
+        loadInitialStateForPlates();
     }
 
     public void loadInitialStateForPlaces() {

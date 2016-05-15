@@ -36,8 +36,9 @@
                     android:src="@drawable/ic_back"/>
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
 
                     <pl.ipebk.tabi.ui.custom.FontTextView
                         android:id="@+id/txt_searched"
@@ -47,10 +48,19 @@
                         android:id="@+id/editTxt_search"
                         style="@style/Details_Text.Search"
                         android:background="@android:color/transparent"
-                        android:imeOptions="actionSearch"
+                        android:imeOptions="actionSearch|flagNoExtractUi"
                         android:inputType="textNoSuggestions"
                         android:textCursorDrawable="@drawable/dark_cursor"/>
                 </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/btn_clear"
+                    android:layout_width="@dimen/Details.Margin.Right"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/description_close_button"
+                    android:paddingLeft="@dimen/Details.Margin.Outer"
+                    android:paddingRight="@dimen/Details.Margin.Outer"
+                    android:src="@drawable/ic_close"/>
             </LinearLayout>
 
             <pl.ipebk.tabi.ui.search.SearchTabPageIndicator

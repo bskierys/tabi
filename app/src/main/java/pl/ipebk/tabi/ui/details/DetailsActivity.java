@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -39,6 +40,7 @@ import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
+import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.DoodleImage;
@@ -53,6 +55,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     public final static String PARAM_PLACE_ID = "param_place_id";
     public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
     public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
+    public final static String PARAM_ITEM_TYPE = "param_item_type";
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
@@ -75,6 +78,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.card_panel) CardView panelCard;
     @Bind({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
+    @Bind((R.id.ic_row)) ImageView placeIcon;
     @Bind(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @Bind(R.id.img_placeholder) ImageView placeHolder;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
@@ -138,10 +142,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
+        PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
         SearchType searchType = SearchType.values()
                 [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
         if (placeId > 0) {
-            presenter.loadPlace(placeId, searchedPlate, searchType,
+            presenter.loadPlace(placeId, searchedPlate, searchType, itemType,
                                 mapWidthStream.asObservable(),
                                 mapHeightStream.asObservable());
         }
@@ -150,9 +155,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                   .first().subscribe(bounds -> {
             mapWrapper.post(() -> {
                 int totalHeight = mapWrapper.getHeight()
-                        - mapWrapper.getPaddingBottom() - mapWrapper.getPaddingTop();
+                        - mapWrapper.getPaddingBottom()
+                        - mapWrapper.getPaddingTop();
                 int totalWidth = mapWrapper.getWidth()
-                        - mapWrapper.getPaddingLeft() - mapWrapper.getPaddingRight();
+                        - mapWrapper.getPaddingLeft()
+                        - mapWrapper.getPaddingRight();
                 mapHeightStream.onNext(totalHeight);
                 mapWidthStream.onNext(totalWidth);
             });
@@ -174,8 +181,17 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @OnClick(R.id.btn_back) public void onBackButton() {
-        // TODO: 2016-03-30 better back behaviour
-        onBackPressed();
+        // TODO: 2016-03-30 animation on back
+        Intent intent = new Intent(this,SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_clear) public void onClearButton() {
+        Intent intent = new Intent(this,SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
+        intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, "");
+        startActivity(intent);
     }
 
     @OnClick(R.id.btn_google_it) public void onSearchMore() {
@@ -184,6 +200,20 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @OnClick(R.id.btn_map) public void onShowOnMap() {
         presenter.showOnMap();
+    }
+
+    @OnClick(R.id.btn_copy) public void onCopy(){
+        presenter.copyToClipboard();
+    }
+
+    @OnClick(R.id.txt_searched) public void onSearchClicked() {
+        Intent intent = new Intent(this,SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, true);
+        startActivity(intent);
+    }
+
+    @Override public void showPlaceIcon(int iconResId) {
+        placeIcon.setImageResource(iconResId);
     }
 
     @Override public void showSearchedText(String searchedText) {
@@ -262,10 +292,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.INVISIBLE));
     }
 
-    @Override public void goToSearchForPhrase(String phrase) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, phrase);
-        startActivity(intent);
+    @Override public void showInfoMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override public void startMap(Uri geoLocation) {
