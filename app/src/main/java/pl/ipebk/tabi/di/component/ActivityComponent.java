@@ -8,6 +8,7 @@ package pl.ipebk.tabi.di.component;
 import dagger.Component;
 import pl.ipebk.tabi.di.PerActivity;
 import pl.ipebk.tabi.di.module.ActivityModule;
+import pl.ipebk.tabi.di.module.ViewModule;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.ui.main.MainActivity;
 import pl.ipebk.tabi.ui.search.SearchActivity;

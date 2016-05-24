@@ -7,6 +7,7 @@ package pl.ipebk.tabi.database.tables;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
     public static final String TABLE_NAME = "search_history";
 
     private static final String[] TABLE_COLUMNS = {
-            COLUMN_ID,
+            BaseColumns._ID,
             COLUMN_PLACE_ID,
             COLUMN_PLATE,
             COLUMN_TIME_SEARCHED,
@@ -39,7 +40,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
             + TABLE_COLUMNS[2] + " TEXT, "
             + TABLE_COLUMNS[3] + " INTEGER NOT NULL, "
             + TABLE_COLUMNS[4] + " INTEGER DEFAULT " + Integer.toString(SearchType.UNKNOWN.ordinal()) + ", "
-            + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + COLUMN_ID + ")"
+            + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + BaseColumns._ID + ")"
             + " ON DELETE CASCADE );";
 
     @Override public String getTableName() {
@@ -56,7 +57,7 @@ public class SearchHistoryTable extends Table<SearchHistory> {
 
     @Override public SearchHistory cursorToModel(Cursor cursor) {
         SearchHistory history = new SearchHistory();
-        history.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+        history.setId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
 
         history.setPlaceId(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID)));
         history.setPlate(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE)));

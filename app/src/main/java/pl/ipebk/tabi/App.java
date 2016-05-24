@@ -8,14 +8,18 @@ package pl.ipebk.tabi;
 import android.app.Application;
 import android.content.Context;
 
+import pl.ipebk.tabi.di.component.DaggerViewComponent;
+import pl.ipebk.tabi.di.component.ViewComponent;
 import pl.ipebk.tabi.di.component.ApplicationComponent;
 import pl.ipebk.tabi.di.component.DaggerApplicationComponent;
+import pl.ipebk.tabi.di.module.ViewModule;
 import pl.ipebk.tabi.di.module.ApplicationModule;
 import pl.ipebk.tabi.utils.TabiTree;
 import timber.log.Timber;
 
 public class App extends Application {
-    private ApplicationComponent component;
+    private ApplicationComponent appComponent;
+    private ViewComponent viewComponent;
 
     public static App get(Context context) {
         return (App) context.getApplicationContext();
@@ -36,15 +40,29 @@ public class App extends Application {
     }
 
     public ApplicationComponent getAppComponent() {
-        if (component == null) {
-            component = DaggerApplicationComponent.builder()
-                                                  .applicationModule(getApplicationModule())
-                                                  .build();
+        if (appComponent == null) {
+            appComponent = DaggerApplicationComponent.builder()
+                                                     .applicationModule(getApplicationModule())
+                                                     .build();
         }
-        return component;
+        return appComponent;
     }
 
-    public void setComponent(ApplicationComponent component) {
-        this.component = component;
+    public void setAppComponent(ApplicationComponent component) {
+        this.appComponent = component;
+    }
+
+    public ViewComponent getViewComponent() {
+        if (viewComponent == null) {
+            viewComponent = DaggerViewComponent.builder()
+                                               .applicationModule(getApplicationModule())
+                                               .viewModule(new ViewModule(this))
+                                               .build();
+        }
+        return viewComponent;
+    }
+
+    public void setViewComponent(ViewComponent viewComponent) {
+        this.viewComponent = viewComponent;
     }
 }

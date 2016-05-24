@@ -21,7 +21,7 @@
     <string name="details_button_google_it">WIĘCEJ</string>
     <string name="details_button_maps">MAPY</string>
     <string name="details_button_copy">SKOPIUJ</string>
-    <string name="details_info_copy_done">Skopiowano do schowka</string>
+    <string name="details_info_copy_done">Skopiowałem do schowka :)</string>
 
     <!--  SEARCH  -->
     <string name="search_header_best">NAJLEPSZE WYNIKI</string>

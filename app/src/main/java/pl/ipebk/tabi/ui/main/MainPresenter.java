@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.Stopwatch;
+import pl.ipebk.tabi.utils.StopwatchManager;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -18,14 +19,16 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
     private final DataManager dataManager;
     private Subscription subscription;
-    private Stopwatch stopwatch = new Stopwatch();
+    private Stopwatch stopwatch;
 
-    @Inject public MainPresenter(DataManager dataManager) {
+    @Inject public MainPresenter(DataManager dataManager, StopwatchManager stopwatchManager) {
         this.dataManager = dataManager;
+        this.stopwatch = stopwatchManager.getDefaultStopwatch();
     }
 
     @Override public void attachView(MainMvpView mvpView) {
         super.attachView(mvpView);
+
         getMvpView().showLoading();
         loadDatabase();
     }

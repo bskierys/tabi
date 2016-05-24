@@ -23,6 +23,9 @@ import android.view.MotionEvent;
 
 import com.viewpagerindicator.UnderlinePageIndicator;
 
+import javax.inject.Inject;
+
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.utils.FontManager;
 
@@ -42,10 +45,12 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
     //endregion
 
     //region Fields
+    @Inject FontManager fontManager;
     private TextPaint textPaint;
     private float[] activeTextHSV = new float[3];
     private float[] inactiveTextHSV = new float[3];
     private boolean isTestMode;
+    private Context context;
 
     private RectF[] bounds;
     private CharSequence[] titles;
@@ -63,16 +68,19 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
     //region Construction
     public SearchTabPageIndicator(Context context) {
         super(context);
+        this.context = context;
         init(null);
     }
 
     public SearchTabPageIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         init(attrs);
     }
 
     public SearchTabPageIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.context = context;
         init(attrs);
     }
     //endregion
@@ -82,6 +90,7 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
             return;
         }
 
+        App.get(context).getViewComponent().inject(this);
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SearchTabPageIndicator, 0, 0);
 
@@ -110,7 +119,7 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
 
         String fontFamily = a.getString(R.styleable.SearchTabPageIndicator_fontFamily);
         if (fontFamily != null && !isTestMode) {
-            textPaint.setTypeface(FontManager.getInstance().get(fontFamily, Typeface.NORMAL));
+            textPaint.setTypeface(fontManager.get(fontFamily, Typeface.NORMAL));
         }
         if (lineHeight == 0) {
             float defaultLineHeight = TypedValue.applyDimension(

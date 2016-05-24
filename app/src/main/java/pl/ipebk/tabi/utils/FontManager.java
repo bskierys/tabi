@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class for effective handling fonts. Uses singleton
- * design pattern for loading fonts only once.
+ * Class for effective handling fonts. Uses singleton design pattern for loading fonts only once.
  */
 public class FontManager {
 
@@ -33,11 +32,11 @@ public class FontManager {
     private static final String STYLE_BOLD = "-Bold.ttf";
     private static final String STYLE_ITALIC = "-Italic.ttf";
     private static final String STYLE_BOLDITALIC = "-BoldItalic.ttf";
-    private List<Font> mFonts;
-    private boolean isInitialized = false;
+    private List<Font> fonts;
+    private boolean isInitialized;
 
-    private boolean isName = false;
-    private boolean isFile = false;
+    private boolean isName;
+    private boolean isFile;
 
     private FontManager() {
     }
@@ -47,18 +46,19 @@ public class FontManager {
     }
 
     /**
-     * Parse the resId and initialize the parser.
-     * If already initialized, does nothing.
+     * Parse the resId and initialize the parser. If already initialized, does nothing.
      *
      * @param context {@link Context} to get resources from
-     * @param resId   Id of xml resource containing list of fonts
+     * @param resId Id of xml resource containing list of fonts
      */
     public void initialize(Context context, int resId) {
-        if (isInitialized) return;
+        if (isInitialized) {
+            return;
+        }
         XmlResourceParser parser = null;
         try {
             parser = context.getResources().getXml(resId);
-            mFonts = new ArrayList<>();
+            fonts = new ArrayList<>();
 
             String tag;
             int eventType = parser.getEventType();
@@ -90,7 +90,7 @@ public class FontManager {
                         if (tag.equals(TAG_FAMILY)) {
                             // add it to the list.
                             if (font != null) {
-                                mFonts.add(font);
+                                fonts.add(font);
                                 font = null;
                             }
                         } else if (tag.equals(TAG_NAME)) {
@@ -104,61 +104,63 @@ public class FontManager {
                         String text = parser.getText();
                         if (isName) {
                             // value is a name, add it to list of family-names.
-                            if (font.families != null)
+                            if (font.families != null) {
                                 font.families.add(text);
+                            }
                         } else if (isFile) {
                             // value is a file, add it to the proper kind.
                             FontStyle fontStyle = new FontStyle();
                             fontStyle.font = Typeface.createFromAsset(context.getAssets(), text);
 
-                            if (text.endsWith(STYLE_BOLD))
+                            if (text.endsWith(STYLE_BOLD)) {
                                 fontStyle.style = Typeface.BOLD;
-                            else if (text.endsWith(STYLE_ITALIC))
+                            } else if (text.endsWith(STYLE_ITALIC)) {
                                 fontStyle.style = Typeface.ITALIC;
-                            else if (text.endsWith(STYLE_BOLDITALIC))
+                            } else if (text.endsWith(STYLE_BOLDITALIC)) {
                                 fontStyle.style = Typeface.BOLD_ITALIC;
-                            else
+                            } else {
                                 fontStyle.style = Typeface.NORMAL;
+                            }
 
                             font.styles.add(fontStyle);
                         }
                 }
 
                 eventType = parser.next();
-
             } while (eventType != XmlPullParser.END_DOCUMENT);
             isInitialized = true;
-
         } catch (XmlPullParserException e) {
             throw new InflateException("Error inflating font XML", e);
         } catch (IOException e) {
             throw new InflateException("Error inflating font XML", e);
         } finally {
-            if (parser != null)
+            if (parser != null) {
                 parser.close();
+            }
         }
     }
 
     /**
-     * Search for already initialized typeface in this class instance.
-     * All fonts are held in singleton instance so you don't have to worry
-     * about view performance.
+     * Search for already initialized typeface in this class instance. All fonts are held in singleton instance so you
+     * don't have to worry about view performance.
      *
      * @param family Family specified in xml used to instantiate class
-     * @param style  One of available styles for fonts
+     * @param style One of available styles for fonts
      * @return Typeface ready to set to TextView
      */
     public Typeface get(String family, int style) {
-        for (Font font : mFonts) {
+        for (Font font : fonts) {
             for (String familyName : font.families) {
                 if (familyName.equals(family)) {
                     // if no style in specified, return normal style.
-                    if (style == -1)
+                    if (style == -1) {
                         style = Typeface.NORMAL;
+                    }
 
                     for (FontStyle fontStyle : font.styles) {
-                        if (fontStyle.style == style)
+                        if (fontStyle.style == style) {
                             return fontStyle.font;
+                        }
                     }
                 }
             }

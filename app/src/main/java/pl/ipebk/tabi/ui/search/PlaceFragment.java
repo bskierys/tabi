@@ -29,18 +29,17 @@ import timber.log.Timber;
  */
 public class PlaceFragment extends Fragment {
     private static final String ARG_FRAGMENT_TYPE = "fragmentType";
-    private static final int SECTION_FIRST_POSITION = 0;
-    private static final int SECTION_SECOND_POSITION = 4;
+    static final int SECTION_FIRST_POSITION = 0;
+    static final int SECTION_SECOND_POSITION = 4;
 
     @Bind(R.id.img_no_results) ImageView noResultsImage;
     @Bind(R.id.place_list) RecyclerView recyclerView;
 
-    private SearchType type;
+    protected SearchType type;
     private boolean viewCreated;
     private Cursor placeCursor;
     private PlaceItemAdapter adapter;
-    private PlaceFragmentEventListener placeClickedListener;
-    private NameFormatHelper nameFormatHelper;
+    private PlaceFragmentEventListener fragmentEventListener;
 
     @SuppressWarnings("unused")
     public static PlaceFragment newInstance(SearchType type) {
@@ -53,35 +52,55 @@ public class PlaceFragment extends Fragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new PlaceItemAdapter(placeCursor);
-        viewCreated = false;
 
         if (getArguments() != null) {
             int typeOrdinal = getArguments().getInt(ARG_FRAGMENT_TYPE);
             type = SearchType.values()[typeOrdinal];
         }
+
+        getAdapter();
+        viewCreated = false;
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_place_list, container, false);
         ButterKnife.bind(this, view);
-        nameFormatHelper = new NameFormatHelper(getActivity());
 
         if (placeCursor != null) {
-            adapter.changeCursor(placeCursor);
+            getAdapter().changeCursor(placeCursor);
         }
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(getLayoutManager());
         recyclerView.setAdapter(adapter);
 
         hideNoResultsImage();
         hideList();
 
-        placeClickedListener.onFragmentViewCreated(type);
+        fragmentEventListener.onFragmentViewCreated(type);
         viewCreated = true;
 
         return view;
+    }
+
+    /**
+     * Test methods to be replaced with mocks
+     */
+    public RecyclerView.LayoutManager getLayoutManager(){
+        return new LinearLayoutManager(getActivity());
+    }
+
+    /**
+     * Test methods to be replaced with mocks
+     */
+    public PlaceItemAdapter getAdapter(){
+        if(adapter == null){
+            adapter = new PlaceItemAdapter(placeCursor, getActivity());
+            adapter.setEventListener(fragmentEventListener);
+            adapter.setType(type);
+        }
+
+        return adapter;
     }
 
     public boolean isViewCreated() {
@@ -90,36 +109,38 @@ public class PlaceFragment extends Fragment {
 
     public void setData(Cursor placeCursor) {
         this.placeCursor = placeCursor;
-
-        if (adapter != null) {
-            this.adapter.changeCursor(placeCursor);
-        }
+        getAdapter().changeCursor(placeCursor);
     }
 
-    public void showQuickHeaders() {
-        adapter.setHistorical(false);
-        adapter.addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_best), null);
-        adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_click),
-                           SearchActivity.EVENT_ID_HEADER_ALL);
+    public void showInitialHeaders() {
+        getAdapter().addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_suggestions), null);
+        getAdapter().removeSection(SECTION_SECOND_POSITION);
+        getAdapter().setHistorical(true);
+    }
+
+    public void showQuickHeaders(int outcomeCount) {
+        getAdapter().setHistorical(false);
+        getAdapter().addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_best), null);
+        if (outcomeCount >= SearchPresenter.SEARCH_QUANTITY_QUICK) {
+            getAdapter().addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_click),
+                                    SearchActivity.EVENT_ID_HEADER_ALL);
+        } else {
+            getAdapter().removeSection(SECTION_SECOND_POSITION);
+        }
     }
 
     public void showFullHeaders(int outcomeCount) {
-        adapter.setHistorical(false);
+        getAdapter().setHistorical(false);
+        getAdapter().addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_best), null);
         if (outcomeCount > SearchPresenter.SEARCH_QUANTITY_QUICK) {
-            adapter.addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_all), null);
+            getAdapter().addSection(SECTION_SECOND_POSITION, getString(R.string.search_header_all), null);
         } else {
-            adapter.removeSection(SECTION_SECOND_POSITION);
+            getAdapter().removeSection(SECTION_SECOND_POSITION);
         }
     }
 
-    public void showHistoryHeaders() {
-        adapter.addSection(SECTION_FIRST_POSITION, getString(R.string.search_header_suggestions), null);
-        adapter.removeSection(SECTION_SECOND_POSITION);
-        adapter.setHistorical(true);
-    }
-
     private void onHeaderClicked(int eventId) {
-        placeClickedListener.onHeaderClicked(eventId);
+        fragmentEventListener.onHeaderClicked(eventId);
     }
 
     public void showList() {
@@ -143,7 +164,7 @@ public class PlaceFragment extends Fragment {
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof PlaceFragmentEventListener) {
-            placeClickedListener = (PlaceFragmentEventListener) context;
+            fragmentEventListener = (PlaceFragmentEventListener) context;
         } else {
             throw new RuntimeException(context + " must implement PlaceFragmentEventListener");
         }
@@ -151,172 +172,6 @@ public class PlaceFragment extends Fragment {
 
     @Override public void onDetach() {
         super.onDetach();
-        placeClickedListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this fragment to allow an interaction in this
-     * fragment to be communicated to the activity and potentially other fragments contained in that activity.
-     */
-    public interface PlaceFragmentEventListener {
-        void onPlaceItemClicked(long placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
-
-        void onHeaderClicked(int eventId);
-
-        void onFragmentViewCreated(SearchType type);
-    }
-
-    public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
-        private boolean historical;
-
-        public PlaceItemAdapter(Cursor cursor) {
-            super(cursor);
-        }
-
-        public void setHistorical(boolean historical) {
-            this.historical = historical;
-        }
-
-        @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_place, parent, false);
-            return new ItemViewHolder(view);
-        }
-
-        @Override protected RecyclerView.ViewHolder createSectionViewHolder(ViewGroup parent) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_place_header, parent, false);
-            return new HeaderViewHolder(view);
-        }
-
-        @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
-            ItemViewHolder holder = (ItemViewHolder) viewHolder;
-            int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
-
-            // show shadow for last rows
-            if (isSectionHeaderPosition(positionToSectionedPosition(position) + 1)
-                    || position == cursor.getCount() - 1) {
-                holder.shadow.setVisibility(View.VISIBLE);
-            } else {
-                holder.shadow.setVisibility(View.GONE);
-            }
-
-            Observable<PlaceListItem> placeStream = Observable.just(cursor).first().map(PlaceListItem::new);
-
-            Observable<PlaceListItem> standardPlaceStream = placeStream
-                    .filter(p -> p.getPlaceType().ordinal() < Place.Type.SPECIAL.ordinal());
-            Observable<PlaceListItem> specialPlaceStream = placeStream
-                    .filter(p -> p.getPlaceType() == Place.Type.SPECIAL);
-            Observable<PlaceListItem> randomPlaceStream = placeStream
-                    .filter(p -> p.getPlaceType() == Place.Type.RANDOM);
-
-            placeStream.doOnNext(place -> holder.root.setOnClickListener(
-                    v -> placeClickedListener.onPlaceItemClicked(
-                            place.getPlaceId(),
-                            getPlateString(place.getPlateStart(), place.getPlateEnd()),
-                            type, place.getPlaceType() == Place.Type.RANDOM ? PlaceListItemType.RANDOM :
-                                    (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH))))
-                       .map(p -> getPlateString(p.getPlateStart(), p.getPlateEnd()))
-                       .doOnNext(t -> holder.icon.setImageResource(iconResourceId))
-                       .subscribe(plateText -> holder.plateView.setText(plateText));
-
-            standardPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
-                               .doOnNext(place -> holder.voivodeshipView.setText(
-                                       nameFormatHelper.formatVoivodeship(place.getVoivodeship())))
-                               .doOnNext(place -> holder.powiatView.setText(
-                                       nameFormatHelper.formatPowiat(place.getPowiat())))
-                               .subscribe();
-
-            specialPlaceStream.doOnNext(place -> holder.powiatView.setText(place.getVoivodeship()))
-                              .map(place -> place.getPlaceName().split(" "))
-                              .doOnNext(name -> holder.placeNameView.setText(name[0]))
-                              .doOnNext(name -> holder.voivodeshipView.setText(getPlaceSubName(name)))
-                              .doOnError(error -> Timber.e("Error processing special place name: %s", error))
-                              .subscribe();
-
-            if (type == SearchType.PLACE) {
-                randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
-                                 .doOnNext(place -> holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER))
-                                 .doOnNext(place -> holder.voivodeshipView.setText(getString(R.string.search_question_where)))
-                                 .doOnNext(place -> holder.powiatView.setText(getString(R.string.search_question_plates)))
-                                 .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
-                                 .subscribe();
-            } else if (type == SearchType.PLATE) {
-                randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(getString(R.string.search_question_what)))
-                                 .doOnNext(place -> holder.voivodeshipView.setText(getString(R.string.search_question_where)))
-                                 .doOnNext(place -> holder.powiatView.setText(nameFormatHelper.getRandomQuestion()))
-                                 .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
-                                 .subscribe();
-            }
-        }
-
-        private String getPlateString(String plateStart, String plateEnd) {
-            Plate plate = new Plate();
-            plate.setPattern(plateStart);
-            plate.setEnd(plateEnd);
-            return plate.toString();
-        }
-
-        private String getPlaceSubName(String[] words) {
-            String subName = "";
-            if (words.length > 1) {
-                for (int i = 1; i < words.length; i++) {
-                    subName += words[i] + " ";
-                }
-            }
-
-            return subName;
-        }
-
-        @Override protected void bindHeaderViewHolder(RecyclerView.ViewHolder viewHolder,
-                                                      int position, Section section) {
-            HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
-
-            holder.header.setText(section.getTitle());
-            holder.root.setClickable(section.getClintEventId() != null);
-
-            if (section.getClintEventId() != null) {
-                holder.root.setOnClickListener((v) -> onHeaderClicked(section.getClintEventId()));
-            }
-
-            // if section is last - add divider
-            if (position == getItemCount() - 1) {
-                holder.divider.setVisibility(View.VISIBLE);
-            } else {
-                holder.divider.setVisibility(View.GONE);
-            }
-
-            // if there are rows above - hide shadow
-            if (position == SECTION_SECOND_POSITION) {
-                holder.shadow.setVisibility(View.GONE);
-            } else {
-                holder.shadow.setVisibility(View.VISIBLE);
-            }
-        }
-
-        public class ItemViewHolder extends RecyclerView.ViewHolder {
-            @Bind(R.id.root) View root;
-            @Bind(R.id.txt_place_name) TextView placeNameView;
-            @Bind(R.id.txt_plate) TextView plateView;
-            @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
-            @Bind(R.id.txt_powiat) TextView powiatView;
-            @Bind(R.id.shadow) ImageView shadow;
-            @Bind(R.id.ic_row) ImageView icon;
-
-            public ItemViewHolder(View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-            }
-        }
-
-        public class HeaderViewHolder extends RecyclerView.ViewHolder {
-            @Bind(R.id.root) View root;
-            @Bind(R.id.txt_header) TextView header;
-            @Bind(R.id.shadow) View shadow;
-            @Bind(R.id.divider) ImageView divider;
-
-            public HeaderViewHolder(View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-            }
-        }
+        fragmentEventListener = null;
     }
 }

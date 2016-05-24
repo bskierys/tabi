@@ -19,6 +19,7 @@ import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
+import pl.ipebk.tabi.utils.StopwatchManager;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -34,13 +35,17 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
+    private StopwatchManager stopwatchManager;
+    private Stopwatch stopwatch;
     private Subscription searchSubscription;
-    private Stopwatch stopwatch = new Stopwatch();
     private String lastSearched;
 
-    @Inject public SearchPresenter(DataManager dataManager, SpellCorrector spellCorrector) {
+    @Inject public SearchPresenter(DataManager dataManager, SpellCorrector spellCorrector,
+                                   StopwatchManager stopwatchManager) {
         this.dataManager = dataManager;
         this.spellCorrector = spellCorrector;
+        this.stopwatchManager = stopwatchManager;
+        this.stopwatch = stopwatchManager.getStopwatch();
     }
 
     @Override public void attachView(SearchMvpView mvpView) {
@@ -90,7 +95,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     public void loadInitialStateForPlaces() {
-        Stopwatch historyWatch = new Stopwatch();
+        Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
         dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE)
                    .filter(cursor -> cursor != null).first()
@@ -100,11 +105,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                    .subscribe(cursor -> {
                        getMvpView().showInitialSearchInPlacesSection(cursor);
                        Timber.d("Loading search history for places took: %s", historyWatch.getElapsedTimeString());
-                   });
+                   }, ex -> Timber.e("Initial places not loaded correctly: " + ex.getMessage()));
     }
 
     public void loadInitialStateForPlates() {
-        Stopwatch historyWatch = new Stopwatch();
+        Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
         dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE)
                    .filter(cursor -> cursor != null).first()
@@ -114,7 +119,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                    .subscribe(cursor -> {
                        getMvpView().showInitialSearchInPlatesSection(cursor);
                        Timber.d("Loading search history for plates took: %s", historyWatch.getElapsedTimeString());
-                   });
+                   }, ex -> Timber.e("Initial plates not loaded correctly: " + ex.getMessage()));
     }
 
     public void quickSearchForText(String rawPhrase) {
@@ -138,7 +143,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                                        .subscribeOn(Schedulers.computation())
                                        .observeOn(AndroidSchedulers.mainThread())
                                        .map(spellCorrector::cleanForSearch)
-                                       .doOnNext(cleanedText->lastSearched = cleanedText)
+                                       .doOnNext(cleanedText -> lastSearched = cleanedText)
                                        .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
                                                   e -> Timber.e("Error during searching for places", e));
     }

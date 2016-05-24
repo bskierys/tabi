@@ -9,6 +9,8 @@ import android.content.Context;
 
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.Place;
 import timber.log.Timber;

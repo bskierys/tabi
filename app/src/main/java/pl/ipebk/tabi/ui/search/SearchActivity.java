@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import icepick.State;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
@@ -36,14 +35,14 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 
-public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceFragmentEventListener, SearchMvpView {
+public class SearchActivity extends BaseActivity implements PlaceFragmentEventListener, SearchMvpView {
     public static final String PARAM_SEARCH_TEXT = "param_search_text";
     public static final String PARAM_SHOW_KEYBOARD = "param_show_keyboard";
     public static final int EVENT_ID_HEADER_ALL = 2654;
 
-    private static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
-    private static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
-    private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
+    static final int SEARCH_PLATES_FRAGMENT_POSITION = 0;
+    static final int SEARCH_PLACES_FRAGMENT_POSITION = 1;
+    static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
     private static final int KEYBOARD_SHOW_DELAY = 200;
 
     @Inject SearchPresenter presenter;
@@ -197,7 +196,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceF
         if (searchPlacesFragment.isViewCreated()) {
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
-            searchPlacesFragment.showQuickHeaders();
+            searchPlacesFragment.showQuickHeaders(cursor.getCount());
         }
     }
 
@@ -205,7 +204,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceF
         if (searchPlacesFragment.isViewCreated()) {
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
-            searchPlacesFragment.showHistoryHeaders();
+            searchPlacesFragment.showInitialHeaders();
         }
     }
 
@@ -257,7 +256,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceF
         if (searchPlatesFragment.isViewCreated()) {
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
-            searchPlatesFragment.showHistoryHeaders();
+            searchPlatesFragment.showInitialHeaders();
         }
     }
 
@@ -288,14 +287,14 @@ public class SearchActivity extends BaseActivity implements PlaceFragment.PlaceF
         if (searchPlatesFragment.isViewCreated()) {
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
-            searchPlatesFragment.showQuickHeaders();
+            searchPlatesFragment.showQuickHeaders(cursor.getCount());
         }
     }
     //endregion
 
     //region View pager management
 
-    private PlaceFragment retainSearchFragment(int position) {
+    protected PlaceFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (savedFragment != null) {

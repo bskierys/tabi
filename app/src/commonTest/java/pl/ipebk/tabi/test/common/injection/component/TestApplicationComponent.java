@@ -9,10 +9,10 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import pl.ipebk.tabi.di.component.ApplicationComponent;
-import pl.ipebk.tabi.test.common.injection.module.ApplicationTestModule;
+import pl.ipebk.tabi.test.common.injection.module.TestApplicationModule;
 
 @Singleton
-@Component(modules = ApplicationTestModule.class)
-public interface TestComponent extends ApplicationComponent {
+@Component(modules = TestApplicationModule.class)
+public interface TestApplicationComponent extends ApplicationComponent {
 
 }

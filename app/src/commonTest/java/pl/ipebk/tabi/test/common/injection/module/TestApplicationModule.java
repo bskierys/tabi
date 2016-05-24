@@ -23,22 +23,21 @@ import static org.mockito.Mockito.mock;
  * Provides application-level dependencies for an app running on a testing environment
  * This allows injecting mocks if necessary.
  */
-@Module
-public class ApplicationTestModule {
+@Module public class TestApplicationModule {
 
-    private final Application mApplication;
+    private final Application application;
 
-    public ApplicationTestModule(Application application) {
-        mApplication = application;
+    public TestApplicationModule(Application application) {
+        this.application = application;
     }
 
     @Provides Application provideApplication() {
-        return mApplication;
+        return application;
     }
 
     @Provides
     @ApplicationContext Context provideContext() {
-        return mApplication;
+        return application;
     }
 
     @Provides
@@ -51,7 +50,7 @@ public class ApplicationTestModule {
      *************/
 
     @Provides
-    @Singleton DataManager provideDataManager() {
+    @Singleton public DataManager provideDataManager() {
         return mock(DataManager.class);
     }
 }

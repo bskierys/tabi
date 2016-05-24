@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.inject.Inject;
+
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 
 /**
@@ -392,10 +395,10 @@ public class DoodleImage {
                 height = context.getResources().getDimensionPixelSize(R.dimen.Doodle_Height_Default);
             }
             if (headerFont == null) {
-                headerFont = FontManager.getInstance().get("bebas", Typeface.NORMAL);
+                headerFont = Typeface.DEFAULT;
             }
             if (descriptionFont == null) {
-                descriptionFont = FontManager.getInstance().get("montserrat", Typeface.NORMAL);
+                descriptionFont = Typeface.DEFAULT;
             }
         }
     }

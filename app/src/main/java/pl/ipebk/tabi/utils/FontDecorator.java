@@ -11,12 +11,22 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 
 /**
  * Helper class to help apply {@link FontManager} fonts to TextViews.
  */
 public class FontDecorator {
+    private Context context;
+    @Inject FontManager fontManager;
+
+    public FontDecorator(Context context) {
+        this.context = context;
+        App.get(context).getViewComponent().inject(this);
+    }
 
     /**
      * Initializes custom font for text view from its attributes. Use 'fontFamily'
@@ -24,10 +34,9 @@ public class FontDecorator {
      * If font family is not set in attributes, default font will be applied
      *
      * @param textView Intence of {@link TextView} to decor with custom font
-     * @param context  Context to acquire attributes from
      * @param attrs    Attributes to set
      */
-    public static void initFromAttributes(TextView textView, Context context, AttributeSet attrs) {
+    public void initFromAttributes(TextView textView, AttributeSet attrs) {
         if (!textView.isInEditMode()) {
             // Fonts work as a combination of particular family and the style.
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Fonts);
@@ -36,7 +45,7 @@ public class FontDecorator {
 
             a.recycle();
 
-            Typeface typeface = FontManager.getInstance().get(family, style);
+            Typeface typeface = fontManager.get(family, style);
             textView.setTypeface(typeface);
         }
     }
@@ -47,8 +56,8 @@ public class FontDecorator {
      * @param family Font family name
      * @param style  style to apply.
      */
-    public static void setCustomFont(TextView textView, String family, int style) {
-        Typeface typeface = FontManager.getInstance().get(family, style);
+    public void setCustomFont(TextView textView, String family, int style) {
+        Typeface typeface = fontManager.get(family, style);
         textView.setTypeface(typeface);
     }
 
@@ -57,8 +66,8 @@ public class FontDecorator {
      *
      * @param family Font family name
      */
-    public static void setCustomFont(TextView textView, String family) {
-        Typeface typeface = FontManager.getInstance().get(family, Typeface.NORMAL);
+    public void setCustomFont(TextView textView, String family) {
+        Typeface typeface = fontManager.get(family, Typeface.NORMAL);
         textView.setTypeface(typeface);
     }
 }

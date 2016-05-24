@@ -13,12 +13,12 @@ import org.junit.runners.model.Statement;
 
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.manager.DataManager;
-import pl.ipebk.tabi.test.common.injection.component.DaggerTestComponent;
-import pl.ipebk.tabi.test.common.injection.component.TestComponent;
-import pl.ipebk.tabi.test.common.injection.module.ApplicationTestModule;
+import pl.ipebk.tabi.test.common.injection.component.DaggerTestApplicationComponent;
+import pl.ipebk.tabi.test.common.injection.component.TestApplicationComponent;
+import pl.ipebk.tabi.test.common.injection.module.TestApplicationModule;
 
 /**
- * Test rule that creates and sets a Dagger TestComponent into the application overriding the
+ * Test rule that creates and sets a Dagger TestApplicationComponent into the application overriding the
  * existing application component.
  * Use this rule in your test case in order for the app to use mock dependencies.
  * It also exposes some of the dependencies so they can be easily accessed from the tests, e.g. to
@@ -26,23 +26,23 @@ import pl.ipebk.tabi.test.common.injection.module.ApplicationTestModule;
  */
 public class TestComponentRule implements TestRule {
 
-    private final TestComponent mTestComponent;
-    private final Context mContext;
+    private final TestApplicationComponent testComponent;
+    private final Context context;
 
     public TestComponentRule(Context context) {
-        mContext = context;
+        this.context = context;
         App application = App.get(context);
-        mTestComponent = DaggerTestComponent.builder()
-                .applicationTestModule(new ApplicationTestModule(application))
-                .build();
+        testComponent = DaggerTestApplicationComponent.builder()
+                                                      .testApplicationModule(new TestApplicationModule(application))
+                                                      .build();
     }
 
     public Context getContext() {
-        return mContext;
+        return context;
     }
 
     public DataManager getMockDataManager() {
-        return mTestComponent.dataManager();
+        return testComponent.dataManager();
     }
 
     @Override
@@ -50,10 +50,10 @@ public class TestComponentRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                App application = App.get(mContext);
-                application.setComponent(mTestComponent);
+                App application = App.get(context);
+                application.setAppComponent(testComponent);
                 base.evaluate();
-                application.setComponent(null);
+                application.setAppComponent(null);
             }
         };
     }

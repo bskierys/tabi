@@ -39,6 +39,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
         this.dataManager = dataManager;
         this.context = activity;
+        // TODO: 2016-05-22 should be injected
         this.nameFormatHelper = new NameFormatHelper(context);
     }
 

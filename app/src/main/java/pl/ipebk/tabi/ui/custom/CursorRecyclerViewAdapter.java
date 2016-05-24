@@ -18,6 +18,7 @@ package pl.ipebk.tabi.ui.custom;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.provider.BaseColumns;
 import android.support.v7.widget.RecyclerView;
 
 import timber.log.Timber;
@@ -36,7 +37,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
     public CursorRecyclerViewAdapter(Cursor cursor) {
         this.cursor = cursor;
         dataValid = cursor != null;
-        rowIdColumn = dataValid ? this.cursor.getColumnIndex("_id") : -1;
+        rowIdColumn = dataValid ? this.cursor.getColumnIndex(BaseColumns._ID) : -1;
         dataSetObserver = new NotifyingDataSetObserver();
         if (this.cursor != null) {
             this.cursor.registerDataSetObserver(dataSetObserver);
@@ -106,7 +107,7 @@ public abstract class CursorRecyclerViewAdapter<VH extends RecyclerView.ViewHold
             if (dataSetObserver != null) {
                 cursor.registerDataSetObserver(dataSetObserver);
             }
-            rowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            rowIdColumn = newCursor.getColumnIndexOrThrow(BaseColumns._ID);
             dataValid = true;
             notifyDataSetChanged();
         } else {

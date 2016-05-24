@@ -20,6 +20,7 @@ import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.test.common.TestDataFactory;
+import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
 import rx.Observable;
 
@@ -71,7 +72,8 @@ public class DetailsPresenterTest {
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, "k", SearchType.PLATE, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, "k", SearchType.PLATE, PlaceListItemType.SEARCH,
+                                   Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate(anyString());
@@ -89,7 +91,8 @@ public class DetailsPresenterTest {
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH,
+                                   Observable.just(1), Observable.just(1));
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate(anyString());
@@ -106,7 +109,8 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH,
+                                   Observable.just(1), Observable.just(1));
 
         detailsPresenter.showOnMap();
 
@@ -118,7 +122,8 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH,
+                                   Observable.just(1), Observable.just(1));
 
         detailsPresenter.searchInGoogle();
 

@@ -8,6 +8,7 @@ package pl.ipebk.tabi.database.base;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
@@ -90,7 +91,7 @@ public abstract class Dao<E extends ModelInterface> {
      * @param id
      */
     public void delete(Long id) {
-        int rowsAffected = db.delete(table.getTableName(), Table.COLUMN_ID + " = " + id);
+        int rowsAffected = db.delete(table.getTableName(), BaseColumns._ID + " = " + id);
         if (rowsAffected < 1) {
             Timber.e("Unable to delete entity %s with id: %d", type.toString(), id);
         } else {
@@ -106,7 +107,7 @@ public abstract class Dao<E extends ModelInterface> {
     public void deleteList(List<Long> ids) {
         String args = TextUtils.join(", ", ids);
         int rowsAffected = db.delete(table.getTableName(),
-                Table.COLUMN_ID + " IN (?) ", args);
+                                     BaseColumns._ID + " IN (?) ", args);
         Timber.d("Rows deleted: %d", rowsAffected);
     }
 
@@ -140,7 +141,7 @@ public abstract class Dao<E extends ModelInterface> {
      * @return Entity with given id or null if not present.
      */
     public E getById(Long id) {
-        String selection = Table.COLUMN_ID + " = ?";
+        String selection = BaseColumns._ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
         String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
@@ -157,7 +158,7 @@ public abstract class Dao<E extends ModelInterface> {
      * @return Observable of entity with given id or null if not present.
      */
     public Observable<E> getByIdObservable(Long id) {
-        String selection = Table.COLUMN_ID + " = ?";
+        String selection = BaseColumns._ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
 
         String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
@@ -252,7 +253,7 @@ public abstract class Dao<E extends ModelInterface> {
         Long id = model.getId();
         if (id > 0) {
             ContentValues values = table.modelToContentValues(model);
-            String selection = Table.COLUMN_ID + " = ?";
+            String selection = BaseColumns._ID + " = ?";
             String[] selectionArgs = {String.valueOf(id)};
             int rowsAffected = db.update(table.getTableName(), values, selection, selectionArgs);
             Timber.d("Rows updated: %d", rowsAffected);

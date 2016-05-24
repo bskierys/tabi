@@ -15,25 +15,30 @@ import pl.ipebk.tabi.utils.FontDecorator;
  * TextView with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
  */
 public class FontTextView extends TextView {
+    private FontDecorator decorator;
+
     public FontTextView(Context context) {
         super(context);
+        decorator = new FontDecorator(context);
     }
 
     public FontTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        FontDecorator.initFromAttributes(this, context, attrs);
+        decorator = new FontDecorator(context);
+        decorator.initFromAttributes(this, attrs);
     }
 
     public FontTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        FontDecorator.initFromAttributes(this, context, attrs);
+        decorator = new FontDecorator(context);
+        decorator.initFromAttributes(this, attrs);
     }
 
     public void setCustomFont(String fontFamily) {
-        FontDecorator.setCustomFont(this, fontFamily);
+        decorator.setCustomFont(this, fontFamily);
     }
 
     public void setCustomFont(String fontFamily, int style) {
-        FontDecorator.setCustomFont(this, fontFamily, style);
+        decorator.setCustomFont(this, fontFamily, style);
     }
 }

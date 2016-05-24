@@ -69,7 +69,7 @@ public class PlaceDao extends Dao<Place> {
     }
 
     public int getNextRowId() {
-        String query = "SELECT MAX(" + PlacesTable.COLUMN_ID + ") FROM " + table.getTableName();
+        String query = "SELECT MAX(" + BaseColumns._ID + ") FROM " + table.getTableName();
         Cursor cursor = db.query(query);
 
         return getSimpleInt(cursor) + 1;
@@ -103,20 +103,20 @@ public class PlaceDao extends Dao<Place> {
         PlatesTable platesTable = new PlatesTable();
 
         String selectAllAdditionalPlatesWithPlaceId = String.format(
-                " SELECT p.%1$s, a.%2$s AS plate_b, a.%3$s AS %4$s, p.%5$s", PlacesTable.COLUMN_ID,
+                " SELECT p.%1$s, a.%2$s AS plate_b, a.%3$s AS %4$s, p.%5$s", BaseColumns._ID,
                 PlatesTable.COLUMN_PLATE, PlacesTable.COLUMN_PLATE_END, PlacesTable.COLUMN_PLATE_END,
                 PlacesTable.COLUMN_HAS_OWN_PLATE)
                 + " FROM " + table.getTableName() + " p JOIN " + platesTable.getTableName()
-                + " a ON " + String.format(" p.%s = a.%s ", PlacesTable.COLUMN_ID, PlatesTable.COLUMN_PLACE_ID);
+                + " a ON " + String.format(" p.%s = a.%s ", BaseColumns._ID, PlatesTable.COLUMN_PLACE_ID);
 
         String selectAdditionalPlatesInCitiesWithOwnPlates = String.format(
                 " SELECT w.%1$s AS ID, w.plate_b AS %2$s, w.plate_end AS %3$s ",
-                PlacesTable.COLUMN_ID, PlacesTable.COLUMN_PLATE, PlacesTable.COLUMN_PLATE_END)
+                BaseColumns._ID, PlacesTable.COLUMN_PLATE, PlacesTable.COLUMN_PLATE_END)
                 + " FROM " + "(" + selectAllAdditionalPlatesWithPlaceId + ")"
                 + " AS w WHERE w." + PlacesTable.COLUMN_HAS_OWN_PLATE + " = ? ";
 
         String selectAllPlatesFromPlacesWithOwnPlate = String.format(
-                " SELECT %1$s AS ID, %2$s, %3$s ", PlacesTable.COLUMN_ID,
+                " SELECT %1$s AS ID, %2$s, %3$s ", BaseColumns._ID,
                 PlacesTable.COLUMN_PLATE, PlacesTable.COLUMN_PLATE_END)
                 + " FROM " + table.getTableName() + " WHERE " + PlacesTable.COLUMN_HAS_OWN_PLATE + " = ? "
                 + " UNION " + selectAdditionalPlatesInCitiesWithOwnPlates;
@@ -136,7 +136,7 @@ public class PlaceDao extends Dao<Place> {
                 + ", k." + PlacesTable.COLUMN_SEARCHED_PLATE + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE
                 + ", k." + PlacesTable.COLUMN_SEARCHED_PLATE_END + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE_END
                 + " FROM (" + orderCorrectPlacesByImportanceAndPlatesAlphabetically + ") AS k LEFT JOIN "
-                + String.format("%1$s ON k.ID = %1$s.%2$s", table.getTableName(), PlacesTable.COLUMN_ID);
+                + String.format("%1$s ON k.ID = %1$s.%2$s", table.getTableName(), BaseColumns._ID);
 
         String selectPlacesThatHaveOwnPlateStartingWith = String.format(selectPlacesFromIdsButKeepTheOrder,
                                                                         "\'" + plateStart + "%\'");
@@ -203,7 +203,7 @@ public class PlaceDao extends Dao<Place> {
 
         String getPlacesByName = "SELECT " + columns + ", MIN(grp) AS source_group FROM ("
                 + selectWithDiacritics + " UNION ALL " + selectNoDiacritics + ") AS " + alias + " GROUP BY "
-                + PlacesTable.COLUMN_ID + " ORDER BY MIN(grp) ASC, " + PlacesTable.COLUMN_PLACE_TYPE
+                + BaseColumns._ID + " ORDER BY MIN(grp) ASC, " + PlacesTable.COLUMN_PLACE_TYPE
                 + " ASC, " + PlacesTable.COLUMN_NAME + " COLLATE LOCALIZED ASC ";
 
         if (limit != null && limit > 0) {

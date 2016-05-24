@@ -7,6 +7,7 @@ package pl.ipebk.tabi.database.tables;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class PlacesTable extends Table<Place> {
     public static final String TABLE_NAME = "places";
 
     private static final String[] TABLE_COLUMNS = {
-            COLUMN_ID,
+            BaseColumns._ID,
             COLUMN_NAME,
             COLUMN_NAME_LOWER,
             COLUMN_SEARCH_PHRASE,
@@ -94,7 +95,7 @@ public class PlacesTable extends Table<Place> {
 
     @Override public Place cursorToModel(Cursor cursor) {
         Place place = new Place();
-        place.setId(cursor.getLong(cursor.getColumnIndex(COLUMN_ID)));
+        place.setId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
         place.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
 
         int placeTypeIndex = cursor.getColumnIndex(COLUMN_PLACE_TYPE);

@@ -18,8 +18,8 @@ import timber.log.Timber;
  * update, and remove sections
  */
 public abstract class SectionedCursorRecyclerViewAdapter extends CursorRecyclerViewAdapter<RecyclerView.ViewHolder> {
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
+    static final int TYPE_HEADER = 0;
+    static final int TYPE_ITEM = 1;
 
     protected boolean isValid = true;
     protected HashMap<Integer, Section> sections = new HashMap<>();

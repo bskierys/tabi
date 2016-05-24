@@ -5,6 +5,7 @@ import android.animation.AnimatorSet;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
@@ -44,7 +46,9 @@ import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.DoodleImage;
+import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.Stopwatch;
+import pl.ipebk.tabi.utils.StopwatchManager;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -59,6 +63,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
+    @Inject StopwatchManager stopwatchManager;
+    @Inject FontManager fontManager;
     // toolbar
     @Bind(R.id.txt_searched) TextView searchedTextView;
     @Bind(R.id.editTxt_search) EditText searchedEditText;
@@ -83,19 +89,25 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.img_placeholder) ImageView placeHolder;
     @Bind(R.id.scroll_container) ScrollView scrollContainer;
 
-    private final Stopwatch stopwatch = new Stopwatch();
+    private Stopwatch stopwatch;
+    private Typeface doodleHeaderFont;
+    private Typeface doodleDescriptionFont;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
-        stopwatch.reset();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+
         presenter.attachView(this);
         toolbarIndicator.setVisibility(View.GONE);
+        doodleHeaderFont = fontManager.get("bebas", Typeface.NORMAL);
+        doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
 
+        stopwatch = stopwatchManager.getDefaultStopwatch();
+        stopwatch.reset();
         clearPreviewLayout();
         prepareOverScroll();
         loadData();
@@ -249,6 +261,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
+                .headerFont(doodleHeaderFont)
+                .descriptionFont(doodleDescriptionFont)
                 .spaceBeforeImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Map_Space_Before))
                 .spaceAfterImage(getResources().getDimensionPixelSize(
@@ -347,6 +361,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
                 .height(height - placeHolder.getPaddingTop() - placeHolder.getPaddingBottom())
                 .width(width - placeHolder.getPaddingRight() - placeHolder.getPaddingLeft())
+                .headerFont(doodleHeaderFont)
+                .descriptionFont(doodleDescriptionFont)
                 .spaceBeforeImage(getResources().getDimensionPixelSize(
                         R.dimen.Details_Height_Doodle_Empty_Space_Before))
                 .spaceAfterImage(getResources().getDimensionPixelSize(

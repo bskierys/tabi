@@ -6,13 +6,13 @@
 package pl.ipebk.tabi.ui.search;
 
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
 import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.tables.PlacesTable;
 
 /**
- * Class representing list item on place list.
- * It has only necessary information to show.
+ * Class representing list item on place list. It has only necessary information to show.
  */
 public class PlaceListItem {
     private long placeId;
@@ -24,7 +24,7 @@ public class PlaceListItem {
     private Place.Type placeType;
 
     public PlaceListItem(Cursor cursor) {
-        setPlaceId(cursor.getLong(cursor.getColumnIndex(PlacesTable.COLUMN_ID)));
+        setPlaceId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
         setPlaceName(cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_NAME)));
         setVoivodeship(cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_VOIVODESHIP)));
         setPowiat(cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_POWIAT)));
@@ -38,6 +38,8 @@ public class PlaceListItem {
             setPlaceType(Place.Type.UNSPECIFIED);
         }
     }
+
+    public PlaceListItem() {}
 
     public long getPlaceId() {
         return placeId;

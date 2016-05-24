@@ -141,6 +141,17 @@ dependencies {
     // unit
     testCompile mobileDependencies.junit
     testCompile mobileDependencies.mockito
+    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile "org.robolectric:shadows-support-v4:3.0"
+    testCompile 'org.assertj:assertj-core:2.0.0'
+    testCompile("com.squareup.assertj:assertj-android:1.1.1") {
+        exclude group: "com.android.support", module: "support-annotations"
+        exclude group: "com.android.support", module: "support-v4"
+    }
+    testCompile("com.squareup.assertj:assertj-android-recyclerview-v7:1.1.1@aar") {
+        exclude group: "com.android.support", module: "support-annotations"
+        exclude group: "com.android.support", module: "support-v4"
+    }
 
     // integration
     androidTestCompile mobileDependencies.mockito

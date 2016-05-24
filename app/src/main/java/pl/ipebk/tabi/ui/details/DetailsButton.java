@@ -10,6 +10,9 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import javax.inject.Inject;
+
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.utils.FontManager;
 
@@ -20,6 +23,8 @@ import pl.ipebk.tabi.utils.FontManager;
 public class DetailsButton extends Button {
     private String text;
     private Drawable doodle;
+    private Context context;
+    @Inject FontManager fontManager;
 
     private TextPaint textPaint;
     private float textHeight;
@@ -31,6 +36,7 @@ public class DetailsButton extends Button {
 
     public DetailsButton(Context context) {
         super(context);
+        this.context = context;
 
         if (!isInEditMode()) {
             init(null, 0);
@@ -39,6 +45,7 @@ public class DetailsButton extends Button {
 
     public DetailsButton(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
 
         if (!isInEditMode()) {
             init(attrs, 0);
@@ -47,6 +54,7 @@ public class DetailsButton extends Button {
 
     public DetailsButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.context = context;
 
         if (!isInEditMode()) {
             init(attrs, defStyle);
@@ -54,8 +62,8 @@ public class DetailsButton extends Button {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.DetailsButton, defStyle, 0);
+        App.get(context).getViewComponent().inject(this);
 
         paddingTop = getPaddingTop();
         paddingBottom = getPaddingBottom();
@@ -80,7 +88,7 @@ public class DetailsButton extends Button {
     }
 
     private void invalidateTextPaintAndMeasurements() {
-        Typeface bebas = FontManager.getInstance().get("bebas", Typeface.NORMAL);
+        Typeface bebas = fontManager.get("bebas", Typeface.NORMAL);
 
         textPaint.setTypeface(bebas);
         textPaint.setTextSize(getContext().getResources().getDimensionPixelSize(R.dimen.Details_Text_Button));

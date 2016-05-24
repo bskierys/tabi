@@ -15,6 +15,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.utils.NameFormatHelper;
+import pl.ipebk.tabi.utils.StopwatchManager;
 
 /**
  * Provide application-level dependencies.
@@ -37,5 +39,9 @@ public class ApplicationModule {
 
     @Provides @Singleton Bus provideEventBus() {
         return new Bus();
+    }
+
+    @Provides @Singleton StopwatchManager provideStopwatchManager() {
+        return new StopwatchManager();
     }
 }

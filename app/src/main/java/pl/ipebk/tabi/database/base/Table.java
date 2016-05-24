@@ -13,8 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
  * Base class for all database tables. It consists of basic methods for all tables.
  */
 public abstract class Table<E> {
-    public static final String COLUMN_ID = "_id";
-
     public abstract String getTableName();
 
     protected abstract String[] getTableColumns();

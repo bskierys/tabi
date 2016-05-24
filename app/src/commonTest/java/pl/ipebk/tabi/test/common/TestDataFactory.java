@@ -17,6 +17,7 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.ui.search.PlaceListItem;
 
 /**
  * Factory class that makes instances of data models with random field values.
@@ -116,5 +117,28 @@ public class TestDataFactory {
         history.setSearchType(type);
         history.setTimeSearched(new Date(time));
         return history;
+    }
+
+    public static PlaceListItem createStandardPlaceItem(String name, String plateStart, Place.Type type){
+        PlaceListItem place = new PlaceListItem();
+
+        place.setPlaceName(name);
+        place.setPlaceType(type);
+        place.setPlateStart(plateStart);
+        place.setPowiat(name);
+        place.setVoivodeship(name);
+
+        return place;
+    }
+
+    public static PlaceListItem createSpecialPlaceItem(String twoWordName, String plateStart){
+        PlaceListItem place = new PlaceListItem();
+
+        place.setPlaceName(twoWordName);
+        place.setPlaceType(Place.Type.SPECIAL);
+        place.setPlateStart(plateStart);
+        place.setVoivodeship(twoWordName);
+
+        return place;
     }
 }
