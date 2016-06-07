@@ -5,6 +5,10 @@
 */
 package pl.ipebk.tabi.ui.main;
 
+import android.database.Cursor;
+
+import java.util.List;
+
 import pl.ipebk.tabi.ui.base.MvpView;
 
 /**
@@ -15,9 +19,10 @@ public interface MainMvpView extends MvpView {
 
     void hideLoading();
 
-    void showTime(String time);
+    void showCategories(List<MainListItem> categories);
 
-    void showError(String errorText);
+    void goToSearch(String phrase);
 
-    void goToSearch();
+    // TODO: 2016-06-03 remove this method
+    void prompt(String message);
 }

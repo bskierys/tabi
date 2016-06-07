@@ -11,6 +11,8 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
+import pl.ipebk.tabi.utils.ResourceHelper;
+
 import static org.mockito.Mockito.*;
 
 @Module public class TestViewModule {
@@ -27,5 +29,9 @@ import static org.mockito.Mockito.*;
 
     @Provides public FontManager provideFontManager() {
         return mock(FontManager.class);
+    }
+
+    @Provides ResourceHelper provideResourceHelper() {
+        return mock(ResourceHelper.class);
     }
 }

@@ -18,6 +18,7 @@
     <!--  grey scale palette  -->
     <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFF</color>
+    <color name="white_semi_transparent">#8Cffffff</color>
     <color name="black">#000</color>
 
     <!--  black transparency  -->

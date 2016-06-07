@@ -21,11 +21,15 @@ import pl.ipebk.tabi.R;
  */
 public class FontDecorator {
     private Context context;
+    private TextView textView;
     @Inject FontManager fontManager;
 
-    public FontDecorator(Context context) {
+    public FontDecorator(Context context, TextView textView) {
         this.context = context;
-        App.get(context).getViewComponent().inject(this);
+        this.textView = textView;
+        if(!textView.isInEditMode()){
+            App.get(context).getViewComponent().inject(this);
+        }
     }
 
     /**
@@ -33,10 +37,9 @@ public class FontDecorator {
      * attribute along with appropriate names from fonts.xml, to style your textView.
      * If font family is not set in attributes, default font will be applied
      *
-     * @param textView Intence of {@link TextView} to decor with custom font
      * @param attrs    Attributes to set
      */
-    public void initFromAttributes(TextView textView, AttributeSet attrs) {
+    public void initFromAttributes(AttributeSet attrs) {
         if (!textView.isInEditMode()) {
             // Fonts work as a combination of particular family and the style.
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Fonts);
@@ -56,7 +59,7 @@ public class FontDecorator {
      * @param family Font family name
      * @param style  style to apply.
      */
-    public void setCustomFont(TextView textView, String family, int style) {
+    public void setCustomFont(String family, int style) {
         Typeface typeface = fontManager.get(family, style);
         textView.setTypeface(typeface);
     }
@@ -66,7 +69,7 @@ public class FontDecorator {
      *
      * @param family Font family name
      */
-    public void setCustomFont(TextView textView, String family) {
+    public void setCustomFont(String family) {
         Typeface typeface = fontManager.get(family, Typeface.NORMAL);
         textView.setTypeface(typeface);
     }

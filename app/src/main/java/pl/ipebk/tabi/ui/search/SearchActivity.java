@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.concurrent.TimeUnit;
@@ -25,15 +27,20 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.State;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.utils.DoodleImage;
+import pl.ipebk.tabi.utils.FontManager;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
+import timber.log.Timber;
 
 public class SearchActivity extends BaseActivity implements PlaceFragmentEventListener, SearchMvpView {
     public static final String PARAM_SEARCH_TEXT = "param_search_text";
@@ -46,11 +53,15 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     private static final int KEYBOARD_SHOW_DELAY = 200;
 
     @Inject SearchPresenter presenter;
+    @Inject FontManager fontManager;
     @Bind(R.id.editTxt_search) EditText searchEditText;
     @Bind(R.id.txt_searched) TextView searchedText;
     @Bind(R.id.pager_search) ViewPager searchPager;
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.indicator) SearchTabPageIndicator indicator;
+    @Bind(R.id.btn_clear) View clearButton;
+    @State String currentSearch;
+    @State boolean isFullySearched;
 
     private PlaceFragment searchPlacesFragment;
     private PlaceFragment searchPlatesFragment;
@@ -58,6 +69,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     private BehaviorSubject<Integer> viewCreationSubject;
     private Bitmap noResultsBitmap;
     private DoodleImage noResultsDoodle;
+    private Typeface doodleHeaderFont;
+    private Typeface doodleDescriptionFont;
+
+    private Subscription editorActionSubscription;
+    private Subscription textChangesSubscription;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,24 +83,20 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         setSupportActionBar(toolbar);
         presenter.attachView(this);
 
-        prepareSearchToolbar();
+        doodleHeaderFont = fontManager.get("bebas", Typeface.NORMAL);
+        doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
+
+        RxViewPager.pageSelections(searchPager)
+                .subscribe(page -> {
+                    if(page == SEARCH_PLACES_FRAGMENT_POSITION){
+                        searchEditText.setHint(getString(R.string.main_search_bar_hint_places));
+                    }else if(page == SEARCH_PLATES_FRAGMENT_POSITION) {
+                        searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
+                    }
+                });
+
         preparePlaceFragments();
         prepareDoodleImages();
-    }
-
-    private void prepareSearchToolbar() {
-        searchedText.setVisibility(View.GONE);
-
-        RxTextView.textChanges(searchEditText)
-                  .debounce(300, TimeUnit.MILLISECONDS)
-                  .subscribe(text -> {
-                      presenter.quickSearchForText(text.toString());
-                  });
-        RxTextView.editorActionEvents(searchEditText)
-                  .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
-                  .subscribe(e -> {
-                      presenter.deepSearchForText(searchEditText.getText().toString());
-                  });
     }
 
     private void preparePlaceFragments() {
@@ -99,6 +111,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     private void prepareDoodleImages() {
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+                .headerFont(doodleHeaderFont)
+                .descriptionFont(doodleDescriptionFont)
                 .height(getResources().getDimensionPixelSize(R.dimen.Search_Height_Doodle))
                 .spaceBeforeImage(getResources().getDimensionPixelSize(
                         R.dimen.Search_Height_Doodle_Space_Before))
@@ -131,22 +145,79 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override protected void onResume() {
         super.onResume();
-        presenter.refreshSearch();
-        searchEditText.requestFocus();
 
         boolean shouldShowKeyboard = getIntent().getBooleanExtra(PARAM_SHOW_KEYBOARD, false);
         String searchText = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
         getIntent().removeExtra(PARAM_SEARCH_TEXT);
+
+        searchEditText.postDelayed(() -> prepareSearch(searchText, shouldShowKeyboard), KEYBOARD_SHOW_DELAY);
+    }
+
+    private void prepareSearch(String searchText, boolean showKeyboard) {
+        searchedText.setVisibility(View.GONE);
+
+        if (currentSearch != null && !currentSearch.equals("")) {
+            showClearButton();
+            if (isFullySearched) {
+                presenter.deepSearchForText(currentSearch);
+            } else {
+                presenter.quickSearchForText(currentSearch);
+            }
+        } else {
+            hideClearButton();
+        }
+
+        PublishSubject<Integer> textChangeSubject = PublishSubject.create();
+        textChangeSubject.asObservable().subscribe(i -> {
+            Timber.d("Text can now be searched");
+        });
+
         if (searchText != null) {
+            currentSearch = searchText;
+            showClearButton();
             presenter.startInitialSearchForText(searchText);
         }
 
-        if (shouldShowKeyboard) {
-            searchEditText.postDelayed(() -> {
-                InputMethodManager keyboard = (InputMethodManager)
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                keyboard.showSoftInput(searchEditText, 0);
-            }, KEYBOARD_SHOW_DELAY);
+        if (showKeyboard) {
+            showKeyboard();
+        } else {
+            hideKeyboard();
+        }
+
+        textChangesSubscription = RxTextView
+                .textChanges(searchEditText)
+                .skipUntil(textChangeSubject)
+                .debounce(300, TimeUnit.MILLISECONDS)
+                .map(CharSequence::toString)
+                .doOnNext(presenter::quickSearchForText)
+                .doOnNext(text -> currentSearch = text)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(text -> {
+                    if (text != null && !text.equals("")) {
+                        showClearButton();
+                    } else {
+                        hideClearButton();
+                    }
+                });
+
+        editorActionSubscription = RxTextView
+                .editorActionEvents(searchEditText)
+                .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
+                .subscribe(e -> {
+                    presenter.deepSearchForText(searchEditText.getText().toString());
+                });
+
+        presenter.refreshSearch();
+        textChangeSubject.onNext(1);
+    }
+
+    @Override protected void onPause() {
+        super.onPause();
+        if (editorActionSubscription != null) {
+            editorActionSubscription.unsubscribe();
+        }
+        if (textChangesSubscription != null) {
+            textChangesSubscription.unsubscribe();
         }
     }
 
@@ -156,12 +227,12 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     @OnClick(R.id.btn_back) public void onBackButton() {
-        // TODO: 2016-05-15 better back behaviour
         onBackPressed();
     }
 
     @OnClick(R.id.btn_clear) public void onClearButton() {
         presenter.clearSearch();
+        hideClearButton();
     }
 
     //region View callbacks
@@ -186,6 +257,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     //region Mvp View methods
     @Override public void showFullSearchInPlacesSection(Cursor cursor) {
         if (searchPlacesFragment.isViewCreated()) {
+            isFullySearched = true;
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
             searchPlacesFragment.showFullHeaders(cursor.getCount());
@@ -194,6 +266,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void showBestSearchInPlacesSection(Cursor cursor) {
         if (searchPlacesFragment.isViewCreated()) {
+            isFullySearched = false;
             searchPlacesFragment.setData(cursor);
             searchPlacesFragment.showList();
             searchPlacesFragment.showQuickHeaders(cursor.getCount());
@@ -210,6 +283,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void showEmptyStateInPlacesSection() {
         if (searchPlacesFragment.isViewCreated()) {
+            isFullySearched = false;
             getNoResultsBitmap().subscribe(searchPlacesFragment::showNoResultsImage);
             searchPlacesFragment.setData(null);
             searchPlacesFragment.hideList();
@@ -233,13 +307,15 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     @Override public void hideKeyboard() {
-        View view = this.getCurrentFocus();
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        searchEditText.clearFocus();
+        keyboard.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
 
-        if (view != null) {
-            view.clearFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+    @Override public void showKeyboard() {
+        InputMethodManager keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        searchEditText.requestFocus();
+        keyboard.showSoftInput(searchEditText, 0);
     }
 
     @Override public void goToPlaceDetails(long placeId, String searchedPlate,
@@ -260,8 +336,17 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         }
     }
 
+    @Override public void showClearButton() {
+        clearButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override public void hideClearButton() {
+        clearButton.setVisibility(View.INVISIBLE);
+    }
+
     @Override public void showEmptyStateInPlatesSection() {
         if (searchPlatesFragment.isViewCreated()) {
+            isFullySearched = false;
             getNoResultsBitmap().subscribe(searchPlatesFragment::showNoResultsImage);
             searchPlatesFragment.setData(null);
             searchPlatesFragment.hideList();
@@ -277,6 +362,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void showFullSearchInPlatesSection(Cursor cursor) {
         if (searchPlatesFragment.isViewCreated()) {
+            isFullySearched = true;
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
             searchPlatesFragment.showFullHeaders(cursor.getCount());
@@ -285,6 +371,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void showBestSearchInPlatesSection(Cursor cursor) {
         if (searchPlatesFragment.isViewCreated()) {
+            isFullySearched = false;
             searchPlatesFragment.setData(cursor);
             searchPlatesFragment.showList();
             searchPlatesFragment.showQuickHeaders(cursor.getCount());

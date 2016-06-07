@@ -16,6 +16,7 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.di.ActivityContext;
+import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
@@ -55,5 +56,9 @@ public class ActivityModule {
 
     @Provides FontManager provideFontManager() {
         return fontManager;
+    }
+
+    @Provides AnimationHelper provideAnimationHelper() {
+        return new AnimationHelper();
     }
 }

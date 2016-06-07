@@ -36,7 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
-import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
@@ -69,6 +68,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Bind(R.id.txt_searched) TextView searchedTextView;
     @Bind(R.id.editTxt_search) EditText searchedEditText;
     @Bind(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
+    @Bind(R.id.btn_clear) View clearButton;
     // texts
     @Bind(R.id.txt_place_name) TextView placeNameView;
     @Bind(R.id.txt_plate) TextView plateView;
@@ -194,13 +194,13 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @OnClick(R.id.btn_back) public void onBackButton() {
         // TODO: 2016-03-30 animation on back
-        Intent intent = new Intent(this,SearchActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_clear) public void onClearButton() {
-        Intent intent = new Intent(this,SearchActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
         intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, "");
         startActivity(intent);
@@ -214,12 +214,12 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.showOnMap();
     }
 
-    @OnClick(R.id.btn_copy) public void onCopy(){
+    @OnClick(R.id.btn_copy) public void onCopy() {
         presenter.copyToClipboard();
     }
 
     @OnClick(R.id.txt_searched) public void onSearchClicked() {
-        Intent intent = new Intent(this,SearchActivity.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, true);
         startActivity(intent);
     }
@@ -231,6 +231,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Override public void showSearchedText(String searchedText) {
         searchedEditText.setVisibility(View.GONE);
         searchedTextView.setText(searchedText);
+        if (searchedText != null && !searchedText.equals("")) {
+            clearButton.setVisibility(View.VISIBLE);
+        } else {
+            clearButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override public void showPlaceName(String name) {

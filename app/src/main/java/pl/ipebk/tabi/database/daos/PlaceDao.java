@@ -24,7 +24,6 @@ import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.database.tables.PlacesTable;
 import pl.ipebk.tabi.database.tables.PlatesTable;
 import pl.ipebk.tabi.database.tables.SearchHistoryTable;
-import pl.ipebk.tabi.ui.main.CategoryListItem;
 import pl.ipebk.tabi.ui.search.PlaceListItem;
 import rx.Observable;
 import timber.log.Timber;
@@ -38,34 +37,6 @@ public class PlaceDao extends Dao<Place> {
         table = new PlacesTable();
         ((PlacesTable) table).setPlateDao(plateDao);
         ((PlacesTable) table).setPlaceDao(this);
-    }
-
-    /**
-     * @return RxJava query observable that should be mapped to {@link CategoryListItem}. Outcome consists of
-     * voivodeships and special categories sorted by type (voivodeships first) and by localized name.
-     */
-    public Observable<List<CategoryListItem>> getVoivodeshipsObservable() {
-        Pair<String, String[]> sql = getVoivodeshipsSql();
-        return db.createQuery(table.getTableName(), sql.first, sql.second)
-                 .mapToList(CategoryListItem::new);
-    }
-
-    private Pair<String, String[]> getVoivodeshipsSql() {
-        String[] columns = {PlacesTable.COLUMN_VOIVODESHIP,
-                PlacesTable.COLUMN_PLATE, PlacesTable.COLUMN_PLACE_TYPE};
-
-        String selection = String.format(" %1$s = ? OR %1$s = ? ", PlacesTable.COLUMN_PLACE_TYPE);
-        String[] selectionArgs = {Integer.toString(Place.Type.VOIVODE_CITY.ordinal()),
-                Integer.toString(Place.Type.SPECIAL.ordinal())};
-
-        String groupBy = PlacesTable.COLUMN_VOIVODESHIP + ", " + PlacesTable.COLUMN_PLACE_TYPE;
-        String orderBy = String.format(" %s ASC, %s COLLATE LOCALIZED ASC ",
-                                       PlacesTable.COLUMN_PLACE_TYPE, PlacesTable.COLUMN_VOIVODESHIP);
-
-        String sql = SQLiteQueryBuilder.buildQueryString(false, table.getTableName(),
-                                                         columns, selection, groupBy, null, orderBy, null);
-
-        return new Pair<>(sql, selectionArgs);
     }
 
     public int getNextRowId() {

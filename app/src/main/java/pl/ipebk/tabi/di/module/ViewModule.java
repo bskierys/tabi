@@ -10,8 +10,10 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
+import pl.ipebk.tabi.utils.ResourceHelper;
 
 @Module
 public class ViewModule {
@@ -30,5 +32,9 @@ public class ViewModule {
 
     @Provides FontManager provideFontManager() {
         return fontManager;
+    }
+
+    @Provides ResourceHelper provideResourceHelper() {
+        return new ResourceHelper(context);
     }
 }

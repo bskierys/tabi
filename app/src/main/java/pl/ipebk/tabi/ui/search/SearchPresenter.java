@@ -12,7 +12,6 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.SearchHistory;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
@@ -80,14 +79,14 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         deepSearchForText(searchText);
     }
 
-    public void refreshSearch(){
-        if(lastSearched == null || lastSearched.equals("")){
+    public void refreshSearch() {
+        if (lastSearched == null || lastSearched.equals("")) {
             loadInitialStateForPlaces();
             loadInitialStateForPlates();
         }
     }
 
-    public void clearSearch(){
+    public void clearSearch() {
         lastSearched = null;
         getMvpView().setSearchText(null);
         loadInitialStateForPlaces();
@@ -139,13 +138,14 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
             searchSubscription.unsubscribe();
         }
 
-        searchSubscription = Observable.just(rawPhrase)
-                                       .subscribeOn(Schedulers.computation())
-                                       .observeOn(AndroidSchedulers.mainThread())
-                                       .map(spellCorrector::cleanForSearch)
-                                       .doOnNext(cleanedText -> lastSearched = cleanedText)
-                                       .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
-                                                  e -> Timber.e("Error during searching for places", e));
+        searchSubscription = Observable
+                .just(rawPhrase)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(spellCorrector::cleanForSearch)
+                .doOnNext(cleanedText -> lastSearched = cleanedText)
+                .subscribe(s -> beginSearchForCleaned(limit, s, searchType),
+                           e -> Timber.e("Error during searching for places", e));
     }
 
     private void beginSearchForCleaned(Integer limit, String s, int searchType) {

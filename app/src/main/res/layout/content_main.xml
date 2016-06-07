@@ -8,35 +8,104 @@
     android:layout_height="match_parent"
     android:background="@color/grey_100"
     android:fillViewport="true"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/category_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="GridLayoutManager"
+        tools:listitem="@layout/row_main"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_tabi_back"
+            style="@style/Main_Doodle"
+            android:src="@drawable/tabi_main_back"/>
+
+        <RelativeLayout
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/Main.Margin.SearchBar.Bottom"
+            android:layout_marginLeft="@dimen/Main.Margin.SearchBar.Horizontal"
+            android:layout_marginRight="@dimen/Main.Margin.SearchBar.Horizontal"
+            android:layout_marginTop="@dimen/Main.Margin.SearchBar.Top.Lowest">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Main.Height.SearchBar"
+                android:scaleType="fitXY"
+                android:src="@drawable/search_bar_shadow"
+                tools:ignore="contentDescription"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Main.Height.SearchBar.Inner"
+                android:layout_marginLeft="@dimen/Main.Margin.SearchBar.Inner.Horizontal"
+                android:layout_marginRight="@dimen/Main.Margin.SearchBar.Inner.Horizontal"
+                android:layout_marginTop="@dimen/Main.Margin.SearchBar.Inner.Top"
+                android:contentDescription="@string/description_search"
+                android:src="@drawable/search_bar"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/search_bar_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/Main.Margin.SearchBar.Bottom"
+            android:layout_marginLeft="@dimen/Main.Margin.SearchBar.Horizontal"
+            android:layout_marginRight="@dimen/Main.Margin.SearchBar.Horizontal"
+            android:layout_marginTop="@dimen/Main.Margin.SearchBar.Top.Lowest">
+
+            <pl.ipebk.tabi.ui.custom.FontTextView
+                android:id="@+id/txt_searched"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Main.Height.SearchBar.Inner"
+                android:layout_marginLeft="@dimen/Main.Margin.SearchBar.Text.Horizontal"
+                android:layout_marginRight="@dimen/Main.Margin.SearchBar.Text.Horizontal"
+                android:layout_marginTop="@dimen/Main.Margin.SearchBar.Inner.Top"
+                android:gravity="center_vertical"
+                android:text="@string/main_search_bar_hint_plates"
+                android:textColor="@color/white_semi_transparent"
+                android:textSize="@dimen/Details.Text.Header"
+                app:fontFamily="montserrat"/>
+
+            <ImageView
+                android:id="@+id/ic_search"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/Main.Height.SearchBar.Inner"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/Main.Margin.SearchBar.Icon"
+                android:layout_marginRight="@dimen/Main.Margin.SearchBar.Icon"
+                android:layout_marginTop="@dimen/Main.Margin.SearchBar.Inner.Top"
+                android:src="@drawable/ic_search"
+                tools:ignore="contentDescription"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/img_tabi_front"
+            style="@style/Main_Doodle"
+            android:src="@drawable/tabi_main_front"/>
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/img_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/grey_100"
+        android:contentDescription="@string/description_loading"
+        android:paddingTop="@dimen/StatusBar"
         android:scaleType="centerInside"
-        android:src="@drawable/loading_screen"/>
-
-    <pl.ipebk.tabi.ui.custom.FontTextView
-        android:id="@+id/txt_prompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:text="Hello World!"
-        android:textColor="#333333"
-        android:textSize="34sp"
-        app:fontFamily="bebas"/>
-
-    <Button
-        android:id="@+id/btn_go"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Go"/>
+        android:src="@drawable/loading_screen"
+        android:visibility="gone"/>
 </RelativeLayout>

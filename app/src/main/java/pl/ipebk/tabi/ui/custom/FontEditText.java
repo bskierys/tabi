@@ -19,26 +19,26 @@ public class FontEditText extends EditText {
 
     public FontEditText(Context context) {
         super(context);
-        decorator = new FontDecorator(context);
+        decorator = new FontDecorator(context, this);
     }
 
     public FontEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        decorator = new FontDecorator(context);
-        decorator.initFromAttributes(this, attrs);
+        decorator = new FontDecorator(context, this);
+        decorator.initFromAttributes(attrs);
     }
 
     public FontEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        decorator = new FontDecorator(context);
-        decorator.initFromAttributes(this, attrs);
+        decorator = new FontDecorator(context, this);
+        decorator.initFromAttributes(attrs);
     }
 
     public void setCustomFont(String fontFamily) {
-        decorator.setCustomFont(this, fontFamily);
+        decorator.setCustomFont(fontFamily);
     }
 
     public void setCustomFont(String fontFamily, int style) {
-        decorator.setCustomFont(this, fontFamily, style);
+        decorator.setCustomFont(fontFamily, style);
     }
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:id="@+id/root"
               xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -14,14 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/Shadows.Height.2dp"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
-        android:id="@+id/txt_header"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/Search.Height.Header"
-        android:gravity="center"
-        android:textColor="@color/grey_850"
-        android:textSize="@dimen/Search.Text.Header"
-        app:fontFamily="bebas"/>
+    <include layout="@layout/row_header"/>
 
     <ImageView
         android:id="@+id/divider"
@@ -29,5 +21,5 @@
         android:layout_height="@dimen/Search.Height.Header.Divider"
         android:layout_marginLeft="@dimen/Details.Margin.Right"
         android:layout_marginRight="@dimen/Details.Margin.Right"
-        android:src="@color/sienna_400"/>
+        android:src="@color/colorPrimary"/>
 </LinearLayout>

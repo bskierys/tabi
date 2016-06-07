@@ -8,6 +8,7 @@
     <dimen name="Doodle.Width.Default">300dp</dimen>
     <dimen name="Doodle.Margin.Minimal">44dp</dimen>
 
+    <!--  DETAILS  -->
     <dimen name="Details.Height.Map">264dp</dimen>
     <dimen name="Details.Height.Placeholder">336dp</dimen>
     <dimen name="Details.Height.Release.Scroll">48dp</dimen>
@@ -35,6 +36,7 @@
     <dimen name="Details.Elevation">3dp</dimen>
     <dimen name="Details.Height.Text.Description">22dp</dimen>
 
+    <!--  SEARCH  -->
     <dimen name="Search.Text.Header">20sp</dimen>
     <dimen name="Search.Height.Tabs">48dp</dimen>
     <dimen name="Search.Height.Tabs.Underline">4dp</dimen>
@@ -47,7 +49,36 @@
     <dimen name="Search.Height.Header">44dp</dimen>
     <dimen name="Search.Height.Header.Divider">2dp</dimen>
 
+    <!--  MAIN  -->
+    <dimen name="Main.Height.Header">304dp</dimen>
+    <dimen name="Main.Width.Header.Divider">56dp</dimen>
+    <dimen name="Main.Margin.Greeting.Top">76dp</dimen>
+    <dimen name="Main.Margin.Greeting.Horizontal">56dp</dimen>
+    <dimen name="Main.Text.Greeting.Large">32sp</dimen>
+    <dimen name="Main.Height.Greeting.Doodle">128dp</dimen>
+    <dimen name="Main.Margin.Greeting.Doodle.Top">140dp</dimen>
+    <dimen name="Main.Margin.Greeting.Doodle.Right">36dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Top.Lowest">192dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Top.Highest">0dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Bottom">20dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Horizontal">12dp</dimen>
+    <dimen name="Main.Height.SearchBar.Inner">48dp</dimen>
+    <dimen name="Main.Height.SearchBar">64dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Inner.Top">4dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Inner.Horizontal">8dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Text.Horizontal">44dp</dimen>
+    <dimen name="Main.Margin.SearchBar.Icon">24dp</dimen>
+    <dimen name="Main.Text.Tile">14sp</dimen>
+    <dimen name="Main.Height.Tile">180dp</dimen>
+    <dimen name="Main.Margin.Tile">4dp</dimen>
+    <dimen name="Main.Padding.Tile">20dp</dimen>
+    <dimen name="Main.Height.Tile.Image">48dp</dimen>
+    <dimen name="Main.Text.Caption.Small">12sp</dimen>
+    <dimen name="Main.Text.Caption.Large">16sp</dimen>
+
+    <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
+    <dimen name="StatusBar">22dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

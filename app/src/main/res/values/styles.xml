@@ -37,10 +37,6 @@
         <item name="android:layout_alignParentBottom">true</item>
     </style>
 
-    <style name="Activity">
-        <item name="android:background">@color/grey_100</item>
-    </style>
-
     <attr name="fontFamily" format="string" />
 
     <declare-styleable name="Fonts">
@@ -67,10 +63,44 @@
     </declare-styleable>
 
     <!--  MAIN  -->
-    <style name="Main" parent="Activity"/>
+    <style name="Main_Doodle">
+        <item name="android:layout_marginRight">@dimen/Main.Margin.Greeting.Doodle.Right</item>
+        <item name="android:layout_marginTop">@dimen/Main.Margin.Greeting.Doodle.Top</item>
+        <item name="android:layout_height">@dimen/Main.Height.Greeting.Doodle</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
 
-    <!--  Search  -->
-    <style name="Search" parent="Activity"/>
+    <style name="Main_Text_Caption">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginRight">80dp</item>
+    </style>
+
+    <!--todo: dimens-->
+    <style name="Main_Text_Caption.Small" parent="Main_Text_Caption">
+        <item name="android:textSize">@dimen/Main.Text.Caption.Small</item>
+        <item name="android:textColor">@color/grey_850</item>
+    </style>
+
+    <style name="Main_Text_Caption.Large" parent="Main_Text_Caption">
+        <item name="android:textSize">@dimen/Main.Text.Caption.Large</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Main_Text_Tile">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/Main.Text.Tile</item>
+    </style>
+
+    <style name="Main_Text_Greeting">
+        <item name="android:textSize">@dimen/Main.Text.Greeting.Large</item>
+        <item name="android:textColor">@color/grey_850</item>
+        <item name="fontFamily">bebas</item>
+    </style>
 
     <!--  DETAILS  -->
     <style name="Details">

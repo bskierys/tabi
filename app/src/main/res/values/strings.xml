@@ -2,6 +2,12 @@
     <!--  PREVIEWS  -->
     <string name="preview_place_name">Białogard</string>
     <string name="preview_plate">ZBI</string>
+    <string name="preview_doodle_greeting">Hej! Jestem Tabi!</string>
+    <string name="preview_doodle_caption">Znam wszystkie tablice rejestracyjne. Śmiało. Pytaj!</string>
+    <string name="preview_category_name">wygwizdów</string>
+
+    <!--  DEFAULTS  -->
+    <string name="default_resource_string">brak tekstu</string>
 
     <!--  DETAILS  -->
     <string name="details_gmina">gmina</string>
@@ -49,6 +55,35 @@
     <!--  DOODLE DEFAULT  -->
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>
     <string name="doodle_default_description">A to peszek</string>
+    
+    <!--  MAIN  -->
+    <string name="main_list_header_browse">PRZEGLĄDAJ</string>
+    <string name="main_list_header_about_app">O APLIKACJI</string>
+    <string name="main_list_header_none"> </string>
+    <string name="main_list_element_dolnoslaskie">dolnośląskie</string>
+    <string name="main_list_element_kujawskopomorskie">kujawsko-pomorskie</string>
+    <string name="main_list_element_lodzkie">łódzkie</string>
+    <string name="main_list_element_lubelskie">lubelskie</string>
+    <string name="main_list_element_lubuskie">lubuskie</string>
+    <string name="main_list_element_malopolskie">małopolskie</string>
+    <string name="main_list_element_mazowieckie">mazowieckie</string>
+    <string name="main_list_element_opolskie">opolskie</string>
+    <string name="main_list_element_podkarpackie">podkarpackie</string>
+    <string name="main_list_element_podlaskie">podlaskie</string>
+    <string name="main_list_element_pomorskie">pomorskie</string>
+    <string name="main_list_element_slaskie">śląskie</string>
+    <string name="main_list_element_swietokrzyskie">świętokrzyskie</string>
+    <string name="main_list_element_warminskomazurskie">warmińsko-mazurskie</string>
+    <string name="main_list_element_wielkopolskie">wielkopolskie</string>
+    <string name="main_list_element_zachodniopomorskie">zachodnio-pomorskie</string>
+    <string name="main_list_element_sluzbybezpieczenstwa">służby bezpieczeństwa</string>
+    <string name="main_list_element_tablicewojskowe">tablice wojskowe</string>
+    <string name="main_list_element_licencje">licencje bibliotek zewnętrznych</string>
+    <string name="main_list_element_ocen">oceń naszą aplikację</string>
+    <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>
+    <string name="main_doodle_caption">Znam *wszystkie* tablice rejestracyjne. Śmiało. Pytaj!</string>
+    <string name="main_search_bar_hint_places">Skąd szukasz rejestracji?</string>
+    <string name="main_search_bar_hint_plates">Jakiej rejestracji szukasz?</string>
 
     <string name="app_name">Tabi</string>
     <string name="action_settings">Settings</string>

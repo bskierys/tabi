@@ -6,4 +6,7 @@
     <string name="description_placeholder">There is nothing more in here</string>
     <string name="description_no_results">No results</string>
     <string name="description_close_button">Clear all search</string>
+    <string name="description_search">Search bar</string>
+    <string name="description_loading">Please wait. Loading&#8230;</string>
+    <string name="description_category_image">Category image</string>
 </resources>

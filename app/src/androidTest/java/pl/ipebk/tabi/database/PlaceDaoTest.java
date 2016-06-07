@@ -15,58 +15,23 @@ import pl.ipebk.tabi.database.models.Place;
 import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.test.common.TestDataFactory;
-import pl.ipebk.tabi.ui.main.CategoryListItem;
 import pl.ipebk.tabi.ui.search.PlaceListItem;
 
 public class PlaceDaoTest extends DatabaseTest {
-    @MediumTest public void testGetVoivodeships() throws Exception {
-        Collator collator = Collator.getInstance();
-
-        String voivodeshipName1 = "A";
-        String voivodeshipName2 = "Ś";
-        String voivodeshipName3 = "Z";
-
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName1, null, Place.Type.VOIVODE_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName2, null, Place.Type.VOIVODE_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName3, null, Place.Type.VOIVODE_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName1, null, Place.Type.SPECIAL));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName2, null, Place.Type.SPECIAL));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace(voivodeshipName3, null, Place.Type.SPECIAL));
-
-        databaseHelper.getPlaceDao().getVoivodeshipsObservable()
-                .subscribe(voivodeships -> {
-                    assertEquals(6, voivodeships.size());
-
-                    // check if voivodeships are before specials
-                    for (int i = 0; i < 3; i++) {
-                        assertEquals(Place.Type.VOIVODE_CITY, voivodeships.get(i).getType());
-                        assertEquals(Place.Type.SPECIAL, voivodeships.get(i + 3).getType());
-                    }
-
-                    // check order of voivodeships
-                    String lastOne = voivodeships.get(0).getName();
-                    for (int i = 1; i < 3; i++) {
-                        CategoryListItem categoryListItem = voivodeships.get(i);
-                        CollationKey key = collator.getCollationKey(categoryListItem.getName());
-                        int compare = key.compareTo(collator.getCollationKey(lastOne));
-
-                        assertTrue(compare > 0);
-                        lastOne = categoryListItem.getName();
-                    }
-                });
-    }
-
     @MediumTest public void testGetPlaceForOnlyOnePlate() throws Exception {
         String plateStartToFind = "TAB";
-        Place placeToFind = TestDataFactory.createStandardPlace(plateStartToFind, plateStartToFind, Place.Type.POWIAT_CITY);
+        Place placeToFind = TestDataFactory.createStandardPlace(plateStartToFind, plateStartToFind, Place.Type
+                .POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeToFind);
 
         String plateStartNotToFind = "BAT";
-        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place
+                .Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeNotToFind);
 
         List<Place> foundPlates = databaseHelper.getPlaceDao()
-                .getPlaceListForPlateStart(Character.toString(plateStartToFind.charAt(0)), null);
+                                                .getPlaceListForPlateStart(Character.toString(plateStartToFind.charAt
+                                                        (0)), null);
 
         assertTrue(1 == foundPlates.size());
 
@@ -93,17 +58,20 @@ public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testGetPlaceForAdditionalPlate() throws Exception {
         String plateStartToFind = "TAB";
         String plateStartNotToFind = "BAT";
-        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+        Place placeNotToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place
+                .Type.POWIAT_CITY);
         databaseHelper.getPlaceDao().add(placeNotToFind);
 
-        Place placeToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type.POWIAT_CITY);
+        Place placeToFind = TestDataFactory.createStandardPlace(plateStartNotToFind, plateStartNotToFind, Place.Type
+                .POWIAT_CITY);
         Plate plate = new Plate();
         plate.setPattern(plateStartToFind);
         placeToFind.getPlates().add(plate);
         databaseHelper.getPlaceDao().add(placeToFind);
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao()
-                .getPlaceListForPlateStart(Character.toString(plateStartToFind.charAt(0)), null);
+                                                .getPlaceListForPlateStart(Character.toString(plateStartToFind.charAt
+                                                        (0)), null);
 
         assertTrue(1 == foundPlaces.size());
 
@@ -152,9 +120,12 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesWithDiacritics() throws Exception {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("swirzyce", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("doboszyce", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type
+                .POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("swirzyce", dummyPlate, Place.Type
+                .POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("doboszyce", dummyPlate, Place.Type
+                .POWIAT_CITY));
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", null);
         assertTrue(!foundPlaces.isEmpty());
@@ -168,9 +139,12 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesLimit() throws Exception {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnico", dummyPlate, Place.Type.POWIAT_CITY));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type.POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type
+                .POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnico", dummyPlate, Place.Type
+                .POWIAT_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type
+                .POWIAT_CITY));
 
         int limit = 2;
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", limit);
@@ -180,10 +154,13 @@ public class PlaceDaoTest extends DatabaseTest {
 
     @MediumTest public void testSearchPlacesSortOrderByType() throws Exception {
         String dummyPlate = "AAA";
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type.VOIVODE_CITY));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnica", dummyPlate, Place.Type
+                .VOIVODE_CITY));
         databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnico", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type.VILLAGE));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnicy", dummyPlate, Place.Type.SPECIAL));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnice", dummyPlate, Place.Type
+                .VILLAGE));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świdnicy", dummyPlate, Place.Type
+                .SPECIAL));
 
         List<Place> foundPlaces = databaseHelper.getPlaceDao().getPlaceListByName("świ", null);
 
@@ -199,7 +176,8 @@ public class PlaceDaoTest extends DatabaseTest {
     @MediumTest public void testSearchPlacesSortOrderByName() throws Exception {
         String dummyPlate = "AAA";
         databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śwarądz", dummyPlate, Place.Type.TOWN));
-        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świnoujście", dummyPlate, Place.Type.TOWN));
+        databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("świnoujście", dummyPlate, Place.Type
+                .TOWN));
         databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śokołów", dummyPlate, Place.Type.TOWN));
         databaseHelper.getPlaceDao().add(TestDataFactory.createStandardPlace("śókołów", dummyPlate, Place.Type.TOWN));
 
@@ -254,7 +232,7 @@ public class PlaceDaoTest extends DatabaseTest {
         List<PlaceListItem> items = databaseHelper.getPlaceDao().getHistoryPlacesList(null, SearchType.PLACE);
 
         assertEquals(3, items.size());
-        for(int i = 0; i<items.size()-1;i++){
+        for (int i = 0; i < items.size() - 1; i++) {
             PlaceListItem item = items.get(i);
             assertEquals(Place.Type.TOWN, item.getPlaceType());
         }
@@ -283,9 +261,9 @@ public class PlaceDaoTest extends DatabaseTest {
 
         assertEquals(5, items.size());
 
-        for(int i = 0; i<items.size()-1;i++){
+        for (int i = 0; i < items.size() - 1; i++) {
             PlaceListItem item = items.get(i);
-            String expectedPlaceName = Integer.toString(4-i);
+            String expectedPlaceName = Integer.toString(4 - i);
             assertEquals(expectedPlaceName, item.getPlaceName());
         }
     }
