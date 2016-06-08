@@ -9,7 +9,7 @@ import android.animation.ObjectAnimator;
 import android.view.animation.Interpolator;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Builder class to help building {@link ObjectAnimator} class objects in single chain.
  */
 public class AnimatorBuilder {
     private String propertyName;
