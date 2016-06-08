@@ -19,7 +19,7 @@ import pl.ipebk.tabi.di.component.ApplicationComponent;
 import pl.ipebk.tabi.di.component.DaggerApplicationComponent;
 import pl.ipebk.tabi.di.module.ViewModule;
 import pl.ipebk.tabi.di.module.ApplicationModule;
-import pl.ipebk.tabi.utils.TabiTree;
+import pl.ipebk.tabi.utils.MonitorLoggingTree;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -34,7 +34,7 @@ public class App extends Application {
         super.onCreate();
 
         if (BuildConfig.DEBUG) {
-            Timber.plant(new TabiTree());
+            Timber.plant(new MonitorLoggingTree());
             Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashlyticsLogExceptionTree());
         } else {

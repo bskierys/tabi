@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TabiTreeTest {
     @Test public void testCreateLogTag1() throws Exception {
-        TabiTree tree = new TabiTree();
+        MonitorLoggingTree tree = new MonitorLoggingTree();
         String className = "pl.ipebk.tabi.utils.advancedHelpers.SearchMvpViewPresenterHelper";
         String expected = "tbi.tls.dvncd.hlprs";
 
@@ -19,7 +19,7 @@ public class TabiTreeTest {
     }
 
     @Test public void testCreateLogTag2() throws Exception {
-        TabiTree tree = new TabiTree();
+        MonitorLoggingTree tree = new MonitorLoggingTree();
         String className = "pl.ipebk.tabi.ui.main.MainActivity";
         String expected = "tbi.ui.mn";
 
@@ -30,7 +30,7 @@ public class TabiTreeTest {
     }
 
     @Test public void testCreateLogMessage() throws Exception {
-        TabiTree tree = new TabiTree();
+        MonitorLoggingTree tree = new MonitorLoggingTree();
         String className = "pl.ipebk.tabi.ui.main.MainActivity";
         String methodName = "loadDoodleImage";
         int line = 67;

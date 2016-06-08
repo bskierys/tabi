@@ -17,7 +17,7 @@ import timber.log.Timber;
  * android monitor. Tag goes like this: tabi.{class name split by camel case, separated by dots, and to lower case. Ah
  * and all vowels are deleted} f.ex tabi.tbl.plcs means class PlacesTable
  */
-public class TabiTree extends Timber.DebugTree {
+public class MonitorLoggingTree extends Timber.DebugTree {
     private static final int CALL_STACK_INDEX = 5;
     private static final String PACKAGE = "pl.ipebk.tabi";
     private static final String TAG = "tbi";
