@@ -29,12 +29,19 @@ allprojects {
     }
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
+
+def versionMajor = properties.getProperty('versionMajor')
+def versionMinor = properties.getProperty('versionMinor')
+def versionPatch = properties.getProperty('versionPatch')
+def versionBuild = properties.getProperty('versionBuild')
+
 ext {
     //Android
     androidApplicationId = 'pl.ipebk.tabi'
-    androidVersionCode = 1000
-    // Major -> Millions, Minor -> Thousands, Bugfix -> Hundreds. E.g 1.3.72 == 1,003,072
-    androidVersionName = "0.1.0"
+    androidVersionCode = versionMajor.toInteger() * 10000000 + versionMinor.toInteger() * 100000 + versionPatch.toInteger() * 1000 + versionBuild.toInteger()
+    androidVersionName = "${versionMajor}.${versionMinor}.${versionPatch}-b${versionBuild}"
     androidBuildToolsVersion = "22.0.1"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 23
@@ -62,59 +69,75 @@ ext {
     rxAndroidVersion = '1.1.0'
     rxBindingVersion = '0.4.0';
     rxDebugVersion = '1.+';
+    timberUtilsVersion = '1.0.0';
+    crashlyticsVersion = '2.5.6@aar';
+    overscrollVersion = '1.0.1';
+    assertjVersion = '2.0.0';
+    assertjAndroidVersion = '1.1.1';
 
     mobileDependencies = [
             // Android
-            appcompat         : "com.android.support:appcompat-v7:${androidSupportVersion}",
-            support           : "com.android.support:support-v4:${androidSupportVersion}",
-            design            : "com.android.support:design:${androidSupportVersion}",
-            cardview          : "com.android.support:cardview-v7:${androidSupportVersion}",
-            recyclerView      : "com.android.support:recyclerview-v7:${androidSupportVersion}",
-            supportannotations: "com.android.support:support-annotations:${androidSupportVersion}",
+            appcompat               : "com.android.support:appcompat-v7:${androidSupportVersion}",
+            support                 : "com.android.support:support-v4:${androidSupportVersion}",
+            design                  : "com.android.support:design:${androidSupportVersion}",
+            cardview                : "com.android.support:cardview-v7:${androidSupportVersion}",
+            recyclerView            : "com.android.support:recyclerview-v7:${androidSupportVersion}",
+            supportannotations      : "com.android.support:support-annotations:${androidSupportVersion}",
 
             // RxJava
-            rxjava            : "io.reactivex:rxjava:${rxJavaVersion}",
-            rxandroid         : "io.reactivex:rxandroid:${rxAndroidVersion}",
-            rxbinding         : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
-            rxdebug           : "io.reactivex:rxjava-debug:1.+",
+            rxjava                  : "io.reactivex:rxjava:${rxJavaVersion}",
+            rxandroid               : "io.reactivex:rxandroid:${rxAndroidVersion}",
+            rxbinding               : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
+            rxbinding_recyclerview  : "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${rxBindingVersion}",
+            rxbinding_support       : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
+            rxdebug                 : "io.reactivex:rxjava-debug:${rxDebugVersion}",
 
             // ButterKnife
-            butterKnife       : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterKnife             : "com.jakewharton:butterknife:${butterKnifeVersion}",
 
             // otto
-            otto              : "com.squareup:otto:${ottoVersion}",
+            otto                    : "com.squareup:otto:${ottoVersion}",
 
-            // timber
-            timber            : "com.jakewharton.timber:timber:${timberVersion}",
+            // logs
+            timber                  : "com.jakewharton.timber:timber:${timberVersion}",
+            timbertreeutils         : "net.ypresto.timbertreeutils:timbertreeutils:${timberUtilsVersion}",
+            crashlytics             : "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}",
 
             // icepick
-            icepick           : "frankiesardo:icepick:${icepickVersion}",
-            icepickProcessor  : "frankiesardo:icepick-processor:${icepickVersion}",
+            icepick                 : "frankiesardo:icepick:${icepickVersion}",
+            icepickProcessor        : "frankiesardo:icepick-processor:${icepickVersion}",
 
             // image downloading
-            picasso           : "com.squareup.picasso:picasso:${picassoVersion}",
-            okhttp            : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
+            picasso                 : "com.squareup.picasso:picasso:${picassoVersion}",
+            okhttp                  : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
 
             // Dagger
-            javaxAnnotation   : "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
-            daggerCompiler    : "com.google.dagger:dagger-compiler:${daggerVersion}",
-            dagger            : "com.google.dagger:dagger:${daggerVersion}",
+            javaxAnnotation         : "org.glassfish:javax.annotation:${javaxAnnotationVersion}",
+            daggerCompiler          : "com.google.dagger:dagger-compiler:${daggerVersion}",
+            dagger                  : "com.google.dagger:dagger:${daggerVersion}",
 
             // SQLite
-            sqliteAssetHelper : "com.readystatesoftware.sqliteasset:sqliteassethelper:${sqliteAssetHelperVersion}",
-            sqlbrite          : "com.squareup.sqlbrite:sqlbrite:${sqlbriteVersion}",
+            sqliteAssetHelper       : "com.readystatesoftware.sqliteasset:sqliteassethelper:${sqliteAssetHelperVersion}",
+            sqlbrite                : "com.squareup.sqlbrite:sqlbrite:${sqlbriteVersion}",
+
+            // overscroll
+            overscroll              : "me.everything:overscroll-decor-android:${overscrollVersion}",
 
             // Unit test dependencies
-            junit             : "junit:junit:${junitVersion}",
-            robolectric       : "org.robolectric:robolectric:${robolectricVerion}",
-            mockito           : "org.mockito:mockito-core:${mockitoVersion}",
+            junit                   : "junit:junit:${junitVersion}",
+            robolectric             : "org.robolectric:robolectric:${robolectricVerion}",
+            robolectric_shadows     : "org.robolectric:shadows-support-v4:${robolectricVerion}",
+            mockito                 : "org.mockito:mockito-core:${mockitoVersion}",
+            assertj                 : "org.assertj:assertj-core:${assertjVersion}",
+            assertj_android         : "com.squareup.assertj:assertj-android:${assertjAndroidVersion}",
+            assertj_android_recycler: "com.squareup.assertj:assertj-android-recyclerview-v7:${assertjAndroidVersion}@aar",
 
             // Integration test dependencies
-            testrules         : 'com.android.support.test:rules:0.3',
-            dexmaker          : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
-            dexmaker_mockito  : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
-            testrunner        : "com.android.support.test:runner:${androidTestVersion}",
-            espresso          : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
-            espressointents   : "com.android.support.test.espresso:espresso-intents:${espressoVersion}",
+            testrules               : 'com.android.support.test:rules:0.3',
+            dexmaker                : "com.google.dexmaker:dexmaker:${dexmakerVersion}",
+            dexmaker_mockito        : "com.google.dexmaker:dexmaker-mockito:${dexmakerVersion}",
+            testrunner              : "com.android.support.test:runner:${androidTestVersion}",
+            espresso                : "com.android.support.test.espresso:espresso-core:${espressoVersion}",
+            espressointents         : "com.android.support.test.espresso:espresso-intents:${espressoVersion}",
     ]
 }

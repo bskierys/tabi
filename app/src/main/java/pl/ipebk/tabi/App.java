@@ -8,6 +8,11 @@ package pl.ipebk.tabi;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
+
+import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
+
+import io.fabric.sdk.android.Fabric;
 import pl.ipebk.tabi.di.component.DaggerViewComponent;
 import pl.ipebk.tabi.di.component.ViewComponent;
 import pl.ipebk.tabi.di.component.ApplicationComponent;
@@ -30,8 +35,11 @@ public class App extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new TabiTree());
+            Fabric.with(this, new Crashlytics());
+            Timber.plant(new CrashlyticsLogExceptionTree());
         } else {
-            // TODO: 2016-02-27 introduce crashlitics or other crash reporting
+            Fabric.with(this, new Crashlytics());
+            Timber.plant(new CrashlyticsLogExceptionTree());
         }
     }
 

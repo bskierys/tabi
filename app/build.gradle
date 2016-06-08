@@ -1,17 +1,26 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.4.2'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.getkeepsafe.dexcount'
+
+project.ext.set("archivesBaseName", "tabi");
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -79,6 +88,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     sourceSets {
         def commonTestDir = 'src/commonTest/java'
         test {
@@ -106,20 +119,24 @@ dependencies {
     compile mobileDependencies.rxjava
     compile mobileDependencies.rxandroid
     compile mobileDependencies.rxbinding
-    compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
+    compile mobileDependencies.rxbinding_recyclerview
+    compile mobileDependencies.rxbinding_support
 
     // butterknife
     compile mobileDependencies.butterKnife
 
-    // overscroll - add to dependencies
-    compile 'me.everything:overscroll-decor-android:1.0.1'
+    // overscroll
+    compile mobileDependencies.overscroll
 
     // otto
     compile mobileDependencies.otto
 
-    // timber
+    // logs
     compile mobileDependencies.timber
+    compile mobileDependencies.timbertreeutils
+    compile(mobileDependencies.crashlytics) {
+        transitive = true;
+    }
 
     // image downloading
     compile mobileDependencies.picasso
@@ -143,14 +160,14 @@ dependencies {
     // unit
     testCompile mobileDependencies.junit
     testCompile mobileDependencies.mockito
-    testCompile 'org.robolectric:robolectric:3.0'
-    testCompile "org.robolectric:shadows-support-v4:3.0"
-    testCompile 'org.assertj:assertj-core:2.0.0'
-    testCompile("com.squareup.assertj:assertj-android:1.1.1") {
+    testCompile mobileDependencies.robolectric
+    testCompile mobileDependencies.robolectric_shadows
+    testCompile mobileDependencies.assertj
+    testCompile(mobileDependencies.assertj_android) {
         exclude group: "com.android.support", module: "support-annotations"
         exclude group: "com.android.support", module: "support-v4"
     }
-    testCompile("com.squareup.assertj:assertj-android-recyclerview-v7:1.1.1@aar") {
+    testCompile(mobileDependencies.assertj_android_recycler) {
         exclude group: "com.android.support", module: "support-annotations"
         exclude group: "com.android.support", module: "support-v4"
     }

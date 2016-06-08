@@ -30,6 +30,7 @@ import pl.ipebk.tabi.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.utils.rxbinding.RxAnimator;
 import pl.ipebk.tabi.utils.rxbinding.RxRecyclerViewExtension;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final int GRID_COLUMNS_NUMBER = 2;
@@ -58,6 +59,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+
+        Timber.e("Problem computing bounds");
 
         presenter.attachView(this);
 

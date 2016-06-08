@@ -9,16 +9,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
-
 import icepick.Icepick;
 import pl.ipebk.tabi.App;
-import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.di.component.ActivityComponent;
 import pl.ipebk.tabi.di.component.DaggerActivityComponent;
 import pl.ipebk.tabi.di.module.ActivityModule;
-import pl.ipebk.tabi.di.module.ViewModule;
-import pl.ipebk.tabi.utils.FontManager;
 
 /**
  * Base Activity for all activities across application. Provides method to help presenter injection
