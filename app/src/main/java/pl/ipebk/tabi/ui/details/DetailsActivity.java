@@ -1,5 +1,6 @@
 package pl.ipebk.tabi.ui.details;
 
+import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.SearchManager;
@@ -44,6 +45,7 @@ import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator
 import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
+import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.Stopwatch;
@@ -62,6 +64,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
+    @Inject AnimationHelper animationHelper;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
     // toolbar
@@ -181,9 +184,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Override protected void onStart() {
         super.onStart();
 
-        AnimatorSet set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.panel_animation);
-        set.setInterpolator(new DecelerateInterpolator());
-        set.setTarget(panelCard);
+        AnimatorSet set = new AnimatorSet();
+        set.play(animationHelper.getDetailsAnimator().createScaleAnim(panelCard))
+                .with(animationHelper.getDetailsAnimator().createFadeInAnim(panelCard));
         set.start();
     }
 

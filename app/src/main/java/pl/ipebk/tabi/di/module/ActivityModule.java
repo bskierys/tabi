@@ -59,6 +59,6 @@ public class ActivityModule {
     }
 
     @Provides AnimationHelper provideAnimationHelper() {
-        return new AnimationHelper();
+        return new AnimationHelper(activity);
     }
 }

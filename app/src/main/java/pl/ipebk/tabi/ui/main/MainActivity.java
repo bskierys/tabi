@@ -122,11 +122,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         float currentY = searchBar.getY();
 
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationHelper.createMoveAnim(searchBar, currentY, targetY))
-                  .with(animationHelper.createScaleDownAnim(searchBar))
-                  .with(animationHelper.createMoveAnim(searchBarContent, currentY, targetY))
-                  .with(animationHelper.createFadeInAnim(searchBarContent))
-                  .with(animationHelper.createFadeInAnim(searchIcon));
+        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, currentY, targetY))
+                  .with(animationHelper.getSearchAnimator().createScaleDownAnim(searchBar))
+                  .with(animationHelper.getSearchAnimator().createMoveAnim(searchBarContent, currentY, targetY))
+                  .with(animationHelper.getSearchAnimator().createFadeInAnim(searchBarContent))
+                  .with(animationHelper.getSearchAnimator().createFadeInAnim(searchIcon));
 
         if (scrollPercent > 0) {
             searchAnim.start();
@@ -177,10 +177,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToSearch(String phrase) {
         // TODO: 2016-06-03 different animation when tile is clicked
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationHelper.createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
-                  .with(animationHelper.createScaleUpAnim(searchBar))
-                  .with(animationHelper.createFadeOutAnim(searchIcon))
-                  .with(animationHelper.createMoveAnim(searchBarContent, searchBarContent.getY(),
+        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
+                  .with(animationHelper.getSearchAnimator().createScaleUpAnim(searchBar))
+                  .with(animationHelper.getSearchAnimator().createFadeOutAnim(searchIcon))
+                  .with(animationHelper.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
                                                        highestSearchBarPosition));
 
         RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll());
