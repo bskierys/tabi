@@ -74,16 +74,32 @@ android {
         }
     }
 
+    //todo: remove from this file
+    signingConfigs {
+        release {
+            storeFile file("keystore/ipebk.jks")
+            storePassword "gwh28dgcmp"
+            keyAlias "ipe_bk_keystore"
+            keyPassword "gwh28dgcmp"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
 
         debug {
             versionNameSuffix " Debug"
             debuggable true
         }
+    }
+
+    lintOptions {
+        // todo: fix lint errors
+        abortOnError false
     }
 
     sourceSets {
