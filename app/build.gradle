@@ -86,10 +86,6 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.returnDefaultValues = true
-    }
-
     sourceSets {
         def commonTestDir = 'src/commonTest/java'
         test {

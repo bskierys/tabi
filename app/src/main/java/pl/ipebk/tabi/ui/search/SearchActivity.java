@@ -95,6 +95,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                     }
                 });
 
+        searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
         prepareDoodleImages();
     }
@@ -154,8 +155,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     private void prepareSearch(String searchText, boolean showKeyboard) {
-        searchedText.setVisibility(View.GONE);
-
         if (currentSearch != null && !currentSearch.equals("")) {
             showClearButton();
             if (isFullySearched) {

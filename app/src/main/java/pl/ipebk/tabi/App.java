@@ -35,8 +35,6 @@ public class App extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new MonitorLoggingTree());
-            Fabric.with(this, new Crashlytics());
-            Timber.plant(new CrashlyticsLogExceptionTree());
         } else {
             Fabric.with(this, new Crashlytics());
             Timber.plant(new CrashlyticsLogExceptionTree());

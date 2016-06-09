@@ -6,7 +6,7 @@ import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
-public class TabiTreeTest {
+public class MonitorLoggingTreeTest {
     @Test public void testCreateLogTag1() throws Exception {
         MonitorLoggingTree tree = new MonitorLoggingTree();
         String className = "pl.ipebk.tabi.utils.advancedHelpers.SearchMvpViewPresenterHelper";
@@ -20,8 +20,19 @@ public class TabiTreeTest {
 
     @Test public void testCreateLogTag2() throws Exception {
         MonitorLoggingTree tree = new MonitorLoggingTree();
-        String className = "pl.ipebk.tabi.ui.main.MainActivity";
-        String expected = "tbi.ui.mn";
+        String className = "pl.ipebk.tabi.communication.bluetooth.wrappers.SppClientDaemonWrapper";
+        String expected = "tbi.cmmnctn.bltth.wrpprs";
+
+        StackTraceElement element = new StackTraceElement(className, "fakeMethod", "fakeFile", 67);
+        String actual = tree.createStackElementTag(element);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test public void testCreateLogTagForDifferentPackage() throws Exception {
+        MonitorLoggingTree tree = new MonitorLoggingTree();
+        String className = "com.github.package.communication.bluetooth.wrappers.SppClientDaemonWrapper";
+        String expected = "PACKAGE.cmmnctn.bltth.wrpprs";
 
         StackTraceElement element = new StackTraceElement(className, "fakeMethod", "fakeFile", 67);
         String actual = tree.createStackElementTag(element);
@@ -31,15 +42,17 @@ public class TabiTreeTest {
 
     @Test public void testCreateLogMessage() throws Exception {
         MonitorLoggingTree tree = new MonitorLoggingTree();
-        String className = "pl.ipebk.tabi.ui.main.MainActivity";
-        String methodName = "loadDoodleImage";
+        String packageName = "pl.ipebk.tabi.communication.bluetooth.wrappers";
+        String className = "SppClientDaemonWrapper";
+        String fullClassName = packageName + "." + className;
+        String methodName = "onError";
         int line = 67;
         String message = "Hello world!";
 
-        String expectedTag = "tbi.ui.mn";
-        String expectedMessage = String.format(Locale.UK, "%s, %d ---> %s", methodName, line, message);
+        String expectedTag = "tbi.cmmnctn.bltth.wrpprs";
+        String expectedMessage = String.format(Locale.UK, "%s, %s, %d ---> %s", className, methodName, line, message);
 
-        StackTraceElement element = new StackTraceElement(className, methodName, "fakeFile", line);
+        StackTraceElement element = new StackTraceElement(fullClassName, methodName, "fakeFile", line);
         String actualTag = tree.createStackElementTag(element);
         String actualMessage = tree.createStackElementMessage(message, element);
 
