@@ -67,7 +67,6 @@ public class SearchActivityTest {
         when(databaseOpenHelper.getPlaceDao()).thenReturn(mockPlaceDao);
     }
 
-    // TODO: 2016-06-09 robolectric tests are not working
     @Test public void testToolbarEditTextEmptyAtStart() throws Exception {
         Cursor cursor = mock(Cursor.class);
         when(mockPlaceDao.getHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
