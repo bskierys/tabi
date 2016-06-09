@@ -1,0 +1,4 @@
+## Customize dependencies
+dependencies:
+  override:
+    - chmod +x gradlew
