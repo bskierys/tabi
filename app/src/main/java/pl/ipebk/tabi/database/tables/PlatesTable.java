@@ -7,7 +7,9 @@ package pl.ipebk.tabi.database.tables;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
+import pl.ipebk.tabi.database.base.Table;
 import pl.ipebk.tabi.database.models.Plate;
 
 public class PlatesTable extends Table<Plate> {
@@ -18,7 +20,7 @@ public class PlatesTable extends Table<Plate> {
     public static final String TABLE_NAME = "additional_plates";
 
     private static final String[] TABLE_COLUMNS = {
-            COLUMN_ID,
+            BaseColumns._ID,
             COLUMN_PLACE_ID,
             COLUMN_PLATE,
             COLUMN_PLATE_END
@@ -30,9 +32,7 @@ public class PlatesTable extends Table<Plate> {
             + TABLE_COLUMNS[0] + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TABLE_COLUMNS[1] + " INTEGER NOT NULL, "
             + TABLE_COLUMNS[2] + " TEXT, "
-            + TABLE_COLUMNS[3] + " TEXT, "
-            + "FOREIGN KEY (" + COLUMN_PLACE_ID + ") REFERENCES " + PlacesTable.TABLE_NAME + "(" + COLUMN_ID + ")"
-            + " ON DELETE CASCADE );";
+            + TABLE_COLUMNS[3] + " TEXT );";
 
     @Override public String getTableName() {
         return TABLE_NAME;
@@ -48,6 +48,7 @@ public class PlatesTable extends Table<Plate> {
 
     @Override public Plate cursorToModel(Cursor cursor) {
         Plate plate = new Plate();
+        plate.setId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
         plate.setPlaceId(cursor.getLong(cursor.getColumnIndex(COLUMN_PLACE_ID)));
         plate.setPattern(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE)));
         plate.setEnd(cursor.getString(cursor.getColumnIndex(COLUMN_PLATE_END)));

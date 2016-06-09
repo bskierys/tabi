@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Main.Height.Header"
+                android:background="@color/grey_100"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/Main.Margin.Greeting.Horizontal"
+        android:layout_marginRight="@dimen/Main.Margin.Greeting.Horizontal"
+        android:layout_marginTop="@dimen/Main.Margin.Greeting.Top"
+        android:orientation="vertical">
+
+        <pl.ipebk.tabi.ui.custom.FontTextView
+            android:id="@+id/txt_greeting"
+            style="@style/Main_Text_Greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preview_doodle_greeting"/>
+
+        <pl.ipebk.tabi.ui.custom.FontTextView
+            android:id="@+id/txt_caption"
+            style="@style/Main_Text_Caption.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/preview_doodle_caption"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="@dimen/Main.Width.Header.Divider"
+        android:layout_height="@dimen/Search.Height.Header.Divider"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@color/colorPrimary"/>
+</RelativeLayout>

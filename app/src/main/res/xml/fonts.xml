@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<familyset>
+    <!--  Bebas Neue -->
+    <family>
+        <nameset>
+            <name>bebas</name>
+        </nameset>
+        <fileset>
+            <file>fonts/BebasNeue-Regular.otf</file>
+        </fileset>
+    </family>
+
+    <!--  Montserrat -->
+    <family>
+        <nameset>
+            <name>montserrat</name>
+        </nameset>
+        <fileset>
+            <file>fonts/Montserrat-Regular.otf</file>
+        </fileset>
+    </family>
+</familyset>

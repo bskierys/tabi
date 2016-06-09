@@ -6,15 +6,180 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
+    </style>
+
+    <style name="AppTheme.Transparent" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Placeholder" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/loading_screen</item>
+    </style>
+
+    <style name="UnderlinePageIndicatorStyle">
+        <item name="android:background">@color/white</item>
+        <item name="selectedColor">@color/colorPrimary</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <attr name="fontFamily" format="string" />
+
+    <declare-styleable name="Fonts">
+        <attr name="android:textStyle" />
+        <attr name="fontFamily" />
+    </declare-styleable>
+
+    <declare-styleable name="DetailsButton">
+        <attr name="text" format="string"/>
+        <attr name="doodle" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="SearchTabPageIndicator">
+        <!--  Text size of titles in indicator  -->
+        <attr name="android:textSize"/>
+        <!--  Color of selected text  -->
+        <attr name="selectedTextColor" format="color"/>
+        <!--  Color of standard (deselected) text  -->
+        <attr name="android:textColor"/>
+        <!--  Font family of text in tabs  -->
+        <attr name="fontFamily" />
+        <!--  Height of line under text that indicates selected tab  -->
+        <attr name="lineHeight" format="dimension"/>
+    </declare-styleable>
+
+    <!--  MAIN  -->
+    <style name="Main_Doodle">
+        <item name="android:layout_marginRight">@dimen/Main.Margin.Greeting.Doodle.Right</item>
+        <item name="android:layout_marginTop">@dimen/Main.Margin.Greeting.Doodle.Top</item>
+        <item name="android:layout_height">@dimen/Main.Height.Greeting.Doodle</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+
+    <style name="Main_Text_Caption">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginRight">80dp</item>
+    </style>
+
+    <!--todo: dimens-->
+    <style name="Main_Text_Caption.Small" parent="Main_Text_Caption">
+        <item name="android:textSize">@dimen/Main.Text.Caption.Small</item>
+        <item name="android:textColor">@color/grey_850</item>
+    </style>
+
+    <style name="Main_Text_Caption.Large" parent="Main_Text_Caption">
+        <item name="android:textSize">@dimen/Main.Text.Caption.Large</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Main_Text_Tile">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/Main.Text.Tile</item>
+    </style>
+
+    <style name="Main_Text_Greeting">
+        <item name="android:textSize">@dimen/Main.Text.Greeting.Large</item>
+        <item name="android:textColor">@color/grey_850</item>
+        <item name="fontFamily">bebas</item>
+    </style>
+
+    <!--  DETAILS  -->
+    <style name="Details">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="Details_Map_Wrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Details_Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">@dimen/Details.Padding.Panel.Button</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Details_Text" parent="TextAppearance.AppCompat.Medium">
+        <item name="fontFamily">montserrat</item>
+    </style>
+
+    <style name="Details_Text.Header" parent="Details_Text">
+        <item name="android:textColor">@color/grey_850</item>
+        <item name="android:textSize">@dimen/Details.Text.Header</item>
+    </style>
+
+    <style name="Details_Text.Description" parent="Details_Text">
+        <item name="android:textColor">@color/grey_600</item>
+        <item name="android:textSize">@dimen/Details.Text.Description</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/Details.Height.Text.Description</item>
+        <item name="android:layout_marginLeft">@dimen/Details.Margin.Right</item>
+        <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:text">example text</item>
+    </style>
+
+    <style name="Details_Text.Search" parent="Details_Text">
+        <item name="android:textSize">@dimen/Details.Text.Header</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
+    </style>
+
+    <style name="Details_Text.Description.Search" parent="Details_Text.Description">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+    </style>
+
+    <style name="Divider">
+        <item name="android:src">@color/grey_300</item>
+    </style>
+
+    <style name="Divider.Horizontal" parent="Divider">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Divider.Vertical" parent="Divider">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">1dp</item>
+    </style>
+
+    <style name="Shadow">
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="Shadow.2dp" parent="Shadow">
+        <item name="android:src">@drawable/shadow2dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/Shadows.Height.2dp</item>
+    </style>
 
 </resources>

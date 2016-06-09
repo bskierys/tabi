@@ -16,6 +16,46 @@ public class Stopwatch {
     private long startUptimeMillis;
 
     /**
+     * Set stopwatch's start time to the current time
+     */
+    public void reset() {
+        startThreadMillis = SystemClock.currentThreadTimeMillis();
+        startRealtimeMillis = SystemClock.elapsedRealtime();
+        startUptimeMillis = SystemClock.uptimeMillis();
+    }
+
+    /**
+     * Get elapsed time since construction or last call to reset()
+     *
+     * @return Stopwatch.ElapsedTime
+     */
+    public ElapsedTime getElapsedTime() {
+        return new ElapsedTime(this);
+    }
+
+    /**
+     * Get elapsed time as a human-readable string
+     * <p>
+     * If time is less than one second, it will be rendered as a number of milliseconds.
+     * Otherwise, it will be rendered as a number of seconds.
+     *
+     * @return String
+     */
+    public String getElapsedTimeString() {
+        double seconds = (double) getElapsedTime().getElapsedRealtimeMillis() / 1000.0;
+        if (seconds < 1.0) {
+            return String.format("%.0f ms", seconds * 1000);
+        } else {
+            return String.format("%.2f s", seconds);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Stopwatch: " + getElapsedTimeString();
+    }
+
+    /**
      * Result of Stopwatch.getElapsedTime()
      */
     public static class ElapsedTime {
@@ -26,8 +66,7 @@ public class Stopwatch {
         /**
          * Constructor
          *
-         * @param stopwatch
-         *            instance from which to calculate elapsed time
+         * @param stopwatch instance from which to calculate elapsed time
          */
         public ElapsedTime(Stopwatch stopwatch) {
             elapsedThreadMillis = SystemClock.currentThreadTimeMillis() - stopwatch.startThreadMillis;
@@ -37,7 +76,7 @@ public class Stopwatch {
 
         /**
          * Get milliseconds running in current thread
-         *
+         * <p>
          * This result is only valid if Stopwatch.getElapsedTime() is called from the same
          * thread as the Stopwatch constructor, or the last call to Stopwatch.reset().
          *
@@ -71,53 +110,5 @@ public class Stopwatch {
                     + " ms; uptime: " + elapsedUptimeMillis
                     + " ms; thread: " + elapsedThreadMillis + " ms";
         }
-    }
-
-    /**
-     * Constructor
-     */
-    public Stopwatch() {
-        reset();
-    }
-
-    /**
-     * Set stopwatch's start time to the current time
-     */
-    public void reset() {
-        startThreadMillis = SystemClock.currentThreadTimeMillis();
-        startRealtimeMillis = SystemClock.elapsedRealtime();
-        startUptimeMillis = SystemClock.uptimeMillis();
-    }
-
-    /**
-     * Get elapsed time since construction or last call to reset()
-     *
-     * @return Stopwatch.ElapsedTime
-     */
-    public ElapsedTime getElapsedTime() {
-        return new ElapsedTime(this);
-    }
-
-    /**
-     * Get elapsed time as a human-readable string
-     *
-     * If time is less than one second, it will be rendered as a number of milliseconds.
-     * Otherwise, it will be rendered as a number of seconds.
-     *
-     * @return String
-     */
-    public String getElapsedTimeString() {
-        double seconds = (double)getElapsedTime().getElapsedRealtimeMillis() / 1000.0;
-        if (seconds < 1.0) {
-            return String.format("%.0f ms", seconds * 1000);
-        }
-        else {
-            return String.format("%.2f s", seconds);
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Stopwatch: " + getElapsedTimeString();
     }
 }

@@ -1,0 +1,210 @@
+/*
+* author: Bartlomiej Kierys
+* date: 2016-02-26
+* email: bskierys@gmail.com
+*/
+package pl.ipebk.tabi.ui.details;
+
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.util.DisplayMetrics;
+
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.database.models.Plate;
+import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.ui.base.BasePresenter;
+import pl.ipebk.tabi.ui.search.PlaceListItemType;
+import pl.ipebk.tabi.utils.NameFormatHelper;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
+    private DataManager dataManager;
+    private Context context;
+    private Place place;
+    private String searchedPlate;
+    private NameFormatHelper nameFormatHelper;
+
+    @Inject public DetailsPresenter(DataManager dataManager, Activity activity) {
+        this.dataManager = dataManager;
+        this.context = activity;
+        // TODO: 2016-05-22 should be injected
+        this.nameFormatHelper = new NameFormatHelper(context);
+    }
+
+    @Override public void attachView(DetailsMvpView mvpView) {
+        super.attachView(mvpView);
+    }
+
+    @Override public void detachView() {
+        super.detachView();
+    }
+
+    public void loadPlace(long id, String searchedPlate, SearchType searchType, PlaceListItemType itemType,
+                          Observable<Integer> mapWidthStream, Observable<Integer> mapHeightStream) {
+
+        getMvpView().disableActionButtons();
+        getMvpView().showSearchedText(searchedPlate);
+        showPlaceIconBasedOnItemType(itemType);
+
+        if (searchedPlate != null && searchType == SearchType.PLATE) {
+            this.searchedPlate = searchedPlate.toUpperCase();
+        }
+
+        Observable<Place> placeStream = dataManager
+                .getDatabaseHelper().getPlaceDao()
+                .getByIdObservable(id);
+
+        Observable<Place> standardPlaceStream = placeStream
+                .filter(p -> p.getType() != Place.Type.SPECIAL);
+
+        standardPlaceStream.subscribeOn(Schedulers.io())
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(this::showStandardPlace);
+
+        Observable<Uri> loadMapStream = Observable
+                .combineLatest(standardPlaceStream, mapWidthStream.filter(w -> w > 0),
+                               mapHeightStream.filter(h -> h > 0), this::getMapUrl);
+
+        loadMapStream.subscribeOn(Schedulers.computation())
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .subscribe(uri -> getMvpView().showMap(uri));
+
+        Observable<Place> specialPlaceStream = placeStream
+                .filter(p -> p.getType() == Place.Type.SPECIAL);
+
+        specialPlaceStream.subscribeOn(Schedulers.io())
+                          .observeOn(AndroidSchedulers.mainThread())
+                          .subscribe(this::showSpecialPlace);
+    }
+
+    private void showPlaceIconBasedOnItemType(PlaceListItemType itemType) {
+        int iconResId = R.drawable.ic_doodle_search;
+
+        if(itemType == PlaceListItemType.HISTORICAL){
+            iconResId = R.drawable.ic_doodle_history;
+        } else if(itemType == PlaceListItemType.RANDOM){
+            iconResId = R.drawable.ic_doodle_random;
+        }
+
+        getMvpView().showPlaceIcon(iconResId);
+    }
+
+    private void showStandardPlace(Place place) {
+        this.place = place;
+
+        getMvpView().enableActionButtons();
+
+        Observable<Place> placeStream = Observable.just(place);
+
+        placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
+                   .filter(p -> p != null).map(Plate::toString)
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(plateText -> getMvpView().showPlate(plateText));
+
+        placeStream.map(p -> nameFormatHelper.formatAdditionalInfo(place, searchedPlate))
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(additionalText -> getMvpView().showAdditionalInfo(additionalText));
+
+        placeStream.subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(p -> {
+                       getMvpView().showPlaceName(p.getName());
+                       getMvpView().showVoivodeship(nameFormatHelper.formatVoivodeship(p.getVoivodeship()));
+                       getMvpView().showPowiat(nameFormatHelper.formatPowiat(p.getPowiat()));
+                       getMvpView().showGmina(nameFormatHelper.formatGmina(p.getGmina()));
+                   });
+    }
+
+    private void showSpecialPlace(Place place) {
+        this.place = place;
+        getMvpView().showPlaceName(place.getName());
+        getMvpView().showPlaceHolder();
+
+        Observable<Place> placeStream = Observable.just(place);
+
+        placeStream.map(p -> p.getPlateMatchingPattern(searchedPlate))
+                   .filter(p -> p != null).map(Plate::toString)
+                   .subscribeOn(Schedulers.computation())
+                   .observeOn(AndroidSchedulers.mainThread())
+                   .subscribe(plateText -> getMvpView().showPlate(plateText));
+    }
+
+    public void showOnMap() {
+        String placeName = nameFormatHelper.formatPlaceToSearch(place);
+        String rawUri = "geo:0,0?q=" + placeName;
+
+        getMvpView().startMap(Uri.parse(rawUri));
+    }
+
+    public void searchInGoogle() {
+        getMvpView().startWebSearch(nameFormatHelper.formatPlaceToSearch(place));
+    }
+
+    public void copyToClipboard() {
+        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        ClipData clip = ClipData.newPlainText(context.getPackageName(), nameFormatHelper.formatPlaceInfo(place));
+        clipboard.setPrimaryClip(clip);
+
+        getMvpView().showInfoMessage(context.getString(R.string.details_info_copy_done));
+    }
+
+    private Uri getMapUrl(Place place, int width, int height) {
+        Resources res = context.getResources();
+        DisplayMetrics metrics = res.getDisplayMetrics();
+
+        int scale = getScale(metrics.density);
+
+        int widthInDp = (int) (width / metrics.density);
+        int heightInDp = (int) (height / metrics.density);
+
+        String size = String.format(Locale.getDefault(), "%dx%d", widthInDp, heightInDp);
+        String language = Locale.getDefault().getLanguage();
+        String placeName = place + "," + context.getString(R.string.details_country);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http");
+        builder.authority("maps.googleapis.com");
+        builder.appendPath("maps");
+        builder.appendPath("api");
+        builder.appendPath("staticmap");
+        builder.appendQueryParameter("center", placeName);
+        builder.appendQueryParameter("zoom", Integer.toString(9));
+        builder.appendQueryParameter("scale", Integer.toString(scale));
+        builder.appendQueryParameter("size", size);
+        builder.appendQueryParameter("maptype", "roadmap");
+        builder.appendQueryParameter("language", language);
+
+        return builder.build();
+    }
+
+    /**
+     * Densities for android are ldpi -> 0.75, mdpi -> 1.0, hdpi -> 1.5, xhdpi -> 2.0, xxhdpi -> 3.0, xxxhdpi -> 4.0.
+     * Scale for map should match these values. Unfortunately non-premium users can only scale up to 2, so we use this
+     * method as computing helper.
+     *
+     * @param density Android pixel density
+     * @return Google static maps api scale
+     */
+    private int getScale(float density) {
+        if (density < 2.0f) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+}

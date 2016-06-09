@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context=".ui.details.DetailsActivity"
+              tools:ignore="contentDescription"
+              tools:showIn="@layout/activity_details">
+
+    <pl.ipebk.tabi.ui.custom.ObservableSizeLayout
+        android:id="@+id/wrap_place_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:padding="@dimen/Details.Margin.Outer">
+
+            <include layout="@layout/row_place_name"/>
+        </LinearLayout>
+    </pl.ipebk.tabi.ui.custom.ObservableSizeLayout>
+
+    <ImageView style="@style/Divider.Horizontal"/>
+
+    <ImageView
+        android:id="@+id/img_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/description_placeholder"
+        android:visibility="gone"/>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_voivodeship"
+        style="@style/Details_Text.Description"
+        android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"/>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_powiat"
+        style="@style/Details_Text.Description"/>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_gmina"
+        style="@style/Details_Text.Description"/>
+
+    <pl.ipebk.tabi.ui.custom.FontTextView
+        android:id="@+id/txt_additional"
+        style="@style/Details_Text.Description"
+        android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"/>
+
+    <RelativeLayout
+        android:id="@+id/map_with_panel"
+        style="@style/Details_Map_Wrapper">
+
+        <include layout="@layout/map_details"/>
+
+        <include layout="@layout/panel_details"/>
+    </RelativeLayout>
+</LinearLayout>

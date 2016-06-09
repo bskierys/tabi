@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/Details.Margin.Map.Top"
+    tools:ignore="contentDescription">
+
+    <pl.ipebk.tabi.ui.custom.ObservableSizeLayout
+        android:id="@+id/wrap_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_200">
+        <ImageView
+            android:id="@+id/img_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_200"
+            android:contentDescription="@string/description_details_map"
+            android:scaleType="centerCrop"/>
+    </pl.ipebk.tabi.ui.custom.ObservableSizeLayout>
+
+    <ImageView
+        android:id="@+id/img_pin"
+        android:layout_width="@dimen/Details.Width.Map.Pin"
+        android:layout_height="@dimen/Details.Height.Map.Pin"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/description_details_map_pin"
+        android:scaleType="fitStart"
+        android:src="@drawable/dic_location"
+        android:visibility="invisible"/>
+
+    <ImageView
+        style="@style/Divider.Horizontal"
+        android:layout_alignParentTop="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Details.Margin.Outer"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/white"/>
+
+        <ImageView
+            style="@style/Divider.Horizontal"
+            android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+</RelativeLayout>

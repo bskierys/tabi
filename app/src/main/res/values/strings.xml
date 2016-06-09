@@ -1,4 +1,92 @@
 <resources>
+    <!--  PREVIEWS  -->
+    <string name="preview_place_name">Białogard</string>
+    <string name="preview_plate">ZBI</string>
+    <string name="preview_doodle_greeting">Hej! Jestem Tabi!</string>
+    <string name="preview_doodle_caption">Znam wszystkie tablice rejestracyjne. Śmiało. Pytaj!</string>
+    <string name="preview_category_name">wygwizdów</string>
+
+    <!--  DEFAULTS  -->
+    <string name="default_resource_string">brak tekstu</string>
+
+    <!--  DETAILS  -->
+    <string name="details_gmina">gmina</string>
+    <string name="details_powiat">powiat</string>
+    <string name="details_voivodeship">województwo</string>
+    <string name="details_additional_town">miasto</string>
+    <string name="details_additional_part_of_town">część miasta</string>
+    <string name="details_additional_village">wioska</string>
+    <string name="details_additional_other_plates">inne tablice</string>
+    <string name="details_country">Polska</string>
+    <string name="details_doodle_loading_header">Poczekaj chwilę&#8230;</string>
+    <string name="details_doodle_loading_description">Zaznaczam teren</string>
+    <string name="details_doodle_error_header">Ojej, ojej, ojej!</string>
+    <string name="details_doodle_error_description">Nie mogę dotrzeć do lokacji</string>
+    <string name="details_doodle_empty_header">Nic tu nie ma</string>
+    <string name="details_doodle_empty_description">Chociaż całkiem możliwe, że coś było, ale to zjadłem&#8230;</string>
+    <string name="details_button_google_it">WIĘCEJ</string>
+    <string name="details_button_maps">MAPY</string>
+    <string name="details_button_copy">SKOPIUJ</string>
+    <string name="details_info_copy_done">Skopiowałem do schowka :)</string>
+
+    <!--  SEARCH  -->
+    <string name="search_header_best">NAJLEPSZE WYNIKI</string>
+    <string name="search_header_all">WSZYSTKIE WYNIKI</string>
+    <string name="search_header_click">KLIKNIJ ABY WYSZUKAĆ WIĘCEJ</string>
+    <string name="search_header_suggestions">PODPOWIEDZI</string>
+    <string name="search_tab_plate">PO TABLICY</string>
+    <string name="search_tab_place">PO MIEJSCU</string>
+    <string name="search_tab_unknown">CZO TY CHCESZ?</string>
+    <string name="search_doodle_no_results_header">Brak wyników</string>
+    <string name="search_doodle_no_results_description">Chyba nie tego szukałem</string>
+    <string name="search_question_where">gdzie to jest?</string>
+    <string name="search_question_plates">jakie tam som tablice?</string>
+    <string name="search_question_what">Co to za miejsce?</string>
+    <string name="search_random_question_0">chcesz się pobawić?</string>
+    <string name="search_random_question_1">co się dzieje?</string>
+    <string name="search_random_question_2">skąd klikash?</string>
+    <string name="search_random_question_3">która godzina?</string>
+    <string name="search_random_question_4">dokąd zmierzamy?</string>
+    <string name="search_random_question_5">ale o so chosi?</string>
+    <string name="search_random_question_6">gdzie jest Zbyszek?</string>
+    <string name="search_random_question_7">co się stało się?</string>
+    <string name="search_random_question_8">jaka jest stolica Bułgarii?</string>
+
+    <!--  DOODLE DEFAULT  -->
+    <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>
+    <string name="doodle_default_description">A to peszek</string>
+    
+    <!--  MAIN  -->
+    <string name="main_list_header_browse">PRZEGLĄDAJ</string>
+    <string name="main_list_header_about_app">O APLIKACJI</string>
+    <string name="main_list_header_none"> </string>
+    <string name="main_list_element_dolnoslaskie">dolnośląskie</string>
+    <string name="main_list_element_kujawskopomorskie">kujawsko-pomorskie</string>
+    <string name="main_list_element_lodzkie">łódzkie</string>
+    <string name="main_list_element_lubelskie">lubelskie</string>
+    <string name="main_list_element_lubuskie">lubuskie</string>
+    <string name="main_list_element_malopolskie">małopolskie</string>
+    <string name="main_list_element_mazowieckie">mazowieckie</string>
+    <string name="main_list_element_opolskie">opolskie</string>
+    <string name="main_list_element_podkarpackie">podkarpackie</string>
+    <string name="main_list_element_podlaskie">podlaskie</string>
+    <string name="main_list_element_pomorskie">pomorskie</string>
+    <string name="main_list_element_slaskie">śląskie</string>
+    <string name="main_list_element_swietokrzyskie">świętokrzyskie</string>
+    <string name="main_list_element_warminskomazurskie">warmińsko-mazurskie</string>
+    <string name="main_list_element_wielkopolskie">wielkopolskie</string>
+    <string name="main_list_element_zachodniopomorskie">zachodnio-pomorskie</string>
+    <string name="main_list_element_sluzbybezpieczenstwa">służby bezpieczeństwa</string>
+    <string name="main_list_element_tablicewojskowe">tablice wojskowe</string>
+    <string name="main_list_element_licencje">licencje bibliotek zewnętrznych</string>
+    <string name="main_list_element_ocen">oceń naszą aplikację</string>
+    <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>
+    <string name="main_doodle_caption">Znam *wszystkie* tablice rejestracyjne. Śmiało. Pytaj!</string>
+    <string name="main_search_bar_hint_places">Skąd szukasz rejestracji?</string>
+    <string name="main_search_bar_hint_plates">Jakiej rejestracji szukasz?</string>
+
     <string name="app_name">Tabi</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>

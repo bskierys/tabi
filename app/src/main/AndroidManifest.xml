@@ -2,6 +2,8 @@
 <manifest package="pl.ipebk.tabi"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -10,15 +12,34 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Placeholder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ui.details.DetailsActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".ui.search.SearchActivity"
+            android:theme="@style/AppTheme.Transparent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.search.SearchActivity"/>
+        </activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b6da5b975f1016a9f9d5bbd45ef7244f820af050" />
     </application>
 
 </manifest>

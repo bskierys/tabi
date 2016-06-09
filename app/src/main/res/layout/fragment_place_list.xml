@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:name="pl.ipebk.tabi.ui.fragments.PlaceFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.search.PlaceFragment">
+    
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Search.Height.Doodle"
+        android:visibility="gone"
+        android:contentDescription="@string/description_no_results"
+        android:id="@+id/img_no_results"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/place_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:visibility="gone"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/row_place"/>
+</RelativeLayout>
+

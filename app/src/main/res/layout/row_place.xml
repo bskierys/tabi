@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/root"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="contentDescription">
+
+    <LinearLayout
+        android:id="@+id/wrp_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ImageView
+            style="@style/Divider.Horizontal"
+            android:layout_marginBottom="@dimen/Search.Margin.Row"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/Details.Margin.Outer"
+            android:paddingRight="@dimen/Details.Margin.Outer">
+
+            <include layout="@layout/row_place_name"/>
+        </LinearLayout>
+
+        <pl.ipebk.tabi.ui.custom.FontTextView
+            android:id="@+id/txt_voivodeship"
+            style="@style/Details_Text.Description.Search"/>
+
+        <pl.ipebk.tabi.ui.custom.FontTextView
+            android:id="@+id/txt_powiat"
+            style="@style/Details_Text.Description.Search"
+            android:layout_marginBottom="@dimen/Search.Margin.Row"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/shadow"
+        android:layout_below="@+id/wrp_row"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Shadows.Height.2dp"
+        android:src="@drawable/shadow2dp"/>
+
+    <ImageView
+        style="@style/Divider.Vertical"
+        android:layout_height="@dimen/Search.Height.Row"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <ImageView
+        style="@style/Divider.Vertical"
+        android:layout_height="@dimen/Search.Height.Row"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+</RelativeLayout>
+
+
