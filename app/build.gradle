@@ -16,8 +16,6 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.getkeepsafe.dexcount'
 
-project.ext.set("archivesBaseName", "tabi");
-
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
