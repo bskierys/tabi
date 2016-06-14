@@ -79,11 +79,25 @@
     <string name="main_list_element_sluzbybezpieczenstwa">służby bezpieczeństwa</string>
     <string name="main_list_element_tablicewojskowe">tablice wojskowe</string>
     <string name="main_list_element_licencje">licencje bibliotek zewnętrznych</string>
-    <string name="main_list_element_ocen">oceń naszą aplikację</string>
+    <!--<string name="main_list_element_ocen">oceń naszą aplikację</string>-->
+    <string name="main_list_element_ocen">zgłoś nam swoje uwagi</string>
     <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>
     <string name="main_doodle_caption">Znam *wszystkie* tablice rejestracyjne. Śmiało. Pytaj!</string>
     <string name="main_search_bar_hint_places">Skąd szukasz rejestracji?</string>
     <string name="main_search_bar_hint_plates">Jakiej rejestracji szukasz?</string>
+    <string name="main_doodle_caption_feedback">Masz jakieś *uwagi*? Zjedź na dół strony.</string>
+
+    <string name="main_feedback_title">Wyślij komentarz do autora</string>
+    <string name="main_feedback_body">Prześlij do nas swój komentarz na temat aplikacji</string>
+    <string name="main_feedback_cancel">ANULUJ</string>
+    <string name="main_feedback_send">WYŚLIJ KOMENTARZ</string>
+    <string name="main_feedback_done">Dzięki za opinię :)</string>
+    <string name="main_feedback_bug">Błąd</string>
+    <string name="main_feedback_idea">Pomysł</string>
+    <string name="main_feedback_question">Pytanie</string>
+    <string name="main_feedback_reply_title">Odpowiedź od autora</string>
+    <string name="main_feedback_reply_button">ZAMKNIJ</string>
+    <string name="main_feedback_reply_rate">Oceń aplikację</string>
 
     <string name="app_name">Tabi</string>
     <string name="action_settings">Settings</string>

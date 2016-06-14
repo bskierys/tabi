@@ -35,6 +35,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private List<MainListItem> categoryList;
     private Context context;
     private final MenuItemClickListener listener;
+    private String caption;
 
     public MainItemAdapter(List<MainListItem> categoryList, Context context, @NonNull MenuItemClickListener listener) {
         this.categoryList = categoryList;
@@ -73,9 +74,14 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             // TODO: 2016-06-07 caption should be generic or depends on sharedPrefs
             // TODO: 2016-06-07 make sharedPrefsHelper 
-            String caption = context.getString(R.string.main_doodle_caption);
+            String captionToSet;
+            if(caption == null || caption.equals("")){
+                captionToSet = context.getString(R.string.main_doodle_caption);
+            } else {
+                captionToSet = caption;
+            }
 
-            headerViewHolder.caption.setText(nameFormatHelper.formatDoodleCaption(caption),
+            headerViewHolder.caption.setText(nameFormatHelper.formatDoodleCaption(captionToSet),
                                              TextView.BufferType.SPANNABLE);
             headerViewHolder.greeting.setText(nameFormatHelper.formatDoodleGreeting());
         } else if(holder instanceof SmallHeaderViewHolder) {
@@ -103,6 +109,12 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         return 30;
+    }
+
+    public void setCaption(String caption) {
+        this.caption = caption;
+        // TODO: 2016-06-14 get rid of magic numbers
+        notifyItemChanged(0);
     }
 
     public void swapItems(List<MainListItem> items) {

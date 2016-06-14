@@ -16,6 +16,7 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
 import pl.ipebk.tabi.utils.NameFormatHelper;
+import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
 /**
