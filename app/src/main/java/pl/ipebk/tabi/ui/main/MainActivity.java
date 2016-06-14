@@ -5,13 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+import com.suredigit.inappfeedback.FeedbackDialog;
+import com.suredigit.inappfeedback.FeedbackSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.search.SearchActivity;
@@ -53,6 +58,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private float scrollPercent;
     private MainItemAdapter adapter;
     private BlockingLayoutManager manager;
+    private FeedbackDialog feedbackDialog;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +75,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         recyclerView.setLayoutManager(manager);
         adapter = new MainItemAdapter(new ArrayList<>(), this, this);
         recyclerView.setAdapter(adapter);
+        feedbackDialog = new FeedbackDialog(this, MainPresenter.API_KEY);
+        prepareFeedbackDialog(feedbackDialog);
 
         RxRecyclerView.scrollEvents(recyclerView)
                       .observeOn(AndroidSchedulers.mainThread())
@@ -97,6 +105,41 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         return percent;
     }
 
+    private void prepareFeedbackDialog(FeedbackDialog dialog){
+        dialog.setDebug(BuildConfig.DEBUG);
+
+        FeedbackSettings feedbackSettings = new FeedbackSettings();
+        //SUBMIT-CANCEL BUTTONS
+        feedbackSettings.setCancelButtonText(getString(R.string.main_feedback_cancel));
+        feedbackSettings.setSendButtonText(getString(R.string.main_feedback_send));
+
+        //DIALOG TEXT
+        feedbackSettings.setText(getString(R.string.main_feedback_body));
+        feedbackSettings.setYourComments("");
+        feedbackSettings.setTitle(getString(R.string.main_feedback_title));
+
+        //TOAST MESSAGE
+        feedbackSettings.setToast(getString(R.string.main_feedback_done));
+
+        //RADIO BUTTONS
+        feedbackSettings.setBugLabel(getString(R.string.main_feedback_bug));
+        feedbackSettings.setIdeaLabel(getString(R.string.main_feedback_idea));
+        feedbackSettings.setQuestionLabel(getString(R.string.main_feedback_question));
+
+        //RADIO BUTTONS ORIENTATION AND GRAVITY
+        feedbackSettings.setOrientation(LinearLayout.VERTICAL);
+        feedbackSettings.setGravity(Gravity.LEFT);
+
+        //DEVELOPER REPLIES
+        feedbackSettings.setReplyTitle(getString(R.string.main_feedback_reply_title));
+        feedbackSettings.setReplyCloseButtonText(getString(R.string.main_feedback_reply_button));
+        feedbackSettings.setReplyRateButtonText(getString(R.string.main_feedback_reply_rate));
+
+        feedbackSettings.setModal(true);
+
+        dialog.setSettings(feedbackSettings);
+    }
+
     private void setAnimationState(float percent) {
         float moveSearchTo = (lowestSearchBarPosition - highestSearchBarPosition)
                 * scrollPercent
@@ -111,6 +154,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override protected void onResume() {
         super.onResume();
+        presenter.refreshView();
 
         float targetY;
         if (scrollPercent > 0) {
@@ -133,6 +177,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         }
     }
 
+    @Override protected void onPause() {
+        super.onPause();
+        feedbackDialog.dismiss();
+    }
+
     @Override protected void onDestroy() {
         super.onDestroy();
 
@@ -141,6 +190,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @OnClick(R.id.search_bar) public void onSearchBarClicked() {
         presenter.goToSearch();
+    }
+
+    @Override public void showFeedbackDialog() {
+        feedbackDialog.show();
+    }
+
+    @Override public void showCaption(String caption) {
+        adapter.setCaption(caption);
     }
 
     @Override public void showLoading() {

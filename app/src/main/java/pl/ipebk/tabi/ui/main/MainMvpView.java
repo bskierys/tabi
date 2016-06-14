@@ -5,8 +5,6 @@
 */
 package pl.ipebk.tabi.ui.main;
 
-import android.database.Cursor;
-
 import java.util.List;
 
 import pl.ipebk.tabi.ui.base.MvpView;
@@ -15,6 +13,10 @@ import pl.ipebk.tabi.ui.base.MvpView;
  * TODO: Generic description. Replace with real one.
  */
 public interface MainMvpView extends MvpView {
+    void showFeedbackDialog();
+
+    void showCaption(String caption);
+
     void showLoading();
 
     void hideLoading();

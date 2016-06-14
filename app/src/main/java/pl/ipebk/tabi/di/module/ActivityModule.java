@@ -42,7 +42,8 @@ public class ActivityModule {
         return activity;
     }
 
-    @Provides @ActivityContext Context provideContext() {
+    // TODO: 2016-06-14 somehow making it "ActivityContext" breaks it
+    @Provides Context provideContext() {
         return activity;
     }
 

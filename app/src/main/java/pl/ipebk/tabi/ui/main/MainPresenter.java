@@ -5,6 +5,7 @@
 */
 package pl.ipebk.tabi.ui.main;
 
+import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -12,9 +13,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
+import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
 import rx.Observable;
@@ -24,13 +27,20 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainPresenter extends BasePresenter<MainMvpView> {
+    public static final String API_KEY = "AF-8DE6899E68E4-F6";
+
     private final DataManager dataManager;
     private Subscription subscription;
     private Stopwatch stopwatch;
+    private PreferenceHelper preferenceHelper;
+    private Context context;
 
-    @Inject public MainPresenter(DataManager dataManager, StopwatchManager stopwatchManager) {
+    @Inject public MainPresenter(DataManager dataManager, StopwatchManager stopwatchManager,
+                                 PreferenceHelper preferenceHelper, Context context) {
         this.dataManager = dataManager;
         this.stopwatch = stopwatchManager.getDefaultStopwatch();
+        this.preferenceHelper = preferenceHelper;
+        this.context = context;
     }
 
     @Override public void attachView(MainMvpView mvpView) {
@@ -45,6 +55,23 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         if (subscription != null) {
             subscription.unsubscribe();
         }
+    }
+
+    public void refreshView() {
+        preferenceHelper.increaseMainScreenVisited();
+
+        int mainScreenVisitedNumber = preferenceHelper.howManyTimesMainScreenVisited();
+
+        // TODO: 2016-06-14 use better method than 1/3 entrances
+        String caption;
+        if (mainScreenVisitedNumber % 3 == 0) {
+            caption = context.getString(R.string.main_doodle_caption_feedback);
+            Timber.d("Show feedback caption");
+        } else {
+            Timber.d("Show standard caption");
+            caption = context.getString(R.string.main_doodle_caption);
+        }
+        getMvpView().showCaption(caption);
     }
 
     // TODO: 2016-05-28 presenter lifecycle
@@ -65,7 +92,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
-    private Observable<Cursor> preloadHistory(){
+    private Observable<Cursor> preloadHistory() {
         return dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(3, SearchType.PLACE);
     }
 
@@ -110,11 +137,17 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
 
     public void menuItemClicked(String action) {
-        try{
+        try {
+            // TODO: 2016-06-14 better action click handling
             int actionId = Integer.parseInt(action);
             Timber.d("Menu item clicked has numeral as action. This number is: %d", actionId);
-            getMvpView().prompt("Not implemented yet");
-        }catch (NumberFormatException e) {
+            if (actionId == 2) {
+                Timber.d("Showing feedback dialog for API key: %s", API_KEY);
+                getMvpView().showFeedbackDialog();
+            } else {
+                getMvpView().prompt("Not implemented yet");
+            }
+        } catch (NumberFormatException e) {
             Timber.d("Menu item clicked has literal as action");
             getMvpView().goToSearch(action);
         }
