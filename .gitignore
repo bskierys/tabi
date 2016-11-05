@@ -1,21 +1,37 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
+# build files ignores
 /build
-/captures
-.idea
+/app/build
+/viewpagerindicator/build
+/viewpagerindicator/build/
+.gradle
+
+# iml files ignores
+viewpagerindicator/viewpagerindicator.iml
+app/app.iml
+tabi.iml
+
+# git produced files
+*.class
+*.orig
+*.REMOTE
+
+# IDEA/Android Studio ignores
+*.iml
 *.ipr
 *.iws
-classes
-gen-external-apklibs
-build
-local.properties
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/datasources.xml
+**/.idea/dataSources.ids
+**/.idea/gradle.xml
+**/.idea/misc.xml
+**/.idea/modules.xml
+**/.idea/libraries
+**/.idea/dictionaries
+**/.idea/.name
+**/.idea/vcs.xml
+
+# others
 .DS_Store
-tmp
-*.swp
-*.lock
-profile
+/local.properties
 /keystore
