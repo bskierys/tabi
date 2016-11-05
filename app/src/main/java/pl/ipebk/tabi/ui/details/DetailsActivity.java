@@ -1,7 +1,5 @@
 package pl.ipebk.tabi.ui.details;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -16,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -167,7 +164,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         }
 
         mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                  .first().subscribe(bounds -> {
+                  .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
             mapWrapper.post(() -> {
                 int totalHeight = mapWrapper.getHeight()
                         - mapWrapper.getPaddingBottom()
@@ -175,6 +172,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 int totalWidth = mapWrapper.getWidth()
                         - mapWrapper.getPaddingLeft()
                         - mapWrapper.getPaddingRight();
+
+                Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
+
                 mapHeightStream.onNext(totalHeight);
                 mapWidthStream.onNext(totalWidth);
             });
@@ -186,7 +186,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
         AnimatorSet set = new AnimatorSet();
         set.play(animationHelper.getDetailsAnimator().createScaleAnim(panelCard))
-                .with(animationHelper.getDetailsAnimator().createFadeInAnim(panelCard));
+           .with(animationHelper.getDetailsAnimator().createFadeInAnim(panelCard));
         set.start();
     }
 
@@ -338,7 +338,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Override public void showPlaceHolder() {
         stopwatch.reset();
         placeHeaderWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                          .sample(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                          .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+            Timber.d("Placeholder bounds computed. Height: %d, width: %d", bounds.height(), bounds.width());
             placeHeaderWrapper.post(this::setPlaceHolderImage);
         });
 
