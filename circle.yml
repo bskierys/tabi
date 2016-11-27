@@ -4,7 +4,8 @@ machine:
 
 ## Customize dependencies
 dependencies:
-  override:
+   override:
+    - echo y | android update sdk --no-ui --all --filter "tools,android-24,build-tools-24.0.0,platform-tools,extra-android-m2repository,extra-google-m2repository,extra-google-google_play_services"
     - chmod +x gradlew
 
 test:
@@ -17,7 +18,9 @@ test:
     - circle-android wait-for-boot
     # run tests  against the emulator.
     - ./gradlew connectedAndroidTest
+    - ./gradlew test --continue
     # copy the build outputs to artifacts
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    - cp -r pine/build/reports/tests/release/* $CIRCLE_TEST_REPORTS
