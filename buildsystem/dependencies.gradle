@@ -49,25 +49,24 @@ ext {
 
     //Libraries
     javaxAnnotationVersion = '10.0-b28'
-    daggerVersion = '2.0.2'
+    daggerVersion = '2.8'
     androidSupportVersion = '24.2.1'
     sqliteAssetHelperVersion = '2.0.1'
-    sqlbriteVersion = '0.6.0'
+    sqlbriteVersion = '0.8.0'
     junitVersion = '4.12'
-    mockitoVersion = '1.10.19'
+    mockitoVersion = '2.2.26'
     butterKnifeVersion = '8.4.0'
     pineVersion = '0.2.0'
     picassoVersion = '2.5.2'
-    okhttpVersion = '3.2.0'
+    okhttpVersion = '3.4.2'
     dexmakerVersion = '1.1'
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
     robolectricVerion = '3.0'
-    rxJavaVersion = '1.1.1'
-    rxAndroidVersion = '1.1.0'
+    rxJavaVersion = '1.2.3'
+    rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';
-    rxDebugVersion = '1.+';
     timberUtilsVersion = '1.0.0';
     crashlyticsVersion = '2.5.6@aar';
     overscrollVersion = '1.0.1';
@@ -89,7 +88,6 @@ ext {
             rxbinding               : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
             rxbinding_recyclerview  : "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${rxBindingVersion}",
             rxbinding_support       : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
-            rxdebug                 : "io.reactivex:rxjava-debug:${rxDebugVersion}",
 
             // ButterKnife
             butterknife         : "com.jakewharton:butterknife:${butterKnifeVersion}",
