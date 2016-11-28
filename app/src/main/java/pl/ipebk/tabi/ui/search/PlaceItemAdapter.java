@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
@@ -206,13 +206,13 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.root) View root;
-        @Bind(R.id.txt_place_name) TextView placeNameView;
-        @Bind(R.id.txt_plate) TextView plateView;
-        @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
-        @Bind(R.id.txt_powiat) TextView powiatView;
-        @Bind(R.id.shadow) ImageView shadow;
-        @Bind(R.id.ic_row) ImageView icon;
+        @BindView(R.id.root) View root;
+        @BindView(R.id.txt_place_name) TextView placeNameView;
+        @BindView(R.id.txt_plate) TextView plateView;
+        @BindView(R.id.txt_voivodeship) TextView voivodeshipView;
+        @BindView(R.id.txt_powiat) TextView powiatView;
+        @BindView(R.id.shadow) ImageView shadow;
+        @BindView(R.id.ic_row) ImageView icon;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -221,10 +221,10 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     }
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.root) View root;
-        @Bind(R.id.txt_header) TextView header;
-        @Bind(R.id.shadow) View shadow;
-        @Bind(R.id.divider) ImageView divider;
+        @BindView(R.id.root) View root;
+        @BindView(R.id.txt_header) TextView header;
+        @BindView(R.id.shadow) View shadow;
+        @BindView(R.id.divider) ImageView divider;
 
         public HeaderViewHolder(View view) {
             super(view);

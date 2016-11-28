@@ -8,17 +8,13 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.test.InstrumentationTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.text.TextPaint;
 
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class DoodleImageTest extends InstrumentationTestCase {
@@ -67,13 +63,13 @@ public class DoodleImageTest extends InstrumentationTestCase {
 
         List<String> lines = image.getLines(text, new MockPaint());
 
-        assertEquals(numberOfWords,lines.size());
+        assertEquals(numberOfWords, lines.size());
     }
 
     private class MockPaint extends Paint {
-        @Override public void getTextBounds(String text, int start, int end, Rect bounds){
+        @Override public void getTextBounds(String text, int start, int end, Rect bounds) {
             int size = text.trim().split(" ").length;
-            bounds.set(0,0,size,size);
+            bounds.set(0, 0, size, size);
         }
     }
 }

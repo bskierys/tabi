@@ -8,15 +8,12 @@ package pl.ipebk.tabi.di.module;
 import android.app.Application;
 import android.content.Context;
 
-import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
-import pl.ipebk.tabi.utils.NameFormatHelper;
-import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
 /**
@@ -36,10 +33,6 @@ public class ApplicationModule {
 
     @Provides @ApplicationContext Context provideContext() {
         return application;
-    }
-
-    @Provides @Singleton Bus provideEventBus() {
-        return new Bus();
     }
 
     @Provides @Singleton StopwatchManager provideStopwatchManager() {

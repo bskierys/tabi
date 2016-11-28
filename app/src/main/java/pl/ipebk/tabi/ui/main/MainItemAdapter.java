@@ -18,7 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
@@ -51,7 +51,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (viewType == TYPE_BIG_HEADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main_big_header, parent, false);
             return new BigHeaderViewHolder(view);
-        } else if(viewType == TYPE_SMALL_HEADER) {
+        } else if (viewType == TYPE_SMALL_HEADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_header, parent, false);
             return new SmallHeaderViewHolder(view);
         }
@@ -61,21 +61,21 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ItemViewHolder){
+        if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             MainListElementItem item = (MainListElementItem) categoryList.get(position - 1);
 
             itemViewHolder.rootView.setOnClickListener(v -> listener.onMenuItemClicked(item.getActionKey()));
             itemViewHolder.categoryName.setText(resourceHelper.getStringResourceForKey(item.getTitleResourceKey()));
             itemViewHolder.categoryIcon.setImageDrawable(resourceHelper.getDrawableResourceForKey(item.getImageResourceKey()));
-        } else if(holder instanceof BigHeaderViewHolder) {
+        } else if (holder instanceof BigHeaderViewHolder) {
             // TODO: 2016-05-31 same holder names
             BigHeaderViewHolder headerViewHolder = (BigHeaderViewHolder) holder;
 
             // TODO: 2016-06-07 caption should be generic or depends on sharedPrefs
             // TODO: 2016-06-07 make sharedPrefsHelper 
             String captionToSet;
-            if(caption == null || caption.equals("")){
+            if (caption == null || caption.equals("")) {
                 captionToSet = context.getString(R.string.main_doodle_caption);
             } else {
                 captionToSet = caption;
@@ -84,7 +84,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             headerViewHolder.caption.setText(nameFormatHelper.formatDoodleCaption(captionToSet),
                                              TextView.BufferType.SPANNABLE);
             headerViewHolder.greeting.setText(nameFormatHelper.formatDoodleGreeting());
-        } else if(holder instanceof SmallHeaderViewHolder) {
+        } else if (holder instanceof SmallHeaderViewHolder) {
             SmallHeaderViewHolder headerViewHolder = (SmallHeaderViewHolder) holder;
             MainListHeaderItem item = (MainListHeaderItem) categoryList.get(position - 1);
 
@@ -93,17 +93,17 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override public int getItemCount() {
-        return categoryList.size()+1;
+        return categoryList.size() + 1;
     }
 
     @Override public int getItemViewType(int position) {
-        if(isSectionHeaderPosition(position)){
+        if (isSectionHeaderPosition(position)) {
             return TYPE_BIG_HEADER;
         } else {
-            MainListItem item = categoryList.get(position-1);
-            if(item instanceof MainListElementItem) {
+            MainListItem item = categoryList.get(position - 1);
+            if (item instanceof MainListElementItem) {
                 return TYPE_ITEM;
-            } else if (item instanceof MainListHeaderItem){
+            } else if (item instanceof MainListHeaderItem) {
                 return TYPE_SMALL_HEADER;
             }
         }
@@ -130,8 +130,8 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         View rootView;
-        @Bind(R.id.txt_category) TextView categoryName;
-        @Bind(R.id.ic_category) ImageView categoryIcon;
+        @BindView(R.id.txt_category) TextView categoryName;
+        @BindView(R.id.ic_category) ImageView categoryIcon;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -141,7 +141,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class SmallHeaderViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.txt_header) TextView header;
+        @BindView(R.id.txt_header) TextView header;
 
         public SmallHeaderViewHolder(View view) {
             super(view);
@@ -151,8 +151,8 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public static class BigHeaderViewHolder extends RecyclerView.ViewHolder {
         View rootView;
-        @Bind(R.id.txt_caption) TextView caption;
-        @Bind(R.id.txt_greeting) TextView greeting;
+        @BindView(R.id.txt_caption) TextView caption;
+        @BindView(R.id.txt_greeting) TextView greeting;
 
         public BigHeaderViewHolder(View itemView) {
             super(itemView);

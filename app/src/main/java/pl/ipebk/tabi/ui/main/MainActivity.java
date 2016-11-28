@@ -22,8 +22,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.BindDimen;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.BuildConfig;
@@ -44,14 +44,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Inject MainPresenter presenter;
     @Inject AnimationHelper animationHelper;
-    @Bind(R.id.img_loading) ImageView loadingView;
-    @Bind(R.id.category_list) RecyclerView recyclerView;
-    @Bind(R.id.search_bar) View searchBar;
-    @Bind(R.id.img_tabi_back) View doodleBack;
-    @Bind(R.id.img_tabi_front) View doodleFront;
-    @Bind(R.id.txt_searched) TextView searchText;
-    @Bind(R.id.search_bar_content) View searchBarContent;
-    @Bind(R.id.ic_search) View searchIcon;
+    @BindView(R.id.img_loading) ImageView loadingView;
+    @BindView(R.id.category_list) RecyclerView recyclerView;
+    @BindView(R.id.search_bar) View searchBar;
+    @BindView(R.id.img_tabi_back) View doodleBack;
+    @BindView(R.id.img_tabi_front) View doodleFront;
+    @BindView(R.id.txt_searched) TextView searchText;
+    @BindView(R.id.search_bar_content) View searchBarContent;
+    @BindView(R.id.ic_search) View searchIcon;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Lowest) float lowestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Highest) float highestSearchBarPosition;
 
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         return percent;
     }
 
-    private void prepareFeedbackDialog(FeedbackDialog dialog){
+    private void prepareFeedbackDialog(FeedbackDialog dialog) {
         dialog.setDebug(BuildConfig.DEBUG);
 
         FeedbackSettings feedbackSettings = new FeedbackSettings();
@@ -234,11 +234,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToSearch(String phrase) {
         // TODO: 2016-06-03 different animation when tile is clicked
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
+        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
+                                                                           highestSearchBarPosition))
                   .with(animationHelper.getSearchAnimator().createScaleUpAnim(searchBar))
                   .with(animationHelper.getSearchAnimator().createFadeOutAnim(searchIcon))
                   .with(animationHelper.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
-                                                       highestSearchBarPosition));
+                                                                           highestSearchBarPosition));
 
         RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll());
         RxAnimator.animationEnd(searchAnim).doOnNext(a -> manager.unlockScroll())

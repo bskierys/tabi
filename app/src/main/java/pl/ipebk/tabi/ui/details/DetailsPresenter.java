@@ -92,9 +92,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private void showPlaceIconBasedOnItemType(PlaceListItemType itemType) {
         int iconResId = R.drawable.ic_doodle_search;
 
-        if(itemType == PlaceListItemType.HISTORICAL){
+        if (itemType == PlaceListItemType.HISTORICAL) {
             iconResId = R.drawable.ic_doodle_history;
-        } else if(itemType == PlaceListItemType.RANDOM){
+        } else if (itemType == PlaceListItemType.RANDOM) {
             iconResId = R.drawable.ic_doodle_random;
         }
 
@@ -155,7 +155,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void copyToClipboard() {
-        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         ClipData clip = ClipData.newPlainText(context.getPackageName(), nameFormatHelper.formatPlaceInfo(place));
         clipboard.setPrimaryClip(clip);

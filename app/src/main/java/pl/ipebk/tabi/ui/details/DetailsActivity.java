@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -29,7 +30,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
@@ -65,29 +67,29 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
     // toolbar
-    @Bind(R.id.txt_searched) TextView searchedTextView;
-    @Bind(R.id.editTxt_search) EditText searchedEditText;
-    @Bind(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
-    @Bind(R.id.btn_clear) View clearButton;
+    @BindView(R.id.txt_searched) TextView searchedTextView;
+    @BindView(R.id.editTxt_search) EditText searchedEditText;
+    @BindView(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
+    @BindView(R.id.btn_clear) View clearButton;
     // texts
-    @Bind(R.id.txt_place_name) TextView placeNameView;
-    @Bind(R.id.txt_plate) TextView plateView;
-    @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
-    @Bind(R.id.txt_powiat) TextView powiatView;
-    @Bind(R.id.txt_gmina) TextView gminaView;
-    @Bind(R.id.txt_additional) TextView additionalInfoView;
+    @BindView(R.id.txt_place_name) TextView placeNameView;
+    @BindView(R.id.txt_plate) TextView plateView;
+    @BindView(R.id.txt_voivodeship) TextView voivodeshipView;
+    @BindView(R.id.txt_powiat) TextView powiatView;
+    @BindView(R.id.txt_gmina) TextView gminaView;
+    @BindView(R.id.txt_additional) TextView additionalInfoView;
     // map and panel
-    @Bind(R.id.img_map) ImageView mapView;
-    @Bind(R.id.wrap_map) ObservableSizeLayout mapWrapper;
-    @Bind(R.id.img_pin) ImageView pinView;
-    @Bind(R.id.map_with_panel) View mapAndPanel;
-    @Bind(R.id.card_panel) CardView panelCard;
-    @Bind({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
+    @BindView(R.id.img_map) ImageView mapView;
+    @BindView(R.id.wrap_map) ObservableSizeLayout mapWrapper;
+    @BindView(R.id.img_pin) ImageView pinView;
+    @BindView(R.id.map_with_panel) View mapAndPanel;
+    @BindView(R.id.card_panel) CardView panelCard;
+    @BindViews({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
-    @Bind((R.id.ic_row)) ImageView placeIcon;
-    @Bind(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
-    @Bind(R.id.img_placeholder) ImageView placeHolder;
-    @Bind(R.id.scroll_container) ScrollView scrollContainer;
+    @BindView((R.id.ic_row)) ImageView placeIcon;
+    @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
+    @BindView(R.id.img_placeholder) ImageView placeHolder;
+    @BindView(R.id.scroll_container) ScrollView scrollContainer;
 
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
@@ -307,11 +309,19 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void enableActionButtons() {
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.VISIBLE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override public void disableActionButtons() {
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.INVISIBLE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override public void showInfoMessage(String message) {
@@ -350,7 +360,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         gminaView.setVisibility(View.GONE);
         additionalInfoView.setVisibility(View.GONE);
         panelCard.setVisibility(View.GONE);
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.GONE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setPlaceHolderImage() {

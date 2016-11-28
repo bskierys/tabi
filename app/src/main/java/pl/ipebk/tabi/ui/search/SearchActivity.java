@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
@@ -54,12 +54,12 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Inject SearchPresenter presenter;
     @Inject FontManager fontManager;
-    @Bind(R.id.editTxt_search) EditText searchEditText;
-    @Bind(R.id.txt_searched) TextView searchedText;
-    @Bind(R.id.pager_search) ViewPager searchPager;
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.indicator) SearchTabPageIndicator indicator;
-    @Bind(R.id.btn_clear) View clearButton;
+    @BindView(R.id.editTxt_search) EditText searchEditText;
+    @BindView(R.id.txt_searched) TextView searchedText;
+    @BindView(R.id.pager_search) ViewPager searchPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.indicator) SearchTabPageIndicator indicator;
+    @BindView(R.id.btn_clear) View clearButton;
     @State String currentSearch;
     @State boolean isFullySearched;
 
@@ -87,13 +87,13 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
 
         RxViewPager.pageSelections(searchPager)
-                .subscribe(page -> {
-                    if(page == SEARCH_PLACES_FRAGMENT_POSITION){
-                        searchEditText.setHint(getString(R.string.main_search_bar_hint_places));
-                    }else if(page == SEARCH_PLATES_FRAGMENT_POSITION) {
-                        searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
-                    }
-                });
+                   .subscribe(page -> {
+                       if (page == SEARCH_PLACES_FRAGMENT_POSITION) {
+                           searchEditText.setHint(getString(R.string.main_search_bar_hint_places));
+                       } else if (page == SEARCH_PLATES_FRAGMENT_POSITION) {
+                           searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
+                       }
+                   });
 
         searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
