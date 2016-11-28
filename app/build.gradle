@@ -20,6 +20,10 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+def keystoreStorePass="default"
+def keystoreKeyAlias="default"
+def keystoreKeyPass="default"
+
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
 
@@ -74,15 +78,28 @@ android {
         }
     }
 
-    //todo: remove from this file
-    signingConfigs {
-        release {
-            storeFile file("keystore/ipebk.jks")
-            storePassword "gwh28dgcmp"
-            keyAlias "ipe_bk_keystore"
-            keyPassword "gwh28dgcmp"
-        }
-    }
+    File signFile = rootProject.file('buildsystem/sign.properties')
+	if (signFile.exists()) {
+		Properties p = new Properties()
+		p.load(new FileInputStream(signFile))
+		
+		keystoreStorePass=p.storePassword
+		keystoreKeyAlias=p.keyAlias
+		keystoreKeyPass=p.keyPassword
+	} else {
+		keystoreStorePass=System.getenv('KEYSTORE_STORE_PASS')
+		keystoreKeyAlias=System.getenv('KEYSTORE_KEY_ALIAS')
+		keystoreKeyPass=System.getenv('KEYSTORE_KAY_PASS')
+	}
+	
+	signingConfigs {
+			release {
+				storeFile file("keystore/ipebk.jks")
+				storePassword keystoreStorePass
+				keyAlias keystoreKeyAlias
+				keyPassword keystoreKeyPass
+			}
+		}
 
     buildTypes {
         release {
@@ -203,4 +220,16 @@ dependencies {
 // Log out test results to console
 tasks.matching {it instanceof Test}.all {
     testLogging.events = ["failed", "passed", "skipped"]
+}
+
+def getLocalProperty(prop) {
+	Properties properties = new Properties()
+	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+	return properties.getProperty(prop, '')
+}
+
+def hasLocalProperty(prop) {
+	Properties properties = new Properties()
+	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+	return properties.hasProperty(prop)
 }
