@@ -23,4 +23,4 @@ test:
     - cp -r app/build/outputs $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
-    - cp -r pine/build/reports/tests/release/* $CIRCLE_TEST_REPORTS
+    - cp -r app/build/reports/tests/release/* $CIRCLE_TEST_REPORTS
