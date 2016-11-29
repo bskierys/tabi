@@ -1,8 +1,6 @@
 package pl.ipebk.tabi.ui.details;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,9 +8,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import pl.ipebk.tabi.database.daos.PlaceDao;
 import pl.ipebk.tabi.database.models.Place;
@@ -22,13 +19,13 @@ import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.test.common.TestDataFactory;
 import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
+import pl.ipebk.tabi.utils.DeviceHelper;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,6 +35,8 @@ public class DetailsPresenterTest {
     @Mock DetailsMvpView mockMvpView;
     @Mock PlaceDao mockPlaceDao;
     @Mock Activity mockContext;
+    @Mock DeviceHelper mockDeviceHelper;
+    @Mock NameFormatHelper mockNameHelper;
     private DetailsPresenter detailsPresenter;
 
     @Before public void setUp() throws Exception {
@@ -47,15 +46,9 @@ public class DetailsPresenterTest {
         DataManager mockDataManager = mock(DataManager.class);
         when(mockDataManager.getDatabaseHelper()).thenReturn(mockOpenHelper);
 
-        // set mocked density
-        DisplayMetrics metrics = new DisplayMetrics();
-        metrics.density = 2f;
+        when(mockDeviceHelper.getMapScale()).thenReturn(2);
 
-        Resources mockResources = mock(Resources.class);
-        when(mockResources.getDisplayMetrics()).thenReturn(metrics);
-        when(mockContext.getResources()).thenReturn(mockResources);
-
-        detailsPresenter = new DetailsPresenter(mockDataManager, mockContext);
+        detailsPresenter = new DetailsPresenter(mockDataManager, mockDeviceHelper, mockNameHelper);
         detailsPresenter.attachView(mockMvpView);
     }
 
@@ -110,12 +103,11 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH,
-                                   Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.showOnMap();
 
-        verify(mockMvpView).startMap(any());
+        verify(mockMvpView).startMapApp(any());
     }
 
     @Test public void testSearchInGoogle() {
@@ -123,8 +115,7 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH,
-                                   Observable.just(1), Observable.just(1));
+        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();
 

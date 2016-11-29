@@ -45,6 +45,7 @@ import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.AnimationHelper;
+import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.Stopwatch;
@@ -66,6 +67,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Inject AnimationHelper animationHelper;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
+    @Inject DeviceHelper deviceHelper;
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
     @BindView(R.id.editTxt_search) EditText searchedEditText;
@@ -94,6 +96,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+
+    private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
+    private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,9 +155,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     private void loadData() {
-        final PublishSubject<Integer> mapWidthStream = PublishSubject.create();
-        final PublishSubject<Integer> mapHeightStream = PublishSubject.create();
-
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
@@ -160,9 +162,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         SearchType searchType = SearchType.values()
                 [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
         if (placeId > 0) {
-            presenter.loadPlace(placeId, searchedPlate, searchType, itemType,
-                                mapWidthStream.asObservable(),
-                                mapHeightStream.asObservable());
+            presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
 
         mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
@@ -177,8 +177,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
                 Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
 
-                mapHeightStream.onNext(totalHeight);
-                mapWidthStream.onNext(totalWidth);
+                float density = deviceHelper.getScreenDensity();
+                mapHeightStream.onNext((int) (totalHeight / density));
+                mapWidthStream.onNext((int) (totalWidth / density));
             });
         });
     }
@@ -300,6 +301,27 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                                                           pair.second.asDrawable()));
     }
 
+    @Override public void showMapError() {
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+                .height(mapView.getHeight())
+                .width(mapView.getWidth())
+                .headerFont(doodleHeaderFont)
+                .descriptionFont(doodleDescriptionFont)
+                .spaceBeforeImage(getResources().getDimensionPixelSize(
+                        R.dimen.Details_Height_Doodle_Map_Space_Before))
+                .spaceAfterImage(getResources().getDimensionPixelSize(
+                        R.dimen.Details_Height_Doodle_Map_Space_After));
+
+        DoodleImage errorDoodle = doodleBuilder
+                .imageResource(R.drawable.tabi_map_error)
+                .headerText(getString(R.string.details_doodle_error_header))
+                .descriptionText(getString(R.string.details_doodle_error_description))
+                .build();
+
+        mapView.setImageDrawable(errorDoodle.asDrawable());
+        pinView.setVisibility(View.INVISIBLE);
+    }
+
     private void loadImageWithPicasso(Uri uri, Drawable loading, Drawable error) {
         stopwatch.reset();
         picasso.load(uri).fit().centerCrop()
@@ -324,11 +346,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         });
     }
 
-    @Override public void showInfoMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    @Override public void showInfoMessageCopied() {
+        Toast.makeText(this, getString(R.string.details_info_copy_done), Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void startMap(Uri geoLocation) {
+    @Override public void startMapApp(Uri geoLocation) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         intent.setPackage("com.google.android.apps.maps");
@@ -365,6 +387,18 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                 view.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override public Observable<Integer> getMapWidthStream() {
+        return mapWidthStream.asObservable();
+    }
+
+    @Override public Observable<Integer> getMapHeightStream() {
+        return mapHeightStream.asObservable();
+    }
+
+    @Override public String getLocalizedPoland() {
+        return getString(R.string.details_country);
     }
 
     private void setPlaceHolderImage() {

@@ -27,6 +27,7 @@ public class FontDecorator {
     public FontDecorator(Context context, TextView textView) {
         this.context = context;
         this.textView = textView;
+        // TODO: 2016-11-29 should have inject constructor
         if(!textView.isInEditMode()){
             App.get(context).getViewComponent().inject(this);
         }

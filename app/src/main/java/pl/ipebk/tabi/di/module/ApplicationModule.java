@@ -14,6 +14,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.utils.DeviceHelper;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
 /**
@@ -35,7 +37,15 @@ public class ApplicationModule {
         return application;
     }
 
-    @Provides @Singleton StopwatchManager provideStopwatchManager() {
+    @Provides @Singleton public StopwatchManager provideStopwatchManager() {
         return new StopwatchManager();
+    }
+
+    @Provides public NameFormatHelper provideNameFormatHelper() {
+        return new NameFormatHelper(application);
+    }
+
+    @Provides public DeviceHelper provideDeviceHelper() {
+        return new DeviceHelper(application);
     }
 }

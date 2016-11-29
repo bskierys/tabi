@@ -8,6 +8,7 @@ package pl.ipebk.tabi.ui.details;
 import android.net.Uri;
 
 import pl.ipebk.tabi.ui.base.MvpView;
+import rx.Observable;
 
 public interface DetailsMvpView extends MvpView {
     void showPlaceIcon(int iconResId);
@@ -28,15 +29,24 @@ public interface DetailsMvpView extends MvpView {
 
     void showMap(Uri uri);
 
+    void showMapError();
+
     void enableActionButtons();
 
     void disableActionButtons();
 
-    void showInfoMessage(String message);
+    void showInfoMessageCopied();
 
-    void startMap(Uri uri);
+    void startMapApp(Uri uri);
 
     void startWebSearch(String searchPhrase);
 
     void showPlaceHolder();
+
+    // returning methods
+    Observable<Integer> getMapWidthStream();
+
+    Observable<Integer> getMapHeightStream();
+
+    String getLocalizedPoland();
 }
