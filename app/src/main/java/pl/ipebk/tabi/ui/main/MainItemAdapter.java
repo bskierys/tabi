@@ -26,9 +26,12 @@ import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
 
 public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    static final int TYPE_BIG_HEADER = 0;
-    static final int TYPE_SMALL_HEADER = 1;
-    static final int TYPE_ITEM = 2;
+    private static final int TYPE_NONE = -1;
+    private static final int TYPE_BIG_HEADER = 0;
+    private static final int TYPE_SMALL_HEADER = 1;
+    private static final int TYPE_ITEM = 2;
+
+    private static final int BIG_HEADER_POSITION = 0;
 
     @Inject ResourceHelper resourceHelper;
     @Inject NameFormatHelper nameFormatHelper;
@@ -108,13 +111,12 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
 
-        return 30;
+        return TYPE_NONE;
     }
 
     public void setCaption(String caption) {
         this.caption = caption;
-        // TODO: 2016-06-14 get rid of magic numbers
-        notifyItemChanged(0);
+        notifyItemChanged(BIG_HEADER_POSITION);
     }
 
     public void swapItems(List<MainListItem> items) {

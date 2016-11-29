@@ -18,6 +18,7 @@ import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.PreferenceHelper;
+import pl.ipebk.tabi.utils.RxUtil;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
 import rx.Observable;
@@ -27,10 +28,10 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainPresenter extends BasePresenter<MainMvpView> {
-    public static final String API_KEY = "AF-8DE6899E68E4-F6";
+    public static final String FEEDBACK_API_KEY = "AF-8DE6899E68E4-F6";
 
     private final DataManager dataManager;
-    private Subscription subscription;
+    private Subscription loadSubscription;
     private Stopwatch stopwatch;
     private PreferenceHelper preferenceHelper;
     private Context context;
@@ -52,9 +53,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     @Override public void detachView() {
         super.detachView();
-        if (subscription != null) {
-            subscription.unsubscribe();
-        }
+        RxUtil.unsubscribe(loadSubscription);
     }
 
     public void refreshView() {
@@ -77,7 +76,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     // TODO: 2016-05-28 presenter lifecycle
     private void loadDatabase() {
         stopwatch.reset();
-        subscription = dataManager
+        loadSubscription = dataManager
                 .initDatabase()
                 .map(v -> preloadHistory())
                 .subscribeOn(Schedulers.io())
@@ -142,7 +141,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
             int actionId = Integer.parseInt(action);
             Timber.d("Menu item clicked has numeral as action. This number is: %d", actionId);
             if (actionId == 2) {
-                Timber.d("Showing feedback dialog for API key: %s", API_KEY);
+                Timber.d("Showing feedback dialog for API key: %s", FEEDBACK_API_KEY);
                 getMvpView().showFeedbackDialog();
             } else {
                 getMvpView().prompt("Not implemented yet");

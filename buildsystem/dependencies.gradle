@@ -44,8 +44,8 @@ ext {
     androidVersionName = "${versionMajor}.${versionMinor}.${versionPatch}-b${versionBuild}"
     androidBuildToolsVersion = "24.0.0"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 25
-    androidCompileSdkVersion = 25
+    androidTargetSdkVersion = 24
+    androidCompileSdkVersion = 24
 
     //Libraries
     javaxAnnotationVersion = '10.0-b28'

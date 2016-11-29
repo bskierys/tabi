@@ -379,7 +379,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     //endregion
 
     //region View pager management
-
     protected PlaceFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);

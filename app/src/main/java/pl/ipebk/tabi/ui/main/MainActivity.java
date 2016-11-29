@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         recyclerView.setLayoutManager(manager);
         adapter = new MainItemAdapter(new ArrayList<>(), this, this);
         recyclerView.setAdapter(adapter);
-        feedbackDialog = new FeedbackDialog(this, MainPresenter.API_KEY);
+        feedbackDialog = new FeedbackDialog(this, MainPresenter.FEEDBACK_API_KEY);
         prepareFeedbackDialog(feedbackDialog);
 
         RxRecyclerView.scrollEvents(recyclerView)
