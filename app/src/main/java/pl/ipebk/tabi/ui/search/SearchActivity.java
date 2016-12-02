@@ -34,6 +34,7 @@ import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
+import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -93,7 +94,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                        } else if (page == SEARCH_PLATES_FRAGMENT_POSITION) {
                            searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
                        }
-                   });
+                   }, ex -> Timber.e(ex, "Page cannot be changed"));
 
         searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
@@ -197,27 +198,24 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                     } else {
                         hideClearButton();
                     }
-                });
+                }, ex -> Timber.e(ex, "Text subscription fail"));
 
         editorActionSubscription = RxTextView
                 .editorActionEvents(searchEditText)
                 .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
                 .subscribe(e -> {
                     presenter.deepSearchForText(searchEditText.getText().toString());
-                });
+                }, ex -> Timber.e(ex, "Text search click fail"));
 
         presenter.refreshSearch();
+        // makes sure subscription for text changes is no fired too soon
         textChangeSubject.onNext(1);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        if (editorActionSubscription != null) {
-            editorActionSubscription.unsubscribe();
-        }
-        if (textChangesSubscription != null) {
-            textChangesSubscription.unsubscribe();
-        }
+        RxUtil.unsubscribe(editorActionSubscription);
+        RxUtil.unsubscribe(textChangesSubscription);
     }
 
     @Override protected void onDestroy() {

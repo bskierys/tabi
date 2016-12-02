@@ -46,8 +46,6 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     public PlaceItemAdapter(Cursor cursor, Context context) {
         super(cursor);
         this.context = context;
-        // TODO: 2016-05-22 this way is simpler for all injections. Should be something like ViewModule to provide it
-        // todo: to activities fragments and presenters
         App.get(context).getViewComponent().inject(this);
     }
 
@@ -83,7 +81,6 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         checkAllArgumentsFilled();
 
         ItemViewHolder holder = (ItemViewHolder) viewHolder;
-        int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
         // show shadow for last rows
         if (isSectionHeaderPosition(positionToSectionedPosition(position) + 1)
@@ -93,59 +90,69 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
             holder.shadow.setVisibility(View.GONE);
         }
 
-        Observable<PlaceListItem> placeStream = Observable.just(cursor).first().map(this::cursorToItem);
+        Observable.just(cursor).first().map(this::cursorToItem)
+                .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
+                .subscribe(place -> {
+                    Place.Type type = place.getPlaceType();
+                    if(type.ordinal() < Place.Type.SPECIAL.ordinal()){
+                        bindStandardPlaceViewHolder(holder, place);
+                    } else if(type == Place.Type.SPECIAL) {
+                        bindSpecialPlaceViewHolder(holder, place);
+                    } else if(type == Place.Type.RANDOM) {
+                        bindRandomPlaceViewHolder(holder, place);
+                    }
+                }, ex -> Timber.e(ex, "Error rendering row view"));
+    }
 
-        Observable<PlaceListItem> standardPlaceStream = placeStream
-                .filter(p -> p.getPlaceType().ordinal() < Place.Type.SPECIAL.ordinal());
-        Observable<PlaceListItem> specialPlaceStream = placeStream
-                .filter(p -> p.getPlaceType() == Place.Type.SPECIAL);
-        Observable<PlaceListItem> randomPlaceStream = placeStream
-                .filter(p -> p.getPlaceType() == Place.Type.RANDOM);
-
-        placeStream.doOnNext(place -> holder.root.setOnClickListener(
-                v -> eventListener.onPlaceItemClicked(
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceListItem place) {
+        holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
                         place.getPlaceId(),
                         getPlateString(place.getPlateStart(), place.getPlateEnd()),
                         type, place.getPlaceType() == Place.Type.RANDOM ? PlaceListItemType.RANDOM :
-                                (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH))))
-                   .map(p -> getPlateString(p.getPlateStart(), p.getPlateEnd()))
-                   .doOnNext(t -> holder.icon.setImageResource(iconResourceId))
-                   .subscribe(plateText -> holder.plateView.setText(plateText));
+                                (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
-        standardPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
-                           .doOnNext(place -> holder.voivodeshipView.setText(
-                                   nameFormatHelper.formatVoivodeship(place.getVoivodeship())))
-                           .doOnNext(place -> holder.powiatView.setText(
-                                   nameFormatHelper.formatPowiat(place.getPowiat())))
-                           .subscribe();
+        holder.plateView.setText(getPlateString(place.getPlateStart(), place.getPlateEnd()));
+    }
 
-        specialPlaceStream.doOnNext(place -> holder.powiatView.setText(place.getVoivodeship()))
-                          .map(place -> place.getPlaceName().split(" "))
-                          .doOnNext(name -> holder.placeNameView.setText(name[0]))
-                          .doOnNext(name -> holder.voivodeshipView.setText(getPlaceSubName(name)))
-                          .doOnError(error -> Timber.e("Error processing special place name: %s", error))
-                          .subscribe();
-
-        if (type == SearchType.PLACE) {
-            randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(place.getPlaceName()))
-                             .doOnNext(place -> holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER))
-                             .doOnNext(place -> holder.voivodeshipView.setText(context.getString(R.string.search_question_where)))
-                             .doOnNext(place -> holder.powiatView.setText(context.getString(R.string.search_question_plates)))
-                             .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
-                             .subscribe();
+    private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+        if(type == SearchType.PLACE){
+            holder.placeNameView.setText(place.getPlaceName());
+            holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER);
+            holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
+            holder.powiatView.setText(context.getString(R.string.search_question_plates));
+            holder.icon.setImageResource(R.drawable.ic_doodle_random);
         } else if (type == SearchType.PLATE) {
-            randomPlaceStream.doOnNext(place -> holder.placeNameView.setText(context.getString(R.string.search_question_what)))
-                             .doOnNext(place -> holder.voivodeshipView.setText(context.getString(R.string.search_question_where)))
-                             .doOnNext(place -> holder.powiatView.setText(nameFormatHelper.getRandomQuestion()))
-                             .doOnNext(place -> holder.icon.setImageResource(R.drawable.ic_doodle_random))
-                             .subscribe();
+            holder.placeNameView.setText(context.getString(R.string.search_question_what));
+            holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
+            holder.powiatView.setText(nameFormatHelper.getRandomQuestion());
+            holder.icon.setImageResource(R.drawable.ic_doodle_random);
         }
+    }
+
+    private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+        int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
+        String[] nameParts = place.getPlaceName().split(" ");
+
+        holder.powiatView.setText(place.getVoivodeship());
+        holder.placeNameView.setText(nameParts[0]);
+        holder.voivodeshipView.setText(getPlaceSubName(nameParts));
+        holder.icon.setImageResource(iconResourceId);
+    }
+
+    private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+        int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
+
+        holder.placeNameView.setText(place.getPlaceName());
+        holder.voivodeshipView.setText(nameFormatHelper.formatVoivodeship(place.getVoivodeship()));
+        holder.powiatView.setText(nameFormatHelper.formatPowiat(place.getPowiat()));
+        holder.icon.setImageResource(iconResourceId);
     }
 
     protected PlaceListItem cursorToItem(Cursor cursor) {
         return new PlaceListItem(cursor);
     }
 
+    // TODO: 2016-12-02 should be in domain
     private String getPlateString(String plateStart, String plateEnd) {
         Plate plate = new Plate();
         plate.setPattern(plateStart);
