@@ -47,6 +47,8 @@ public class DetailsPresenterTest {
         when(mockDataManager.getDatabaseHelper()).thenReturn(mockOpenHelper);
 
         when(mockDeviceHelper.getMapScale()).thenReturn(2);
+        when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
+        when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
 
         detailsPresenter = new DetailsPresenter(mockDataManager, mockDeviceHelper, mockNameHelper);
         detailsPresenter.attachView(mockMvpView);
@@ -115,10 +117,11 @@ public class DetailsPresenterTest {
         Place malbork = TestDataFactory.createStandardPlace(name);
 
         when(mockPlaceDao.getByIdObservable(1L)).thenReturn(Observable.just(malbork));
+        when(mockNameHelper.formatPlaceToSearch(malbork)).thenReturn(name);
         detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();
 
-        verify(mockMvpView).startWebSearch(anyString());
+        verify(mockMvpView).startWebSearch(name);
     }
 }
