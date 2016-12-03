@@ -1,5 +1,11 @@
 -- wyszukiwanie po tablicy
-SELECT * FROM plates_to_search WHERE searched_plate LIKE 'd%' GROUP BY _id  ORDER BY length(searched_plate) ASC, place_type ASC,  searched_plate ASC,  searched_plate_end ASC;
+SELECT _id, place_name, place_type, voivodeship, powiat, searched_plate, searched_plate_end FROM (
+
+	SELECT * FROM (
+		SELECT _id, MAX(plate_priority) AS max_plate_priority FROM plates_to_search WHERE searched_plate LIKE 'py%' GROUP BY _id
+	) as o LEFT JOIN plates_to_search p ON o._id = p._id WHERE o.max_plate_priority = p.plate_priority
+	
+) as w WHERE searched_plate LIKE 'py%' ORDER BY length(searched_plate) ASC, place_type ASC,  searched_plate ASC,  searched_plate_end ASC;
 
 -- wypisanie wszystkich kategorii na ekranie głównym
 SELECT * FROM categories ORDER BY place_type ASC, voivodeship COLLATE localized ASC;
