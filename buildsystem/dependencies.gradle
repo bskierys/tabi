@@ -54,7 +54,8 @@ ext {
     sqliteAssetHelperVersion = '2.0.1'
     sqlbriteVersion = '0.8.0'
     junitVersion = '4.12'
-    mockitoVersion = '2.2.26'
+    mockitoTwoVersion = '2.2.26'
+    mockitoOneVersion = '1.10.19'
     butterKnifeVersion = '8.4.0'
     pineVersion = '0.2.0'
     picassoVersion = '2.5.2'
@@ -90,8 +91,8 @@ ext {
             rxbinding_support       : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
 
             // ButterKnife
-            butterknife         : "com.jakewharton:butterknife:${butterKnifeVersion}",
-            butterknife_compiler: "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
+            butterknife             : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterknife_compiler    : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
 
             // logs
             pine                    : "com.github.bskierys.pine:pine:${pineVersion}",
@@ -122,7 +123,8 @@ ext {
             junit                   : "junit:junit:${junitVersion}",
             robolectric             : "org.robolectric:robolectric:${robolectricVerion}",
             robolectric_shadows     : "org.robolectric:shadows-support-v4:${robolectricVerion}",
-            mockito                 : "org.mockito:mockito-core:${mockitoVersion}",
+            mockitoTwo              : "org.mockito:mockito-core:${mockitoTwoVersion}",
+            mockitoOne              : "org.mockito:mockito-core:${mockitoOneVersion}",
             assertj                 : "org.assertj:assertj-core:${assertjVersion}",
             assertj_android         : "com.squareup.assertj:assertj-android:${assertjAndroidVersion}",
             assertj_android_recycler: "com.squareup.assertj:assertj-android-recyclerview-v7:${assertjAndroidVersion}@aar",

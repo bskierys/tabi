@@ -184,7 +184,7 @@ dependencies {
 
     // unit
     testCompile mobileDependencies.junit
-    testCompile mobileDependencies.mockito
+    testCompile mobileDependencies.mockitoTwo
     testCompile mobileDependencies.robolectric
     testCompile mobileDependencies.robolectric_shadows
     testCompile mobileDependencies.assertj
@@ -198,7 +198,7 @@ dependencies {
     }
 
     // integration
-    androidTestCompile mobileDependencies.mockito
+    androidTestCompile mobileDependencies.mockitoOne
     androidTestCompile mobileDependencies.dexmaker
     androidTestCompile mobileDependencies.dexmaker_mockito
     androidTestCompile(mobileDependencies.testrules) {
