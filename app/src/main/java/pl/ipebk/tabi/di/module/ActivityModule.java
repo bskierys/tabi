@@ -17,7 +17,9 @@ import dagger.Provides;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.di.ActivityContext;
 import pl.ipebk.tabi.utils.AnimationHelper;
+import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
@@ -61,5 +63,14 @@ public class ActivityModule {
 
     @Provides AnimationHelper provideAnimationHelper() {
         return new AnimationHelper(activity);
+    }
+
+    // TODO: 2016-11-29 remove when activity component has app dependencies
+    @Provides NameFormatHelper provideNameFormatHelper() {
+        return new NameFormatHelper(activity);
+    }
+
+    @Provides DeviceHelper provideDeviceHelper() {
+        return new DeviceHelper(activity);
     }
 }

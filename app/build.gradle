@@ -150,16 +150,14 @@ dependencies {
     compile mobileDependencies.rxbinding_support
 
     // butterknife
-    compile mobileDependencies.butterKnife
+    compile mobileDependencies.butterknife
+    apt mobileDependencies.butterknife_compiler
 
     // overscroll
     compile mobileDependencies.overscroll
 
-    // otto
-    compile mobileDependencies.otto
-
     // logs
-    compile mobileDependencies.timber
+    compile mobileDependencies.pine
     compile mobileDependencies.timbertreeutils
     compile(mobileDependencies.crashlytics) {
         transitive = true;
@@ -186,7 +184,7 @@ dependencies {
 
     // unit
     testCompile mobileDependencies.junit
-    testCompile mobileDependencies.mockito
+    testCompile mobileDependencies.mockitoTwo
     testCompile mobileDependencies.robolectric
     testCompile mobileDependencies.robolectric_shadows
     testCompile mobileDependencies.assertj
@@ -200,7 +198,7 @@ dependencies {
     }
 
     // integration
-    androidTestCompile mobileDependencies.mockito
+    androidTestCompile mobileDependencies.mockitoOne
     androidTestCompile mobileDependencies.dexmaker
     androidTestCompile mobileDependencies.dexmaker_mockito
     androidTestCompile(mobileDependencies.testrules) {
@@ -220,16 +218,4 @@ dependencies {
 // Log out test results to console
 tasks.matching {it instanceof Test}.all {
     testLogging.events = ["failed", "passed", "skipped"]
-}
-
-def getLocalProperty(prop) {
-	Properties properties = new Properties()
-	properties.load(project.rootProject.file('local.properties').newDataInputStream())
-	return properties.getProperty(prop, '')
-}
-
-def hasLocalProperty(prop) {
-	Properties properties = new Properties()
-	properties.load(project.rootProject.file('local.properties').newDataInputStream())
-	return properties.hasProperty(prop)
 }

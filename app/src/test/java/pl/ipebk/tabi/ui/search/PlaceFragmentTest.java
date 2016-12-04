@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 import org.robolectric.util.FragmentTestUtil;
@@ -35,7 +35,7 @@ import pl.ipebk.tabi.database.models.SearchType;
 import static org.junit.Assert.*;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class PlaceFragmentTest {
     private TestablePlaceFragment fragment;
     @Mock LinearLayoutManager mockLayoutManager;

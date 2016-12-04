@@ -19,6 +19,7 @@ public class FontEditText extends EditText {
 
     public FontEditText(Context context) {
         super(context);
+        // TODO: 2016-11-29 should be injected
         decorator = new FontDecorator(context, this);
     }
 

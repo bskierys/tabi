@@ -26,10 +26,6 @@ public class ViewModule {
         this.fontManager.initialize(context, R.xml.fonts);
     }
 
-    @Provides NameFormatHelper provideNameFormatHelper() {
-        return new NameFormatHelper(context);
-    }
-
     @Provides FontManager provideFontManager() {
         return fontManager;
     }

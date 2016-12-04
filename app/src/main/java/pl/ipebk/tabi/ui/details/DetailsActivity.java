@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -29,7 +30,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
@@ -43,6 +45,7 @@ import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.search.SearchActivity;
 import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.AnimationHelper;
+import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.Stopwatch;
@@ -64,34 +67,38 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Inject AnimationHelper animationHelper;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
+    @Inject DeviceHelper deviceHelper;
     // toolbar
-    @Bind(R.id.txt_searched) TextView searchedTextView;
-    @Bind(R.id.editTxt_search) EditText searchedEditText;
-    @Bind(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
-    @Bind(R.id.btn_clear) View clearButton;
+    @BindView(R.id.txt_searched) TextView searchedTextView;
+    @BindView(R.id.editTxt_search) EditText searchedEditText;
+    @BindView(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
+    @BindView(R.id.btn_clear) View clearButton;
     // texts
-    @Bind(R.id.txt_place_name) TextView placeNameView;
-    @Bind(R.id.txt_plate) TextView plateView;
-    @Bind(R.id.txt_voivodeship) TextView voivodeshipView;
-    @Bind(R.id.txt_powiat) TextView powiatView;
-    @Bind(R.id.txt_gmina) TextView gminaView;
-    @Bind(R.id.txt_additional) TextView additionalInfoView;
+    @BindView(R.id.txt_place_name) TextView placeNameView;
+    @BindView(R.id.txt_plate) TextView plateView;
+    @BindView(R.id.txt_voivodeship) TextView voivodeshipView;
+    @BindView(R.id.txt_powiat) TextView powiatView;
+    @BindView(R.id.txt_gmina) TextView gminaView;
+    @BindView(R.id.txt_additional) TextView additionalInfoView;
     // map and panel
-    @Bind(R.id.img_map) ImageView mapView;
-    @Bind(R.id.wrap_map) ObservableSizeLayout mapWrapper;
-    @Bind(R.id.img_pin) ImageView pinView;
-    @Bind(R.id.map_with_panel) View mapAndPanel;
-    @Bind(R.id.card_panel) CardView panelCard;
-    @Bind({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
+    @BindView(R.id.img_map) ImageView mapView;
+    @BindView(R.id.wrap_map) ObservableSizeLayout mapWrapper;
+    @BindView(R.id.img_pin) ImageView pinView;
+    @BindView(R.id.map_with_panel) View mapAndPanel;
+    @BindView(R.id.card_panel) CardView panelCard;
+    @BindViews({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
-    @Bind((R.id.ic_row)) ImageView placeIcon;
-    @Bind(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
-    @Bind(R.id.img_placeholder) ImageView placeHolder;
-    @Bind(R.id.scroll_container) ScrollView scrollContainer;
+    @BindView((R.id.ic_row)) ImageView placeIcon;
+    @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
+    @BindView(R.id.img_placeholder) ImageView placeHolder;
+    @BindView(R.id.scroll_container) ScrollView scrollContainer;
 
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+
+    private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
+    private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,9 +155,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     private void loadData() {
-        final PublishSubject<Integer> mapWidthStream = PublishSubject.create();
-        final PublishSubject<Integer> mapHeightStream = PublishSubject.create();
-
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
@@ -158,9 +162,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         SearchType searchType = SearchType.values()
                 [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
         if (placeId > 0) {
-            presenter.loadPlace(placeId, searchedPlate, searchType, itemType,
-                                mapWidthStream.asObservable(),
-                                mapHeightStream.asObservable());
+            presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
 
         mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
@@ -175,8 +177,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
                 Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
 
-                mapHeightStream.onNext(totalHeight);
-                mapWidthStream.onNext(totalWidth);
+                float density = deviceHelper.getScreenDensity();
+                mapHeightStream.onNext((int) (totalHeight / density));
+                mapWidthStream.onNext((int) (totalWidth / density));
             });
         });
     }
@@ -298,6 +301,27 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
                                                           pair.second.asDrawable()));
     }
 
+    @Override public void showMapError() {
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+                .height(mapView.getHeight())
+                .width(mapView.getWidth())
+                .headerFont(doodleHeaderFont)
+                .descriptionFont(doodleDescriptionFont)
+                .spaceBeforeImage(getResources().getDimensionPixelSize(
+                        R.dimen.Details_Height_Doodle_Map_Space_Before))
+                .spaceAfterImage(getResources().getDimensionPixelSize(
+                        R.dimen.Details_Height_Doodle_Map_Space_After));
+
+        DoodleImage errorDoodle = doodleBuilder
+                .imageResource(R.drawable.tabi_map_error)
+                .headerText(getString(R.string.details_doodle_error_header))
+                .descriptionText(getString(R.string.details_doodle_error_description))
+                .build();
+
+        mapView.setImageDrawable(errorDoodle.asDrawable());
+        pinView.setVisibility(View.INVISIBLE);
+    }
+
     private void loadImageWithPicasso(Uri uri, Drawable loading, Drawable error) {
         stopwatch.reset();
         picasso.load(uri).fit().centerCrop()
@@ -307,18 +331,26 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void enableActionButtons() {
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.VISIBLE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override public void disableActionButtons() {
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.INVISIBLE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
-    @Override public void showInfoMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    @Override public void showInfoMessageCopied() {
+        Toast.makeText(this, getString(R.string.details_info_copy_done), Toast.LENGTH_SHORT).show();
     }
 
-    @Override public void startMap(Uri geoLocation) {
+    @Override public void startMapApp(Uri geoLocation) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         intent.setPackage("com.google.android.apps.maps");
@@ -350,7 +382,23 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         gminaView.setVisibility(View.GONE);
         additionalInfoView.setVisibility(View.GONE);
         panelCard.setVisibility(View.GONE);
-        ButterKnife.apply(actionButtons, (button, index) -> button.setVisibility(View.GONE));
+        ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
+            @Override public void apply(@NonNull Button view, int index) {
+                view.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    @Override public Observable<Integer> getMapWidthStream() {
+        return mapWidthStream.asObservable();
+    }
+
+    @Override public Observable<Integer> getMapHeightStream() {
+        return mapHeightStream.asObservable();
+    }
+
+    @Override public String getLocalizedPoland() {
+        return getString(R.string.details_country);
     }
 
     private void setPlaceHolderImage() {

@@ -8,8 +8,6 @@ package pl.ipebk.tabi.test.common.injection.module;
 import android.app.Application;
 import android.content.Context;
 
-import com.squareup.otto.Bus;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -38,11 +36,6 @@ import static org.mockito.Mockito.mock;
     @Provides
     @ApplicationContext Context provideContext() {
         return application;
-    }
-
-    @Provides
-    @Singleton Bus provideEventBus() {
-        return new Bus();
     }
 
     /*************

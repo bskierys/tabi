@@ -57,10 +57,6 @@ public class SearchPresenterTest {
         Stopwatch stopwatch = mock(Stopwatch.class);
         StopwatchManager mockManager = mock(StopwatchManager.class);
         when(mockManager.getStopwatch()).thenReturn(stopwatch);
-        when(mockManager.getDefaultStopwatch()).thenReturn(stopwatch);
-
-        Resources mockResources = mock(Resources.class);
-        when(mockContext.getResources()).thenReturn(mockResources);
 
         searchPresenter = new SearchPresenter(mockDataManager, new SpellCorrector(), mockManager);
         searchPresenter.attachView(mockMvpView);
@@ -78,11 +74,7 @@ public class SearchPresenterTest {
 
     @Test public void testRefreshSearch() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(cursor.getCount()).thenReturn(30);
-
         when(mockPlaceDao.getHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
-        when(mockPlaceDao.getPlacesForPlateStart(anyString(),anyInt())).thenReturn(rx.Observable.just(cursor));
-        when(mockPlaceDao.getPlacesByName(anyString(),anyInt())).thenReturn(rx.Observable.just(cursor));
 
         searchPresenter.quickSearchForText("");
 

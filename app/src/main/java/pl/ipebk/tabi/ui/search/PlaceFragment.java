@@ -11,18 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.models.Plate;
 import pl.ipebk.tabi.database.models.SearchType;
-import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
-import pl.ipebk.tabi.utils.NameFormatHelper;
-import rx.Observable;
-import timber.log.Timber;
 
 /**
  * A fragment representing a list of Places.
@@ -32,8 +25,8 @@ public class PlaceFragment extends Fragment {
     static final int SECTION_FIRST_POSITION = 0;
     static final int SECTION_SECOND_POSITION = 4;
 
-    @Bind(R.id.img_no_results) ImageView noResultsImage;
-    @Bind(R.id.place_list) RecyclerView recyclerView;
+    @BindView(R.id.img_no_results) ImageView noResultsImage;
+    @BindView(R.id.place_list) RecyclerView recyclerView;
 
     protected SearchType type;
     private boolean viewCreated;
@@ -86,15 +79,15 @@ public class PlaceFragment extends Fragment {
     /**
      * Test methods to be replaced with mocks
      */
-    public RecyclerView.LayoutManager getLayoutManager(){
+    public RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(getActivity());
     }
 
     /**
      * Test methods to be replaced with mocks
      */
-    public PlaceItemAdapter getAdapter(){
-        if(adapter == null){
+    public PlaceItemAdapter getAdapter() {
+        if (adapter == null) {
             adapter = new PlaceItemAdapter(placeCursor, getActivity());
             adapter.setEventListener(fragmentEventListener);
             adapter.setType(type);
