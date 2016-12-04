@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
@@ -34,6 +34,7 @@ import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.utils.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
+import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -54,12 +55,12 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Inject SearchPresenter presenter;
     @Inject FontManager fontManager;
-    @Bind(R.id.editTxt_search) EditText searchEditText;
-    @Bind(R.id.txt_searched) TextView searchedText;
-    @Bind(R.id.pager_search) ViewPager searchPager;
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.indicator) SearchTabPageIndicator indicator;
-    @Bind(R.id.btn_clear) View clearButton;
+    @BindView(R.id.editTxt_search) EditText searchEditText;
+    @BindView(R.id.txt_searched) TextView searchedText;
+    @BindView(R.id.pager_search) ViewPager searchPager;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.indicator) SearchTabPageIndicator indicator;
+    @BindView(R.id.btn_clear) View clearButton;
     @State String currentSearch;
     @State boolean isFullySearched;
 
@@ -87,13 +88,13 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
 
         RxViewPager.pageSelections(searchPager)
-                .subscribe(page -> {
-                    if(page == SEARCH_PLACES_FRAGMENT_POSITION){
-                        searchEditText.setHint(getString(R.string.main_search_bar_hint_places));
-                    }else if(page == SEARCH_PLATES_FRAGMENT_POSITION) {
-                        searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
-                    }
-                });
+                   .subscribe(page -> {
+                       if (page == SEARCH_PLACES_FRAGMENT_POSITION) {
+                           searchEditText.setHint(getString(R.string.main_search_bar_hint_places));
+                       } else if (page == SEARCH_PLATES_FRAGMENT_POSITION) {
+                           searchEditText.setHint(getString(R.string.main_search_bar_hint_plates));
+                       }
+                   }, ex -> Timber.e(ex, "Page cannot be changed"));
 
         searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
@@ -197,27 +198,24 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                     } else {
                         hideClearButton();
                     }
-                });
+                }, ex -> Timber.e(ex, "Text subscription fail"));
 
         editorActionSubscription = RxTextView
                 .editorActionEvents(searchEditText)
                 .filter(event -> event.actionId() == EditorInfo.IME_ACTION_SEARCH)
                 .subscribe(e -> {
                     presenter.deepSearchForText(searchEditText.getText().toString());
-                });
+                }, ex -> Timber.e(ex, "Text search click fail"));
 
         presenter.refreshSearch();
+        // makes sure subscription for text changes is no fired too soon
         textChangeSubject.onNext(1);
     }
 
     @Override protected void onPause() {
         super.onPause();
-        if (editorActionSubscription != null) {
-            editorActionSubscription.unsubscribe();
-        }
-        if (textChangesSubscription != null) {
-            textChangesSubscription.unsubscribe();
-        }
+        RxUtil.unsubscribe(editorActionSubscription);
+        RxUtil.unsubscribe(textChangesSubscription);
     }
 
     @Override protected void onDestroy() {
@@ -379,7 +377,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     //endregion
 
     //region View pager management
-
     protected PlaceFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
