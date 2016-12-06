@@ -14,7 +14,7 @@ SELECT t._id as _id, t.place_name as place_name, t.place_type as place_type, t.v
 		UNION ALL  
 	SELECT *,  2 as grp FROM places_to_search WHERE place_name_to_lower_no_diacritics LIKE "sam%" 
 	
-) AS t GROUP BY _id ORDER BY has_own_plate DESC, MIN(grp) ASC,  place_type ASC,  place_name;
+) AS t GROUP BY _id ORDER BY has_own_plate DESC, MIN(grp) ASC,  place_type ASC,  place_name COLLATE LOCALIZED ASC;
 
 -- =================== wypisanie wszystkich kategorii na ekranie głównym =======
 SELECT * FROM categories ORDER BY place_type ASC, voivodeship COLLATE localized ASC;
@@ -24,7 +24,7 @@ SELECT f1._id as _id,f1.place_name as place_name, f1.place_type as place_type, f
 f1.plate as searched_plate, f1.plate_end as searched_plate_end FROM (
  
 	SELECT p._id as _id,p.place_name as place_name, p.place_type as place_type,p.voivodeship as voivodeship, p.powiat as powiat, s.plate as plate,null as plate_end FROM 
-			search_history s left join places p on s.place_id = p._id WHERE s.search_type = 0 ORDER BY s.time_searched DESC 
+			search_history s left join places p on s.place_id = p._id WHERE s.search_type = 0 ORDER BY s.time_searched DESC LIMIT 2
 		
 ) AS f1  
 -- dołącz losową tablicę
