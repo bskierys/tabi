@@ -20,9 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.domain.place.LicensePlate;
+import pl.ipebk.tabi.readmodel.PlaceType;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
@@ -90,28 +90,29 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
             holder.shadow.setVisibility(View.GONE);
         }
 
-        Observable.just(cursor).first().map(this::cursorToItem)
+        // TODO: 2016-12-06 this class should use PlaceAndPlateDto
+        /*Observable.just(cursor).first().map(this::cursorToItem)
                 .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
                 .subscribe(place -> {
-                    Place.Type type = place.getPlaceType();
-                    if(type.ordinal() < Place.Type.SPECIAL.ordinal()){
+                    PlaceType type = place.ty
+                    if(type.ordinal() < PlaceType.SPECIAL.ordinal()){
                         bindStandardPlaceViewHolder(holder, place);
-                    } else if(type == Place.Type.SPECIAL) {
+                    } else if(type == PlaceType.SPECIAL) {
                         bindSpecialPlaceViewHolder(holder, place);
-                    } else if(type == Place.Type.RANDOM) {
+                    } else if(type == PlaceType.RANDOM) {
                         bindRandomPlaceViewHolder(holder, place);
                     }
-                }, ex -> Timber.e(ex, "Error rendering row view"));
+                }, ex -> Timber.e(ex, "Error rendering row view"));*/
     }
 
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceListItem place) {
-        holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
+        /*holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
                         place.getPlaceId(),
                         getPlateString(place.getPlateStart(), place.getPlateEnd()),
                         type, place.getPlaceType() == Place.Type.RANDOM ? PlaceListItemType.RANDOM :
                                 (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
-        holder.plateView.setText(getPlateString(place.getPlateStart(), place.getPlateEnd()));
+        holder.plateView.setText(getPlateString(place.getPlateStart(), place.getPlateEnd()));*/
     }
 
     private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
@@ -154,10 +155,12 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
 
     // TODO: 2016-12-02 should be in domain
     private String getPlateString(String plateStart, String plateEnd) {
-        Plate plate = new Plate();
+        // TODO: 2016-12-06 factory needed
+        /*Plate plate = new Plate();
         plate.setPattern(plateStart);
         plate.setEnd(plateEnd);
-        return plate.toString();
+        return plate.toString();*/
+        return null;
     }
 
     private String getPlaceSubName(String[] words) {

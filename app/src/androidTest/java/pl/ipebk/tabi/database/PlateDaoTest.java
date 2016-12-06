@@ -11,11 +11,8 @@ import android.test.suitebuilder.annotation.MediumTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.models.Plate;
-
 public class PlateDaoTest extends DatabaseTest {
-    private static final String PLATE1 = "TAB";
+    /*private static final String PLATE1 = "TAB";
     private static final String PLATE2 = "BAT";
     private static final String PLACE1 = "Name";
     private static final String PLACE2 = "Eman";
@@ -80,5 +77,5 @@ public class PlateDaoTest extends DatabaseTest {
 
         all = databaseHelper.getPlateDao().getAll();
         assertEquals(2, all.size());
-    }
+    }*/
 }

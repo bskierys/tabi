@@ -8,8 +8,8 @@ package pl.ipebk.tabi.ui.search;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.tables.PlacesTable;
+import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
+import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
  * Class representing list item on place list. It has only necessary information to show.
@@ -21,7 +21,7 @@ public class PlaceListItem {
     private String plateEnd;
     private String voivodeship;
     private String powiat;
-    private Place.Type placeType;
+    private PlaceType placeType;
 
     public PlaceListItem(Cursor cursor) {
         setPlaceId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
@@ -31,12 +31,12 @@ public class PlaceListItem {
         setPlateStart(cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_SEARCHED_PLATE)));
         setPlateEnd(cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_SEARCHED_PLATE_END)));
 
-        int placeTypeIndex = cursor.getColumnIndex(PlacesTable.COLUMN_PLACE_TYPE);
+        /*int placeTypeIndex = cursor.getColumnIndex(PlacesTable.COLUMN_PLACE_TYPE);
         if (!cursor.isNull(placeTypeIndex)) {
-            setPlaceType(Place.Type.values()[cursor.getInt(placeTypeIndex)]);
+            setPlaceType(PlaceType.values()[cursor.getInt(placeTypeIndex)]);
         } else {
-            setPlaceType(Place.Type.UNSPECIFIED);
-        }
+            setPlaceType(PlaceType.UNSPECIFIED);
+        }*/
     }
 
     public PlaceListItem() {}
@@ -89,11 +89,11 @@ public class PlaceListItem {
         this.powiat = powiat;
     }
 
-    public Place.Type getPlaceType() {
+    public PlaceType getPlaceType() {
         return placeType;
     }
 
-    public void setPlaceType(Place.Type placeType) {
+    public void setPlaceType(PlaceType placeType) {
         this.placeType = placeType;
     }
 }

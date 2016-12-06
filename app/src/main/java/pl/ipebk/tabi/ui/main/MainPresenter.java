@@ -14,8 +14,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.RxUtil;
@@ -92,7 +92,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     }
 
     private Observable<Cursor> preloadHistory() {
-        return dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(3, SearchType.PLACE);
+        // TODO: 2016-12-06 should use repository
+        return dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(3, SearchType.PLACE.ordinal());
     }
 
     private void loadCategories() {

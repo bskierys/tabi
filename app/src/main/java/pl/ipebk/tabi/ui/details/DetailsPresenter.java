@@ -12,10 +12,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.domain.place.LicensePlate;
+import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.PlaceType;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.utils.DeviceHelper;
@@ -30,6 +31,7 @@ import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private DataManager dataManager;
+    // TODO: 2016-12-06 should not use domain model? rather view dto
     private Observable<Place> placeOnce;
     private BehaviorSubject<Place> placeSubject;
     private String searchedPlate;
@@ -68,12 +70,15 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
-        loadPlaceSubscription = dataManager.getDatabaseHelper()
+        /*loadPlaceSubscription = dataManager.getDatabaseHelper()
                                            .getPlaceDao()
                                            .getByIdObservable(id)
-                                           .subscribe(placeSubject::onNext);
+                                           .map(placeModel -> {
+                                               // TODO: 2016-12-06 when using repository should not be a problem
+                                           })
+                                           .subscribe(placeSubject::onNext);*/
 
-        Observable<Place> standardPlaceStream = placeOnce.filter(p -> p.getType() != Place.Type.SPECIAL);
+        Observable<Place> standardPlaceStream = placeOnce.filter(p -> p.getType() != PlaceType.SPECIAL);
         standardPlaceStream.subscribeOn(Schedulers.io())
                            .observeOn(AndroidSchedulers.mainThread())
                            .subscribe(this::showStandardPlace, error -> {
@@ -92,7 +97,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
                                                        getMvpView().showMapError();
                                                    });
 
-        Observable<Place> specialPlaceStream = placeOnce.filter(p -> p.getType() == Place.Type.SPECIAL);
+        Observable<Place> specialPlaceStream = placeOnce.filter(p -> p.getType() == PlaceType.SPECIAL);
         specialPlaceStream.subscribeOn(Schedulers.io())
                           .observeOn(AndroidSchedulers.mainThread())
                           .subscribe(this::showSpecialPlace, error -> {
@@ -113,7 +118,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     private void showStandardPlace(Place place) {
-        Plate plate = place.getPlateMatchingPattern(searchedPlate);
+        LicensePlate plate = place.getPlateMatchingPattern(searchedPlate);
         if (plate != null) {
             getMvpView().showPlate(plate.toString());
         }
@@ -127,7 +132,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     private void showSpecialPlace(Place place) {
-        Plate plate = place.getPlateMatchingPattern(searchedPlate);
+        LicensePlate plate = place.getPlateMatchingPattern(searchedPlate);
         if (plate != null) {
             getMvpView().showPlate(plate.toString());
         }

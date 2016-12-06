@@ -8,7 +8,7 @@ package pl.ipebk.tabi.manager;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import rx.Observable;
 import rx.Subscriber;
 

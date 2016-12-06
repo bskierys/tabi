@@ -7,7 +7,7 @@ package pl.ipebk.tabi.test.common.utils;
 
 import android.content.Context;
 
-import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 
 public class TestNameFormatHelper extends NameFormatHelper {

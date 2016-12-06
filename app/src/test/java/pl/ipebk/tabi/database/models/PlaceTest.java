@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class PlaceTest {
-    @Test public void testGetMainPlateForNoPlates() throws Exception {
+    /*@Test public void testGetMainPlateForNoPlates() throws Exception {
         Place malbork = new Place();
         malbork.setName("Malbork");
 
@@ -72,7 +72,7 @@ public class PlaceTest {
         String actual = malbork.platesToStringExceptMatchingPattern("KM");
 
         assertEquals(expected, actual);
-    }
+    }*/
 
 
 }

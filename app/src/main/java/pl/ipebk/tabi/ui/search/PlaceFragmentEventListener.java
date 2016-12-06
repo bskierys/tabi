@@ -5,7 +5,7 @@
 */
 package pl.ipebk.tabi.ui.search;
 
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.readmodel.SearchType;
 
 /**
  * This interface must be implemented by activities that contain this fragment to allow an interaction in this

@@ -13,10 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import pl.ipebk.tabi.database.models.Place;
-import pl.ipebk.tabi.database.models.Plate;
-import pl.ipebk.tabi.database.models.SearchHistory;
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.ui.search.PlaceListItem;
 
 /**
@@ -24,7 +21,8 @@ import pl.ipebk.tabi.ui.search.PlaceListItem;
  * The aim of this class is to help setting up test fixtures.
  */
 public class TestDataFactory {
-    public static Place createPlaceWithPlates(String... patterns) {
+    /*public static PlaceModel createPlaceWithPlates(String... patterns) {
+        PlaceModel standardPlace = PlaceModel.create(0, "Malbork", )
         Place malbork = new Place();
         malbork.setName("Malbork");
         malbork.setPlates(getListOfPlates(patterns));
@@ -140,5 +138,5 @@ public class TestDataFactory {
         place.setVoivodeship(twoWordName);
 
         return place;
-    }
+    }*/
 }

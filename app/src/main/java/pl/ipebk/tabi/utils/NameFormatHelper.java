@@ -16,7 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.Place;
+import pl.ipebk.tabi.domain.place.Place;
+import pl.ipebk.tabi.readmodel.PlaceType;
 import timber.log.Timber;
 
 /**
@@ -53,17 +54,18 @@ public class NameFormatHelper {
      * @param searchedPlate needed to exclude it from list of plates
      * @return formatted info or empty string if place is null
      */
+    // TODO: 2016-12-06 this should be domain helper
     public String formatAdditionalInfo(Place place, String searchedPlate) {
         if (place == null) {
             return "";
         }
 
         String placeType = "";
-        if (place.getType().ordinal() < Place.Type.PART_OF_TOWN.ordinal()) {
+        if (place.getType().ordinal() < PlaceType.PART_OF_TOWN.ordinal()) {
             placeType = context.getString(R.string.details_additional_town);
-        } else if (place.getType() == Place.Type.PART_OF_TOWN) {
+        } else if (place.getType() == PlaceType.PART_OF_TOWN) {
             placeType = context.getString(R.string.details_additional_part_of_town) + " " + place.getGmina();
-        } else if (place.getType() == Place.Type.VILLAGE) {
+        } else if (place.getType() == PlaceType.VILLAGE) {
             placeType = context.getString(R.string.details_additional_village);
         }
 

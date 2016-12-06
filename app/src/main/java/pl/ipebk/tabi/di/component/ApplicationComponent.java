@@ -11,12 +11,10 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.di.ApplicationContext;
 import pl.ipebk.tabi.di.module.ApplicationModule;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.manager.DataManager;
-import pl.ipebk.tabi.ui.search.PlaceItemAdapter;
-import pl.ipebk.tabi.utils.DeviceHelper;
 
 @Singleton
 @Component(modules = ApplicationModule.class)

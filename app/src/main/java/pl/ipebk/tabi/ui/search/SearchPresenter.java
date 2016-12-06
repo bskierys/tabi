@@ -13,9 +13,8 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.database.models.SearchHistory;
-import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.RxUtil;
 import pl.ipebk.tabi.utils.SpellCorrector;
@@ -61,9 +60,9 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     //region public methods
     public void placeSelected(long placeId, String searchedPlate, String plateClicked,
                               SearchType searchType, PlaceListItemType itemType) {
-        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
+        //getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
 
-        Observable.just(new SearchHistory())
+        /*Observable.just(new SearchHistory())
                   .doOnNext(history -> history.setPlaceId(placeId))
                   .doOnNext(history -> history.setPlate(plateClicked))
                   .doOnNext(history -> history.setSearchType(searchType))
@@ -72,7 +71,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                   .subscribe(history -> dataManager.getDatabaseHelper()
                                                    .getSearchHistoryDao()
                                                    .updateOrAdd(history)
-                          , ex -> Timber.e(ex, "Problem saving history to database"));
+                          , ex -> Timber.e(ex, "Problem saving history to database"));*/
     }
 
     public void startInitialSearchForText(String searchText) {
@@ -97,7 +96,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public void loadInitialStateForPlaces() {
         Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
-        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE)
+        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE.ordinal())
                    .filter(cursor -> cursor != null).first()
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
@@ -111,7 +110,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public void loadInitialStateForPlates() {
         Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
-        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE)
+        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE.ordinal())
                    .filter(cursor -> cursor != null).first()
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
@@ -167,13 +166,14 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     @NonNull private Observable<Pair<Cursor, Cursor>> getObservableForSearchWithinTwoQueries(String phrase, Integer
             limit) {
-        Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
+        /*Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
                                                                .getPlaceDao().getPlacesForPlateStart(phrase, limit);
 
         Observable<Cursor> placesCursorObservable = dataManager.getDatabaseHelper()
-                                                               .getPlaceDao().getPlacesByName(phrase, limit);
+                                                               .getPlaceDao().getPlacesByName(phrase, limit);*/
 
-        return Observable.zip(platesCursorObservable, placesCursorObservable, Pair<Cursor, Cursor>::new);
+        //return Observable.zip(platesCursorObservable, placesCursorObservable, Pair<Cursor, Cursor>::new);
+        return null;
     }
 
     private void showSearchResults(Pair<Cursor, Cursor> cursorCursorPair, int searchType) {

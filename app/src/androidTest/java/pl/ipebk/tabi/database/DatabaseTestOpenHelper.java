@@ -12,13 +12,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
-import pl.ipebk.tabi.database.daos.PlaceDao;
-import pl.ipebk.tabi.database.daos.PlateDao;
-import pl.ipebk.tabi.database.daos.SearchHistoryDao;
-import pl.ipebk.tabi.database.openHelper.DatabaseHelperInterface;
-import pl.ipebk.tabi.database.tables.PlacesTable;
-import pl.ipebk.tabi.database.tables.PlatesTable;
-import pl.ipebk.tabi.database.tables.SearchHistoryTable;
+import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
+import pl.ipebk.tabi.infrastructure.daos.PlacesToSearchDao;
+import pl.ipebk.tabi.infrastructure.daos.PlateDao;
+import pl.ipebk.tabi.infrastructure.daos.PlatesToSearchDao;
+import pl.ipebk.tabi.infrastructure.daos.SearchHistoryDao;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseHelperInterface;
+import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
+import pl.ipebk.tabi.infrastructure.tables.PlatesTable;
+import pl.ipebk.tabi.infrastructure.tables.SearchHistoryTable;
+import pl.ipebk.tabi.infrastructure.views.PlacesToSearchView;
+import pl.ipebk.tabi.infrastructure.views.PlatesToSearchView;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -29,13 +33,15 @@ import timber.log.Timber;
  */
 public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements DatabaseHelperInterface {
     private static final String DATABASE_NAME = "tabi.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     protected SQLiteDatabase db;
     protected BriteDatabase briteDb;
     protected PlaceDao placeDao;
     protected PlateDao plateDao;
     protected SearchHistoryDao searchHistoryDao;
+    protected PlacesToSearchDao placesToSearchDao;
+    protected PlatesToSearchDao platesToSearchDao;
     private boolean setupDone;
 
     public DatabaseTestOpenHelper(Context context) {
@@ -52,6 +58,14 @@ public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements Database
 
     @Override public SearchHistoryDao getSearchHistoryDao() {
         return searchHistoryDao;
+    }
+
+    @Override public PlacesToSearchDao getPlacesToSearchDao() {
+        return placesToSearchDao;
+    }
+
+    @Override public PlatesToSearchDao getPlatesToSearchDao() {
+        return platesToSearchDao;
     }
 
     private void setupDao() {
@@ -73,15 +87,27 @@ public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements Database
         if (searchHistoryDao == null) {
             searchHistoryDao = new SearchHistoryDao(briteDb);
         }
+
+        if (placesToSearchDao == null) {
+            placesToSearchDao = new PlacesToSearchDao(briteDb);
+        }
+
+        if (platesToSearchDao == null) {
+            platesToSearchDao = new PlatesToSearchDao(briteDb);
+        }
     }
 
     @Override public void onCreate(SQLiteDatabase database) {
         PlatesTable platesTable = new PlatesTable();
         PlacesTable placesTable = new PlacesTable();
         SearchHistoryTable searchHistoryTable = new SearchHistoryTable();
+        PlacesToSearchView placesToSearchView = new PlacesToSearchView();
+        PlatesToSearchView platesToSearchView = new PlatesToSearchView();
         placesTable.create(database);
         platesTable.create(database);
         searchHistoryTable.create(database);
+        platesToSearchView.create(database);
+        placesToSearchView.create(database);
     }
 
     @Override public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
@@ -126,12 +152,18 @@ public class DatabaseTestOpenHelper extends SQLiteOpenHelper implements Database
             PlacesTable placesTable = new PlacesTable();
             PlatesTable platesTable = new PlatesTable();
             SearchHistoryTable searchHistoryTable = new SearchHistoryTable();
+            PlacesToSearchView placesToSearchView = new PlacesToSearchView();
+            PlatesToSearchView platesToSearchView = new PlatesToSearchView();
             platesTable.drop(db);
             searchHistoryTable.drop(db);
             placesTable.drop(db);
+            placesToSearchView.drop(db);
+            platesToSearchView.drop(db);
             placesTable.create(db);
             platesTable.create(db);
             searchHistoryTable.create(db);
+            placesToSearchView.create(db);
+            platesToSearchView.create(db);
         }
     }
 }
