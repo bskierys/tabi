@@ -7,7 +7,10 @@ package pl.ipebk.tabi.infrastructure.finders;
 
 import android.database.Cursor;
 
+import java.util.List;
+
 import pl.ipebk.tabi.infrastructure.daos.PlacesToSearchDao;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import rx.Observable;
 
@@ -23,5 +26,9 @@ public class DaoPlaceFinder implements PlaceFinder {
 
     @Override public Observable<Cursor> findPlacesByName(String nameStart, Integer limit) {
         return dao.getPlacesByName(nameStart, limit);
+    }
+
+    List<PlaceAndPlateDto> findPlacesListByName(String nameStart, Integer limit) {
+        return dao.getPlaceListByName(nameStart, limit);
     }
 }

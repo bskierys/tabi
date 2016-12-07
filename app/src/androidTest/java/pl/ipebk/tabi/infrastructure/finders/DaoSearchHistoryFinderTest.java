@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class DaoSearchHistoryFinderTest {
+public class DaoSearchHistoryFinderTest extends FinderTest {
     /*@MediumTest public void testGetHistoryForType() throws Exception {
         String dummyPlate = "AAA";
         Place place1 = TestDataFactory.createStandardPlace("śwarądz", dummyPlate, Place.Type.TOWN);

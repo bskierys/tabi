@@ -2,17 +2,13 @@ package pl.ipebk.tabi.infrastructure.finders;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
-import java.util.List;
-
-import pl.ipebk.tabi.database.DatabaseTest;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.test.common.TestModelFactory;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class DaoLicensePlateFinderTest extends DatabaseTest {
+public class DaoLicensePlateFinderTest extends FinderTest {
     private DaoLicensePlateFinder finder;
     private TestModelFactory as;
     private DatabaseTestModelFactory is;
@@ -24,113 +20,105 @@ public class DaoLicensePlateFinderTest extends DatabaseTest {
         is = (DatabaseTestModelFactory) as;
     }
 
-    private static class DatabaseTestModelFactory extends TestModelFactory {
-        private void addedToDatabase() {
-            this.placeModel = placeModelAssembler.assemble();
-            databaseHelper.getPlaceDao().add(this.placeModel);
-        }
-    }
-
     @MediumTest public void test_shouldFindPlate_whenSearchingByFirstPlate() throws Exception {
-        as.givenPlace().withPlate("TAB").ofType(PlaceType.POWIAT_CITY);
+        as.givenPlace().withPlate("TAB");
         is.addedToDatabase();
         // and
-        as.givenPlace().withPlate("BAT").ofType(PlaceType.POWIAT_CITY);
+        as.givenPlace().withPlate("BAT");
         is.addedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("T", null));
-        thenFoundPlaces().hasCount(1).andFirstPlace().hasPlate("TAB");
+        thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasPlate("TAB");
     }
 
     @MediumTest public void test_shouldFindPlate_whenSearchingByAdditionalPlate() throws Exception {
-        as.givenPlace().withPlate("BAT").withPlate("TAB").ofType(PlaceType.POWIAT_CITY);
+        as.givenPlace().withPlate("BAT").and().withPlate("TAB");
         is.addedToDatabase();
         // and
-        as.givenPlace().withPlate("BAT").ofType(PlaceType.POWIAT_CITY);
+        as.givenPlace().withPlate("BAT");
         is.addedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("T", null));
-        thenFoundPlaces().hasCount(1).andFirstPlace().hasPlate("TAB");
+        thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasPlate("TAB");
     }
 
-    private List<PlaceAndPlateDto> foundPlaces;
+    @MediumTest public void test_shouldNotFindPlate_whenNoneMatches() throws Exception {
+        as.givenPlace().withPlate("BRA");
+        is.addedToDatabase();
+        // and
+        as.givenPlace().withPlate("BAT");
+        is.addedToDatabase();
 
-    public void whenSearched(List<PlaceAndPlateDto> places) {
-        this.foundPlaces = places;
+        whenSearched(finder.findPlaceListForPlateStart("T", null));
+        thenFoundPlaces().hasCount(0);
     }
 
-    public PlaceDtoCollectionAssert thenFoundPlaces() {
-        return new PlaceDtoCollectionAssert(foundPlaces);
+    @MediumTest public void test_shouldTwoLatterPlateBeFirst_whenSimilarPattern() throws Exception {
+        as.givenPlace().withPlate("BAT");
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BA");
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("B");
+        is.addedToDatabase();
+
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
+
+        then().searchedPlaceThatIs(FIRST).hasPlate("B"); //and
+        then().searchedPlaceThatIs(SECOND).hasPlate("BA"); //and
+        then().searchedPlaceThatIs(THIRD).hasPlate("BAT");
     }
 
-    public static class PlaceDtoCollectionAssert {
-        private List<PlaceAndPlateDto> places;
+    @MediumTest public void test_shouldBiggerCityBeFirst_whenSimilarPattern() throws Exception {
+        as.givenPlace().withPlate("BAT").ofType(PlaceType.TOWN);
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY);
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BAT").ofType(PlaceType.POWIAT_CITY);
+        is.addedToDatabase();
 
-        public PlaceDtoCollectionAssert(List<PlaceAndPlateDto> place) {
-            this.places = place;
-        }
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
 
-        public PlaceDtoCollectionAssert hasCount(int count) {
-            assertEquals(count, places.size());
-            return this;
-        }
-
-        public PlaceAndPlateDtoAssert andFirstPlace() {
-            assertTrue(places.size() >= 1);
-            PlaceAndPlateDto place = places.get(0);
-            assertNotNull(place);
-
-            return new PlaceAndPlateDtoAssert(place);
-        }
+        then().searchedPlaceThatIs(FIRST).isType(PlaceType.VOIVODE_CITY); //and
+        then().searchedPlaceThatIs(SECOND).isType(PlaceType.POWIAT_CITY); // and
+        then().searchedPlaceThatIs(THIRD).isType(PlaceType.TOWN);
     }
 
-    public static class PlaceAndPlateDtoAssert {
-        private PlaceAndPlateDto place;
+    @MediumTest public void test_shouldBeSortedAlphabetically_whenSearched() throws Exception {
+        as.givenPlace().withPlate("BZ");
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BP");
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BA");
+        is.addedToDatabase();
 
-        public PlaceAndPlateDtoAssert(PlaceAndPlateDto place) {
-            this.place = place;
-        }
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
 
-        public PlaceAndPlateDtoAssert hasPlate(String plate) {
-            assertEquals(plate, place.plateStart());
-            return this;
-        }
+        then().searchedPlaceThatIs(FIRST).hasPlate("BA"); //and
+        then().searchedPlaceThatIs(SECOND).hasPlate("BP"); // and
+        then().searchedPlaceThatIs(THIRD).hasPlate("BZ");
     }
 
-    /*@MediumTest public void testGetByPlateIsSortedProperly() throws Exception {
-        PlaceModel twoLetter1 = TestDataFactory.createStandardPlace("1", "AA", PlaceType.POWIAT_CITY);
-        PlaceModel twoLetter2 = TestDataFactory.createStandardPlace("2", "AZ", PlaceType.POWIAT_CITY);
-        PlaceModel threeLetter1 = TestDataFactory.createStandardPlace("3", "AAA", PlaceType.POWIAT_CITY);
-        PlaceModel threeLetter2 = TestDataFactory.createStandardPlace("4", "AWW", PlaceType.POWIAT_CITY);
-        PlaceModel threeLetter3 = TestDataFactory.createStandardPlace("5", "AZZ", PlaceType.POWIAT_CITY);
+    @MediumTest public void test_shouldBeSortedByCitySizeFirst_whenMayBeSortedByPlateLength() throws Exception {
+        as.givenPlace().withPlate("BA").ofType(PlaceType.VILLAGE);
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY);
+        is.addedToDatabase();
 
-        databaseHelper.getPlaceDao().add(twoLetter1);
-        databaseHelper.getPlaceDao().add(twoLetter2);
-        databaseHelper.getPlaceDao().add(threeLetter1);
-        databaseHelper.getPlaceDao().add(threeLetter2);
-        databaseHelper.getPlaceDao().add(threeLetter3);
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
 
-        int limit = 4;
+        then().searchedPlaceThatIs(FIRST).isType(PlaceType.VOIVODE_CITY); //and
+        then().searchedPlaceThatIs(SECOND).isType(PlaceType.VILLAGE);
+    }
 
-        List<PlaceModel> places = databaseHelper.getPlaceDao().getPlaceListForPlateStart("A", limit);
+    @MediumTest public void test_shouldBeSortedByPlateLengthFirst_whenMayBeSortedAlphabetically() throws Exception {
+        as.givenPlace().withPlate("BZ");
+        is.addedToDatabase(); // and
+        as.givenPlace().withPlate("BAT");
+        is.addedToDatabase();
 
-        // check if limit is correct
-        assertEquals(limit, places.size());
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
 
-        Collator collator = Collator.getInstance();
-        for (int j = 0; j <= 1; j++) {
-            String lastOne = places.get(j * 2).getPlates().get(0).getPattern();
-            PlateModel plate = places.get(j * 2 + 1).getPlates().get(0);
-            String platePattern = plate.getPattern();
-
-            // check for pattern length
-            assertEquals(j + 2, platePattern.length());
-            assertEquals(j + 2, lastOne.length());
-
-            // check alphabetical order
-            CollationKey key = collator.getCollationKey(platePattern);
-            int compare = key.compareTo(collator.getCollationKey(lastOne));
-            assertTrue(compare > 0);
-        }
-    }*/
+        then().searchedPlaceThatIs(FIRST).hasPlate("BZ"); //and
+        then().searchedPlaceThatIs(SECOND).hasPlate("BAT");
+    }
 }

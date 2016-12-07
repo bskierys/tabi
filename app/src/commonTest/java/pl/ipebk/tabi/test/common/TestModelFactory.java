@@ -31,7 +31,7 @@ public class TestModelFactory {
         private static final String DEFAULT_VOIVODESHIP = "default_voivodeship";
         private static final String DEFAULT_POWIAT = "default_powiat";
         private static final String DEFAULT_GMINA = "default_gmina";
-        private static final PlaceType DEAFULT_TYPE = PlaceType.VOIVODE_CITY;
+        private static final PlaceType DEAFULT_TYPE = PlaceType.POWIAT_CITY;
 
         private Random random = new Random();
 
@@ -54,6 +54,10 @@ public class TestModelFactory {
             }
 
             plates.add(PlateModel.create(pattern, ""));
+            return this;
+        }
+
+        public PlaceModelAssembler and() {
             return this;
         }
 
