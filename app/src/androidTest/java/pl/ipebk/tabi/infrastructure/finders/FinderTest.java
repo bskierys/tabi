@@ -33,7 +33,7 @@ public class FinderTest extends DatabaseTest {
     }
 
     // TODO: 2016-12-10 rename
-    public void addedToDatabase() {
+    public void isAddedToDatabase() {
         this.placeModel = placeModelAssembler.assemble();
         databaseHelper.getPlaceDao().add(this.placeModel);
     }
@@ -60,6 +60,10 @@ public class FinderTest extends DatabaseTest {
         public PlaceDtoCollectionAssert hasCount(int count) {
             assertEquals(count, places.size());
             return this;
+        }
+
+        public PlaceDtoCollectionAssert areNone(){
+            return this.hasCount(0);
         }
 
         public PlaceDtoCollectionAssert and() {

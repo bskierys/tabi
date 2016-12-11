@@ -61,8 +61,8 @@ public class PlatesToSearchDao extends ViewDao<PlaceAndPlateDto> {
                 PlatesToSearchView.COLUMN_PLATE_PRIORITY;
 
         String orderFormat = " SELECT " + view.getQualifiedColumnsCommaSeparated(null) + " FROM ( " + selectGrouped +
-                " ) as w WHERE " + PlacesTable.COLUMN_SEARCHED_PLATE + " LIKE %s ORDER BY length( " +
-                PlacesTable.COLUMN_SEARCHED_PLATE + " ) ASC, " + PlacesTable.COLUMN_PLACE_TYPE + " ASC, " +
+                " ) as w WHERE " + PlacesTable.COLUMN_SEARCHED_PLATE + " LIKE %s ORDER BY " +
+                PlacesTable.COLUMN_PLACE_TYPE +" ASC, length( " + PlacesTable.COLUMN_SEARCHED_PLATE + " ) ASC, " +
                 PlacesTable.COLUMN_SEARCHED_PLATE + " ASC, " + PlacesTable.COLUMN_SEARCHED_PLATE_END + " ASC ";
 
         String placeLikePattern = "\'" + plateStart + "%\'";
@@ -75,7 +75,6 @@ public class PlatesToSearchDao extends ViewDao<PlaceAndPlateDto> {
             selectPlacesThatHaveOwnPlateStartWith += ";";
         }
 
-        //return new Pair<>("SELECT * FROM " + view.getName(), null);
         return new Pair<>(selectPlacesThatHaveOwnPlateStartWith, null);
     }
 }

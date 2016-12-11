@@ -28,8 +28,9 @@ public class PlacesToSearchView extends PlaceAndPlateDtoView {
     // TODO: 2016-12-06 format this to proper code dependant on constants
     @Override protected String getDatabaseCreateStatement() {
         return "CREATE VIEW places_to_search AS\n" +
-                "SELECT _id, place_name, place_type, voivodeship, powiat, plate, plate_end, place_name_to_lower, " +
-                "place_name_to_lower_no_diacritics, has_own_plate FROM places WHERE place_type < 5;";
+                "SELECT _id, place_name, place_type, voivodeship, powiat, plate AS searched_plate, plate_end AS " +
+                "searched_plate_end, place_name_to_lower, place_name_to_lower_no_diacritics, has_own_plate FROM " +
+                "places WHERE place_type < 5;";
     }
 
     @Override public String getName() {

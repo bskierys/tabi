@@ -30,7 +30,7 @@ public class PlatesToSearchView extends PlaceAndPlateDtoView {
      */
     // TODO: 2016-12-06 format this to proper code dependant on constants
     @Override protected String getDatabaseCreateStatement() {
-        /*return "CREATE VIEW plates_to_search AS\n" +
+        return "CREATE VIEW plates_to_search AS\n" +
                 "SELECT places._id as _id, places.place_name as place_name, places.place_type as place_type, places" +
                 ".voivodeship as voivodeship, places.powiat as powiat, \n" +
                 "k.searched_plate AS searched_plate,  k.searched_plate_end AS searched_plate_end, k.plate_priority AS" +
@@ -48,12 +48,7 @@ public class PlatesToSearchView extends PlaceAndPlateDtoView {
                 "\t\t\n" +
                 "\t) AS m\n" +
                 "\t\n" +
-                ") AS k LEFT JOIN places ON k.ID = places._id ORDER BY plate_priority;";*/
-        return "CREATE VIEW plates_to_search AS SELECT places._id as _id, places.place_name as place_name, " +
-                "places.place_type as place_type, places" +
-                ".voivodeship as voivodeship, places.powiat as powiat, \n" +
-                "places.plate AS searched_plate,  places.plate_end AS searched_plate_end, 2 AS" +
-                " plate_priority FROM places";
+                ") AS k LEFT JOIN places ON k.ID = places._id ORDER BY plate_priority;";
     }
 
     @Override public String getName() {

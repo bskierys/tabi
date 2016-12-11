@@ -147,6 +147,7 @@ public class PlacesTable extends Table<PlaceModel> {
             int nextRowId = placeDao.getNextRowId();
             model.setId(nextRowId);
 
+            // remove main plate so it is not treated as additional plate
             PlateModel mainPlate = model.plates().get(0);
             model.plates().remove(0);
 
@@ -156,6 +157,8 @@ public class PlacesTable extends Table<PlaceModel> {
 
             plateDao.updateOrAdd(model.plates());
 
+            // add main plate afterwards to not harm original model
+            model.plates().add(0,mainPlate);
             values.put(COLUMN_PLATE, mainPlate.pattern());
             values.put(COLUMN_PLATE_END, mainPlate.end());
         }

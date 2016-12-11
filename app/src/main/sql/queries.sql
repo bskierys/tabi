@@ -5,7 +5,7 @@ SELECT _id, place_name, place_type, voivodeship, powiat, searched_plate, searche
 		SELECT _id, MAX(plate_priority) AS max_plate_priority FROM plates_to_search WHERE searched_plate LIKE 'py%' GROUP BY _id
 	) as o LEFT JOIN plates_to_search p ON o._id = p._id WHERE o.max_plate_priority = p.plate_priority
 	
-) as w WHERE searched_plate LIKE 'py%' ORDER BY length(searched_plate) ASC, place_type ASC,  searched_plate ASC,  searched_plate_end ASC;
+) as w WHERE searched_plate LIKE 'py%' ORDER BY place_type ASC, length(searched_plate) ASC, searched_plate ASC,  searched_plate_end ASC;
 
 -- =================== wyszukiwanie po nazwie miejsca ===================
 SELECT t._id as _id, t.place_name as place_name, t.place_type as place_type, t.voivodeship as voivodeship, t.powiat as powiat, t.plate as searched_plate,  t.plate_end as searched_plate_end FROM (

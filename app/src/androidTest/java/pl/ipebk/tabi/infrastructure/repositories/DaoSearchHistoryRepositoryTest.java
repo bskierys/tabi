@@ -54,7 +54,7 @@ public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
         SearchHistoryModel model = models.get(0);
 
         assertEquals(model.placeId(), history.getPlaceId());
-        assertEquals(new Date(10), model.timeSearched());
+        assertEquals(20, model.timeSearched().getTime());
     }
 
     public PlaceModelAssembler givenPlace() {

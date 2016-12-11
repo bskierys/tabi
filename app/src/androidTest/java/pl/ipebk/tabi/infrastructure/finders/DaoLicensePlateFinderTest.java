@@ -16,45 +16,45 @@ public class DaoLicensePlateFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFindPlate_whenSearchingByFirstPlate() throws Exception {
-        givenPlace().withPlate("TAB");
-        addedToDatabase();
+        givenPlace().withPlate("TAB").withOwnPlate();
+        isAddedToDatabase();
         // and
-        givenPlace().withPlate("BAT");
-        addedToDatabase();
+        givenPlace().withPlate("BAT").withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("T", null));
         thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasPlate("TAB");
     }
 
     @MediumTest public void test_shouldFindPlate_whenSearchingByAdditionalPlate() throws Exception {
-        givenPlace().withPlate("BAT").and().withPlate("TAB");
-        addedToDatabase();
+        givenPlace().withPlate("BAT").and().withPlate("TAB").withOwnPlate();
+        isAddedToDatabase();
         // and
-        givenPlace().withPlate("BAT");
-        addedToDatabase();
+        givenPlace().withPlate("BAT").withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("T", null));
         thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasPlate("TAB");
     }
 
     @MediumTest public void test_shouldNotFindPlate_whenNoneMatches() throws Exception {
-        givenPlace().withPlate("BRA");
-        addedToDatabase();
+        givenPlace().withPlate("BRA").withOwnPlate();
+        isAddedToDatabase();
         // and
-        givenPlace().withPlate("BAT");
-        addedToDatabase();
+        givenPlace().withPlate("BAT").withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("T", null));
         thenFoundPlaces().hasCount(0);
     }
 
     @MediumTest public void test_shouldTwoLatterPlateBeFirst_whenSimilarPattern() throws Exception {
-        givenPlace().withPlate("BAT");
-        addedToDatabase(); // and
-        givenPlace().withPlate("BA");
-        addedToDatabase(); // and
-        givenPlace().withPlate("B");
-        addedToDatabase();
+        givenPlace().withPlate("BAT").withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BA").withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("B").withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("B", null));
 
@@ -64,12 +64,12 @@ public class DaoLicensePlateFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldBiggerCityBeFirst_whenSimilarPattern() throws Exception {
-        givenPlace().withPlate("BAT").ofType(PlaceType.TOWN);
-        addedToDatabase(); // and
-        givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY);
-        addedToDatabase(); // and
-        givenPlace().withPlate("BAT").ofType(PlaceType.POWIAT_CITY);
-        addedToDatabase();
+        givenPlace().withPlate("BAT").ofType(PlaceType.TOWN).withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY).withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BAT").ofType(PlaceType.POWIAT_CITY).withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("B", null));
 
@@ -79,12 +79,12 @@ public class DaoLicensePlateFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldBeSortedAlphabetically_whenSearched() throws Exception {
-        givenPlace().withPlate("BZ");
-        addedToDatabase(); // and
-        givenPlace().withPlate("BP");
-        addedToDatabase(); // and
-        givenPlace().withPlate("BA");
-        addedToDatabase();
+        givenPlace().withPlate("BZ").withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BP").withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BA").withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("B", null));
 
@@ -94,10 +94,10 @@ public class DaoLicensePlateFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldBeSortedByCitySizeFirst_whenMayBeSortedByPlateLength() throws Exception {
-        givenPlace().withPlate("BA").ofType(PlaceType.VILLAGE);
-        addedToDatabase(); // and
-        givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY);
-        addedToDatabase();
+        givenPlace().withPlate("BA").ofType(PlaceType.VILLAGE).withOwnPlate();
+        isAddedToDatabase(); // and
+        givenPlace().withPlate("BAT").ofType(PlaceType.VOIVODE_CITY).withOwnPlate();
+        isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("B", null));
 
@@ -106,14 +106,18 @@ public class DaoLicensePlateFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldBeSortedByPlateLengthFirst_whenMayBeSortedAlphabetically() throws Exception {
-        givenPlace().withPlate("BZ");
-        addedToDatabase(); // and
-        givenPlace().withPlate("BAT");
-        addedToDatabase();
+        givenPlace().withPlate("BZ").withOwnPlate(); isAddedToDatabase(); // and
+        givenPlace().withPlate("BAT").withOwnPlate(); isAddedToDatabase();
 
         whenSearched(finder.findPlaceListForPlateStart("B", null));
 
         then().searchedPlaceThatIs(FIRST).hasPlate("BZ"); //and
         then().searchedPlaceThatIs(SECOND).hasPlate("BAT");
+    }
+
+    @MediumTest public void test_shouldNotFindPlace_whenPlaceHasNoOwnPlate() throws Exception {
+        givenPlace().withPlate("BZ"); isAddedToDatabase();
+        whenSearched(finder.findPlaceListForPlateStart("B", null));
+        thenFoundPlaces().areNone();
     }
 }

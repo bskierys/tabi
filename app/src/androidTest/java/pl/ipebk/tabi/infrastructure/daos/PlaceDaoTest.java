@@ -33,8 +33,7 @@ public class PlaceDaoTest extends DatabaseTest {
 
         assertEquals(1, nextRowId);
 
-        PlaceModel place = givenPlace().assemble();
-        databaseHelper.getPlaceDao().add(place);
+        givenPlace().assemble();
         nextRowId = databaseHelper.getPlaceDao().getNextRowId();
 
         assertEquals(2, nextRowId);
