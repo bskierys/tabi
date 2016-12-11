@@ -9,7 +9,10 @@ import android.database.Cursor;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import pl.ipebk.tabi.infrastructure.daos.PlacesToSearchDao;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import rx.Observable;
@@ -19,6 +22,10 @@ import rx.Observable;
  */
 public class DaoPlaceFinder implements PlaceFinder {
     private PlacesToSearchDao dao;
+
+    @Inject DaoPlaceFinder(DatabaseOpenHelper openHelper) {
+        this.dao = openHelper.getPlacesToSearchDao();
+    }
 
     public DaoPlaceFinder(PlacesToSearchDao dao) {
         this.dao = dao;

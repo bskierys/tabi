@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import pl.ipebk.tabi.infrastructure.base.ViewDao;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
+import pl.ipebk.tabi.infrastructure.views.PlacesToSearchView;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import rx.Observable;
 import timber.log.Timber;
@@ -27,6 +28,7 @@ import timber.log.Timber;
 public class PlacesToSearchDao extends ViewDao<PlaceAndPlateDto> {
     public PlacesToSearchDao(BriteDatabase database) {
         super(PlaceAndPlateDto.class, database);
+        view = new PlacesToSearchView();
     }
 
     /**
@@ -59,8 +61,6 @@ public class PlacesToSearchDao extends ViewDao<PlaceAndPlateDto> {
 
         String alias = "t";
         String columns = view.getQualifiedColumnsCommaSeparated(alias);
-        columns += ", " + alias + "." + PlacesTable.COLUMN_PLATE + " as " + PlacesTable.COLUMN_SEARCHED_PLATE;
-        columns += ", " + alias + "." + PlacesTable.COLUMN_PLATE_END + " as " + PlacesTable.COLUMN_SEARCHED_PLATE_END;
 
         String selectPlaceTemplate = " SELECT *, %d as grp FROM %s WHERE %s LIKE %s ";
         String likeArg = "\"" + nameStart + "%\"";

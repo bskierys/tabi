@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
@@ -31,7 +33,7 @@ import timber.log.Timber;
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * Adapter for items of type {@link PlaceListItem}. Some dependencies are filled by constructor, but you have to use
+ * Adapter for items of type {@link pl.ipebk.tabi.readmodel.PlaceAndPlateDto}. Some dependencies are filled by constructor, but you have to use
  * {@link #setType(SearchType)}, and {@link #setEventListener(PlaceFragmentEventListener)} before requesting any layout
  * to avoid errors.
  */
@@ -91,10 +93,10 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         }
 
         // TODO: 2016-12-06 this class should use PlaceAndPlateDto
-        /*Observable.just(cursor).first().map(this::cursorToItem)
+        Observable.just(cursor).first().map(this::cursorToItem)
                 .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
                 .subscribe(place -> {
-                    PlaceType type = place.ty
+                    PlaceType type = place.placeType();
                     if(type.ordinal() < PlaceType.SPECIAL.ordinal()){
                         bindStandardPlaceViewHolder(holder, place);
                     } else if(type == PlaceType.SPECIAL) {
@@ -102,22 +104,22 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
                     } else if(type == PlaceType.RANDOM) {
                         bindRandomPlaceViewHolder(holder, place);
                     }
-                }, ex -> Timber.e(ex, "Error rendering row view"));*/
+                }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
-    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceListItem place) {
-        /*holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
-                        place.getPlaceId(),
-                        getPlateString(place.getPlateStart(), place.getPlateEnd()),
-                        type, place.getPlaceType() == Place.Type.RANDOM ? PlaceListItemType.RANDOM :
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
+        holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
+                        place.placeId(),
+                        getPlateString(place.plateStart(), place.plateEnd()),
+                        type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
                                 (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
-        holder.plateView.setText(getPlateString(place.getPlateStart(), place.getPlateEnd()));*/
+        holder.plateView.setText(getPlateString(place.plateStart(), place.plateEnd()));
     }
 
-    private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+    private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         if(type == SearchType.PLACE){
-            holder.placeNameView.setText(place.getPlaceName());
+            holder.placeNameView.setText(place.placeName());
             holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER);
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
             holder.powiatView.setText(context.getString(R.string.search_question_plates));
@@ -130,37 +132,34 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         }
     }
 
-    private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+    private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
-        String[] nameParts = place.getPlaceName().split(" ");
+        String[] nameParts = place.placeName().split(" ");
 
-        holder.powiatView.setText(place.getVoivodeship());
+        holder.powiatView.setText(place.voivodeship());
         holder.placeNameView.setText(nameParts[0]);
         holder.voivodeshipView.setText(getPlaceSubName(nameParts));
         holder.icon.setImageResource(iconResourceId);
     }
 
-    private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceListItem place) {
+    private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
-        holder.placeNameView.setText(place.getPlaceName());
-        holder.voivodeshipView.setText(nameFormatHelper.formatVoivodeship(place.getVoivodeship()));
-        holder.powiatView.setText(nameFormatHelper.formatPowiat(place.getPowiat()));
+        holder.placeNameView.setText(place.placeName());
+        holder.voivodeshipView.setText(nameFormatHelper.formatVoivodeship(place.voivodeship()));
+        holder.powiatView.setText(nameFormatHelper.formatPowiat(place.powiat()));
         holder.icon.setImageResource(iconResourceId);
     }
 
-    protected PlaceListItem cursorToItem(Cursor cursor) {
-        return new PlaceListItem(cursor);
+    protected PlaceAndPlateDto cursorToItem(Cursor cursor) {
+        return PlaceAndPlateDto.create(cursor);
     }
 
     // TODO: 2016-12-02 should be in domain
     private String getPlateString(String plateStart, String plateEnd) {
         // TODO: 2016-12-06 factory needed
-        /*Plate plate = new Plate();
-        plate.setPattern(plateStart);
-        plate.setEnd(plateEnd);
-        return plate.toString();*/
-        return null;
+        LicensePlate plate = new LicensePlate(new AggregateId(0), plateStart, plateEnd);
+        return plate.toString();
     }
 
     private String getPlaceSubName(String[] words) {

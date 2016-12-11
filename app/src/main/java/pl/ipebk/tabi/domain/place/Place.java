@@ -27,7 +27,8 @@ public class Place extends BaseAggreagateRoot {
 
     @SuppressWarnings("unused") private Place() {}
 
-    Place(String name, PlaceType type, String voivodeship, String powiat, String gmina, List<LicensePlate>
+    // TODO: 2016-12-10 factory to create this object
+    public Place(String name, PlaceType type, String voivodeship, String powiat, String gmina, List<LicensePlate>
             plates, boolean hasOwnPlate) {
         this.name = name;
         this.type = type;

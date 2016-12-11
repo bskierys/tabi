@@ -16,6 +16,16 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.di.ActivityContext;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
+import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
+import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
+import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
+import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
+import pl.ipebk.tabi.readmodel.LicensePlateFinder;
+import pl.ipebk.tabi.readmodel.PlaceFinder;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;
@@ -72,5 +82,25 @@ public class ActivityModule {
 
     @Provides DeviceHelper provideDeviceHelper() {
         return new DeviceHelper(activity);
+    }
+
+    @Provides public SearchHistoryRepository provideSearchHistoryRepository(DaoSearchHistoryRepository repository) {
+        return repository;
+    }
+
+    @Provides public PlaceRepository providePlaceRepository(DaoPlaceRepository repository) {
+        return repository;
+    }
+
+    @Provides public LicensePlateFinder provideLicensePlateFinder(DaoLicensePlateFinder finder) {
+        return finder;
+    }
+
+    @Provides public PlaceFinder providePlaceFinder(DaoPlaceFinder finder) {
+        return finder;
+    }
+
+    @Provides public SearchHistoryFinder provideSearchHistoryFinder(DaoSearchHistoryFinder finder) {
+        return finder;
     }
 }

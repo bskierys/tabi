@@ -27,6 +27,10 @@ public abstract class SearchHistoryModel implements Model {
         this.id = id;
     }
 
+    public static SearchHistoryModel create(long placeId, String plate, Date timeSearched, int searchType) {
+        return new AutoValue_SearchHistoryModel(placeId, plate, timeSearched, searchType);
+    }
+
     public static SearchHistoryModel create(long id, long placeId, String plate, Date timeSearched, int searchType) {
         SearchHistoryModel history = new AutoValue_SearchHistoryModel(placeId, plate, timeSearched, searchType);
         history.setId(id);

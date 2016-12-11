@@ -13,7 +13,11 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.readmodel.LicensePlateFinder;
+import pl.ipebk.tabi.readmodel.PlaceFinder;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.RxUtil;
@@ -33,16 +37,23 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private static final int SEARCH_TYPE_FULL = 82;
     private static final int HISTORY_SEARCH_NUMBER = 3;
 
-    private final DataManager dataManager;
     private final SpellCorrector spellCorrector;
     private StopwatchManager stopwatchManager;
     private Stopwatch stopwatch;
     private Subscription searchSubscription;
     private String lastSearched;
+    private SearchHistoryRepository historyRepository;
+    private SearchHistoryFinder historyFinder;
+    private PlaceFinder placeFinder;
+    private LicensePlateFinder plateFinder;
 
-    @Inject public SearchPresenter(DataManager dataManager, SpellCorrector spellCorrector,
-                                   StopwatchManager stopwatchManager) {
-        this.dataManager = dataManager;
+    @Inject public SearchPresenter(SearchHistoryRepository searchRepository, SearchHistoryFinder historyFinder,
+                                   PlaceFinder placeFinder, LicensePlateFinder plateFinder,
+                                   SpellCorrector spellCorrector, StopwatchManager stopwatchManager) {
+        this.historyRepository = searchRepository;
+        this.placeFinder = placeFinder;
+        this.historyFinder = historyFinder;
+        this.plateFinder = plateFinder;
         this.spellCorrector = spellCorrector;
         this.stopwatchManager = stopwatchManager;
         this.stopwatch = stopwatchManager.getStopwatch();
@@ -60,18 +71,15 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     //region public methods
     public void placeSelected(long placeId, String searchedPlate, String plateClicked,
                               SearchType searchType, PlaceListItemType itemType) {
-        //getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
+        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
 
-        /*Observable.just(new SearchHistory())
-                  .doOnNext(history -> history.setPlaceId(placeId))
-                  .doOnNext(history -> history.setPlate(plateClicked))
-                  .doOnNext(history -> history.setSearchType(searchType))
-                  .doOnNext(history -> history.setTimeSearched(Calendar.getInstance().getTime()))
+        // TODO: 2016-12-10 should be responsibility of factory method
+        SearchHistory history = new SearchHistory(placeId, plateClicked, Calendar.getInstance().getTime(), searchType);
+
+        Observable.just(history)
                   .observeOn(Schedulers.io())
-                  .subscribe(history -> dataManager.getDatabaseHelper()
-                                                   .getSearchHistoryDao()
-                                                   .updateOrAdd(history)
-                          , ex -> Timber.e(ex, "Problem saving history to database"));*/
+                  .subscribe(historyRepository::save
+                          , ex -> Timber.e(ex, "Problem saving history to database"));
     }
 
     public void startInitialSearchForText(String searchText) {
@@ -96,7 +104,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public void loadInitialStateForPlaces() {
         Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
-        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE.ordinal())
+        historyFinder.findHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLACE)
                    .filter(cursor -> cursor != null).first()
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
@@ -110,7 +118,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public void loadInitialStateForPlates() {
         Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
-        dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE.ordinal())
+        historyFinder.findHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE)
                    .filter(cursor -> cursor != null).first()
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
@@ -166,14 +174,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
 
     @NonNull private Observable<Pair<Cursor, Cursor>> getObservableForSearchWithinTwoQueries(String phrase, Integer
             limit) {
-        /*Observable<Cursor> platesCursorObservable = dataManager.getDatabaseHelper()
-                                                               .getPlaceDao().getPlacesForPlateStart(phrase, limit);
+        // TODO: 2016-12-10 refactor
+        Observable<Cursor> platesCursorObservable = plateFinder.findPlacesForPlateStart(phrase, limit);
+        Observable<Cursor> placesCursorObservable = placeFinder.findPlacesByName(phrase, limit);
 
-        Observable<Cursor> placesCursorObservable = dataManager.getDatabaseHelper()
-                                                               .getPlaceDao().getPlacesByName(phrase, limit);*/
-
-        //return Observable.zip(platesCursorObservable, placesCursorObservable, Pair<Cursor, Cursor>::new);
-        return null;
+        return Observable.zip(platesCursorObservable, placesCursorObservable, Pair<Cursor, Cursor>::new);
     }
 
     private void showSearchResults(Pair<Cursor, Cursor> cursorCursorPair, int searchType) {

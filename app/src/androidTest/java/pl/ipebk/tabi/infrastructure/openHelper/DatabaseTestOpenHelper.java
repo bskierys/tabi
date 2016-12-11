@@ -3,7 +3,7 @@
 * date: 2016-02-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database;
+package pl.ipebk.tabi.infrastructure.openHelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -2,96 +2,83 @@ package pl.ipebk.tabi.infrastructure.finders;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
-import java.util.List;
+import java.util.Date;
 
-import pl.ipebk.tabi.test.common.TestDataFactory;
-import pl.ipebk.tabi.ui.search.PlaceListItem;
-
-import static org.junit.Assert.*;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
+import pl.ipebk.tabi.infrastructure.models.PlaceModel;
+import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
+import pl.ipebk.tabi.readmodel.PlaceType;
+import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
+import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
 public class DaoSearchHistoryFinderTest extends FinderTest {
-    /*@MediumTest public void testGetHistoryForType() throws Exception {
-        String dummyPlate = "AAA";
-        Place place1 = TestDataFactory.createStandardPlace("śwarądz", dummyPlate, Place.Type.TOWN);
-        Place place2 = TestDataFactory.createStandardPlace("śokołów", dummyPlate, Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(place1);
-        databaseHelper.getPlaceDao().add(place2);
+    private static final int DEFAULT_SEARCH_LIMIT = 3;
 
-        databaseHelper.getSearchHistoryDao().updateOrAdd(
-                TestDataFactory.createSearchHistory(place1.getId(), SearchType.PLACE, 0));
-        databaseHelper.getSearchHistoryDao().updateOrAdd(
-                TestDataFactory.createSearchHistory(place2.getId(), SearchType.PLACE, 10));
-        databaseHelper.getSearchHistoryDao().updateOrAdd(
-                TestDataFactory.createSearchHistory(place2.getId(), SearchType.PLATE, 20));
+    private DaoSearchHistoryFinder finder;
 
-        List<PlaceListItem> items = databaseHelper.getPlaceDao().getHistoryPlacesList(null, SearchType.PLACE);
+    // TODO: 2016-12-07 write finder descriptions based on that tests
+    @Override public void setUp() throws Exception {
+        super.setUp();
+        finder = new DaoSearchHistoryFinder(databaseHelper.getPlaceDao());
+    }
 
-        assertEquals(3, items.size());
-        for (int i = 0; i < items.size() - 1; i++) {
-            PlaceListItem item = items.get(i);
-            assertEquals(Place.Type.TOWN, item.getPlaceType());
+    @MediumTest public void test_shouldFindOnlyForPlates_whenSearchedForHistoryForPlates() throws Exception {
+        givenThatSearched(givenPlace().withName("a")).within(SearchType.PLATE).atTime(10).assemble();
+        givenThatSearched(givenPlace().withName("b")).within(SearchType.PLATE).atTime(12).assemble();
+        givenThatSearched(givenPlace().withName("b")).within(SearchType.PLACE).atTime(14).assemble();
+
+        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLATE));
+
+        thenFoundPlaces().hasCount(3); // one for random plate
+        then().searchedPlaceThatIs(FIRST).hasName("a");
+        then().searchedPlaceThatIs(SECOND).hasName("b");
+    }
+
+    @MediumTest public void test_shouldOrderPlacesByTime() throws Exception {
+        givenThatSearched(givenPlace().withName("a")).atTime(14).assemble();
+        givenThatSearched(givenPlace().withName("b")).atTime(10).assemble();
+        givenThatSearched(givenPlace().withName("c")).atTime(12).assemble();
+
+        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchHistoryAssembler.DEFAULT_SEARCH_TYPE));
+
+        then().searchedPlaceThatIs(FIRST).hasName("b");
+        then().searchedPlaceThatIs(SECOND).hasName("c");
+        then().searchedPlaceThatIs(SECOND).hasName("a");
+    }
+
+    @MediumTest public void test_shouldHaveRandomPlace_whenSearchForPlace() throws Exception {
+        givenThatSearched(givenPlace().withName("a")).within(SearchType.PLACE).atTime(10).assemble();
+        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLACE));
+        thenFoundPlaces().hasCount(2); // one for random
+        then().searchedPlaceThatIs(LAST).isType(PlaceType.RANDOM);
+    }
+
+    @MediumTest public void test_shouldHaveRandomPlace_whenSearchForLicensePlate() throws Exception {
+        givenThatSearched(givenPlace().withName("a")).within(SearchType.PLATE).atTime(10).assemble();
+        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLATE));
+        thenFoundPlaces().hasCount(2); // one for random
+        then().searchedPlaceThatIs(LAST).isType(PlaceType.RANDOM);
+    }
+
+    protected SearchHistoryAssembler searchHistoryAssembler;
+
+    private SearchHistoryAssembler2 givenThatSearched(PlaceModelAssembler placeAssembler) {
+        PlaceModel model = placeAssembler.assemble();
+        databaseHelper.getPlaceDao().add(model);
+        searchHistoryAssembler = new SearchHistoryAssembler2();
+        searchHistoryAssembler = searchHistoryAssembler.searchedFor(model);
+        return (SearchHistoryAssembler2) searchHistoryAssembler;
+    }
+
+    private static class SearchHistoryAssembler2 extends SearchHistoryAssembler {
+        @Override public SearchHistoryModel assemble() {
+            SearchHistoryModel model = super.assemble();
+            databaseHelper.getSearchHistoryDao().updateOrAdd(model);
+            return model;
         }
     }
-
-    @MediumTest public void testGetHistoryProperlySorted() throws Exception {
-        Place first = TestDataFactory.createStandardPlace("1", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(first);
-        Place second = TestDataFactory.createStandardPlace("2", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(second);
-        Place third = TestDataFactory.createStandardPlace("3", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(third);
-        Place forth = TestDataFactory.createStandardPlace("4", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(forth);
-
-        databaseHelper.getSearchHistoryDao().add(
-                TestDataFactory.createSearchHistory(second.getId(), SearchType.PLACE, 10));
-        databaseHelper.getSearchHistoryDao().add(
-                TestDataFactory.createSearchHistory(first.getId(), SearchType.PLACE, 5));
-        databaseHelper.getSearchHistoryDao().add(
-                TestDataFactory.createSearchHistory(forth.getId(), SearchType.PLACE, 50));
-        databaseHelper.getSearchHistoryDao().add(
-                TestDataFactory.createSearchHistory(third.getId(), SearchType.PLACE, 12));
-
-        List<PlaceListItem> items = databaseHelper.getPlaceDao().getHistoryPlacesList(null, SearchType.PLACE);
-
-        assertEquals(5, items.size());
-
-        for (int i = 0; i < items.size() - 1; i++) {
-            PlaceListItem item = items.get(i);
-            String expectedPlaceName = Integer.toString(4 - i);
-            assertEquals(expectedPlaceName, item.getPlaceName());
-        }
-    }
-
-    @MediumTest public void testGetHistoryHasRandomForPlace() throws Exception {
-        Place first = TestDataFactory.createStandardPlace("1", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(first);
-        Place second = TestDataFactory.createStandardPlace("2", "AAA", Place.Type.TOWN);
-        databaseHelper.getPlaceDao().add(second);
-
-        List<PlaceListItem> items = databaseHelper.getPlaceDao().getHistoryPlacesList(null, SearchType.PLACE);
-        assertEquals(1, items.size());
-
-        PlaceListItem random = items.get(0);
-        assertTrue(random.getPlaceName().equals("1") || random.getPlaceName().equals("2"));
-    }
-
-    @MediumTest public void testGetHistoryHasRandomForPlate() throws Exception {
-        Place first = TestDataFactory.createStandardPlace("1", "AAA", Place.Type.TOWN);
-        first.setHasOwnPlate(true);
-        databaseHelper.getPlaceDao().add(first);
-        Place second = TestDataFactory.createStandardPlace("2", "AAA", Place.Type.TOWN);
-        second.setHasOwnPlate(false);
-        databaseHelper.getPlaceDao().add(second);
-
-        List<PlaceListItem> items = databaseHelper.getPlaceDao().getHistoryPlacesList(null, SearchType.PLATE);
-        assertEquals(1, items.size());
-
-        PlaceListItem random = items.get(0);
-        assertTrue(random.getPlaceName().equals("1"));
-        assertEquals(Place.Type.RANDOM, random.getPlaceType());
-    }*/
 }

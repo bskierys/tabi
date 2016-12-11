@@ -7,10 +7,11 @@ package pl.ipebk.tabi.infrastructure.finders;
 
 import java.util.List;
 
-import pl.ipebk.tabi.database.DatabaseTest;
+import pl.ipebk.tabi.infrastructure.DatabaseTest;
+import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.test.common.TestModelFactory;
+import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
 /**
  * TODO: Generic description. Replace with real one.
@@ -21,6 +22,21 @@ public class FinderTest extends DatabaseTest {
     protected static final int SECOND = 1;
     protected static final int THIRD = 2;
     protected static final int FOURTH = 3;
+    protected static final int LAST = -1;
+
+    protected PlaceModel placeModel;
+    protected PlaceModelAssembler placeModelAssembler;
+
+    public PlaceModelAssembler givenPlace() {
+        placeModelAssembler = new PlaceModelAssembler();
+        return placeModelAssembler;
+    }
+
+    // TODO: 2016-12-10 rename
+    public void addedToDatabase() {
+        this.placeModel = placeModelAssembler.assemble();
+        databaseHelper.getPlaceDao().add(this.placeModel);
+    }
 
     public void whenSearched(List<PlaceAndPlateDto> places) {
         this.foundPlaces = places;
@@ -51,8 +67,13 @@ public class FinderTest extends DatabaseTest {
         }
 
         public PlaceAndPlateDtoAssert searchedPlaceThatIs(int placeNumber) {
-            assertTrue(places.size() > placeNumber);
-            PlaceAndPlateDto place = places.get(placeNumber);
+            PlaceAndPlateDto place;
+            if(placeNumber == LAST) {
+                place = places.get(places.size() - 1);
+            } else {
+                assertTrue(places.size() > placeNumber);
+                place = places.get(placeNumber);
+            }
             assertNotNull(place);
 
             return new PlaceAndPlateDtoAssert(place);
@@ -79,14 +100,6 @@ public class FinderTest extends DatabaseTest {
         public PlaceAndPlateDtoAssert isType(PlaceType type) {
             assertEquals(type, place.placeType());
             return this;
-        }
-    }
-
-    // TODO: 2016-12-07 what access to this classes? Should be here or separate classes?
-    static class DatabaseTestModelFactory extends TestModelFactory {
-        void addedToDatabase() {
-            this.placeModel = placeModelAssembler.assemble();
-            databaseHelper.getPlaceDao().add(this.placeModel);
         }
     }
 }

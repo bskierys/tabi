@@ -20,6 +20,7 @@ public class SearchHistory extends BaseAggreagateRoot {
     private Date timeSearched;
     private SearchType searchType;
 
+    // TODO: 2016-12-10 factory to create this object
     public SearchHistory(long placeId, String plate, Date timeSearched, SearchType searchType) {
         this.placeId = placeId;
         this.plate = plate;

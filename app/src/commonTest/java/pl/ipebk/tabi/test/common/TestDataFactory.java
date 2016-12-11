@@ -5,17 +5,6 @@
 */
 package pl.ipebk.tabi.test.common;
 
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import pl.ipebk.tabi.infrastructure.models.PlaceModel;
-import pl.ipebk.tabi.ui.search.PlaceListItem;
-
 /**
  * Factory class that makes instances of data models with random field values.
  * The aim of this class is to help setting up test fixtures.

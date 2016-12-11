@@ -5,7 +5,6 @@
 */
 package pl.ipebk.tabi.infrastructure.views;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
@@ -19,19 +18,6 @@ import pl.ipebk.tabi.readmodel.PlaceType;
  */
 abstract class PlaceAndPlateDtoView extends View<PlaceAndPlateDto> {
     @Override public PlaceAndPlateDto cursorToModel(Cursor cursor) {
-        long placeId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
-        String placeName = cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_NAME));
-        String voivodeship = cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_VOIVODESHIP));
-        String powiat = cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_POWIAT));
-        String plateStart = cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_SEARCHED_PLATE));
-        String plateEnd = cursor.getString(cursor.getColumnIndex(PlacesTable.COLUMN_SEARCHED_PLATE_END));
-
-        PlaceType type = PlaceType.UNSPECIFIED;
-        int placeTypeIndex = cursor.getColumnIndex(PlacesTable.COLUMN_PLACE_TYPE);
-        if (!cursor.isNull(placeTypeIndex)) {
-            type = PlaceType.values()[cursor.getInt(placeTypeIndex)];
-        }
-
-        return PlaceAndPlateDto.create(placeId, placeName, plateStart, plateEnd, voivodeship, powiat, type);
+        return PlaceAndPlateDto.create(cursor);
     }
 }

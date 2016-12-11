@@ -12,8 +12,10 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
@@ -30,7 +32,7 @@ import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
-    private DataManager dataManager;
+    private PlaceRepository repository;
     // TODO: 2016-12-06 should not use domain model? rather view dto
     private Observable<Place> placeOnce;
     private BehaviorSubject<Place> placeSubject;
@@ -42,9 +44,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
-    @Inject public DetailsPresenter(DataManager dataManager, DeviceHelper deviceHelper, NameFormatHelper
+    @Inject public DetailsPresenter(PlaceRepository repository, DeviceHelper deviceHelper, NameFormatHelper
             nameFormatHelper) {
-        this.dataManager = dataManager;
+        this.repository = repository;
         this.deviceHelper = deviceHelper;
         this.nameFormatHelper = nameFormatHelper;
     }
@@ -70,13 +72,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
-        /*loadPlaceSubscription = dataManager.getDatabaseHelper()
-                                           .getPlaceDao()
-                                           .getByIdObservable(id)
-                                           .map(placeModel -> {
-                                               // TODO: 2016-12-06 when using repository should not be a problem
-                                           })
-                                           .subscribe(placeSubject::onNext);*/
+        // TODO: 2016-12-10 onError here
+        loadPlaceSubscription = repository.loadByIdObservable(new AggregateId(id))
+                                          .subscribe(placeSubject::onNext);
 
         Observable<Place> standardPlaceStream = placeOnce.filter(p -> p.getType() != PlaceType.SPECIAL);
         standardPlaceStream.subscribeOn(Schedulers.io())

@@ -9,7 +9,10 @@ import android.database.Cursor;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import pl.ipebk.tabi.infrastructure.daos.PlatesToSearchDao;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import rx.Observable;
@@ -19,6 +22,10 @@ import rx.Observable;
  */
 public class DaoLicensePlateFinder implements LicensePlateFinder {
     private PlatesToSearchDao dao;
+
+    @Inject DaoLicensePlateFinder(DatabaseOpenHelper openHelper) {
+        this.dao = openHelper.getPlatesToSearchDao();
+    }
 
     public DaoLicensePlateFinder(PlatesToSearchDao dao) {
         this.dao = dao;

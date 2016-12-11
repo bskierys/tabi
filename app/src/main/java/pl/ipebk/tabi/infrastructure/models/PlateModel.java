@@ -5,16 +5,19 @@
 */
 package pl.ipebk.tabi.infrastructure.models;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 import pl.ipebk.tabi.infrastructure.base.Model;
 
 @AutoValue
 public abstract class PlateModel implements Model {
+    // TODO: 2016-12-11 add nullable annotations
     private long id;
     private long placeId;
     public abstract String pattern();
-    public abstract String end();
+    @Nullable public abstract String end();
 
     @Override public long getId() {
         return id;

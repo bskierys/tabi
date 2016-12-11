@@ -8,15 +8,22 @@ package pl.ipebk.tabi.infrastructure.daos;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import pl.ipebk.tabi.infrastructure.base.Dao;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.infrastructure.tables.SearchHistoryTable;
+import pl.ipebk.tabi.infrastructure.views.PlacesToSearchView;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import rx.Observable;
@@ -55,6 +62,31 @@ public class PlaceDao extends Dao<PlaceModel> {
     public Observable<Cursor> getHistoryPlaces(Integer limit, int type) {
         Pair<String, String[]> sql = getHistoryPlacesSql(limit, type);
         return db.createQuery(table.getName(), sql.first, sql.second).map(SqlBrite.Query::run);
+    }
+
+    /**
+     * Internal method for tests
+     */
+    public List<PlaceAndPlateDto> getHistoryPlacesList(Integer limit, int type) {
+        Pair<String, String[]> sql = getHistoryPlacesSql(limit, type);
+        Cursor cursor = db.query(sql.first, sql.second);
+        return getListOfDtoForCursor(cursor);
+    }
+
+    @NonNull protected List<PlaceAndPlateDto> getListOfDtoForCursor(Cursor cursor) {
+        // TODO: 2016-12-10 temporary method
+        List<PlaceAndPlateDto> models = new ArrayList<>();
+        if (cursor != null) {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                PlaceAndPlateDto model = PlaceAndPlateDto.create(cursor);
+                models.add(model);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        models.removeAll(Collections.singleton(null));
+        return models;
     }
 
     private Pair<String, String[]> getHistoryPlacesSql(Integer limit, int type) {
@@ -125,7 +157,7 @@ public class PlaceDao extends Dao<PlaceModel> {
     /**
      * Gets count of places that are not special and that has own plates
      */
-    private int getStandardPlacesWithPlateCount() {
+    int getStandardPlacesWithPlateCount() {
         String[] columns = {"count(1)"};
         String whereClause = PlacesTable.COLUMN_PLACE_TYPE + " < ? AND "
                 + PlacesTable.COLUMN_HAS_OWN_PLATE + " = ? ";

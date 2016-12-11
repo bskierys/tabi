@@ -3,10 +3,12 @@
 * date: 2016-02-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.database;
+package pl.ipebk.tabi.infrastructure;
 
 import android.test.AndroidTestCase;
 import android.test.RenamingDelegatingContext;
+
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseTestOpenHelper;
 
 public class DatabaseTest extends AndroidTestCase {
     protected static DatabaseTestOpenHelper databaseHelper;
