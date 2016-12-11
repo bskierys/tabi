@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
@@ -14,20 +17,20 @@ import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
 public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
     private DaoSearchHistoryRepository repository;
-    private PlaceModelAssembler placeModelAssembler;
+    private SearchHistoryFactory factory;
+    private Date now;
     private PlaceModel placeModel;
 
     @Override public void setUp() throws Exception {
         super.setUp();
         repository = new DaoSearchHistoryRepository(databaseHelper.getSearchHistoryDao());
+        factory = new SearchHistoryFactory(() -> now);
     }
 
     @MediumTest public void test_shouldSaveHistoryToDatabase() throws Exception {
-        givenPlace().withName("a").and().withPlate("GRA");
-        addedToDatabase();
+        addToDatabase(givenPlace().withName("a").and().withPlate("GRA"));
 
-        SearchHistory history = new SearchHistory(placeModel.getId(), placeModel.plates().get(0).pattern(),
-                                                  new Date(10), SearchType.PLACE);
+        SearchHistory history = createHistory(10, SearchType.PLACE);
         repository.save(history);
 
         SearchHistoryModel model = databaseHelper.getSearchHistoryDao().getAll().get(0);
@@ -38,13 +41,10 @@ public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
     }
 
     @MediumTest public void test_shouldReplaceSearchHistory_whenSearchedSecondTime() throws Exception {
-        givenPlace().withName("a").and().withPlate("GRA");
-        addedToDatabase();
+        addToDatabase(givenPlace().withName("a").and().withPlate("GRA"));
 
-        SearchHistory history = new SearchHistory(placeModel.getId(), placeModel.plates().get(0).pattern(),
-                                                  new Date(10), SearchType.PLACE);
-        SearchHistory history2 = new SearchHistory(placeModel.getId(), placeModel.plates().get(0).pattern(),
-                                                  new Date(20), SearchType.PLACE);
+        SearchHistory history = createHistory(10, SearchType.PLACE);
+        SearchHistory history2 = createHistory(20, SearchType.PLACE);
         repository.save(history);
         repository.save(history2);
 
@@ -57,14 +57,19 @@ public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
         assertEquals(20, model.timeSearched().getTime());
     }
 
-    public PlaceModelAssembler givenPlace() {
-        placeModelAssembler = new PlaceModelAssembler();
-        return placeModelAssembler;
+    private PlaceModelAssembler givenPlace() {
+        return new PlaceModelAssembler();
     }
 
-    // TODO: 2016-12-10 rename
-    public void addedToDatabase() {
-        this.placeModel = placeModelAssembler.assemble();
-        databaseHelper.getPlaceDao().add(this.placeModel);
+    private void addToDatabase(PlaceModelAssembler assembler) {
+        this.placeModel = assembler.assemble();
+        databaseHelper.getPlaceDao().add(placeModel);
+    }
+
+    private SearchHistory createHistory(long time, SearchType type) {
+        now = new Date(time);
+        long placeId = placeModel.getId();
+        String plate = placeModel.plates().get(0).pattern();
+        return factory.create(placeId, plate, type);
     }
 }

@@ -5,7 +5,6 @@
 */
 package pl.ipebk.tabi.infrastructure.base;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -28,8 +27,7 @@ public abstract class DataStructure<E> {
     /**
      * Converts database cursor to desired entity.
      *
-     * @param cursor Instance of {@link Cursor}. Must be opened, moved to first object and closed
-     * afterwards.
+     * @param cursor Instance of {@link Cursor}. Must be opened, moved to first object and closed afterwards.
      * @return Entity from database.
      */
     public abstract E cursorToModel(Cursor cursor);

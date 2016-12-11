@@ -7,77 +7,59 @@ package pl.ipebk.tabi.infrastructure.daos;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
+import java.util.List;
+
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinderTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
 
 public class SearchHistoryDaoTest extends DatabaseTest {
-    private PlaceModelAssembler2 placeModelAssembler;
+    private PlaceModel placeModel;
 
-    @Override public void setUp() throws Exception {
-        super.setUp();
-    }
+    @MediumTest public void testAddOrUpdateHistory() throws Exception {
+        addToDatabase(givenPlace().withName("a"));
 
-    protected SearchHistoryAssembler searchHistoryAssembler;
+        remember(thatISearched().forPlaceWithId(givenPlaceId()).atTime(0));
+        assertEquals(1, databaseHelper.getSearchHistoryDao().getAll().size());
 
-    private SearchHistoryAssembler2 givenThatSearched(PlaceModelAssembler placeAssembler) {
-        PlaceModel model = placeAssembler.assemble();
-        databaseHelper.getPlaceDao().add(model);
-        searchHistoryAssembler = new SearchHistoryAssembler2();
-        searchHistoryAssembler = searchHistoryAssembler.searchedFor(model);
-        return (SearchHistoryAssembler2) searchHistoryAssembler;
-    }
+        remember(thatISearched().forPlaceWithId(givenPlaceId()).atTime(10));
+        List<SearchHistoryModel> wholeHistory = databaseHelper.getSearchHistoryDao().getAll();
 
-    private static class SearchHistoryAssembler2 extends SearchHistoryAssembler {
-        @Override public SearchHistoryModel assemble() {
-            SearchHistoryModel model = super.assemble();
-            databaseHelper.getSearchHistoryDao().updateOrAdd(model);
-            return model;
-        }
-    }
-
-    // TODO: 2016-12-10 better naming/usage for that class
-    // TODO: 2016-12-10 add place to database in assemble method
-    public PlaceModelAssembler2 givenPlace() {
-        placeModelAssembler = new PlaceModelAssembler2();
-        return placeModelAssembler;
-    }
-
-    // TODO: 2016-12-10 change names to match pattern
-    /*@MediumTest public void testAddOrUpdateHistory() throws Exception {
-        long id = givenPlace().withName("Place").assemble().getId();
-
-        givenThatSearched()
-        databaseHelper.getSearchHistoryDao().updateOrAdd(TestDataFactory.createSearchHistory(id, SearchType.PLACE, 0));
-        assertEquals(1, databaseHelper.getSearchHistoryDao().getHistoryListForType(SearchType.PLACE, null).size());
-
-        databaseHelper.getSearchHistoryDao().updateOrAdd(TestDataFactory.createSearchHistory(id, SearchType.PLACE, 10));
-        List<SearchHistory> wholeHistory = databaseHelper.getSearchHistoryDao()
-                                                         .getHistoryListForType(SearchType.PLACE, null);
         assertEquals(1, wholeHistory.size());
-        assertEquals(10, wholeHistory.get(0).getTimeSearched().getTime());
+        assertEquals(10, wholeHistory.get(0).timeSearched().getTime());
     }
 
     @MediumTest public void testAddHistoryDoeInOtherSearchType() throws Exception {
-        Place place = TestDataFactory.createStandardPlace("PlaceModel");
-        databaseHelper.getPlaceDao().add(place);
-        long id = place.getId();
+        addToDatabase(givenPlace().withName("a"));
 
-        databaseHelper.getSearchHistoryDao().updateOrAdd(TestDataFactory.createSearchHistory(id, SearchType.PLACE, 0));
-        databaseHelper.getSearchHistoryDao().updateOrAdd(TestDataFactory.createSearchHistory(id, SearchType.PLATE, 10));
+        remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.PLACE).atTime(0));
+        remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.PLATE).atTime(10));
 
         assertEquals(2, databaseHelper.getSearchHistoryDao().getAll().size());
-    }*/
+    }
 
-    // TODO: 2016-12-10 better naming
-    class PlaceModelAssembler2 extends PlaceModelAssembler {
-        @Override public PlaceModel assemble() {
-            PlaceModel model = super.assemble();
-            databaseHelper.getPlaceDao().add(model);
-            return model;
-        }
+    private void addToDatabase(PlaceModelAssembler assembler) {
+        this.placeModel = assembler.assemble();
+        databaseHelper.getPlaceDao().add(placeModel);
+    }
+
+    private void remember(SearchHistoryAssembler assembler) {
+        databaseHelper.getSearchHistoryDao().updateOrAdd(assembler.assemble());
+    }
+
+    private PlaceModelAssembler givenPlace() {
+        return new PlaceModelAssembler();
+    }
+
+    private long givenPlaceId() {
+        return this.placeModel.getId();
+    }
+
+    private SearchHistoryAssembler thatISearched() {
+        return new SearchHistoryAssembler();
     }
 }

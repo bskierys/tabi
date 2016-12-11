@@ -15,7 +15,9 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
@@ -77,5 +79,9 @@ public class ApplicationModule {
 
     @Provides public SearchHistoryFinder provideSearchHistoryFinder(DaoSearchHistoryFinder finder) {
         return finder;
+    }
+
+    @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {
+        return provider;
     }
 }

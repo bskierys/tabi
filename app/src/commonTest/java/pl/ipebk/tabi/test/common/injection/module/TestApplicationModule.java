@@ -13,9 +13,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.manager.DataManager;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * Provides application-level dependencies for an app running on a testing environment
@@ -44,6 +43,10 @@ import static org.mockito.Mockito.mock;
 
     @Provides
     @Singleton public DataManager provideDataManager() {
-        return mock(DataManager.class);
+        return null;
+    }
+
+    @Provides public SearchTimeProvider provideSearchTimeProvider() {
+        return null;
     }
 }

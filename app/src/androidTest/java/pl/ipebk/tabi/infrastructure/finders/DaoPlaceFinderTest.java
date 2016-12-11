@@ -4,9 +4,6 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import pl.ipebk.tabi.readmodel.PlaceType;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class DaoPlaceFinderTest extends FinderTest {
     private DaoPlaceFinder finder;
 
@@ -17,81 +14,69 @@ public class DaoPlaceFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFindPlace_whenHasPolishDiacritics() throws Exception {
-        givenPlace().withName("świdnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swirzyce");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica")); // and
+        addToDatabase(givenPlace().withName("swirzyce"));
 
         whenSearched(finder.findPlacesListByName("świd", null));
+
         thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasName("świdnica");
     }
 
     @MediumTest public void test_shouldFindPlace_whenSearchedWithoutPolishDiacritics() throws Exception {
-        givenPlace().withName("świdnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swirzyce");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica")); // and
+        addToDatabase(givenPlace().withName("swirzyce"));
 
         whenSearched(finder.findPlacesListByName("swid", null));
+
         thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasName("świdnica");
     }
 
     @MediumTest public void test_shouldOrderAlphabetically_whenHasPolishDiacritics() throws Exception {
-        givenPlace().withName("świdnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swirzyce");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica")); // and
+        addToDatabase(givenPlace().withName("swirzyce"));
 
         whenSearched(finder.findPlacesListByName("swi", null));
+
         thenFoundPlaces().hasCount(2).and().searchedPlaceThatIs(FIRST).hasName("swirzyce"); // and
         then().searchedPlaceThatIs(SECOND).hasName("świdnica");
     }
 
     @MediumTest public void test_shouldLimitResults_whenAsked() throws Exception {
-        givenPlace().withName("swidnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnico");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnice");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("swidnica")); // and
+        addToDatabase(givenPlace().withName("swidnico")); // and
+        addToDatabase(givenPlace().withName("swidnice"));
 
         whenSearched(finder.findPlacesListByName("swi", 2));
+
         thenFoundPlaces().hasCount(2);
     }
 
     @MediumTest public void test_shouldBiggerCityBeFirst_whenSearched() throws Exception {
-        givenPlace().withName("swidnica").ofType(PlaceType.TOWN);
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE);
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica").ofType(PlaceType.VOIVODE_CITY);
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("swidnica").ofType(PlaceType.TOWN)); // and
+        addToDatabase(givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE)); // and
+        addToDatabase(givenPlace().withName("swidnica").ofType(PlaceType.VOIVODE_CITY));
 
         whenSearched(finder.findPlacesListByName("swi", null));
+
         then().searchedPlaceThatIs(FIRST).isType(PlaceType.VOIVODE_CITY); // and
         then().searchedPlaceThatIs(SECOND).isType(PlaceType.TOWN); // and
         then().searchedPlaceThatIs(THIRD).isType(PlaceType.VILLAGE);
     }
 
     @MediumTest public void test_shouldCityBeFirst_whenHasOwnPlate() throws Exception {
-        givenPlace().withName("swidnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnice").withOwnPlate();
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("swidnica")); // and
+        addToDatabase(givenPlace().withName("swidnice").withOwnPlate());
 
         whenSearched(finder.findPlacesListByName("swi", null));
+
         then().searchedPlaceThatIs(FIRST).hasName("swidnice");
     }
 
     @MediumTest public void test_shouldBeSortedAlphabetically_whenUsingPolishDiacritics() throws Exception {
-        givenPlace().withName("śwarądz");
-        isAddedToDatabase(); // and
-        givenPlace().withName("świnoujście");
-        isAddedToDatabase(); // and
-        givenPlace().withName("śokołów");
-        isAddedToDatabase(); // and
-        givenPlace().withName("śókołów");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("śwarądz")); // and
+        addToDatabase(givenPlace().withName("świnoujście")); // and
+        addToDatabase(givenPlace().withName("śokołów")); // and
+        addToDatabase(givenPlace().withName("śókołów"));
 
         whenSearched(finder.findPlacesListByName("ś", null));
 
@@ -102,10 +87,8 @@ public class DaoPlaceFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFavorNoDiacritics_whenSearchedWithoutDiacritics() throws Exception {
-        givenPlace().withName("świdnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica")); // and
+        addToDatabase(givenPlace().withName("swidnica"));
 
         whenSearched(finder.findPlacesListByName("swi", null));
 
@@ -114,20 +97,17 @@ public class DaoPlaceFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFavorDiacritics_whenSearchedWithDiacritics() throws Exception {
-        givenPlace().withName("świdnica");
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica")); // and
+        addToDatabase(givenPlace().withName("swidnica"));
 
         whenSearched(finder.findPlacesListByName("świ", null));
+
         thenFoundPlaces().hasCount(1).and().searchedPlaceThatIs(FIRST).hasName("świdnica");
     }
 
     @MediumTest public void test_shouldFavorOwningPlate_whenCanFavorByDiacritics() throws Exception {
-        givenPlace().withName("świdnica").withOwnPlate();
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica");
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica").withOwnPlate()); // and
+        addToDatabase(givenPlace().withName("swidnica"));
 
         whenSearched(finder.findPlacesListByName("swi", null));
 
@@ -137,10 +117,8 @@ public class DaoPlaceFinderTest extends FinderTest {
 
     // TODO: 2016-12-07 should it be that way?
     @MediumTest public void test_shouldFavorDiacritics_whenCanFavorBigCity() throws Exception {
-        givenPlace().withName("świdnica").ofType(PlaceType.TOWN);
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE);
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("świdnica").ofType(PlaceType.TOWN)); // and
+        addToDatabase(givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE));
 
         whenSearched(finder.findPlacesListByName("swi", null));
 
@@ -149,10 +127,8 @@ public class DaoPlaceFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFavorBigCity_whenCanFavorSortingAlphabetically() throws Exception {
-        givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE);
-        isAddedToDatabase(); // and
-        givenPlace().withName("swidnice").ofType(PlaceType.TOWN);
-        isAddedToDatabase();
+        addToDatabase(givenPlace().withName("swidnica").ofType(PlaceType.VILLAGE)); // and
+        addToDatabase(givenPlace().withName("swidnice").ofType(PlaceType.TOWN));
 
         whenSearched(finder.findPlacesListByName("swi", null));
 

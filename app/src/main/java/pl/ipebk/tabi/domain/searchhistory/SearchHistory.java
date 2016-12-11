@@ -7,6 +7,7 @@ package pl.ipebk.tabi.domain.searchhistory;
 
 import java.util.Date;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.BaseAggreagateRoot;
 import pl.ipebk.tabi.readmodel.SearchType;
 
@@ -15,13 +16,12 @@ import pl.ipebk.tabi.readmodel.SearchType;
  * in database models are autoincrement and can only by obtained from database.
  */
 public class SearchHistory extends BaseAggreagateRoot {
-    private long placeId;
+    private AggregateId placeId;
     private String plate;
     private Date timeSearched;
     private SearchType searchType;
 
-    // TODO: 2016-12-10 factory to create this object
-    public SearchHistory(long placeId, String plate, Date timeSearched, SearchType searchType) {
+    SearchHistory(AggregateId placeId, String plate, Date timeSearched, SearchType searchType) {
         this.placeId = placeId;
         this.plate = plate;
         this.timeSearched = timeSearched;
@@ -31,7 +31,7 @@ public class SearchHistory extends BaseAggreagateRoot {
     // TODO: 2016-12-04 correcting searched plate belongs here not in presenter
 
     // getters only for repo
-    public long getPlaceId() { return placeId; }
+    public long getPlaceId() { return placeId.getValue(); }
     public String getPlate() { return plate; }
     public Date getTimeSearched() { return timeSearched; }
     public SearchType getSearchType() { return searchType; }

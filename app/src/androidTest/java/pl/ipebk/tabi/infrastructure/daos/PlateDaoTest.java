@@ -16,7 +16,6 @@ import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.PlateModel;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
-// TODO: 2016-12-10 verify
 public class PlateDaoTest extends DatabaseTest {
     private static final String PLATE1 = "TAB";
     private static final String PLATE2 = "BAT";
@@ -34,9 +33,9 @@ public class PlateDaoTest extends DatabaseTest {
     }
 
     @NonNull private List<PlateModel> addTwoPlatesForTwoPlaces(long place1Id, long place2Id) {
-        PlateModel plate1 = PlateModel.create(PLATE1,"");
+        PlateModel plate1 = PlateModel.create(PLATE1, null);
         plate1.setPlaceId(place1Id);
-        PlateModel plate2 = PlateModel.create(PLATE2,"");
+        PlateModel plate2 = PlateModel.create(PLATE2, null);
         plate2.setPlaceId(place2Id);
         List<PlateModel> platesToAdd = new ArrayList<>();
         platesToAdd.add(plate1);

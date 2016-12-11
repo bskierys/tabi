@@ -22,7 +22,6 @@ import pl.ipebk.tabi.infrastructure.base.Dao;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.infrastructure.tables.SearchHistoryTable;
-import pl.ipebk.tabi.infrastructure.views.PlacesToSearchView;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
@@ -172,10 +171,11 @@ public class PlaceDao extends Dao<PlaceModel> {
 
     private int getPlacesCount() {
         String[] columns = {"count(1)"};
-
+        String whereClause = PlacesTable.COLUMN_PLACE_TYPE + " < ? ";
+        String[] whereArgs = {Integer.toString(PlaceType.SPECIAL.ordinal())};
         String sql = SQLiteQueryBuilder.buildQueryString(
-                false, table.getName(), columns, null, null, null, null, null);
-        Cursor cursor = db.query(sql);
+                false, table.getName(), columns, whereClause, null, null, null, null);
+        Cursor cursor = db.query(sql, whereArgs);
 
         return getSimpleInt(cursor);
     }

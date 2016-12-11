@@ -14,18 +14,16 @@ import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
 public class PlaceDaoTest extends DatabaseTest {
 
-    private PlaceModelAssembler2 placeModelAssembler;
-    private PlaceModel placeModel;
-
     @Override public void setUp() throws Exception {
         super.setUp();
     }
 
-    // TODO: 2016-12-10 better naming/usage for that class
-    // TODO: 2016-12-10 add place to database in assemble method
-    public PlaceModelAssembler2 givenPlace() {
-        placeModelAssembler = new PlaceModelAssembler2();
-        return placeModelAssembler;
+    private PlaceModelAssembler givenPlace() {
+        return new PlaceModelAssembler();
+    }
+
+    private void addToDatabase(PlaceModelAssembler assembler) {
+        databaseHelper.getPlaceDao().add(assembler.assemble());
     }
 
     @MediumTest public void testGetNextRowId() throws Exception {
@@ -33,26 +31,25 @@ public class PlaceDaoTest extends DatabaseTest {
 
         assertEquals(1, nextRowId);
 
-        givenPlace().assemble();
+        addToDatabase(givenPlace().withName("a"));
         nextRowId = databaseHelper.getPlaceDao().getNextRowId();
 
         assertEquals(2, nextRowId);
     }
 
-    // TODO: 2016-12-10 test second method with count
     @MediumTest public void testGetNotSpecialPowiatPlacesCount() throws Exception {
-        givenPlace().ofType(PlaceType.TOWN).withOwnPlate().assemble();
-        givenPlace().ofType(PlaceType.VILLAGE).withOwnPlate().assemble();
-        givenPlace().ofType(PlaceType.POWIAT_CITY).withOwnPlate().assemble();
-        givenPlace().ofType(PlaceType.VOIVODE_CITY).withOwnPlate().assemble();
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY).withOwnPlate());
 
-        givenPlace().ofType(PlaceType.TOWN).assemble();
-        givenPlace().ofType(PlaceType.VILLAGE).assemble();
-        givenPlace().ofType(PlaceType.POWIAT_CITY).assemble();
-        givenPlace().ofType(PlaceType.VOIVODE_CITY).assemble();
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN));
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE));
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY));
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY));
 
-        givenPlace().ofType(PlaceType.RANDOM).withOwnPlate().assemble();
-        givenPlace().ofType(PlaceType.SPECIAL).withOwnPlate().assemble();
+        addToDatabase(givenPlace().ofType(PlaceType.RANDOM).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.SPECIAL).withOwnPlate());
 
         int expected = 4;
         int actual = databaseHelper.getPlaceDao().getStandardPlacesWithPlateCount();
@@ -60,12 +57,16 @@ public class PlaceDaoTest extends DatabaseTest {
         assertEquals(expected, actual);
     }
 
-    // TODO: 2016-12-10 better naming
-    class PlaceModelAssembler2 extends PlaceModelAssembler {
-        @Override public PlaceModel assemble() {
-            PlaceModel model = super.assemble();
-            databaseHelper.getPlaceDao().add(model);
-            return model;
-        }
+    @MediumTest public void testGetCount() throws Exception {
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.SPECIAL).withOwnPlate());
+
+        int expected = 4;
+        int actual = databaseHelper.getPlaceDao().getStandardPlacesWithPlateCount();
+
+        assertEquals(expected, actual);
     }
 }

@@ -8,71 +8,61 @@ package pl.ipebk.tabi.infrastructure.finders;
 import java.util.List;
 
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
-import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class FinderTest extends DatabaseTest {
     private List<PlaceAndPlateDto> foundPlaces;
-    protected static final int FIRST = 0;
-    protected static final int SECOND = 1;
-    protected static final int THIRD = 2;
-    protected static final int FOURTH = 3;
-    protected static final int LAST = -1;
+    static final int FIRST = 0;
+    static final int SECOND = 1;
+    static final int THIRD = 2;
+    static final int FOURTH = 3;
+    static final int LAST = -1;
 
-    protected PlaceModel placeModel;
-    protected PlaceModelAssembler placeModelAssembler;
-
-    public PlaceModelAssembler givenPlace() {
-        placeModelAssembler = new PlaceModelAssembler();
-        return placeModelAssembler;
+    PlaceModelAssembler givenPlace() {
+        return new PlaceModelAssembler();
     }
 
-    // TODO: 2016-12-10 rename
-    public void isAddedToDatabase() {
-        this.placeModel = placeModelAssembler.assemble();
-        databaseHelper.getPlaceDao().add(this.placeModel);
+    void addToDatabase(PlaceModelAssembler assembler) {
+        databaseHelper.getPlaceDao().add(assembler.assemble());
     }
 
-    public void whenSearched(List<PlaceAndPlateDto> places) {
+    void whenSearched(List<PlaceAndPlateDto> places) {
         this.foundPlaces = places;
     }
 
-    public PlaceDtoCollectionAssert thenFoundPlaces() {
+    PlaceDtoCollectionAssert thenFoundPlaces() {
         return new PlaceDtoCollectionAssert(foundPlaces);
     }
 
-    public PlaceDtoCollectionAssert then() {
+    PlaceDtoCollectionAssert then() {
         return new PlaceDtoCollectionAssert(foundPlaces);
     }
 
-    public static class PlaceDtoCollectionAssert {
+    static class PlaceDtoCollectionAssert {
         private List<PlaceAndPlateDto> places;
 
-        public PlaceDtoCollectionAssert(List<PlaceAndPlateDto> place) {
+        PlaceDtoCollectionAssert(List<PlaceAndPlateDto> place) {
             this.places = place;
         }
 
-        public PlaceDtoCollectionAssert hasCount(int count) {
+        PlaceDtoCollectionAssert hasCount(int count) {
             assertEquals(count, places.size());
             return this;
         }
 
-        public PlaceDtoCollectionAssert areNone(){
+        PlaceDtoCollectionAssert areNone() {
             return this.hasCount(0);
         }
 
-        public PlaceDtoCollectionAssert and() {
+        PlaceDtoCollectionAssert and() {
             return this;
         }
 
-        public PlaceAndPlateDtoAssert searchedPlaceThatIs(int placeNumber) {
+        PlaceAndPlateDtoAssert searchedPlaceThatIs(int placeNumber) {
             PlaceAndPlateDto place;
-            if(placeNumber == LAST) {
+            if (placeNumber == LAST) {
                 place = places.get(places.size() - 1);
             } else {
                 assertTrue(places.size() > placeNumber);
@@ -84,24 +74,24 @@ public class FinderTest extends DatabaseTest {
         }
     }
 
-    public static class PlaceAndPlateDtoAssert {
+    static class PlaceAndPlateDtoAssert {
         private PlaceAndPlateDto place;
 
-        public PlaceAndPlateDtoAssert(PlaceAndPlateDto place) {
+        PlaceAndPlateDtoAssert(PlaceAndPlateDto place) {
             this.place = place;
         }
 
-        public PlaceAndPlateDtoAssert hasPlate(String plate) {
+        PlaceAndPlateDtoAssert hasPlate(String plate) {
             assertEquals(plate, place.plateStart());
             return this;
         }
 
-        public PlaceAndPlateDtoAssert hasName(String name) {
+        PlaceAndPlateDtoAssert hasName(String name) {
             assertEquals(name, place.placeName());
             return this;
         }
 
-        public PlaceAndPlateDtoAssert isType(PlaceType type) {
+        PlaceAndPlateDtoAssert isType(PlaceType type) {
             assertEquals(type, place.placeType());
             return this;
         }

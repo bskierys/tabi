@@ -16,6 +16,7 @@ import pl.ipebk.tabi.readmodel.SearchType;
  */
 public class SearchHistoryAssembler {
     public static final SearchType DEFAULT_SEARCH_TYPE = SearchType.PLACE;
+    private static final String DEFAULT_PLATE = "TAB";
 
     private long placeId;
     private String plate;
@@ -25,6 +26,16 @@ public class SearchHistoryAssembler {
     public SearchHistoryAssembler searchedFor(PlaceModel place) {
         this.placeId = place.getId();
         this.plate = place.plates().get(0).pattern();
+        return this;
+    }
+
+    public SearchHistoryAssembler forPlaceWithId(long id) {
+        this.placeId = id;
+        return this;
+    }
+
+    public SearchHistoryAssembler forPlate(String plate) {
+        this.plate = plate;
         return this;
     }
 
@@ -39,8 +50,12 @@ public class SearchHistoryAssembler {
     }
 
     public SearchHistoryModel assemble() {
-        if (placeId == 0 || plate == null) {
+        if (placeId == 0) {
             return null;
+        }
+
+        if(plate == null) {
+            plate = DEFAULT_PLATE;
         }
 
         if (timeSearched == null) {

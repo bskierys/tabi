@@ -2,21 +2,12 @@ package pl.ipebk.tabi.infrastructure.finders;
 
 import android.test.suitebuilder.annotation.MediumTest;
 
-import java.util.Date;
-import java.util.List;
-
-import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
-import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class DaoSearchHistoryFinderTest extends FinderTest {
     private static final int DEFAULT_SEARCH_LIMIT = 4;
 
@@ -29,9 +20,9 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldFindOnlyForPlates_whenSearchedForHistoryForPlates() throws Exception {
-        givenThatSearched(givenPlace().withName("a")).within(SearchType.PLACE).atTime(10).assemble();
-        givenThatSearched(givenPlace().withName("b")).within(SearchType.PLACE).atTime(12).assemble();
-        givenThatSearched(givenPlace().withName("b")).within(SearchType.PLATE).atTime(14).assemble();
+        remember(thatISearched(forPlace().withName("a")).within(SearchType.PLACE).atTime(10));
+        remember(thatISearched(forPlace().withName("b")).within(SearchType.PLACE).atTime(12));
+        remember(thatISearched(forPlace().withName("b")).within(SearchType.PLATE).atTime(14));
 
         whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLACE));
 
@@ -41,9 +32,9 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldOrderPlacesByTime() throws Exception {
-        givenThatSearched(givenPlace().withName("a")).atTime(14).assemble();
-        givenThatSearched(givenPlace().withName("b")).atTime(10).assemble();
-        givenThatSearched(givenPlace().withName("c")).atTime(12).assemble();
+        remember(thatISearched(forPlace().withName("a")).atTime(14));
+        remember(thatISearched(givenPlace().withName("b")).atTime(10));
+        remember(thatISearched(givenPlace().withName("c")).atTime(12));
 
         whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchHistoryAssembler.DEFAULT_SEARCH_TYPE));
 
@@ -53,34 +44,32 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldHaveRandomPlace_whenSearchForPlace() throws Exception {
-        givenThatSearched(givenPlace().withName("a")).within(SearchType.PLACE).atTime(10).assemble();
+        remember(thatISearched(givenPlace().withName("a")).within(SearchType.PLACE).atTime(10));
         whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLACE));
         thenFoundPlaces().hasCount(2); // one for random
         then().searchedPlaceThatIs(LAST).isType(PlaceType.RANDOM);
     }
 
     @MediumTest public void test_shouldHaveRandomPlace_whenSearchForLicensePlate() throws Exception {
-        givenThatSearched(givenPlace().withName("a").withOwnPlate()).within(SearchType.PLATE).atTime(10).assemble();
+        remember(thatISearched(givenPlace().withName("a").withOwnPlate()).within(SearchType.PLATE).atTime(10));
         whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLATE));
         thenFoundPlaces().hasCount(2); // one for random
         then().searchedPlaceThatIs(LAST).isType(PlaceType.RANDOM);
     }
 
-    protected SearchHistoryAssembler searchHistoryAssembler;
-
-    private SearchHistoryAssembler2 givenThatSearched(PlaceModelAssembler placeAssembler) {
-        PlaceModel model = placeAssembler.assemble();
-        databaseHelper.getPlaceDao().add(model);
-        searchHistoryAssembler = new SearchHistoryAssembler2();
-        searchHistoryAssembler = searchHistoryAssembler.searchedFor(model);
-        return (SearchHistoryAssembler2) searchHistoryAssembler;
+    private void remember(SearchHistoryAssembler assembler) {
+        databaseHelper.getSearchHistoryDao().updateOrAdd(assembler.assemble());
     }
 
-    private static class SearchHistoryAssembler2 extends SearchHistoryAssembler {
-        @Override public SearchHistoryModel assemble() {
-            SearchHistoryModel model = super.assemble();
-            databaseHelper.getSearchHistoryDao().updateOrAdd(model);
-            return model;
-        }
+    private PlaceModelAssembler forPlace() {
+        return givenPlace();
+    }
+
+    private SearchHistoryAssembler thatISearched(PlaceModelAssembler placeAssembler) {
+        PlaceModel model = placeAssembler.assemble();
+        databaseHelper.getPlaceDao().add(model);
+        SearchHistoryAssembler searchHistoryAssembler = new SearchHistoryAssembler();
+        searchHistoryAssembler = searchHistoryAssembler.searchedFor(model);
+        return searchHistoryAssembler;
     }
 }

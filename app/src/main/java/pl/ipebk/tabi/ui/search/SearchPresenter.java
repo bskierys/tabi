@@ -14,6 +14,7 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
@@ -46,10 +47,12 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private SearchHistoryFinder historyFinder;
     private PlaceFinder placeFinder;
     private LicensePlateFinder plateFinder;
+    private SearchHistoryFactory historyFactory;
 
     @Inject public SearchPresenter(SearchHistoryRepository searchRepository, SearchHistoryFinder historyFinder,
                                    PlaceFinder placeFinder, LicensePlateFinder plateFinder,
-                                   SpellCorrector spellCorrector, StopwatchManager stopwatchManager) {
+                                   SpellCorrector spellCorrector, StopwatchManager stopwatchManager,
+                                   SearchHistoryFactory factory) {
         this.historyRepository = searchRepository;
         this.placeFinder = placeFinder;
         this.historyFinder = historyFinder;
@@ -57,6 +60,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
         this.spellCorrector = spellCorrector;
         this.stopwatchManager = stopwatchManager;
         this.stopwatch = stopwatchManager.getStopwatch();
+        this.historyFactory = factory;
     }
 
     @Override public void attachView(SearchMvpView mvpView) {
@@ -73,13 +77,11 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
                               SearchType searchType, PlaceListItemType itemType) {
         getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
 
-        // TODO: 2016-12-10 should be responsibility of factory method
-        SearchHistory history = new SearchHistory(placeId, plateClicked, Calendar.getInstance().getTime(), searchType);
-
-        Observable.just(history)
+        Observable.just(historyFactory.create(placeId, plateClicked, searchType))
                   .observeOn(Schedulers.io())
-                  .subscribe(historyRepository::save
-                          , ex -> Timber.e(ex, "Problem saving history to database"));
+                  .subscribe(historyRepository::save, ex -> {
+                      Timber.e(ex, "Problem saving history to database");
+                  });
     }
 
     public void startInitialSearchForText(String searchText) {

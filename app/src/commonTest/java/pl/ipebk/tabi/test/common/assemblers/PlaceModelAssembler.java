@@ -44,7 +44,7 @@ public class PlaceModelAssembler {
             plates = new ArrayList<>();
         }
 
-        plates.add(PlateModel.create(pattern, ""));
+        plates.add(PlateModel.create(pattern, null));
         return this;
     }
 
@@ -72,7 +72,7 @@ public class PlaceModelAssembler {
             patternBuilder.append(RANDOM_PLATE_SOURCE.charAt(rndInt));
         }
 
-        return PlateModel.create(patternBuilder.toString(), "");
+        return PlateModel.create(patternBuilder.toString(), null);
     }
 
     public PlaceModelAssembler withOwnPlate() {

@@ -10,14 +10,13 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.di.ActivityContext;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
@@ -31,8 +30,6 @@ import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.SpellCorrector;
-import pl.ipebk.tabi.utils.Stopwatch;
-import pl.ipebk.tabi.utils.StopwatchManager;
 import timber.log.Timber;
 
 @Module
@@ -102,5 +99,9 @@ public class ActivityModule {
 
     @Provides public SearchHistoryFinder provideSearchHistoryFinder(DaoSearchHistoryFinder finder) {
         return finder;
+    }
+
+    @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {
+        return provider;
     }
 }

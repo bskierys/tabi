@@ -37,7 +37,7 @@ public class DaoPlaceRepository implements PlaceRepository {
     @Override public Observable<Place> loadByIdObservable(AggregateId id) {
         // TODO: 2016-12-04 factory to make domain place
         return dao.getByIdObservable(id.getValue()).map(model ->{
-            List<LicensePlate> licensePlates = new ArrayList<LicensePlate>();
+            List<LicensePlate> licensePlates = new ArrayList<>();
             for (PlateModel plate: model.plates()) {
                 licensePlates.add(new LicensePlate(new AggregateId(model.getId()), plate.pattern(), plate.end()));
             }
