@@ -23,6 +23,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
@@ -39,6 +40,7 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
  */
 public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     @Inject NameFormatHelper nameFormatHelper;
+    @Inject PlaceAndPlateFactory itemFactory;
 
     private boolean historical;
     private Context context;
@@ -152,7 +154,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     }
 
     protected PlaceAndPlateDto cursorToItem(Cursor cursor) {
-        return PlaceAndPlateDto.create(cursor);
+        return itemFactory.createFromCursor(cursor);
     }
 
     // TODO: 2016-12-02 should be in domain

@@ -1,9 +1,5 @@
 package pl.ipebk.tabi.database.models;
 
-import org.junit.Test;
-
-import pl.ipebk.tabi.test.common.TestDataFactory;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

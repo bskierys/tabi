@@ -1,29 +1,11 @@
 package pl.ipebk.tabi.ui.details;
 
-import android.app.Activity;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import pl.ipebk.tabi.manager.DataManager;
-import pl.ipebk.tabi.test.common.TestDataFactory;
-import pl.ipebk.tabi.ui.search.PlaceListItemType;
-import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
-import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.NameFormatHelper;
-import rx.Observable;
-
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DetailsPresenterTest {

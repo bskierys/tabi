@@ -5,6 +5,7 @@
 */
 package pl.ipebk.tabi.ui.search;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.readmodel.SearchType;
 
 /**
@@ -12,7 +13,7 @@ import pl.ipebk.tabi.readmodel.SearchType;
  * fragment to be communicated to the activity and potentially other fragments contained in that activity.
  */
 public interface PlaceFragmentEventListener {
-    void onPlaceItemClicked(long placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+    void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
 
     void onHeaderClicked(int eventId);
 

@@ -276,4 +276,15 @@ public abstract class Dao<E extends Model> {
         }
         return after;
     }
+
+    protected int getSimpleInt(Cursor cursor) {
+        int count = 0;
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+            }
+            cursor.close();
+        }
+        return count;
+    }
 }

@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.test.common.TestDataFactory;
 import pl.ipebk.tabi.test.common.rules.TestComponentRule;
 import pl.ipebk.tabi.util.OrientationChangeAction;
 import rx.Observable;

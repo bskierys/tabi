@@ -13,6 +13,7 @@ import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinderTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
+import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
@@ -40,6 +41,39 @@ public class SearchHistoryDaoTest extends DatabaseTest {
         remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.PLATE).atTime(10));
 
         assertEquals(2, databaseHelper.getSearchHistoryDao().getAll().size());
+    }
+
+    @MediumTest public void testGetNotSpecialPowiatPlacesCount() throws Exception {
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY).withOwnPlate());
+
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN));
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE));
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY));
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY));
+
+        addToDatabase(givenPlace().ofType(PlaceType.RANDOM).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.SPECIAL).withOwnPlate());
+
+        int expected = 4;
+        int actual = databaseHelper.getSearchHistoryDao().getStandardPlacesWithPlateCount();
+
+        assertEquals(expected, actual);
+    }
+
+    @MediumTest public void testGetCount() throws Exception {
+        addToDatabase(givenPlace().ofType(PlaceType.TOWN).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VILLAGE).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.POWIAT_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.VOIVODE_CITY).withOwnPlate());
+        addToDatabase(givenPlace().ofType(PlaceType.SPECIAL).withOwnPlate());
+
+        int expected = 4;
+        int actual = databaseHelper.getSearchHistoryDao().getPlacesCount();
+
+        assertEquals(expected, actual);
     }
 
     private void addToDatabase(PlaceModelAssembler assembler) {

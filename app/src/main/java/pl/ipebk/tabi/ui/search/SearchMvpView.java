@@ -7,6 +7,7 @@ package pl.ipebk.tabi.ui.search;
 
 import android.database.Cursor;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.MvpView;
 
@@ -44,5 +45,5 @@ public interface SearchMvpView extends MvpView {
 
     void showKeyboard();
 
-    void goToPlaceDetails(long placeId, String searchedText, SearchType searchType, PlaceListItemType itemType);
+    void goToPlaceDetails(AggregateId placeId, String searchedText, SearchType searchType, PlaceListItemType itemType);
 }

@@ -5,6 +5,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 import java.util.Date;
 import java.util.List;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
@@ -70,6 +71,6 @@ public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
         now = new Date(time);
         long placeId = placeModel.getId();
         String plate = placeModel.plates().get(0).pattern();
-        return factory.create(placeId, plate, type);
+        return factory.create(new AggregateId(placeId), plate, type);
     }
 }

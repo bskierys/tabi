@@ -1,37 +1,15 @@
 package pl.ipebk.tabi.ui.search;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Build;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.List;
-
-import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.BuildConfig;
-import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.test.common.TestDataFactory;
-import pl.ipebk.tabi.test.common.utils.TestNameFormatHelper;
-import pl.ipebk.tabi.test.common.injection.component.DaggerTestViewComponent;
-import pl.ipebk.tabi.test.common.injection.component.TestViewComponent;
-import pl.ipebk.tabi.test.common.injection.module.TestViewModule;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)

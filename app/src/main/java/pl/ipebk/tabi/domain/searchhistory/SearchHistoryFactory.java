@@ -22,9 +22,8 @@ public class SearchHistoryFactory {
         this.timeProvider = timeProvider;
     }
 
-    public SearchHistory create(long placeId, String searchedPlate, SearchType type) {
-        AggregateId id = new AggregateId(placeId);
+    public SearchHistory create(AggregateId placeId, String searchedPlate, SearchType type) {
         Date now = timeProvider.now();
-        return new SearchHistory(id, searchedPlate, now, type);
+        return new SearchHistory(placeId, searchedPlate, now, type);
     }
 }

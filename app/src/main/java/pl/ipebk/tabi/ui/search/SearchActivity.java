@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
@@ -233,9 +234,9 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     //region View callbacks
-    @Override public void onPlaceItemClicked(long placeId, String plateClicked,
+    @Override public void onPlaceItemClicked(AggregateId placeId, String plateClicked,
                                              SearchType type, PlaceListItemType itemType) {
-        if (placeId > 0) {
+        if (placeId.isValid()) {
             presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type, itemType);
         }
     }
@@ -315,10 +316,10 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         keyboard.showSoftInput(searchEditText, 0);
     }
 
-    @Override public void goToPlaceDetails(long placeId, String searchedPlate,
+    @Override public void goToPlaceDetails(AggregateId placeId, String searchedPlate,
                                            SearchType searchType, PlaceListItemType itemType) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId);
+        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
         intent.putExtra(DetailsActivity.PARAM_ITEM_TYPE, itemType);

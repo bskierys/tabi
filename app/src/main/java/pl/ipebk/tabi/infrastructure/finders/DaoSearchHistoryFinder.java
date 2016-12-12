@@ -12,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
+import pl.ipebk.tabi.infrastructure.daos.SearchHistoryDao;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
@@ -22,13 +23,16 @@ import rx.Observable;
  * TODO: Generic description. Replace with real one.
  */
 public class DaoSearchHistoryFinder implements SearchHistoryFinder {
-    private PlaceDao dao;
+    private SearchHistoryDao dao;
 
     @Inject public DaoSearchHistoryFinder(DatabaseOpenHelper openHelper) {
-        this.dao = openHelper.getPlaceDao();
+        this.dao = openHelper.getSearchHistoryDao();
     }
 
-    public DaoSearchHistoryFinder(PlaceDao dao) {
+    /**
+     * Internal constructor for tests
+     */
+    DaoSearchHistoryFinder(SearchHistoryDao dao) {
         this.dao = dao;
     }
 

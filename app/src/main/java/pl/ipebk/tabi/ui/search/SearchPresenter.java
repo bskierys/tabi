@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
@@ -73,7 +74,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(long placeId, String searchedPlate, String plateClicked,
+    public void placeSelected(AggregateId placeId, String searchedPlate, String plateClicked,
                               SearchType searchType, PlaceListItemType itemType) {
         getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
 

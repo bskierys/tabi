@@ -18,4 +18,8 @@ public final class AggregateId {
     public long getValue() {
         return id;
     }
+
+    public boolean isValid() {
+        return id > 0;
+    }
 }

@@ -78,7 +78,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         stopwatch.reset();
         loadSubscription = dataManager
                 .initDatabase()
-                .map(v -> preloadHistory())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(v -> {
@@ -89,11 +88,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     getMvpView().hideLoading();
                     Timber.d("Initializing time: %s", stopwatch.getElapsedTimeString());
                 });
-    }
-
-    private Observable<Cursor> preloadHistory() {
-        // TODO: 2016-12-06 should use repository
-        return dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(3, SearchType.PLACE.ordinal());
     }
 
     private void loadCategories() {
