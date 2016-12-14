@@ -26,6 +26,7 @@ import timber.log.Timber;
 public class NameFormatHelper {
     private final static String RANDOM_QUESTION_RESOURCE_NAME = "search_random_question_";
     private final static int RANDOM_QUESTION_MAX_VALUE = 8;
+    private final static String POWIAT_REPLACE_FORMAT = "$z$";
     public final static String UNKNOWN_PLATE_CHARACTER = "???";
 
     private Context context;
@@ -40,6 +41,8 @@ public class NameFormatHelper {
     }
 
     public String formatPowiat(String powiat) {
+        String zReplacement = context.getString(R.string.details_powiat_territorial);
+        powiat = powiat.replace(POWIAT_REPLACE_FORMAT, zReplacement);
         return context.getString(R.string.details_powiat) + " " + powiat;
     }
 
