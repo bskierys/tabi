@@ -7,6 +7,7 @@ import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
+import static pl.ipebk.tabi.test.common.assertions.Order.*;
 
 public class DaoSearchHistoryFinderTest extends FinderTest {
     private static final int DEFAULT_SEARCH_LIMIT = 4;

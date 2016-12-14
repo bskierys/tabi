@@ -17,7 +17,8 @@ public class LicensePlate extends BaseAggreagateRoot {
     private String pattern;
     private String end;
 
-    @SuppressWarnings("unused") private LicensePlate() {}
+    // TODO: 2016-12-14 make private
+    @SuppressWarnings("unused") LicensePlate() {}
 
     // TODO: 2016-12-10 this package private - make factory
     public LicensePlate(AggregateId placeId, String pattern, String end) {

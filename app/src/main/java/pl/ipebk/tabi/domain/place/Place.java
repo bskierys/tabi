@@ -25,7 +25,8 @@ public class Place extends BaseAggreagateRoot {
     private List<LicensePlate> plates;
     private boolean hasOwnPlate;
 
-    @SuppressWarnings("unused") private Place() {}
+    // TODO: 2016-12-14 make private
+    @SuppressWarnings("unused") Place() {}
 
     // TODO: 2016-12-10 factory to create this object
     public Place(String name, PlaceType type, String voivodeship, String powiat, String gmina, List<LicensePlate>

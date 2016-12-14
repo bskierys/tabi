@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import pl.ipebk.tabi.di.ApplicationContext;
 import pl.ipebk.tabi.di.module.ApplicationModule;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.manager.DataManager;

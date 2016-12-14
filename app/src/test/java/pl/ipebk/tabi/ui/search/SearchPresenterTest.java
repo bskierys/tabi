@@ -15,14 +15,26 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.LicensePlateFinder;
+import pl.ipebk.tabi.readmodel.PlaceFinder;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.details.DetailsPresenter;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
+import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
@@ -35,25 +47,27 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SearchPresenterTest {
-/*    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new RxSchedulersOverrideRule();
+    @Rule public final RxSchedulersOverrideRule overrideSchedulersRule = new RxSchedulersOverrideRule();
     @Mock SearchMvpView mockMvpView;
-    @Mock PlaceDao mockPlaceDao;
-    @Mock SearchHistoryDao mockHistoryDao;
+    @Mock SearchHistoryRepository searchRepository;
+    @Mock SearchHistoryFinder historyFinder;
+    @Mock PlaceFinder placeFinder;
+    @Mock LicensePlateFinder plateFinder;
+    @Mock SearchTimeProvider timeProvider;
     @Mock Activity mockContext;
     private SearchPresenter searchPresenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        DatabaseOpenHelper mockOpenHelper = mock(DatabaseOpenHelper.class);
-        when(mockOpenHelper.getPlaceDao()).thenReturn(mockPlaceDao);
-        when(mockOpenHelper.getSearchHistoryDao()).thenReturn(mockHistoryDao);
-        DataManager mockDataManager = mock(DataManager.class);
-        when(mockDataManager.getDatabaseHelper()).thenReturn(mockOpenHelper);
         Stopwatch stopwatch = mock(Stopwatch.class);
         StopwatchManager mockManager = mock(StopwatchManager.class);
         when(mockManager.getStopwatch()).thenReturn(stopwatch);
 
-        searchPresenter = new SearchPresenter(mockDataManager, new SpellCorrector(), mockManager);
+        SearchHistoryFactory searchHistoryFactory = new SearchHistoryFactory(timeProvider);
+
+        searchPresenter = new SearchPresenter(searchRepository, historyFinder,
+                                              placeFinder, plateFinder, new SpellCorrector(),
+                                              mockManager, searchHistoryFactory);
         searchPresenter.attachView(mockMvpView);
     }
 
@@ -62,14 +76,19 @@ public class SearchPresenterTest {
     }
 
     @Test public void testPlaceSelected() throws Exception {
-        searchPresenter.placeSelected(0, "TAB", "TAB", SearchType.PLACE,PlaceListItemType.SEARCH);
-        verify(mockMvpView).goToPlaceDetails(0, "TAB", SearchType.PLACE,PlaceListItemType.SEARCH);
-        verify(mockHistoryDao).updateOrAdd(any(SearchHistory.class));
+        searchPresenter.placeSelected(new AggregateId(0), "TAB", "TAB", SearchType.PLACE, PlaceListItemType.SEARCH);
+        verify(mockMvpView).goToPlaceDetails(agIdEq(new AggregateId(0)), eq("TAB"), eq(SearchType.PLACE),
+                                             eq(PlaceListItemType.SEARCH));
+        verify(searchRepository).save(any(SearchHistory.class));
+    }
+
+    static AggregateId agIdEq(AggregateId expected) {
+        return argThat(new AggregateIdMatcher(expected));
     }
 
     @Test public void testRefreshSearch() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
+        when(historyFinder.findHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
 
         searchPresenter.quickSearchForText("");
 
@@ -80,7 +99,7 @@ public class SearchPresenterTest {
 
     @Test public void testClearSearch() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
+        when(historyFinder.findHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
 
         searchPresenter.clearSearch();
         verify(mockMvpView).showInitialSearchInPlatesSection(cursor);
@@ -89,7 +108,7 @@ public class SearchPresenterTest {
 
     @Test public void testLoadInitialStateForPlaces() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
+        when(historyFinder.findHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
 
         searchPresenter.loadInitialStateForPlates();
         verify(mockMvpView).showInitialSearchInPlatesSection(any(Cursor.class));
@@ -97,9 +116,9 @@ public class SearchPresenterTest {
 
     @Test public void testLoadInitialStateForPlates() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
+        when(historyFinder.findHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));
 
         searchPresenter.loadInitialStateForPlaces();
         verify(mockMvpView).showInitialSearchInPlacesSection(any(Cursor.class));
-    }*/
+    }
 }

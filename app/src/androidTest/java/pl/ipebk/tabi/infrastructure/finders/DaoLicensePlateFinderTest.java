@@ -5,6 +5,8 @@ import android.test.suitebuilder.annotation.MediumTest;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 
+import static pl.ipebk.tabi.test.common.assertions.Order.*;
+
 public class DaoLicensePlateFinderTest extends FinderTest {
     private DaoLicensePlateFinder finder;
 

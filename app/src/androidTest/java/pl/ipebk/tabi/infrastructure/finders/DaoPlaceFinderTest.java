@@ -3,6 +3,7 @@ package pl.ipebk.tabi.infrastructure.finders;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import pl.ipebk.tabi.readmodel.PlaceType;
+import static pl.ipebk.tabi.test.common.assertions.Order.*;
 
 public class DaoPlaceFinderTest extends FinderTest {
     private DaoPlaceFinder finder;

@@ -13,6 +13,7 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
+import static org.mockito.Mockito.mock;
 
 @Module
 public class TestViewModule {
@@ -24,18 +25,18 @@ public class TestViewModule {
     }
 
     @Provides public NameFormatHelper provideNameFormatHelper() {
-        return null;
+        return mock(NameFormatHelper.class);
     }
 
     @Provides public FontManager provideFontManager() {
-        return null;
+        return mock(FontManager.class);
     }
 
     @Provides ResourceHelper provideResourceHelper() {
-        return null;
+        return mock(ResourceHelper.class);
     }
 
     @Provides PlaceAndPlateFactory providePlaceAndPlateFactory() {
-        return null;
+        return mock(PlaceAndPlateFactory.class);
     }
 }

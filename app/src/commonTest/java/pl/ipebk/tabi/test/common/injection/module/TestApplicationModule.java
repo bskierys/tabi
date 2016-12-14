@@ -13,14 +13,21 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
+
+import static org.mockito.Mockito.mock;
 
 /**
- * Provides application-level dependencies for an app running on a testing environment
- * This allows injecting mocks if necessary.
+ * Provides application-level dependencies for an app running on a testing environment This allows injecting mocks if
+ * necessary.
  */
-@Module public class TestApplicationModule {
+@Module
+public class TestApplicationModule {
 
     private final Application application;
 
@@ -41,12 +48,24 @@ import pl.ipebk.tabi.manager.DataManager;
      * MOCKS
      *************/
 
+    @Provides public DatabaseOpenHelper provideDatabaseOpenHelper() {
+        return mock(DatabaseOpenHelper.class);
+    }
+
     @Provides
     @Singleton public DataManager provideDataManager() {
-        return null;
+        return mock(DataManager.class);
     }
 
     @Provides public SearchTimeProvider provideSearchTimeProvider() {
-        return null;
+        return mock(SearchTimeProvider.class);
+    }
+
+    @Provides public PlaceRepository providePlaceRepository() {
+        return mock(PlaceRepository.class);
+    }
+
+    @Provides public SearchHistoryFinder provideSearchHistoryFinder() {
+        return mock(SearchHistoryFinder.class);
     }
 }

@@ -15,8 +15,9 @@ import pl.ipebk.tabi.canonicalmodel.AggregateId;
 public abstract class PlaceAndPlateFactory {
     public abstract PlaceAndPlateDto createFromCursor(Cursor cursor);
 
-    public PlaceAndPlateDto create(long placeId, String placeName, String plateStart,
-                                          String plateEnd, String voivodeship, String powiat, PlaceType placeType) {
-        return new AutoValue_PlaceAndPlateDto(new AggregateId(placeId), placeName, plateStart, plateEnd, voivodeship, powiat, placeType);
+    public PlaceAndPlateDto create(long placeId, String placeName, String plateStart, String plateEnd,
+                                   String voivodeship, String powiat, PlaceType placeType) {
+        return new AutoValue_PlaceAndPlateDto(new AggregateId(placeId), placeName, plateStart,
+                                              plateEnd, voivodeship, powiat, placeType);
     }
 }
