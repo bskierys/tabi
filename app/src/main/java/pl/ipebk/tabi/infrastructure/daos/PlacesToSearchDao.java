@@ -73,7 +73,8 @@ public class PlacesToSearchDao extends ViewDao<PlaceAndPlateDto> {
         String getPlacesByName = "SELECT " + columns + ", MIN(grp) AS source_group FROM ("
                 + selectWithDiacritics + " UNION ALL " + selectNoDiacritics + ") AS " + alias + " GROUP BY "
                 + BaseColumns._ID + " ORDER BY " + PlacesTable.COLUMN_HAS_OWN_PLATE + " DESC ,MIN(grp) ASC, "
-                + PlacesTable.COLUMN_PLACE_TYPE + " ASC, " + PlacesTable.COLUMN_NAME + " COLLATE LOCALIZED ASC ";
+                + PlacesTable.COLUMN_PLACE_TYPE + " ASC, length( " + PlacesTable.COLUMN_SEARCHED_PLATE + " ) ASC, "
+                + PlacesTable.COLUMN_NAME + " COLLATE LOCALIZED ASC ";
 
         if (limit != null && limit > 0) {
             getPlacesByName += " LIMIT " + Integer.toString(limit) + ";";

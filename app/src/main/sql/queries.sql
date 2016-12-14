@@ -8,13 +8,13 @@ SELECT _id, place_name, place_type, voivodeship, powiat, searched_plate, searche
 ) as w WHERE searched_plate LIKE 'py%' ORDER BY place_type ASC, length(searched_plate) ASC, searched_plate ASC,  searched_plate_end ASC;
 
 -- =================== wyszukiwanie po nazwie miejsca ===================
-SELECT t._id as _id, t.place_name as place_name, t.place_type as place_type, t.voivodeship as voivodeship, t.powiat as powiat, t.plate as searched_plate,  t.plate_end as searched_plate_end FROM (
+SELECT t._id as _id, t.place_name as place_name, t.place_type as place_type, t.voivodeship as voivodeship, t.powiat as powiat, t.searched_plate as searched_plate,  t.searched_plate_end as searched_plate_end FROM (
 
 	SELECT *,  1 as grp FROM places_to_search WHERE place_name_to_lower LIKE "sam%"  
 		UNION ALL  
 	SELECT *,  2 as grp FROM places_to_search WHERE place_name_to_lower_no_diacritics LIKE "sam%" 
 	
-) AS t GROUP BY _id ORDER BY has_own_plate DESC, MIN(grp) ASC,  place_type ASC,  place_name COLLATE LOCALIZED ASC;
+) AS t GROUP BY _id ORDER BY has_own_plate DESC, MIN(grp) ASC, place_type ASC, length(searched_plate) ASC, place_name COLLATE LOCALIZED ASC;
 
 -- =================== wypisanie wszystkich kategorii na ekranie głównym =======
 SELECT * FROM categories ORDER BY place_type ASC, voivodeship COLLATE localized ASC;
