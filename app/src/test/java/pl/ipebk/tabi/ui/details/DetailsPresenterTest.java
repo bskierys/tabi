@@ -52,7 +52,6 @@ public class DetailsPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(mockDeviceHelper.getMapScale()).thenReturn(2);
         when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
         when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
         mockNameHelper = new TestNameFormatHelper(mockContext);
