@@ -13,6 +13,10 @@ test:
     # run unit tests
     - ./gradlew test --continue
     # copy the build outputs to artifacts
-    - cp -r app/build/outputs/apk $CIRCLE_ARTIFACTS
+    - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
     # copy the test results to the test results directory.
     - cp -r app/build/reports/tests/release/* $CIRCLE_TEST_REPORTS
+    # assemble release version
+    - ./gradlew assembleRelease
+    # copy release apk
+    - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS
