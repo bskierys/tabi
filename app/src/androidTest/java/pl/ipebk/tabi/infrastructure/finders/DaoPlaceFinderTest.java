@@ -8,7 +8,6 @@ import static pl.ipebk.tabi.test.common.assertions.Order.*;
 public class DaoPlaceFinderTest extends FinderTest {
     private DaoPlaceFinder finder;
 
-    // TODO: 2016-12-07 write finder descriptions based on that tests
     @Override public void setUp() throws Exception {
         super.setUp();
         finder = new DaoPlaceFinder(databaseHelper.getPlacesToSearchDao());

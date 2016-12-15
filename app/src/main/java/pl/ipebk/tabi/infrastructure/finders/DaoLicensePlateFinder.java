@@ -18,7 +18,7 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import rx.Observable;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link LicensePlateFinder} that bases on apps Dao
  */
 public class DaoLicensePlateFinder implements LicensePlateFinder {
     private PlatesToSearchDao dao;

@@ -14,7 +14,6 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
 
     private DaoSearchHistoryFinder finder;
 
-    // TODO: 2016-12-07 write finder descriptions based on that tests
     @Override public void setUp() throws Exception {
         super.setUp();
         finder = new DaoSearchHistoryFinder(databaseHelper.getSearchHistoryDao());

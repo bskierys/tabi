@@ -20,7 +20,7 @@ import pl.ipebk.tabi.readmodel.SearchType;
 import rx.Observable;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link SearchHistoryFinder} that uses app's dao
  */
 public class DaoSearchHistoryFinder implements SearchHistoryFinder {
     private SearchHistoryDao dao;

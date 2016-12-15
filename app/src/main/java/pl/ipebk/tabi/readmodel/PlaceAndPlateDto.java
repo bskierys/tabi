@@ -12,7 +12,7 @@ import com.google.auto.value.AutoValue;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Simplified model of place with plate to display on search row
  */
 @AutoValue
 public abstract class PlaceAndPlateDto {

@@ -18,7 +18,7 @@ import pl.ipebk.tabi.readmodel.PlaceFinder;
 import rx.Observable;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link PlaceFinder} that bases on apps Dao
  */
 public class DaoPlaceFinder implements PlaceFinder {
     private PlacesToSearchDao dao;
