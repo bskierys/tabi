@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.infrastructure.models;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 
 import java.util.List;
@@ -19,9 +21,9 @@ public abstract class PlaceModel implements Model {
 
     public abstract String name();
     public abstract PlaceType type();
-    public abstract String voivodeship();
-    public abstract String powiat();
-    public abstract String gmina();
+    @Nullable public abstract String voivodeship();
+    @Nullable public abstract String powiat();
+    @Nullable public abstract String gmina();
     public abstract List<PlateModel> plates();
     public abstract boolean hasOwnPlate();
 
