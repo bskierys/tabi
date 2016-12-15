@@ -99,7 +99,6 @@ public class PlacesTable extends Table<PlaceModel> {
         long id = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
         String name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME));
 
-        // TODO: 2016-12-05 placeType canonical?
         PlaceType type = PlaceType.UNSPECIFIED;
         int placeTypeIndex = cursor.getColumnIndex(COLUMN_PLACE_TYPE);
         if (!cursor.isNull(placeTypeIndex)) {

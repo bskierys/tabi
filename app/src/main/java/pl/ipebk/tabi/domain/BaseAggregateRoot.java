@@ -8,9 +8,9 @@ package pl.ipebk.tabi.domain;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Base class for all aggregates
  */
-public class BaseAggreagateRoot {
+public class BaseAggregateRoot {
     protected AggregateId aggregateId;
 
     public AggregateId getAggregateId() {

@@ -10,6 +10,9 @@ import pl.ipebk.tabi.readmodel.PlaceType;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Assert helper for {@link PlaceAndPlateDto} object
+ */
 public class PlaceAndPlateDtoAssert {
     private PlaceAndPlateDto place;
 

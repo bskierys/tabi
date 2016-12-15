@@ -12,5 +12,8 @@ import rx.Observable;
  * This repository exists only to load places with plates by it's id
  */
 public interface PlaceRepository {
+    /**
+     * Load Place by it's id
+     */
     Observable<Place> loadByIdObservable(AggregateId id);
 }

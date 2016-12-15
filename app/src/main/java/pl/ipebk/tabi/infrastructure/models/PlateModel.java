@@ -13,9 +13,9 @@ import pl.ipebk.tabi.infrastructure.base.Model;
 
 @AutoValue
 public abstract class PlateModel implements Model {
-    // TODO: 2016-12-11 add nullable annotations
     private long id;
     private long placeId;
+
     public abstract String pattern();
     @Nullable public abstract String end();
 
@@ -27,7 +27,7 @@ public abstract class PlateModel implements Model {
         this.id = id;
     }
 
-    public long placeId(){
+    public long placeId() {
         return placeId;
     }
 

@@ -8,6 +8,7 @@ package pl.ipebk.tabi.infrastructure.views;
 import android.provider.BaseColumns;
 
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
+import pl.ipebk.tabi.readmodel.PlaceType;
 
 public class PlacesToSearchView extends PlaceAndPlateDtoView {
     public static final String VIEW_NAME = "places_to_search";
@@ -25,12 +26,17 @@ public class PlacesToSearchView extends PlaceAndPlateDtoView {
     /**
      * Database create statement too complicated -omitted on purpose
      */
-    // TODO: 2016-12-06 format this to proper code dependant on constants
     @Override protected String getDatabaseCreateStatement() {
-        return "CREATE VIEW places_to_search AS\n" +
-                "SELECT _id, place_name, place_type, voivodeship, powiat, plate AS searched_plate, plate_end AS " +
-                "searched_plate_end, place_name_to_lower, place_name_to_lower_no_diacritics, has_own_plate FROM " +
-                "places WHERE place_type < 5;";
+        return "CREATE VIEW " + VIEW_NAME + " AS " +
+                " SELECT " + BaseColumns._ID + ", " + PlacesTable.COLUMN_NAME + ", "
+                + PlacesTable.COLUMN_PLACE_TYPE + ", " + PlacesTable.COLUMN_VOIVODESHIP + ", "
+                + PlacesTable.COLUMN_POWIAT + ", "
+                + PlacesTable.COLUMN_PLATE + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE + ", "
+                + PlacesTable.COLUMN_PLATE_END + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE_END + ", "
+                + PlacesTable.COLUMN_NAME_LOWER + ", " + PlacesTable.COLUMN_SEARCH_PHRASE + ", "
+                + PlacesTable.COLUMN_HAS_OWN_PLATE + " FROM " + PlacesTable.TABLE_NAME
+                + " WHERE " + PlacesTable.COLUMN_PLACE_TYPE + " < " + Integer.toString(PlaceType.SPECIAL.ordinal()) +
+                ";";
     }
 
     @Override public String getName() {

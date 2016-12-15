@@ -15,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 import static pl.ipebk.tabi.test.common.assertions.Order.LAST;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Assert helper for list of {@link PlaceAndPlateDto} objects
  */
 public class PlaceDtoCollectionAssert {
     private List<PlaceAndPlateDto> places;

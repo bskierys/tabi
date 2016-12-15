@@ -10,11 +10,21 @@ dependencies:
 
 test:
   override:
+    # start the emulator
+    - emulator -avd circleci-android22 -no-audio -no-window:
+        background: true
+        parallel: true
+    # wait for it to have booted
+    - circle-android wait-for-boot
     # run unit tests
     - ./gradlew test --continue
     # copy the test results to the test results directory.
     - cp -r app/build/reports/tests/release/* $CIRCLE_TEST_REPORTS
-    # assemble release version
+    # run tests  against the emulator.
+    - ./gradlew connectedAndroidTest
+    # copy the test results to the test results directory.
+    - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
+    # assemble apk files
     - ./gradlew assembleRelease assembleDebug
     # copy release and debug apk
     - cp -r app/build/outputs/apk/* $CIRCLE_ARTIFACTS

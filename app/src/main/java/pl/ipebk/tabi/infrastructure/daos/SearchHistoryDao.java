@@ -145,7 +145,7 @@ public class SearchHistoryDao extends Dao<SearchHistoryModel> {
 
         String selectRandom = " SELECT " + columnsF2Inside + " FROM " + PlacesTable.TABLE_NAME;
         String limitRandomTemplate = " LIMIT 1 OFFSET ABS(RANDOM() %% %d";
-        if (type == SearchType.PLATE.ordinal()) {
+        if (type == SearchType.LICENSE_PLATE.ordinal()) {
             String whereClause = " WHERE " + PlacesTable.COLUMN_PLACE_TYPE + " < %s AND "
                     + PlacesTable.COLUMN_HAS_OWN_PLATE + " = %s ";
             String[] whereArgs = {Integer.toString(PlaceType.SPECIAL.ordinal()), Integer.toString(1)};

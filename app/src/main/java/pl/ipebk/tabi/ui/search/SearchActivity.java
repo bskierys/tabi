@@ -386,7 +386,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         } else {
             switch (position) {
                 case SEARCH_PLATES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchType.PLATE);
+                    return PlaceFragment.newInstance(SearchType.LICENSE_PLATE);
                 case SEARCH_PLACES_FRAGMENT_POSITION:
                     return PlaceFragment.newInstance(SearchType.PLACE);
             }

@@ -8,14 +8,14 @@ package pl.ipebk.tabi.domain.searchhistory;
 import java.util.Date;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.BaseAggreagateRoot;
+import pl.ipebk.tabi.domain.BaseAggregateRoot;
 import pl.ipebk.tabi.readmodel.SearchType;
 
 /**
  * This aggregate exists purely to be inserted into database. That is why it does not have getter or setter for id. Id
  * in database models are autoincrement and can only by obtained from database.
  */
-public class SearchHistory extends BaseAggreagateRoot {
+public class SearchHistory extends BaseAggregateRoot {
     private AggregateId placeId;
     private String plate;
     private Date timeSearched;

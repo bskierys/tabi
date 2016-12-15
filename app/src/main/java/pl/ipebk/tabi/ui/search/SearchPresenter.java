@@ -9,12 +9,9 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
-import java.util.Calendar;
-
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
@@ -121,7 +118,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     public void loadInitialStateForPlates() {
         Stopwatch historyWatch = stopwatchManager.getStopwatch();
         historyWatch.reset();
-        historyFinder.findHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.PLATE)
+        historyFinder.findHistoryPlaces(HISTORY_SEARCH_NUMBER, SearchType.LICENSE_PLATE)
                    .filter(cursor -> cursor != null).first()
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())

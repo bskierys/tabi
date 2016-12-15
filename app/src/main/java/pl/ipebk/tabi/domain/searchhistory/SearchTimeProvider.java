@@ -8,7 +8,7 @@ package pl.ipebk.tabi.domain.searchhistory;
 import java.util.Date;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Provides current time. Should be injected in app, but mocked in tests
  */
 public interface SearchTimeProvider {
     Date now();

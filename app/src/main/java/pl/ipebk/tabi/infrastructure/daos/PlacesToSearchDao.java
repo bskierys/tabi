@@ -22,9 +22,6 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import rx.Observable;
 import timber.log.Timber;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class PlacesToSearchDao extends ViewDao<PlaceAndPlateDto> {
     public PlacesToSearchDao(BriteDatabase database) {
         super(PlaceAndPlateDto.class, database);

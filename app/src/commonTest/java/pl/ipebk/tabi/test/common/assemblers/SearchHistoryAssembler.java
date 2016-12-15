@@ -12,7 +12,7 @@ import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.readmodel.SearchType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Assembler of {@link SearchHistoryModel} for tests
  */
 public class SearchHistoryAssembler {
     public static final SearchType DEFAULT_SEARCH_TYPE = SearchType.PLACE;

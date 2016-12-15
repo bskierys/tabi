@@ -15,9 +15,6 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class DatabaseViewPlaceAndPlateFactory extends PlaceAndPlateFactory {
     @Inject public DatabaseViewPlaceAndPlateFactory() {}
 

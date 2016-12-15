@@ -6,7 +6,7 @@
 package pl.ipebk.tabi.test.common.assertions;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Helper constants for accessing items in test list in more natural way
  */
 public final class Order {
     // prevent creation

@@ -10,7 +10,7 @@ import android.database.Cursor;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Factory class to produce dto objects. It was created to separate database logic from model
  */
 public abstract class PlaceAndPlateFactory {
     public abstract PlaceAndPlateDto createFromCursor(Cursor cursor);

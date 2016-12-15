@@ -20,7 +20,7 @@ import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import rx.Observable;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link PlaceRepository} that uses app's dao
  */
 public class DaoPlaceRepository implements PlaceRepository {
     private PlaceDao dao;
@@ -29,24 +29,24 @@ public class DaoPlaceRepository implements PlaceRepository {
         this.dao = openHelper.getPlaceDao();
     }
 
-    // TODO: 2016-12-10 what to do with that constructor
-    public DaoPlaceRepository(PlaceDao dao) {
+    /**
+     * Internal constructor for tests
+     */
+    DaoPlaceRepository(PlaceDao dao) {
         this.dao = dao;
     }
 
     @Override public Observable<Place> loadByIdObservable(AggregateId id) {
         // TODO: 2016-12-04 factory to make domain place
-        return dao.getByIdObservable(id.getValue()).map(model ->{
+        return dao.getByIdObservable(id.getValue()).map(model -> {
             List<LicensePlate> licensePlates = new ArrayList<>();
-            for (PlateModel plate: model.plates()) {
+            for (PlateModel plate : model.plates()) {
                 licensePlates.add(new LicensePlate(new AggregateId(model.getId()), plate.pattern(), plate.end()));
             }
 
-            Place place = new Place(model.name(), model.type(),
-                                    model.voivodeship(), model.powiat(),
-                                    model.gmina(), licensePlates, model.hasOwnPlate());
-
-            return place;
+            return new Place(model.name(), model.type(),
+                             model.voivodeship(), model.powiat(),
+                             model.gmina(), licensePlates, model.hasOwnPlate());
         });
     }
 }

@@ -6,7 +6,7 @@
 package pl.ipebk.tabi.readmodel;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Enum that specifies how large is the place chosen
  */
 public enum PlaceType {
     VOIVODE_CITY,

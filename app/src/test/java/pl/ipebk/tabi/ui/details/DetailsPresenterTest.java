@@ -25,7 +25,6 @@ import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -74,7 +73,7 @@ public class DetailsPresenterTest {
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, "k", SearchType.PLATE, PlaceListItemType.SEARCH);
+        detailsPresenter.loadPlace(1L, "k", SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate("TAB");
@@ -98,7 +97,7 @@ public class DetailsPresenterTest {
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
+        detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate(anyString());
@@ -117,7 +116,7 @@ public class DetailsPresenterTest {
         Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates, true);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
+        detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.showOnMap();
 
@@ -132,7 +131,7 @@ public class DetailsPresenterTest {
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
         when(mockNameHelper.formatPlaceToSearch(malbork)).thenReturn(name);
-        detailsPresenter.loadPlace(1L, null, SearchType.PLATE, PlaceListItemType.SEARCH);
+        detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();
 

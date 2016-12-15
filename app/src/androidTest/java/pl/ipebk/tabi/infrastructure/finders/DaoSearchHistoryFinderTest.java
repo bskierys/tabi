@@ -22,7 +22,7 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
     @MediumTest public void test_shouldFindOnlyForPlates_whenSearchedForHistoryForPlates() throws Exception {
         remember(thatISearched(forPlace().withName("a")).within(SearchType.PLACE).atTime(10));
         remember(thatISearched(forPlace().withName("b")).within(SearchType.PLACE).atTime(12));
-        remember(thatISearched(forPlace().withName("b")).within(SearchType.PLATE).atTime(14));
+        remember(thatISearched(forPlace().withName("b")).within(SearchType.LICENSE_PLATE).atTime(14));
 
         whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLACE));
 
@@ -51,8 +51,8 @@ public class DaoSearchHistoryFinderTest extends FinderTest {
     }
 
     @MediumTest public void test_shouldHaveRandomPlace_whenSearchForLicensePlate() throws Exception {
-        remember(thatISearched(givenPlace().withName("a").withOwnPlate()).within(SearchType.PLATE).atTime(10));
-        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.PLATE));
+        remember(thatISearched(givenPlace().withName("a").withOwnPlate()).within(SearchType.LICENSE_PLATE).atTime(10));
+        whenSearched(finder.findHistoryPlacesList(DEFAULT_SEARCH_LIMIT, SearchType.LICENSE_PLATE));
         thenFoundPlaces().hasCount(2); // one for random
         then().searchedPlaceThatIs(LAST).isType(PlaceType.RANDOM);
     }

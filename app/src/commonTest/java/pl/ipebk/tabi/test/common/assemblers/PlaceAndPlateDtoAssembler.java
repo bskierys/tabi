@@ -12,7 +12,7 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Assembler of {@link PlaceAndPlateDto} for tests
  */
 public class PlaceAndPlateDtoAssembler extends PlaceAndPlateFactory {
     private static final String DEFAULT_PLACE_NAME = "place_name";

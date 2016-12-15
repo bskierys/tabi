@@ -6,7 +6,7 @@
 package pl.ipebk.tabi.canonicalmodel;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Value Object to handles id of model items in app
  */
 public final class AggregateId {
     private long id;

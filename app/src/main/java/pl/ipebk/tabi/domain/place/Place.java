@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.BaseAggreagateRoot;
+import pl.ipebk.tabi.domain.BaseAggregateRoot;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
  * TODO: Generic description. Replace with real one.
  * todo: not exactly domain model - rebuild
  */
-public class Place extends BaseAggreagateRoot {
+public class Place extends BaseAggregateRoot {
     private String name;
     private PlaceType type;
     private String voivodeship;

@@ -9,9 +9,6 @@ import org.mockito.ArgumentMatcher;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public class AggregateIdMatcher implements ArgumentMatcher<AggregateId> {
     private final AggregateId expected;
 

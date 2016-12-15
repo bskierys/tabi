@@ -6,10 +6,10 @@
 package pl.ipebk.tabi.readmodel;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Determines whether user is searching by place or by license plate
  */
 public enum SearchType {
-    PLATE,
+    LICENSE_PLATE,
     PLACE,
     UNKNOWN
 }

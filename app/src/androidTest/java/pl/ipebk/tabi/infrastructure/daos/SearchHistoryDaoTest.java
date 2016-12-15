@@ -10,7 +10,6 @@ import android.test.suitebuilder.annotation.MediumTest;
 import java.util.List;
 
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
-import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinderTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.readmodel.PlaceType;
@@ -38,7 +37,7 @@ public class SearchHistoryDaoTest extends DatabaseTest {
         addToDatabase(givenPlace().withName("a"));
 
         remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.PLACE).atTime(0));
-        remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.PLATE).atTime(10));
+        remember(thatISearched().forPlaceWithId(givenPlaceId()).within(SearchType.LICENSE_PLATE).atTime(10));
 
         assertEquals(2, databaseHelper.getSearchHistoryDao().getAll().size());
     }

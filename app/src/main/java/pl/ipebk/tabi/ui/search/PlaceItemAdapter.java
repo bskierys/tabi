@@ -126,7 +126,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
             holder.powiatView.setText(context.getString(R.string.search_question_plates));
             holder.icon.setImageResource(R.drawable.ic_doodle_random);
-        } else if (type == SearchType.PLATE) {
+        } else if (type == SearchType.LICENSE_PLATE) {
             holder.placeNameView.setText(context.getString(R.string.search_question_what));
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
             holder.powiatView.setText(nameFormatHelper.getRandomQuestion());

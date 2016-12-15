@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
@@ -64,7 +62,7 @@ public class PlaceItemAdapterTest {
         when(cursor.getCount()).thenReturn(1);
         adapter = new TestablePlaceItemAdapter(cursor, application);
         adapter.setEventListener(eventListener);
-        adapter.setType(SearchType.PLATE);
+        adapter.setType(SearchType.LICENSE_PLATE);
 
         LayoutInflater inflater = (LayoutInflater) RuntimeEnvironment
                 .application.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -97,7 +95,7 @@ public class PlaceItemAdapterTest {
         itemHolder.root.performClick();
 
         verify(eventListener).onPlaceItemClicked(agIdEq(new AggregateId(10)), eq("TAB"),
-                                                 eq(SearchType.PLATE), eq(PlaceListItemType.SEARCH));
+                                                 eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH));
     }
 
     @Test public void testBindSpecialPlace() throws Exception {
@@ -135,7 +133,7 @@ public class PlaceItemAdapterTest {
         String name = "Name";
         String plateStart = "TAB";
 
-        adapter.setType(SearchType.PLATE);
+        adapter.setType(SearchType.LICENSE_PLATE);
         PlaceAndPlateDto place = assemblePlace().withName(name).withPlate(plateStart).random().assemble();
         when(mockItems.get(0)).thenReturn(place);
 

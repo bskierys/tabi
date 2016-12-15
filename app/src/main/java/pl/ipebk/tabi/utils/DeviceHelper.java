@@ -14,7 +14,7 @@ import android.util.DisplayMetrics;
 import javax.inject.Inject;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Helper to provide information about device that app is currently running on
  */
 public class DeviceHelper {
     private Context context;

@@ -14,7 +14,7 @@ import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link SearchHistoryRepository} with app's dao
  */
 public class DaoSearchHistoryRepository implements SearchHistoryRepository {
     private SearchHistoryDao dao;
@@ -23,8 +23,10 @@ public class DaoSearchHistoryRepository implements SearchHistoryRepository {
         this.dao = openHelper.getSearchHistoryDao();
     }
 
-    // TODO: 2016-12-10 ??
-    public DaoSearchHistoryRepository(SearchHistoryDao dao) {
+    /**
+     * Internal constructor for tests
+     */
+    DaoSearchHistoryRepository(SearchHistoryDao dao) {
         this.dao = dao;
     }
 

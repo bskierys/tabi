@@ -16,7 +16,6 @@ import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
-import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
@@ -68,7 +67,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         getMvpView().showSearchedText(searchedPlate);
         showPlaceIconBasedOnItemType(itemType);
 
-        if (searchedPlate != null && searchType == SearchType.PLATE) {
+        if (searchedPlate != null && searchType == SearchType.LICENSE_PLATE) {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 

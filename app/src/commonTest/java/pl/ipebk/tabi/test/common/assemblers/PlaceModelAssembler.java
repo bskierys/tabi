@@ -14,7 +14,7 @@ import pl.ipebk.tabi.infrastructure.models.PlateModel;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Assembler of {@link PlaceModel} for tests
  */
 public class PlaceModelAssembler {
     private static final String RANDOM_PLATE_SOURCE = "ABCDEFGHIJKLMNOPRSTUVWXYZ";
