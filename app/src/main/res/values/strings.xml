@@ -13,6 +13,8 @@
     <string name="details_gmina">gmina</string>
     <string name="details_powiat">powiat</string>
     <string name="details_voivodeship">województwo</string>
+    <!-- TODO: rename -->
+    <string name="details_powiat_territorial">(ziemski)</string>
     <string name="details_additional_town">miasto</string>
     <string name="details_additional_part_of_town">część miasta</string>
     <string name="details_additional_village">wioska</string>

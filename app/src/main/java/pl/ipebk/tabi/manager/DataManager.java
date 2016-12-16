@@ -8,7 +8,7 @@ package pl.ipebk.tabi.manager;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import rx.Observable;
 import rx.Subscriber;
 
@@ -18,6 +18,7 @@ import rx.Subscriber;
  */
 @Singleton
 public class DataManager {
+    // TODO: 2016-12-10 remove data manager
     private final DatabaseOpenHelper databaseHelper;
 
     @Inject public DataManager(DatabaseOpenHelper databaseHelper) {

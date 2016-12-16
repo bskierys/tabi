@@ -135,6 +135,10 @@ dependencies {
     def mobileDependencies = rootProject.ext.mobileDependencies
     compile project(':viewpagerindicator')
 
+    // auto-value
+    provided mobileDependencies.autovalue // needed for Android Studio
+    apt mobileDependencies.autovalue
+
     // Android
     compile mobileDependencies.appcompat
     compile mobileDependencies.support

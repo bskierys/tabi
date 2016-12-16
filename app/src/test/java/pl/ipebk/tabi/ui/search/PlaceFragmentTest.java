@@ -10,29 +10,31 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
-import org.robolectric.util.FragmentTestUtil;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-
-import static org.assertj.android.api.Assertions.assertThat;
-import static org.assertj.android.recyclerview.v7.api.Assertions.assertThat;
 
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.readmodel.SearchType;
 
-import static org.junit.Assert.*;
+import static org.assertj.android.api.Assertions.assertThat;
+import static org.assertj.android.recyclerview.v7.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
@@ -253,8 +255,8 @@ public class PlaceFragmentTest {
             return eventListener;
         }
 
-        @Override public void onPlaceItemClicked(long placeId, String plateClicked,
-                                                 SearchType type, PlaceListItemType itemType) {
+        @Override public void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type,
+                                                 PlaceListItemType itemType) {
             eventListener.onPlaceItemClicked(placeId, plateClicked, type, itemType);
         }
 

@@ -23,13 +23,18 @@ import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.util.Scheduler;
 
+import dagger.Provides;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.daos.PlaceDao;
-import pl.ipebk.tabi.database.models.SearchType;
-import pl.ipebk.tabi.database.openHelper.DatabaseOpenHelper;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.infrastructure.daos.SearchHistoryDao;
+import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
+import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
+import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.injection.component.DaggerTestApplicationComponent;
 import pl.ipebk.tabi.test.common.injection.component.TestApplicationComponent;
 import pl.ipebk.tabi.test.common.injection.module.TestApplicationModule;
@@ -50,9 +55,10 @@ import static org.assertj.android.api.Assertions.assertThat;
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
 public class SearchActivityTest {
-    @Mock PlaceDao mockPlaceDao;
-    @Mock DatabaseOpenHelper databaseOpenHelper;
-    @Mock DataManager dataManager;
+    // TODO: 2016-12-14 repositories should be taken from  app component not config persistant component - that breaks the tests
+    @Mock SearchHistoryFinder mockFinder;
+    @Mock SearchHistoryDao dao;
+    @Mock DatabaseOpenHelper dbHelper;
 
     public SearchActivityTest() {
         App application = App.get(RuntimeEnvironment.application);
@@ -66,13 +72,14 @@ public class SearchActivityTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        when(dataManager.getDatabaseHelper()).thenReturn(databaseOpenHelper);
-        when(databaseOpenHelper.getPlaceDao()).thenReturn(mockPlaceDao);
+        when(dbHelper.getSearchHistoryDao()).thenReturn(dao);
     }
 
     @Test public void testToolbarEditTextEmptyAtStart() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
+        when(mockFinder.findHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
+        // TODO: 2016-12-14 the above is unnecessary for now but should be used as final solution
+        when(dao.getHistoryPlaces(anyInt(), anyInt())).thenReturn(Observable.just(cursor));
         SearchActivity activity = getSearchActivity();
 
         EditText editText = (EditText) activity.findViewById(R.id.editTxt_search);
@@ -83,8 +90,9 @@ public class SearchActivityTest {
 
     @Test public void testToolbarHiddenTextEmptyAtStart() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
-
+        when(mockFinder.findHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
+        // TODO: 2016-12-14 the above is unnecessary for now but should be used as final solution
+        when(dao.getHistoryPlaces(anyInt(), anyInt())).thenReturn(Observable.just(cursor));
         SearchActivity activity = getSearchActivity();
 
         TextView hiddenSearch = (TextView) activity.findViewById(R.id.txt_searched);
@@ -105,8 +113,9 @@ public class SearchActivityTest {
 
     @Test public void testArePlaceFragmentsLoaded() throws Exception {
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
-
+        when(mockFinder.findHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
+        // TODO: 2016-12-14 the above is unnecessary for now but should be used as final solution
+        when(dao.getHistoryPlaces(anyInt(), anyInt())).thenReturn(Observable.just(cursor));
         SearchActivity activity = getSearchActivity();
 
         ViewPager pager = (ViewPager) activity.findViewById(R.id.pager_search);
@@ -121,8 +130,9 @@ public class SearchActivityTest {
         String sampleText = "text";
 
         Cursor cursor = mock(Cursor.class);
-        when(mockPlaceDao.getHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
-
+        when(mockFinder.findHistoryPlaces(anyInt(), any())).thenReturn(Observable.just(cursor));
+        // TODO: 2016-12-14 the above is unnecessary for now but should be used as final solution
+        when(dao.getHistoryPlaces(anyInt(), anyInt())).thenReturn(Observable.just(cursor));
         SearchActivity activity = getSearchActivity();
 
         View xButton = activity.findViewById(R.id.btn_clear);
@@ -134,7 +144,7 @@ public class SearchActivityTest {
         assertThat(editText).doesNotContainText(sampleText);
 
         // TODO: 2016-11-29 invoked too many times
-        verify(mockPlaceDao, atLeastOnce()).getHistoryPlaces(anyInt(), any(SearchType.class));
+        verify(dao, atLeastOnce()).getHistoryPlaces(anyInt(), anyInt());
     }
 
     @Test public void testDataSearchedWhenTextEntered() throws Exception {
@@ -207,8 +217,12 @@ public class SearchActivityTest {
             super(application);
         }
 
-        @Override public DataManager provideDataManager() {
-            return dataManager;
+        @Override public SearchHistoryFinder provideSearchHistoryFinder() {
+            return mockFinder;
+        }
+
+        @Override public DatabaseOpenHelper provideDatabaseOpenHelper() {
+            return dbHelper;
         }
     }
 }

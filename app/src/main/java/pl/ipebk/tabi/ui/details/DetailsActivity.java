@@ -37,7 +37,7 @@ import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchType;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;

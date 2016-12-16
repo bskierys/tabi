@@ -14,8 +14,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.database.models.SearchType;
 import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.RxUtil;
@@ -78,7 +78,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         stopwatch.reset();
         loadSubscription = dataManager
                 .initDatabase()
-                .map(v -> preloadHistory())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(v -> {
@@ -89,10 +88,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     getMvpView().hideLoading();
                     Timber.d("Initializing time: %s", stopwatch.getElapsedTimeString());
                 });
-    }
-
-    private Observable<Cursor> preloadHistory() {
-        return dataManager.getDatabaseHelper().getPlaceDao().getHistoryPlaces(3, SearchType.PLACE);
     }
 
     private void loadCategories() {

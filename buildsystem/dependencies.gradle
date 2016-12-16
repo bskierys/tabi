@@ -73,6 +73,7 @@ ext {
     overscrollVersion = '1.0.1';
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
+    autoValueVersion = '1.2';
 
     mobileDependencies = [
             // Android
@@ -118,6 +119,9 @@ ext {
 
             // overscroll
             overscroll              : "me.everything:overscroll-decor-android:${overscrollVersion}",
+
+            // auto-value
+            autovalue               : "com.google.auto.value:auto-value:${autoValueVersion}",
 
             // Unit test dependencies
             junit                   : "junit:junit:${junitVersion}",

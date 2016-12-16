@@ -10,19 +10,26 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.di.ActivityContext;
+import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
+import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
+import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
+import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
+import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
+import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
+import pl.ipebk.tabi.readmodel.LicensePlateFinder;
+import pl.ipebk.tabi.readmodel.PlaceFinder;
+import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.SpellCorrector;
-import pl.ipebk.tabi.utils.Stopwatch;
-import pl.ipebk.tabi.utils.StopwatchManager;
 import timber.log.Timber;
 
 @Module
@@ -72,5 +79,29 @@ public class ActivityModule {
 
     @Provides DeviceHelper provideDeviceHelper() {
         return new DeviceHelper(activity);
+    }
+
+    @Provides public SearchHistoryRepository provideSearchHistoryRepository(DaoSearchHistoryRepository repository) {
+        return repository;
+    }
+
+    @Provides public PlaceRepository providePlaceRepository(DaoPlaceRepository repository) {
+        return repository;
+    }
+
+    @Provides public LicensePlateFinder provideLicensePlateFinder(DaoLicensePlateFinder finder) {
+        return finder;
+    }
+
+    @Provides public PlaceFinder providePlaceFinder(DaoPlaceFinder finder) {
+        return finder;
+    }
+
+    @Provides public SearchHistoryFinder provideSearchHistoryFinder(DaoSearchHistoryFinder finder) {
+        return finder;
+    }
+
+    @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {
+        return provider;
     }
 }

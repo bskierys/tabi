@@ -9,13 +9,14 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
+import static org.mockito.Mockito.mock;
 
-import static org.mockito.Mockito.*;
-
-@Module public class TestViewModule {
+@Module
+public class TestViewModule {
 
     protected Context context;
 
@@ -33,5 +34,9 @@ import static org.mockito.Mockito.*;
 
     @Provides ResourceHelper provideResourceHelper() {
         return mock(ResourceHelper.class);
+    }
+
+    @Provides PlaceAndPlateFactory providePlaceAndPlateFactory() {
+        return mock(PlaceAndPlateFactory.class);
     }
 }
