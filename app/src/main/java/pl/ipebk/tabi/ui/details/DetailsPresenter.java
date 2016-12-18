@@ -15,6 +15,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
+import pl.ipebk.tabi.domain.place.PlaceFactory;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
@@ -32,22 +33,20 @@ import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private PlaceRepository repository;
-    // TODO: 2016-12-06 should not use domain model? rather view dto
     private Observable<Place> placeOnce;
     private BehaviorSubject<Place> placeSubject;
     private String searchedPlate;
 
-    private NameFormatHelper nameFormatHelper;
+    private PlaceFactory placeFactory;
     private DeviceHelper deviceHelper;
 
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
-    @Inject public DetailsPresenter(PlaceRepository repository, DeviceHelper deviceHelper, NameFormatHelper
-            nameFormatHelper) {
+    @Inject public DetailsPresenter(PlaceRepository repository, DeviceHelper deviceHelper, PlaceFactory placeFactory) {
         this.repository = repository;
         this.deviceHelper = deviceHelper;
-        this.nameFormatHelper = nameFormatHelper;
+        this.placeFactory = placeFactory;
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -73,6 +72,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
         // TODO: 2016-12-10 onError here
         loadPlaceSubscription = repository.loadByIdObservable(new AggregateId(id))
+                                          .map(placeFactory::createFromDto)
                                           .subscribe(placeSubject::onNext);
 
         Observable<Place> standardPlaceStream = placeOnce.filter(p -> p.getType() != PlaceType.SPECIAL);
@@ -121,11 +121,11 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         }
 
         getMvpView().enableActionButtons();
-        getMvpView().showAdditionalInfo(nameFormatHelper.formatAdditionalInfo(place, searchedPlate));
+        getMvpView().showAdditionalInfo(place.getAdditionalInfo(searchedPlate));
         getMvpView().showPlaceName(place.getName());
-        getMvpView().showVoivodeship(nameFormatHelper.formatVoivodeship(place.getVoivodeship()));
-        getMvpView().showPowiat(nameFormatHelper.formatPowiat(place.getPowiat()));
-        getMvpView().showGmina(nameFormatHelper.formatGmina(place.getGmina()));
+        getMvpView().showVoivodeship(place.getVoivodeship());
+        getMvpView().showPowiat(place.getPowiat());
+        getMvpView().showGmina(place.getGmina());
     }
 
     private void showSpecialPlace(Place place) {
@@ -139,7 +139,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void showOnMap() {
-        placeOnce.map(place -> nameFormatHelper.formatPlaceToSearch(place))
+        placeOnce.map(Place::getSearchPhrase)
                  .map(placeName -> "geo:0,0?q=" + placeName)
                  .map(Uri::parse)
                  .subscribe(uri -> getMvpView().startMapApp(uri)
@@ -147,13 +147,13 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     public void searchInGoogle() {
-        placeOnce.map(place -> nameFormatHelper.formatPlaceToSearch(place))
+        placeOnce.map(Place::getSearchPhrase)
                  .subscribe(searchData -> getMvpView().startWebSearch(searchData),
                             error -> Timber.e(error, "Error loading google search"));
     }
 
     public void copyToClipboard() {
-        placeOnce.map(place -> nameFormatHelper.formatPlaceInfo(place))
+        placeOnce.map(Place::getFullInfo)
                  .subscribe(placeInfo -> {
                      deviceHelper.copyToClipBoard(placeInfo);
                      getMvpView().showInfoMessageCopied();

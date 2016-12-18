@@ -6,6 +6,7 @@
 package pl.ipebk.tabi.domain.place;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.readmodel.PlaceDto;
 import rx.Observable;
 
 /**
@@ -15,5 +16,5 @@ public interface PlaceRepository {
     /**
      * Load Place by it's id
      */
-    Observable<Place> loadByIdObservable(AggregateId id);
+    Observable<PlaceDto> loadByIdObservable(AggregateId id);
 }

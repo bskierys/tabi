@@ -13,6 +13,7 @@ import pl.ipebk.tabi.domain.BaseAggregateRoot;
 import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
+import pl.ipebk.tabi.utils.NameFormatHelper;
 
 /**
  * TODO: Generic description. Replace with real one.
@@ -20,9 +21,15 @@ import pl.ipebk.tabi.readmodel.PlaceType;
  */
 public class Place extends BaseAggregateRoot {
     private PlaceDto dto;
+    private NameFormatHelper nameFormatHelper;
 
     // TODO: 2016-12-14 make private
     @SuppressWarnings("unused") Place() {}
+
+    Place(PlaceDto dto, NameFormatHelper formatHelper) {
+        this.dto = dto;
+        this.nameFormatHelper = formatHelper;
+    }
 
     // TODO: 2016-12-10 factory to create this object
     public Place(String name, PlaceType type, String voivodeship, String powiat,
@@ -44,15 +51,28 @@ public class Place extends BaseAggregateRoot {
     }
 
     public String getVoivodeship() {
-        return dto.voivodeship();
+        return nameFormatHelper.formatVoivodeship(dto.voivodeship());
     }
 
     public String getPowiat() {
-        return dto.powiat();
+        return nameFormatHelper.formatPowiat(dto.powiat());
     }
 
     public String getGmina() {
-        return dto.gmina();
+        return nameFormatHelper.formatGmina(dto.gmina());
+    }
+
+    public String getAdditionalInfo(String searchedPlate) {
+        return nameFormatHelper.formatAdditionalInfo(this, searchedPlate);
+    }
+
+    public String getFullInfo() {
+        return nameFormatHelper.formatPlaceInfo(this);
+    }
+
+    // TODO: 2016-12-18 describe
+    public String getSearchPhrase() {
+        return nameFormatHelper.formatPlaceToSearch(this);
     }
 
     public List<LicensePlate> getPlates() {

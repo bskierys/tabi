@@ -8,6 +8,7 @@ import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
+import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import rx.observers.TestSubscriber;
 
@@ -24,17 +25,17 @@ public class DaoPlaceRepositoryTest extends DatabaseTest {
 
     @MediumTest public void test_loadsPlaceProperly() throws Exception {
         addToDatabase(givenPlace().withName("a").withPlate("TAB").and().withPlate("BAT").withOwnPlate());
-        TestSubscriber<Place> testSubscriber = TestSubscriber.create();
+        TestSubscriber<PlaceDto> testSubscriber = TestSubscriber.create();
 
         repository.loadByIdObservable(givenPlaceId()).subscribe(testSubscriber);
         testSubscriber.awaitValueCount(1, 500, TimeUnit.MILLISECONDS);
-        Place loadedPlace = testSubscriber.getOnNextEvents().get(0);
+        PlaceDto loadedPlace = testSubscriber.getOnNextEvents().get(0);
 
-        assertEquals(placeModel.name(), loadedPlace.getName());
-        assertEquals(placeModel.voivodeship(), loadedPlace.getVoivodeship());
-        assertEquals(placeModel.powiat(), loadedPlace.getPowiat());
-        assertEquals(placeModel.gmina(), loadedPlace.getGmina());
-        assertEquals(placeModel.plates().size(), loadedPlace.getPlates().size());
+        assertEquals(placeModel.name(), loadedPlace.name());
+        assertEquals(placeModel.voivodeship(), loadedPlace.voivodeship());
+        assertEquals(placeModel.powiat(), loadedPlace.powiat());
+        assertEquals(placeModel.gmina(), loadedPlace.gmina());
+        assertEquals(placeModel.plates().size(), loadedPlace.plates().size());
 
         testSubscriber.unsubscribe();
     }

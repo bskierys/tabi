@@ -17,7 +17,10 @@ import java.util.List;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
+import pl.ipebk.tabi.domain.place.PlaceFactory;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
+import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.test.common.utils.TestNameFormatHelper;
@@ -45,6 +48,7 @@ public class DetailsPresenterTest {
     @Mock Activity mockContext;
     @Mock DeviceHelper mockDeviceHelper;
     private TestNameFormatHelper mockNameHelper;
+    private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
 
     // TODO: 2016-12-14 given-when-then test scheme
@@ -54,8 +58,9 @@ public class DetailsPresenterTest {
         when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
         when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
         mockNameHelper = new TestNameFormatHelper(mockContext);
+        mockFactory = new PlaceFactory(mockNameHelper);
 
-        detailsPresenter = new DetailsPresenter(placeRepo, mockDeviceHelper, mockNameHelper);
+        detailsPresenter = new DetailsPresenter(placeRepo, mockDeviceHelper, mockFactory);
         detailsPresenter.attachView(mockMvpView);
     }
 
@@ -67,9 +72,9 @@ public class DetailsPresenterTest {
     @Test public void testStandardPlaceIsLoaded() {
         String name = "Malbork";
         // TODO: 2016-12-14 factory class
-        List<LicensePlate> plates = new ArrayList<>();
-        plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.TOWN,name + "1",name + "2",name + "3", plates);
+        List<LicensePlateDto> plates = new ArrayList<>();
+        plates.add(LicensePlateDto.create("TAB",null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.TOWN,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
@@ -91,9 +96,9 @@ public class DetailsPresenterTest {
 
     @Test public void testSpecialPlaceIsLoaded() {
         String name = "Malbork";
-        List<LicensePlate> plates = new ArrayList<>();
-        plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        List<LicensePlateDto> plates = new ArrayList<>();
+        plates.add(LicensePlateDto.create("TAB",null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
@@ -111,9 +116,9 @@ public class DetailsPresenterTest {
 
     @Test public void testShowOnMap() {
         String name = "Malbork";
-        List<LicensePlate> plates = new ArrayList<>();
-        plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        List<LicensePlateDto> plates = new ArrayList<>();
+        plates.add(LicensePlateDto.create("TAB",null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
@@ -125,16 +130,17 @@ public class DetailsPresenterTest {
 
     @Test public void testSearchInGoogle() {
         String name = "Malbork";
-        List<LicensePlate> plates = new ArrayList<>();
-        plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        List<LicensePlateDto> plates = new ArrayList<>();
+        plates.add(LicensePlateDto.create("TAB",null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
-        when(mockNameHelper.formatPlaceToSearch(malbork)).thenReturn(name);
+        when(mockNameHelper.formatPlaceToSearch(any())).thenReturn(name);
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();
 
-        verify(mockMvpView).startWebSearch(mockNameHelper.formatPlaceToSearch(malbork));
+        Place malborkPlace = mockFactory.createFromDto(malbork);
+        verify(mockMvpView).startWebSearch(malborkPlace.getSearchPhrase());
     }
 }

@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.domain.place.PlaceFactory;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;

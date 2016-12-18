@@ -17,6 +17,8 @@ import pl.ipebk.tabi.domain.place.PlaceRepository;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.models.PlateModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
+import pl.ipebk.tabi.readmodel.PlaceDto;
 import rx.Observable;
 
 /**
@@ -36,17 +38,16 @@ public class DaoPlaceRepository implements PlaceRepository {
         this.dao = dao;
     }
 
-    @Override public Observable<Place> loadByIdObservable(AggregateId id) {
+    @Override public Observable<PlaceDto> loadByIdObservable(AggregateId id) {
         // TODO: 2016-12-04 factory to make domain place
         return dao.getByIdObservable(id.getValue()).map(model -> {
-            List<LicensePlate> licensePlates = new ArrayList<>();
+            List<LicensePlateDto> licensePlates = new ArrayList<>();
             for (PlateModel plate : model.plates()) {
-                licensePlates.add(new LicensePlate(new AggregateId(model.getId()), plate.pattern(), plate.end()));
+                licensePlates.add(LicensePlateDto.create(plate.pattern(), plate.end()));
             }
 
-            return new Place(model.name(), model.type(),
-                             model.voivodeship(), model.powiat(),
-                             model.gmina(), licensePlates);
+            return PlaceDto.create(model.name(), model.type(), model.voivodeship(),
+                                   model.powiat(), model.gmina(), licensePlates);
         });
     }
 }
