@@ -69,7 +69,7 @@ public class DetailsPresenterTest {
         // TODO: 2016-12-14 factory class
         List<LicensePlate> plates = new ArrayList<>();
         plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.TOWN,name + "1",name + "2",name + "3", plates, true);
+        Place malbork = new Place(name, PlaceType.TOWN,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
@@ -93,7 +93,7 @@ public class DetailsPresenterTest {
         String name = "Malbork";
         List<LicensePlate> plates = new ArrayList<>();
         plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates, true);
+        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
@@ -113,7 +113,7 @@ public class DetailsPresenterTest {
         String name = "Malbork";
         List<LicensePlate> plates = new ArrayList<>();
         plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates, true);
+        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
@@ -127,7 +127,7 @@ public class DetailsPresenterTest {
         String name = "Malbork";
         List<LicensePlate> plates = new ArrayList<>();
         plates.add(new LicensePlate(new AggregateId(0L), "TAB", null));
-        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates, true);
+        Place malbork = new Place(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
         when(mockNameHelper.formatPlaceToSearch(malbork)).thenReturn(name);

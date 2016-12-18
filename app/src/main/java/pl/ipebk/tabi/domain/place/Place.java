@@ -10,6 +10,8 @@ import java.util.List;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.BaseAggregateRoot;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
+import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
@@ -17,87 +19,48 @@ import pl.ipebk.tabi.readmodel.PlaceType;
  * todo: not exactly domain model - rebuild
  */
 public class Place extends BaseAggregateRoot {
-    private String name;
-    private PlaceType type;
-    private String voivodeship;
-    private String powiat;
-    private String gmina;
-    private List<LicensePlate> plates;
-    private boolean hasOwnPlate;
+    private PlaceDto dto;
 
     // TODO: 2016-12-14 make private
     @SuppressWarnings("unused") Place() {}
 
     // TODO: 2016-12-10 factory to create this object
-    public Place(String name, PlaceType type, String voivodeship, String powiat, String gmina, List<LicensePlate>
-            plates, boolean hasOwnPlate) {
-        this.name = name;
-        this.type = type;
-        this.voivodeship = voivodeship;
-        this.powiat = powiat;
-        this.gmina = gmina;
-        this.plates = plates;
-        this.hasOwnPlate = hasOwnPlate;
+    public Place(String name, PlaceType type, String voivodeship, String powiat,
+                 String gmina, List<LicensePlate> plates) {
+        List<LicensePlateDto> plateDtos = new ArrayList<>();
+        for (LicensePlate plate: plates) {
+            plateDtos.add(plate.getDto());
+        }
+
+        this.dto = PlaceDto.create(name, type, voivodeship, powiat, gmina, plateDtos);
     }
 
     public String getName() {
-        return name;
+        return dto.name();
     }
 
     public PlaceType getType() {
-        return type;
+        return dto.placeType();
     }
 
     public String getVoivodeship() {
-        return voivodeship;
+        return dto.voivodeship();
     }
 
     public String getPowiat() {
-        return powiat;
+        return dto.powiat();
     }
 
     public String getGmina() {
-        return gmina;
+        return dto.gmina();
     }
 
     public List<LicensePlate> getPlates() {
+        List<LicensePlate> plates = new ArrayList<>();
+        for(LicensePlateDto plateDto: dto.plates()) {
+            plates.add(new LicensePlate(aggregateId, plateDto.pattern(), plateDto.end()));
+        }
         return plates;
-    }
-
-    public boolean hasOwnPlate() {
-        return hasOwnPlate;
-    }
-
-    void setName(String name) {
-        this.name = name;
-    }
-
-    void setType(PlaceType type) {
-        this.type = type;
-    }
-
-    void setVoivodeship(String voivodeship) {
-        this.voivodeship = voivodeship;
-    }
-
-    void setPowiat(String powiat) {
-        this.powiat = powiat;
-    }
-
-    void setGmina(String gmina) {
-        this.gmina = gmina;
-    }
-
-    void setPlates(List<LicensePlate> plates) {
-        this.plates = plates;
-    }
-
-    void setHasOwnPlate(boolean hasOwnPlate) {
-        this.hasOwnPlate = hasOwnPlate;
-    }
-
-    void setAggregateId(long id) {
-        this.aggregateId = new AggregateId(id);
     }
 
     @Override public String toString() {
@@ -109,8 +72,9 @@ public class Place extends BaseAggregateRoot {
      * @return main {@link LicensePlate} for place or null if list is null or empty.
      */
     public LicensePlate getMainPlate() {
-        if (plates != null && plates.size() > 0) {
-            return plates.get(0);
+        if (dto.plates() != null && dto.plates().size() > 0) {
+            LicensePlateDto plateDto = dto.plates().get(0);
+            return new LicensePlate(aggregateId, plateDto.pattern(), plateDto.end());
         } else {
             return null;
         }
@@ -126,9 +90,10 @@ public class Place extends BaseAggregateRoot {
             plate = getMainPlate();
         } else {
             int i = 0;
-            while (plate == null && i < plates.size()) {
-                if (plates.get(i).getPattern().startsWith(pattern)) {
-                    plate = plates.get(i);
+            while (plate == null && i < dto.plates().size()) {
+                if (dto.plates().get(i).pattern().startsWith(pattern)) {
+                    LicensePlateDto plateDto = dto.plates().get(i);
+                    plate = new LicensePlate(aggregateId, plateDto.pattern(), plateDto.end());
                 }
                 i++;
             }
@@ -145,6 +110,11 @@ public class Place extends BaseAggregateRoot {
      * @return String representation of list of plates separated by commas
      */
     public String platesToString() {
+        List<LicensePlate> plates = new ArrayList<>();
+        for (LicensePlateDto plateDto : dto.plates()) {
+            LicensePlate plate = new LicensePlate(aggregateId, plateDto.pattern(), plateDto.end());
+            plates.add(plate);
+        }
         return platesToString(plates);
     }
 
@@ -157,7 +127,8 @@ public class Place extends BaseAggregateRoot {
     public String platesToStringExceptMatchingPattern(String pattern) {
         List<LicensePlate> platesToShow = new ArrayList<>();
         LicensePlate plateMatchingPattern = getPlateMatchingPattern(pattern);
-        for (LicensePlate plate : plates) {
+        for (LicensePlateDto plateDto : dto.plates()) {
+            LicensePlate plate = new LicensePlate(aggregateId, plateDto.pattern(), plateDto.end());
             if (!plate.equals(plateMatchingPattern)) {
                 platesToShow.add(plate);
             }

@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.readmodel.PlaceType;
 
 import static org.junit.Assert.*;
 
 public class PlaceTest {
     @Test public void testGetMainPlateForNoPlates() throws Exception {
-        Place malbork = new Place();
-        malbork.setName("Malbork");
+        Place malbork = new Place("Malbork", PlaceType.TOWN, null, null, null, new ArrayList<>());
 
         LicensePlate plate = malbork.getMainPlate();
 
@@ -77,14 +77,10 @@ public class PlaceTest {
     }
 
     private Place createPlaceWithPlates(String... patterns) {
-        Place malbork = new Place();
-        malbork.setName("Malbork");
-        malbork.setPlates(getListOfPlates(patterns));
-
-        return malbork;
+        return new Place("Malbork", PlaceType.TOWN, null, null, null, getListOfPlates(patterns));
     }
 
-    private static List<LicensePlate> getListOfPlates(String... patterns) {
+    private List<LicensePlate> getListOfPlates(String... patterns) {
         List<LicensePlate> plates = new ArrayList<>();
         for (int i = 0; i < patterns.length; i++) {
             plates.add(createPlate(patterns[i]));
@@ -92,7 +88,7 @@ public class PlaceTest {
         return plates;
     }
 
-    public static LicensePlate createPlate(String pattern) {
+    public LicensePlate createPlate(String pattern) {
         return new LicensePlate(new AggregateId(0), pattern, null);
     }
 }

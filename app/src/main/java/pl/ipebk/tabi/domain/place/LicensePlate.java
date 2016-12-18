@@ -11,7 +11,6 @@ import pl.ipebk.tabi.readmodel.LicensePlateDto;
 
 /**
  * TODO: Generic description. Replace with real one.
- * todo: not exactly domain model - rebuild
  */
 public class LicensePlate extends BaseAggregateRoot {
     private AggregateId placeId;
@@ -36,6 +35,11 @@ public class LicensePlate extends BaseAggregateRoot {
 
     public String getEnd() {
         return dto.end();
+    }
+
+    // TODO: 2016-12-18 should be removed
+    public LicensePlateDto getDto() {
+        return dto;
     }
 
     @Override public boolean equals(Object o) {

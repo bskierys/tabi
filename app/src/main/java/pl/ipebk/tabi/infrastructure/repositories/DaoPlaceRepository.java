@@ -46,7 +46,7 @@ public class DaoPlaceRepository implements PlaceRepository {
 
             return new Place(model.name(), model.type(),
                              model.voivodeship(), model.powiat(),
-                             model.gmina(), licensePlates, model.hasOwnPlate());
+                             model.gmina(), licensePlates);
         });
     }
 }

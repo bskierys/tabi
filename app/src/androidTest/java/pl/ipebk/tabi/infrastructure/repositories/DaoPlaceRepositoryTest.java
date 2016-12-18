@@ -31,7 +31,6 @@ public class DaoPlaceRepositoryTest extends DatabaseTest {
         Place loadedPlace = testSubscriber.getOnNextEvents().get(0);
 
         assertEquals(placeModel.name(), loadedPlace.getName());
-        assertEquals(placeModel.hasOwnPlate(), loadedPlace.hasOwnPlate());
         assertEquals(placeModel.voivodeship(), loadedPlace.getVoivodeship());
         assertEquals(placeModel.powiat(), loadedPlace.getPowiat());
         assertEquals(placeModel.gmina(), loadedPlace.getGmina());
