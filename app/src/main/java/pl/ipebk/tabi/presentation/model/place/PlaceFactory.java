@@ -3,7 +3,7 @@
 * date: 2016-12-18
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.place;
+package pl.ipebk.tabi.presentation.model.place;
 
 import javax.inject.Inject;
 

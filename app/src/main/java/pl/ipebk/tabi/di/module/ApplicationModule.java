@@ -14,7 +14,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.di.ApplicationContext;
-import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;

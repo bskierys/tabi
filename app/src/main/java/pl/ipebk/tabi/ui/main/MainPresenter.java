@@ -6,7 +6,6 @@
 package pl.ipebk.tabi.ui.main;
 
 import android.content.Context;
-import android.database.Cursor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +13,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.manager.DataManager;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.PreferenceHelper;
 import pl.ipebk.tabi.utils.RxUtil;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
-import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,15 +27,15 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
     public static final String FEEDBACK_API_KEY = "AF-8DE6899E68E4-F6";
 
-    private final DataManager dataManager;
+    private final DatabaseLoader databaseLoader;
     private Subscription loadSubscription;
     private Stopwatch stopwatch;
     private PreferenceHelper preferenceHelper;
     private Context context;
 
-    @Inject public MainPresenter(DataManager dataManager, StopwatchManager stopwatchManager,
+    @Inject public MainPresenter(DatabaseLoader databaseLoader, StopwatchManager stopwatchManager,
                                  PreferenceHelper preferenceHelper, Context context) {
-        this.dataManager = dataManager;
+        this.databaseLoader = databaseLoader;
         this.stopwatch = stopwatchManager.getDefaultStopwatch();
         this.preferenceHelper = preferenceHelper;
         this.context = context;
@@ -76,7 +73,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     // TODO: 2016-05-28 presenter lifecycle
     private void loadDatabase() {
         stopwatch.reset();
-        loadSubscription = dataManager
+        loadSubscription = databaseLoader
                 .initDatabase()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -13,8 +13,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.domain.place.PlaceFactory;
-import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
@@ -23,6 +22,8 @@ import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
 import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
 import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
+import pl.ipebk.tabi.presentation.DatabaseLoader;
+import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
@@ -104,5 +105,9 @@ public class ActivityModule {
 
     @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {
         return provider;
+    }
+
+    @Provides public DatabaseLoader provideDatabaseLoader(SqliteDatabaseLoader loader) {
+        return loader;
     }
 }

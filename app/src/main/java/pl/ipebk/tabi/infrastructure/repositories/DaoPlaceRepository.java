@@ -11,7 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.models.PlateModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;

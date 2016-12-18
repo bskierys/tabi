@@ -1,10 +1,7 @@
 package pl.ipebk.tabi.ui.search;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.database.Observable;
-import android.util.DisplayMetrics;
 
 import org.junit.After;
 import org.junit.Before;
@@ -20,28 +17,22 @@ import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
-import pl.ipebk.tabi.manager.DataManager;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.readmodel.SearchType;
-import pl.ipebk.tabi.ui.details.DetailsPresenter;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import pl.ipebk.tabi.utils.Stopwatch;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

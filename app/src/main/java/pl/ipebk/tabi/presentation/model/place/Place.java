@@ -3,12 +3,11 @@
 * date: 2016-12-04
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.place;
+package pl.ipebk.tabi.presentation.model.place;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.domain.BaseAggregateRoot;
 import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceDto;
@@ -17,13 +16,11 @@ import pl.ipebk.tabi.utils.NameFormatHelper;
 
 /**
  * TODO: Generic description. Replace with real one.
- * todo: not exactly domain model - rebuild
  */
 public class Place extends BaseAggregateRoot {
     private PlaceDto dto;
     private NameFormatHelper nameFormatHelper;
 
-    // TODO: 2016-12-14 make private
     @SuppressWarnings("unused") private Place() {}
 
     Place(PlaceDto dto, NameFormatHelper formatHelper) {

@@ -1,11 +1,10 @@
-package pl.ipebk.tabi.domain.place;
+package pl.ipebk.tabi.presentation.model.place;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 

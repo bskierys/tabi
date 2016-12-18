@@ -3,7 +3,7 @@
 * date: 2016-02-24
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.manager;
+package pl.ipebk.tabi.presentation;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,26 +13,21 @@ import rx.Observable;
 import rx.Subscriber;
 
 /**
- * Responsible for data management across application.
- * Should be included in all presenters to propagate data.
+ * Implementation of {@link DatabaseLoader}. Responsible for initiating sqlite database
  */
-@Singleton
-public class DataManager {
-    // TODO: 2016-12-10 remove data manager
+public class SqliteDatabaseLoader implements DatabaseLoader {
     private final DatabaseOpenHelper databaseHelper;
 
-    @Inject public DataManager(DatabaseOpenHelper databaseHelper) {
+    @Inject public SqliteDatabaseLoader(DatabaseOpenHelper databaseHelper) {
         this.databaseHelper = databaseHelper;
     }
 
-    public DatabaseOpenHelper getDatabaseHelper() {
-        return databaseHelper;
-    }
-
-    public Observable<Void> initDatabase() {
+    @Override public Observable<Void> initDatabase() {
         return Observable.create(new Observable.OnSubscribe<Void>() {
             @Override public void call(Subscriber<? super Void> subscriber) {
-                if (subscriber.isUnsubscribed()) return;
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
                 databaseHelper.init();
                 subscriber.onCompleted();
             }

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.domain.place.Place;
+import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import timber.log.Timber;
 

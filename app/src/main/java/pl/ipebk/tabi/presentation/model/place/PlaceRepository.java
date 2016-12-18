@@ -3,7 +3,7 @@
 * date: 2016-12-04
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.place;
+package pl.ipebk.tabi.presentation.model.place;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.readmodel.PlaceDto;
