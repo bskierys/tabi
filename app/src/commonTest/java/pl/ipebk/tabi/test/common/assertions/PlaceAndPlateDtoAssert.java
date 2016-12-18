@@ -26,7 +26,7 @@ public class PlaceAndPlateDtoAssert {
     }
 
     public PlaceAndPlateDtoAssert hasName(String name) {
-        assertEquals(name, place.placeName());
+        assertEquals(name, place.name());
         return this;
     }
 

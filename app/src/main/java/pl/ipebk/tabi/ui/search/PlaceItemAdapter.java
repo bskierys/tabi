@@ -111,7 +111,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
 
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
-                        place.placeId(),
+                        place.id(),
                         getPlateString(place.plateStart(), place.plateEnd()),
                         type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
                                 (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
@@ -121,7 +121,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
 
     private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         if(type == SearchType.PLACE){
-            holder.placeNameView.setText(place.placeName());
+            holder.placeNameView.setText(place.name());
             holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER);
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
             holder.powiatView.setText(context.getString(R.string.search_question_plates));
@@ -136,7 +136,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
 
     private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
-        String[] nameParts = place.placeName().split(" ");
+        String[] nameParts = place.name().split(" ");
 
         holder.powiatView.setText(place.voivodeship());
         holder.placeNameView.setText(nameParts[0]);
@@ -147,7 +147,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
-        holder.placeNameView.setText(place.placeName());
+        holder.placeNameView.setText(place.name());
         holder.voivodeshipView.setText(nameFormatHelper.formatVoivodeship(place.voivodeship()));
         holder.powiatView.setText(nameFormatHelper.formatPowiat(place.powiat()));
         holder.icon.setImageResource(iconResourceId);

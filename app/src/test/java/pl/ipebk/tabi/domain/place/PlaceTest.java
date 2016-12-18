@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
+
 import static org.junit.Assert.*;
 
 public class PlaceTest {
@@ -91,8 +93,6 @@ public class PlaceTest {
     }
 
     public static LicensePlate createPlate(String pattern) {
-        LicensePlate plate = new LicensePlate();
-        plate.setPattern(pattern);
-        return plate;
+        return new LicensePlate(new AggregateId(0), pattern, null);
     }
 }

@@ -2,15 +2,15 @@ package pl.ipebk.tabi.domain.place;
 
 import org.junit.Test;
 
+import pl.ipebk.tabi.canonicalmodel.AggregateId;
+
 import static org.junit.Assert.*;
 
 public class LicensePlateTest {
     @Test public void testToString() throws Exception {
-        LicensePlate plate = new LicensePlate();
         String pattern = "TAB";
         String end = "I";
-        plate.setPattern(pattern);
-        plate.setEnd(end);
+        LicensePlate plate = new LicensePlate(new AggregateId(0), pattern, end);
 
         String expected = pattern + "..." + "I";
         String actual = plate.toString();
@@ -19,9 +19,8 @@ public class LicensePlateTest {
     }
 
     @Test public void testToStringWhenEndNull() throws Exception {
-        LicensePlate plate = new LicensePlate();
         String pattern = "TAB";
-        plate.setPattern(pattern);
+        LicensePlate plate = new LicensePlate(new AggregateId(0), pattern, null);
 
         String actual = plate.toString();
 

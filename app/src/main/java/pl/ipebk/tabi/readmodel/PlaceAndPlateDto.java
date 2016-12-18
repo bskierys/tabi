@@ -16,8 +16,8 @@ import pl.ipebk.tabi.canonicalmodel.AggregateId;
  */
 @AutoValue
 public abstract class PlaceAndPlateDto {
-    public abstract AggregateId placeId();
-    public abstract String placeName();
+    public abstract AggregateId id();
+    public abstract String name();
     public abstract String plateStart();
     @Nullable public abstract String plateEnd();
     @Nullable public abstract String voivodeship();
