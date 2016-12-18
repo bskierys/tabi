@@ -23,9 +23,9 @@ import pl.ipebk.tabi.infrastructure.base.Dao;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.infrastructure.tables.SearchHistoryTable;
-import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateFactory;
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import rx.Observable;
@@ -35,13 +35,13 @@ public class SearchHistoryDao extends Dao<SearchHistoryModel> {
     private int standardPlacesWithPlateCount;
     private int placesCount;
     private PlacesTable placesTable;
-    private PlaceAndPlateFactory itemFactory;
+    private PlaceAndPlateDtoFactory itemFactory;
 
     public SearchHistoryDao(BriteDatabase database) {
         super(SearchHistoryModel.class, database);
         table = new SearchHistoryTable();
         placesTable = new PlacesTable();
-        itemFactory = new DatabaseViewPlaceAndPlateFactory();
+        itemFactory = new DatabaseViewPlaceAndPlateDtoFactory();
         placesCount = getPlacesCount();
         standardPlacesWithPlateCount = getStandardPlacesWithPlateCount();
     }

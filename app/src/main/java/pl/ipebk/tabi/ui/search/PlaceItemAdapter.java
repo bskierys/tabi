@@ -20,9 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.readmodel.LicensePlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
@@ -108,17 +109,17 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
                 }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
-    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
                         place.id(),
-                        getPlateString(place.plateStart(), place.plateEnd()),
+                        place.plateString(),
                         type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
                                 (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
-        holder.plateView.setText(getPlateString(place.plateStart(), place.plateEnd()));
+        holder.plateView.setText(place.plateString());
     }
 
-    private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
+    private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         if(type == SearchType.PLACE){
             holder.placeNameView.setText(place.name());
             holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER);
@@ -133,7 +134,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         }
     }
 
-    private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
+    private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
         String[] nameParts = place.name().split(" ");
 
@@ -143,7 +144,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         holder.icon.setImageResource(iconResourceId);
     }
 
-    private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceAndPlateDto place) {
+    private void bindStandardPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
         holder.placeNameView.setText(place.name());
@@ -152,16 +153,11 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         holder.icon.setImageResource(iconResourceId);
     }
 
-    protected PlaceAndPlateDto cursorToItem(Cursor cursor) {
+    protected PlaceAndPlate cursorToItem(Cursor cursor) {
         return itemFactory.createFromCursor(cursor);
     }
 
     // TODO: 2016-12-02 should be in domain
-    private String getPlateString(String plateStart, String plateEnd) {
-        LicensePlateDto plate = LicensePlateDto.create(plateStart, plateEnd);
-        return plate.toString();
-    }
-
     private String getPlaceSubName(String[] words) {
         String subName = "";
         if (words.length > 1) {

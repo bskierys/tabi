@@ -15,6 +15,6 @@ import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
  */
 abstract class PlaceAndPlateDtoView extends View<PlaceAndPlateDto> {
     @Override public PlaceAndPlateDto cursorToModel(Cursor cursor) {
-        return (new DatabaseViewPlaceAndPlateFactory()).createFromCursor(cursor);
+        return (new DatabaseViewPlaceAndPlateDtoFactory()).createFromCursor(cursor);
     }
 }

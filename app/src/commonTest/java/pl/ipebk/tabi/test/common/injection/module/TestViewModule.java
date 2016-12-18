@@ -9,7 +9,7 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
@@ -36,7 +36,7 @@ public class TestViewModule {
         return mock(ResourceHelper.class);
     }
 
-    @Provides PlaceAndPlateFactory providePlaceAndPlateFactory() {
-        return mock(PlaceAndPlateFactory.class);
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory() {
+        return mock(PlaceAndPlateDtoFactory.class);
     }
 }

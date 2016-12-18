@@ -23,6 +23,7 @@ import timber.log.Timber;
 /**
  * Helper class that handles readable text formatting for places.
  */
+// TODO: 2016-12-18 rename
 public class NameFormatHelper {
     private final static String RANDOM_QUESTION_RESOURCE_NAME = "search_random_question_";
     private final static int RANDOM_QUESTION_MAX_VALUE = 8;
@@ -86,6 +87,7 @@ public class NameFormatHelper {
      * named search_random_question_{next_number} and increase max search number. In case of error it retrieves named
      * search_random_question_0
      */
+    // TODO: 2016-12-18 move to anothr helper
     public String getRandomQuestion() {
         String packageName = context.getPackageName();
         int randomQuestionNumber = random.nextInt(RANDOM_QUESTION_MAX_VALUE + 1);

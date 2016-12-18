@@ -10,11 +10,9 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateFactory;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
-import pl.ipebk.tabi.utils.AnimationHelper;
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
 
 @Module
@@ -36,7 +34,7 @@ public class ViewModule {
         return new ResourceHelper(context);
     }
 
-    @Provides PlaceAndPlateFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateFactory factory) {
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
         return factory;
     }
 }

@@ -23,9 +23,11 @@ import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.SearchType;
-import pl.ipebk.tabi.test.common.assemblers.PlaceAndPlateDtoAssembler;
+import pl.ipebk.tabi.test.common.assemblers.PlaceAndPlateDtoDtoAssembler;
 import pl.ipebk.tabi.test.common.injection.component.DaggerTestViewComponent;
 import pl.ipebk.tabi.test.common.injection.component.TestViewComponent;
 import pl.ipebk.tabi.test.common.injection.module.TestViewModule;
@@ -45,6 +47,7 @@ public class PlaceItemAdapterTest {
     @Mock Cursor cursor;
 
     private TestNameFormatHelper formatHelper;
+    private PlaceAndPlateFactory factory;
     private PlaceItemAdapter.HeaderViewHolder headerHolder;
     private PlaceItemAdapter.ItemViewHolder itemHolder;
     private PlaceItemAdapter adapter;
@@ -54,6 +57,7 @@ public class PlaceItemAdapterTest {
 
         App application = App.get(RuntimeEnvironment.application);
         formatHelper = new TestNameFormatHelper(application);
+        factory = new PlaceAndPlateFactory(null, formatHelper);
         TestViewComponent testComponent = DaggerTestViewComponent.builder()
                                                                  .testViewModule(new TestModule(application))
                                                                  .build();
@@ -161,8 +165,8 @@ public class PlaceItemAdapterTest {
         assertThat(itemHolder.powiatView).doesNotContainText(formatHelper.formatPowiat(name));
     }
 
-    private PlaceAndPlateDtoAssembler assemblePlace(){
-        return new PlaceAndPlateDtoAssembler();
+    private PlaceAndPlateDtoDtoAssembler assemblePlace(){
+        return new PlaceAndPlateDtoDtoAssembler();
     }
 
     static AggregateId agIdEq(AggregateId expected) {
@@ -182,8 +186,8 @@ public class PlaceItemAdapterTest {
             return headerHolder;
         }
 
-        @Override protected PlaceAndPlateDto cursorToItem(Cursor cursor) {
-            return mockItems.get(0);
+        @Override protected PlaceAndPlate cursorToItem(Cursor cursor) {
+            return factory.createFromDto(mockItems.get(0));
         }
     }
 

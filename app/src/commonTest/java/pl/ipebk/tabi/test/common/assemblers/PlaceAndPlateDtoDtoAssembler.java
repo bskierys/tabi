@@ -8,13 +8,13 @@ package pl.ipebk.tabi.test.common.assemblers;
 import android.database.Cursor;
 
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
  * Assembler of {@link PlaceAndPlateDto} for tests
  */
-public class PlaceAndPlateDtoAssembler extends PlaceAndPlateFactory {
+public class PlaceAndPlateDtoDtoAssembler extends PlaceAndPlateDtoFactory {
     private static final String DEFAULT_PLACE_NAME = "place_name";
     private static final String DEFAULT_PLATE_START = "RPY";
     private static final String DEFAULT_VOIVODESHIP = "voivodeship";
@@ -33,42 +33,42 @@ public class PlaceAndPlateDtoAssembler extends PlaceAndPlateFactory {
         return create(placeId,placeName, plateStart, plateEnd, voivodeship, powiat, placeType);
     }
 
-    public PlaceAndPlateDtoAssembler withId(long id) {
+    public PlaceAndPlateDtoDtoAssembler withId(long id) {
         this.placeId = id;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler withName(String name) {
+    public PlaceAndPlateDtoDtoAssembler withName(String name) {
         this.placeName = name;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler inPowiat(String powiat) {
+    public PlaceAndPlateDtoDtoAssembler inPowiat(String powiat) {
         this.powiat = powiat;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler inVoivodeship(String voivodeship) {
+    public PlaceAndPlateDtoDtoAssembler inVoivodeship(String voivodeship) {
         this.voivodeship = voivodeship;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler withPlate(String plateStart) {
+    public PlaceAndPlateDtoDtoAssembler withPlate(String plateStart) {
         this.plateStart = plateStart;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler standard() {
+    public PlaceAndPlateDtoDtoAssembler standard() {
         this.placeType = PlaceType.TOWN;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler random() {
+    public PlaceAndPlateDtoDtoAssembler random() {
         this.placeType = PlaceType.RANDOM;
         return this;
     }
 
-    public PlaceAndPlateDtoAssembler special() {
+    public PlaceAndPlateDtoDtoAssembler special() {
         this.placeType = PlaceType.SPECIAL;
         return this;
     }

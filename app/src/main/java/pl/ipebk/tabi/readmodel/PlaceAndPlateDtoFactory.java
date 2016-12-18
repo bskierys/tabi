@@ -12,7 +12,7 @@ import pl.ipebk.tabi.canonicalmodel.AggregateId;
 /**
  * Factory class to produce dto objects. It was created to separate database logic from model
  */
-public abstract class PlaceAndPlateFactory {
+public abstract class PlaceAndPlateDtoFactory {
     public abstract PlaceAndPlateDto createFromCursor(Cursor cursor);
 
     public PlaceAndPlateDto create(long placeId, String placeName, String plateStart, String plateEnd,

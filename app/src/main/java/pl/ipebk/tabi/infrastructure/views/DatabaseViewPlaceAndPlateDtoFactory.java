@@ -12,11 +12,11 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
-public class DatabaseViewPlaceAndPlateFactory extends PlaceAndPlateFactory {
-    @Inject public DatabaseViewPlaceAndPlateFactory() {}
+public class DatabaseViewPlaceAndPlateDtoFactory extends PlaceAndPlateDtoFactory {
+    @Inject public DatabaseViewPlaceAndPlateDtoFactory() {}
 
     @Override public PlaceAndPlateDto createFromCursor(Cursor cursor) {
         long placeId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
