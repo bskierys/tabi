@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 import static org.junit.Assert.*;
@@ -14,7 +15,7 @@ public class PlaceTest {
     @Test public void testGetMainPlateForNoPlates() throws Exception {
         Place malbork = new Place("Malbork", PlaceType.TOWN, null, null, null, new ArrayList<>());
 
-        LicensePlate plate = malbork.getMainPlate();
+        LicensePlateDto plate = malbork.getMainPlate();
 
         assertNull(plate);
     }
@@ -23,9 +24,9 @@ public class PlaceTest {
         String mainPlatePattern = "TAB";
         Place malbork = createPlaceWithPlates(mainPlatePattern, "BAT", "GAP");
 
-        LicensePlate mainPlate = malbork.getMainPlate();
+        LicensePlateDto mainPlate = malbork.getMainPlate();
 
-        assertEquals(mainPlatePattern, mainPlate.getPattern());
+        assertEquals(mainPlatePattern, mainPlate.pattern());
     }
 
 
@@ -33,27 +34,27 @@ public class PlaceTest {
         String plateToFind = "KK";
         Place malbork = createPlaceWithPlates("KR", plateToFind, "KM");
 
-        LicensePlate plate = malbork.getPlateMatchingPattern(plateToFind);
+        LicensePlateDto plate = malbork.getPlateMatchingPattern(plateToFind);
 
-        assertEquals(plateToFind, plate.getPattern());
+        assertEquals(plateToFind, plate.pattern());
     }
 
     @Test public void testGetPlateMatchingPatternOneLetter() {
         String plateToFind = "KR";
         Place malbork = createPlaceWithPlates(plateToFind, "KK", "KM");
 
-        LicensePlate plate = malbork.getPlateMatchingPattern("K");
+        LicensePlateDto plate = malbork.getPlateMatchingPattern("K");
 
-        assertEquals(plateToFind, plate.getPattern());
+        assertEquals(plateToFind, plate.pattern());
     }
 
     @Test public void testGetPlateMatchingPatternNull() {
         String mainPlatePattern = "TAB";
         Place malbork = createPlaceWithPlates(mainPlatePattern, "BAT", "GAP");
 
-        LicensePlate plate = malbork.getPlateMatchingPattern(null);
+        LicensePlateDto plate = malbork.getPlateMatchingPattern(null);
 
-        assertEquals(mainPlatePattern, plate.getPattern());
+        assertEquals(mainPlatePattern, plate.pattern());
     }
 
     @Test public void testPlatesToString() {
@@ -80,15 +81,15 @@ public class PlaceTest {
         return new Place("Malbork", PlaceType.TOWN, null, null, null, getListOfPlates(patterns));
     }
 
-    private List<LicensePlate> getListOfPlates(String... patterns) {
-        List<LicensePlate> plates = new ArrayList<>();
+    private List<LicensePlateDto> getListOfPlates(String... patterns) {
+        List<LicensePlateDto> plates = new ArrayList<>();
         for (int i = 0; i < patterns.length; i++) {
             plates.add(createPlate(patterns[i]));
         }
         return plates;
     }
 
-    public LicensePlate createPlate(String pattern) {
-        return new LicensePlate(new AggregateId(0), pattern, null);
+    public LicensePlateDto createPlate(String pattern) {
+        return LicensePlateDto.create(pattern, null);
     }
 }

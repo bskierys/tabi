@@ -17,4 +17,12 @@ public abstract class LicensePlateDto {
     public static LicensePlateDto create(String pattern ,String end) {
         return new AutoValue_LicensePlateDto(pattern, end);
     }
+
+    @Override public String toString() {
+        String result = pattern();
+        if (end() != null) {
+            result += "..." + end();
+        }
+        return result;
+    }
 }

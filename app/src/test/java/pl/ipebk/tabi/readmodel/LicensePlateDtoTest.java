@@ -1,16 +1,14 @@
-package pl.ipebk.tabi.domain.place;
+package pl.ipebk.tabi.readmodel;
 
 import org.junit.Test;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
-
-public class LicensePlateTest {
+public class LicensePlateDtoTest {
     @Test public void testToString() throws Exception {
         String pattern = "TAB";
         String end = "I";
-        LicensePlate plate = new LicensePlate(new AggregateId(0), pattern, end);
+        LicensePlateDto plate = LicensePlateDto.create(pattern, end);
 
         String expected = pattern + "..." + "I";
         String actual = plate.toString();
@@ -20,7 +18,7 @@ public class LicensePlateTest {
 
     @Test public void testToStringWhenEndNull() throws Exception {
         String pattern = "TAB";
-        LicensePlate plate = new LicensePlate(new AggregateId(0), pattern, null);
+        LicensePlateDto plate = LicensePlateDto.create(pattern, null);
 
         String actual = plate.toString();
 

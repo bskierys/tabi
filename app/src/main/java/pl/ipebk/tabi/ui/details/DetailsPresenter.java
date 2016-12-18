@@ -13,16 +13,15 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.domain.place.PlaceFactory;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
@@ -115,7 +114,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     private void showStandardPlace(Place place) {
-        LicensePlate plate = place.getPlateMatchingPattern(searchedPlate);
+        LicensePlateDto plate = place.getPlateMatchingPattern(searchedPlate);
         if (plate != null) {
             getMvpView().showPlate(plate.toString());
         }
@@ -129,7 +128,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     }
 
     private void showSpecialPlace(Place place) {
-        LicensePlate plate = place.getPlateMatchingPattern(searchedPlate);
+        LicensePlateDto plate = place.getPlateMatchingPattern(searchedPlate);
         if (plate != null) {
             getMvpView().showPlate(plate.toString());
         }

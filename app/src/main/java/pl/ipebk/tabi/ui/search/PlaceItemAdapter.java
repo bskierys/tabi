@@ -20,8 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.place.LicensePlate;
+import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
@@ -159,8 +158,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
 
     // TODO: 2016-12-02 should be in domain
     private String getPlateString(String plateStart, String plateEnd) {
-        // TODO: 2016-12-06 factory needed
-        LicensePlate plate = new LicensePlate(new AggregateId(0), plateStart, plateEnd);
+        LicensePlateDto plate = LicensePlateDto.create(plateStart, plateEnd);
         return plate.toString();
     }
 

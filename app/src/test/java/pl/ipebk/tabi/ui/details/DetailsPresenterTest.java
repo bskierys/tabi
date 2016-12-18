@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.place.LicensePlate;
 import pl.ipebk.tabi.domain.place.Place;
 import pl.ipebk.tabi.domain.place.PlaceFactory;
 import pl.ipebk.tabi.domain.place.PlaceRepository;
