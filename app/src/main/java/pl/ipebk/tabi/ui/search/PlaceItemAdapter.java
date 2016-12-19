@@ -22,12 +22,9 @@ import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import rx.Observable;
 import timber.log.Timber;
 
@@ -39,7 +36,7 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
  * to avoid errors.
  */
 public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
-    @Inject NameFormatHelper nameFormatHelper;
+    @Inject RandomTextProvider randomTextProvider;
     @Inject PlaceAndPlateFactory itemFactory;
 
     private boolean historical;
@@ -121,14 +118,14 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         if(type == SearchType.PLACE){
             holder.placeNameView.setText(place.name());
-            holder.plateView.setText(NameFormatHelper.UNKNOWN_PLATE_CHARACTER);
+            holder.plateView.setText(randomTextProvider.getUnknownPlatePlaceholder());
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
             holder.powiatView.setText(context.getString(R.string.search_question_plates));
             holder.icon.setImageResource(R.drawable.ic_doodle_random);
         } else if (type == SearchType.LICENSE_PLATE) {
             holder.placeNameView.setText(context.getString(R.string.search_question_what));
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
-            holder.powiatView.setText(nameFormatHelper.getRandomQuestion());
+            holder.powiatView.setText(randomTextProvider.getRandomQuestion());
             holder.icon.setImageResource(R.drawable.ic_doodle_random);
         }
     }
@@ -156,7 +153,6 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         return itemFactory.createFromCursor(cursor);
     }
 
-    // TODO: 2016-12-02 should be in domain
     private String getPlaceSubName(String[] words) {
         String subName = "";
         if (words.length > 1) {

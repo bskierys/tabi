@@ -22,7 +22,7 @@ import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.readmodel.SearchType;
-import pl.ipebk.tabi.test.common.utils.TestNameFormatHelper;
+import pl.ipebk.tabi.test.common.utils.TestPlaceLocalizationHelper;
 import pl.ipebk.tabi.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
@@ -46,7 +46,7 @@ public class DetailsPresenterTest {
     @Mock PlaceRepository placeRepo;
     @Mock Activity mockContext;
     @Mock DeviceHelper mockDeviceHelper;
-    private TestNameFormatHelper mockNameHelper;
+    private TestPlaceLocalizationHelper mockNameHelper;
     private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
 
@@ -56,7 +56,7 @@ public class DetailsPresenterTest {
 
         when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
         when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
-        mockNameHelper = new TestNameFormatHelper(mockContext);
+        mockNameHelper = new TestPlaceLocalizationHelper(mockContext);
         mockFactory = new PlaceFactory(mockNameHelper);
 
         detailsPresenter = new DetailsPresenter(placeRepo, mockDeviceHelper, mockFactory);

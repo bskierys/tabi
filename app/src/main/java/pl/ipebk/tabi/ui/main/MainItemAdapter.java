@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
 
 public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -34,7 +33,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int BIG_HEADER_POSITION = 0;
 
     @Inject ResourceHelper resourceHelper;
-    @Inject NameFormatHelper nameFormatHelper;
+    @Inject DoodleTextFormatter doodleTextFormatter;
     private List<MainListItem> categoryList;
     private Context context;
     private final MenuItemClickListener listener;
@@ -84,9 +83,9 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 captionToSet = caption;
             }
 
-            headerViewHolder.caption.setText(nameFormatHelper.formatDoodleCaption(captionToSet),
+            headerViewHolder.caption.setText(doodleTextFormatter.formatDoodleCaption(captionToSet),
                                              TextView.BufferType.SPANNABLE);
-            headerViewHolder.greeting.setText(nameFormatHelper.formatDoodleGreeting());
+            headerViewHolder.greeting.setText(doodleTextFormatter.formatDoodleGreeting());
         } else if (holder instanceof SmallHeaderViewHolder) {
             SmallHeaderViewHolder headerViewHolder = (SmallHeaderViewHolder) holder;
             MainListHeaderItem item = (MainListHeaderItem) categoryList.get(position - 1);

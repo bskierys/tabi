@@ -6,21 +6,21 @@
 package pl.ipebk.tabi.presentation.model.placeandplate;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
 public class PlaceAndPlate {
     private PlaceAndPlateDto dto;
-    private NameFormatHelper formatHelper;
+    private PlaceLocalizationHelper localizationHelper;
 
-    PlaceAndPlate(PlaceAndPlateDto dto, NameFormatHelper formatHelper) {
+    PlaceAndPlate(PlaceAndPlateDto dto, PlaceLocalizationHelper localizationHelper) {
         this.dto = dto;
-        this.formatHelper = formatHelper;
+        this.localizationHelper = localizationHelper;
     }
 
     public AggregateId id(){
@@ -41,10 +41,10 @@ public class PlaceAndPlate {
     }
 
     public String voivodeship(){
-        return formatHelper.formatVoivodeship(dto.voivodeship());
+        return localizationHelper.formatVoivodeship(dto.voivodeship());
     }
 
     public String powiat() {
-        return formatHelper.formatPowiat(dto.powiat());
+        return localizationHelper.formatPowiat(dto.powiat());
     }
 }

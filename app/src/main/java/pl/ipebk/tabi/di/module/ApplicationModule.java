@@ -26,8 +26,8 @@ import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
+import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.StopwatchManager;
 
 /**
@@ -53,8 +53,8 @@ public class ApplicationModule {
         return new StopwatchManager();
     }
 
-    @Provides public NameFormatHelper provideNameFormatHelper() {
-        return new NameFormatHelper(application);
+    @Provides public DoodleTextFormatter provideNameFormatHelper() {
+        return new DoodleTextFormatter(application);
     }
 
     @Provides public DeviceHelper provideDeviceHelper() {

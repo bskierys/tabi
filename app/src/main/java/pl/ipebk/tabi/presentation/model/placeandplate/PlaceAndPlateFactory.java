@@ -9,27 +9,27 @@ import android.database.Cursor;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
 public class PlaceAndPlateFactory {
     private PlaceAndPlateDtoFactory dtoFactory;
-    private NameFormatHelper formatHelper;
+    private PlaceLocalizationHelper localizationHelper;
 
-    @Inject public PlaceAndPlateFactory(PlaceAndPlateDtoFactory dtoFactory, NameFormatHelper formatHelper) {
+    @Inject public PlaceAndPlateFactory(PlaceAndPlateDtoFactory dtoFactory, PlaceLocalizationHelper localizationHelper) {
         this.dtoFactory = dtoFactory;
-        this.formatHelper = formatHelper;
+        this.localizationHelper = localizationHelper;
     }
 
     public PlaceAndPlate createFromCursor(Cursor cursor) {
-        return new PlaceAndPlate(dtoFactory.createFromCursor(cursor), formatHelper);
+        return new PlaceAndPlate(dtoFactory.createFromCursor(cursor), localizationHelper);
     }
 
     public PlaceAndPlate createFromDto(PlaceAndPlateDto dto) {
-        return new PlaceAndPlate(dto, formatHelper);
+        return new PlaceAndPlate(dto, localizationHelper);
     }
 }

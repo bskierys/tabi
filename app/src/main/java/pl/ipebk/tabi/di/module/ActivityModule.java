@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
@@ -27,10 +28,10 @@ import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
+import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import timber.log.Timber;
 
@@ -75,8 +76,12 @@ public class ActivityModule {
     }
 
     // TODO: 2016-11-29 remove when activity component has app dependencies
-    @Provides NameFormatHelper provideNameFormatHelper() {
-        return new NameFormatHelper(activity);
+    @Provides DoodleTextFormatter provideNameFormatHelper() {
+        return new DoodleTextFormatter(activity);
+    }
+
+    @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
+        return new PlaceLocalizationHelper(activity);
     }
 
     @Provides DeviceHelper provideDeviceHelper() {

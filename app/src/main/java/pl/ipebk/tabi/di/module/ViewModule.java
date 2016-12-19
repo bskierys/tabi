@@ -11,7 +11,9 @@ import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.ResourceHelper;
 
@@ -32,6 +34,14 @@ public class ViewModule {
 
     @Provides ResourceHelper provideResourceHelper() {
         return new ResourceHelper(context);
+    }
+
+    @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
+        return new PlaceLocalizationHelper(context);
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return new RandomTextProvider(context);
     }
 
     @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {

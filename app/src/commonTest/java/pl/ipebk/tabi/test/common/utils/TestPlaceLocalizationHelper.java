@@ -1,22 +1,21 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-05-24
+* date: 2016-12-19
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.test.common.utils;
 
 import android.content.Context;
 
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.Place;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
-public class TestNameFormatHelper extends NameFormatHelper {
+public class TestPlaceLocalizationHelper extends PlaceLocalizationHelper {
     public static final String VOIVODESHIP_MOCK_NAME = "voivo";
     public static final String POWIAT_MOCK_NAME = "powiat";
     public static final String GMINA_MOCK_NAME = "gmina";
-    public static final String RANDOM_MOCK_QUESTION = "random";
 
-    public TestNameFormatHelper(Context context) {
+    public TestPlaceLocalizationHelper(Context context) {
         super(context);
     }
 
@@ -40,9 +39,5 @@ public class TestNameFormatHelper extends NameFormatHelper {
         outcome += " " + searchedPlate;
 
         return outcome;
-    }
-
-    @Override public String getRandomQuestion() {
-        return RANDOM_MOCK_QUESTION;
     }
 }

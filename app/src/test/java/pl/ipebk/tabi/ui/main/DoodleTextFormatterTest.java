@@ -1,4 +1,5 @@
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.ui.main;
+
 
 import android.content.Context;
 import android.os.Build;
@@ -15,26 +16,27 @@ import org.robolectric.annotation.Config;
 
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
-public class NameFormatHelperTest {
+public class DoodleTextFormatterTest {
     Context context;
-    NameFormatHelper nameFormatHelper;
+    DoodleTextFormatter doodleTextFormatter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.context = RuntimeEnvironment.application;
-        nameFormatHelper = new NameFormatHelper(context);
+        doodleTextFormatter = new DoodleTextFormatter(context);
     }
 
     @Test public void testFormatDoodleCaptionWrongFormatting() throws Exception {
         String unFormattedText = "this is *invalid text";
         try {
-            nameFormatHelper.formatDoodleCaption(unFormattedText);
+            doodleTextFormatter.formatDoodleCaption(unFormattedText);
             fail();
         } catch (IllegalArgumentException e) {
             // we are expecting exception
@@ -45,7 +47,7 @@ public class NameFormatHelperTest {
         String unFormattedText = "this *text* need *caption*";
         String formattedText = "this text need caption";
 
-        SpannableString actual = nameFormatHelper.formatDoodleCaption(unFormattedText);
+        SpannableString actual = doodleTextFormatter.formatDoodleCaption(unFormattedText);
 
         assertEquals(formattedText, actual.toString());
     }
@@ -56,7 +58,7 @@ public class NameFormatHelperTest {
         int[] expectedStarts = new int[]{0, 5, 9, 15, 22};
         int[] expectedEnds = new int[]{5, 9, 15, 22, 22};
 
-        SpannableString actual = nameFormatHelper.formatDoodleCaption(unFormattedText);
+        SpannableString actual = doodleTextFormatter.formatDoodleCaption(unFormattedText);
         TextAppearanceSpan[] spans = actual.getSpans(0, unFormattedText.length(), TextAppearanceSpan.class);
         int[] starts = new int[spans.length];
         int[] ends = new int[spans.length];
@@ -83,7 +85,7 @@ public class NameFormatHelperTest {
         int[] expectedStarts = new int[]{0, 0, 4, 10, 14};
         int[] expectedEnds = new int[]{0, 4, 10, 14, 22};
 
-        SpannableString actual = nameFormatHelper.formatDoodleCaption(unFormattedText);
+        SpannableString actual = doodleTextFormatter.formatDoodleCaption(unFormattedText);
         TextAppearanceSpan[] spans = actual.getSpans(0, unFormattedText.length(), TextAppearanceSpan.class);
         int[] starts = new int[spans.length];
         int[] ends = new int[spans.length];
@@ -107,7 +109,7 @@ public class NameFormatHelperTest {
     @Test public void testFormatDoodleCaptionNoCaption() throws Exception {
         String unFormattedText = "this text does not need caption";
 
-        SpannableString actual = nameFormatHelper.formatDoodleCaption(unFormattedText);
+        SpannableString actual = doodleTextFormatter.formatDoodleCaption(unFormattedText);
         TextAppearanceSpan[] spans = actual.getSpans(0, unFormattedText.length(), TextAppearanceSpan.class);
 
         assertEquals(1, spans.length);

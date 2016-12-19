@@ -9,23 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.domain.BaseAggregateRoot;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class Place extends BaseAggregateRoot {
+public class Place {
     private PlaceDto dto;
-    private NameFormatHelper nameFormatHelper;
+    private PlaceLocalizationHelper localizationHelper;
 
-    @SuppressWarnings("unused") private Place() {}
-
-    Place(PlaceDto dto, NameFormatHelper formatHelper) {
+    Place(PlaceDto dto, PlaceLocalizationHelper localizationHelper) {
         this.dto = dto;
-        this.nameFormatHelper = formatHelper;
+        this.localizationHelper = localizationHelper;
     }
 
     Place(String name, PlaceType type, String voivodeship, String powiat,
@@ -42,28 +40,32 @@ public class Place extends BaseAggregateRoot {
     }
 
     public String getVoivodeship() {
-        return nameFormatHelper.formatVoivodeship(dto.voivodeship());
+        return localizationHelper.formatVoivodeship(dto.voivodeship());
     }
 
     public String getPowiat() {
-        return nameFormatHelper.formatPowiat(dto.powiat());
+        return localizationHelper.formatPowiat(dto.powiat());
     }
 
     public String getGmina() {
-        return nameFormatHelper.formatGmina(dto.gmina());
+        return localizationHelper.formatGmina(dto.gmina());
     }
 
     public String getAdditionalInfo(String searchedPlate) {
-        return nameFormatHelper.formatAdditionalInfo(this, searchedPlate);
+        return localizationHelper.formatAdditionalInfo(this, searchedPlate);
     }
 
     public String getFullInfo() {
-        return nameFormatHelper.formatPlaceInfo(this);
+        return localizationHelper.formatPlaceInfo(this);
     }
 
     // TODO: 2016-12-18 describe
     public String getSearchPhrase() {
-        return nameFormatHelper.formatPlaceToSearch(this);
+        return localizationHelper.formatPlaceToSearch(this);
+    }
+
+    public boolean hasAdditionalPlates() {
+        return dto.plates().size() > 1;
     }
 
     // TODO: 2016-12-18 make getters package private

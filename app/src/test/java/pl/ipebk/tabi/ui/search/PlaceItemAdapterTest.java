@@ -31,9 +31,9 @@ import pl.ipebk.tabi.test.common.assemblers.PlaceAndPlateDtoDtoAssembler;
 import pl.ipebk.tabi.test.common.injection.component.DaggerTestViewComponent;
 import pl.ipebk.tabi.test.common.injection.component.TestViewComponent;
 import pl.ipebk.tabi.test.common.injection.module.TestViewModule;
-import pl.ipebk.tabi.test.common.utils.TestNameFormatHelper;
+import pl.ipebk.tabi.test.common.utils.TestPlaceLocalizationHelper;
+import pl.ipebk.tabi.test.common.utils.TestRandomTextProvider;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -46,7 +46,8 @@ public class PlaceItemAdapterTest {
     @Mock PlaceFragmentEventListener eventListener;
     @Mock Cursor cursor;
 
-    private TestNameFormatHelper formatHelper;
+    private TestPlaceLocalizationHelper localizationHelper;
+    private TestRandomTextProvider randomProvider;
     private PlaceAndPlateFactory factory;
     private PlaceItemAdapter.HeaderViewHolder headerHolder;
     private PlaceItemAdapter.ItemViewHolder itemHolder;
@@ -56,8 +57,9 @@ public class PlaceItemAdapterTest {
         MockitoAnnotations.initMocks(this);
 
         App application = App.get(RuntimeEnvironment.application);
-        formatHelper = new TestNameFormatHelper(application);
-        factory = new PlaceAndPlateFactory(null, formatHelper);
+        randomProvider = new TestRandomTextProvider(application);
+        localizationHelper = new TestPlaceLocalizationHelper(application);
+        factory = new PlaceAndPlateFactory(null, localizationHelper);
         TestViewComponent testComponent = DaggerTestViewComponent.builder()
                                                                  .testViewModule(new TestModule(application))
                                                                  .build();
@@ -93,8 +95,8 @@ public class PlaceItemAdapterTest {
 
         assertThat(itemHolder.placeNameView).hasText("Name");
         assertThat(itemHolder.plateView).hasText("TAB");
-        assertThat(itemHolder.voivodeshipView).hasText(formatHelper.formatVoivodeship("voivo"));
-        assertThat(itemHolder.powiatView).hasText(formatHelper.formatPowiat("powiat"));
+        assertThat(itemHolder.voivodeshipView).hasText(localizationHelper.formatVoivodeship("voivo"));
+        assertThat(itemHolder.powiatView).hasText(localizationHelper.formatPowiat("powiat"));
 
         itemHolder.root.performClick();
 
@@ -112,7 +114,7 @@ public class PlaceItemAdapterTest {
         assertThat(itemHolder.placeNameView).hasText("Name");
         assertThat(itemHolder.plateView).hasText("TAB");
         assertThat(itemHolder.voivodeshipView).hasText("this");
-        assertThat(itemHolder.powiatView).hasText(formatHelper.formatVoivodeship("voivodeship"));
+        assertThat(itemHolder.powiatView).hasText(localizationHelper.formatVoivodeship("voivodeship"));
     }
 
     @Test public void testBindHeader() throws Exception {
@@ -145,8 +147,8 @@ public class PlaceItemAdapterTest {
 
         assertThat(itemHolder.placeNameView).doesNotContainText(name);
         assertThat(itemHolder.plateView).hasText(plateStart);
-        assertThat(itemHolder.voivodeshipView).doesNotContainText(formatHelper.formatVoivodeship(name));
-        assertThat(itemHolder.powiatView).hasText(TestNameFormatHelper.RANDOM_MOCK_QUESTION);
+        assertThat(itemHolder.voivodeshipView).doesNotContainText(localizationHelper.formatVoivodeship(name));
+        assertThat(itemHolder.powiatView).hasText(TestRandomTextProvider.RANDOM_MOCK_QUESTION);
     }
 
     @Test public void testBindRandomPlacePlaceSection() throws Exception {
@@ -161,8 +163,8 @@ public class PlaceItemAdapterTest {
 
         assertThat(itemHolder.placeNameView).hasText(name);
         assertThat(itemHolder.plateView).hasText("???");
-        assertThat(itemHolder.voivodeshipView).doesNotContainText(formatHelper.formatVoivodeship(name));
-        assertThat(itemHolder.powiatView).doesNotContainText(formatHelper.formatPowiat(name));
+        assertThat(itemHolder.voivodeshipView).doesNotContainText(localizationHelper.formatVoivodeship(name));
+        assertThat(itemHolder.powiatView).doesNotContainText(localizationHelper.formatPowiat(name));
     }
 
     private PlaceAndPlateDtoDtoAssembler assemblePlace(){
@@ -197,8 +199,8 @@ public class PlaceItemAdapterTest {
             super(context);
         }
 
-        @Override public NameFormatHelper provideNameFormatHelper() {
-            return formatHelper;
+        @Override public RandomTextProvider provideRandomTextProvider() {
+            return randomProvider;
         }
     }
 }

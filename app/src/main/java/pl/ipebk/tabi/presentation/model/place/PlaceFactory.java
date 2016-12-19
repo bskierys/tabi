@@ -7,20 +7,21 @@ package pl.ipebk.tabi.presentation.model.place;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.PlaceDto;
-import pl.ipebk.tabi.utils.NameFormatHelper;
+import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
 
 /**
- * This class exists to inject {@link NameFormatHelper} to {@link Place} object.
+ * This class exists to inject {@link DoodleTextFormatter} to {@link Place} object.
  */
 public class PlaceFactory {
-    private NameFormatHelper formatHelper;
+    private PlaceLocalizationHelper localizationHelper;
 
-    @Inject public PlaceFactory(NameFormatHelper formatHelper) {
-        this.formatHelper = formatHelper;
+    @Inject public PlaceFactory(PlaceLocalizationHelper localizationHelper) {
+        this.localizationHelper = localizationHelper;
     }
 
     public Place createFromDto(PlaceDto dto) {
-        return new Place(dto, formatHelper);
+        return new Place(dto, localizationHelper);
     }
 }

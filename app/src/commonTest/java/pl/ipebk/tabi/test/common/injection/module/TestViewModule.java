@@ -9,9 +9,11 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
+import pl.ipebk.tabi.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.NameFormatHelper;
 import pl.ipebk.tabi.utils.ResourceHelper;
 import static org.mockito.Mockito.mock;
 
@@ -24,8 +26,16 @@ public class TestViewModule {
         this.context = context;
     }
 
-    @Provides public NameFormatHelper provideNameFormatHelper() {
-        return mock(NameFormatHelper.class);
+    @Provides public DoodleTextFormatter provideNameFormatHelper() {
+        return mock(DoodleTextFormatter.class);
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return mock(RandomTextProvider.class);
+    }
+
+    @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
+        return mock(PlaceLocalizationHelper.class);
     }
 
     @Provides public FontManager provideFontManager() {
