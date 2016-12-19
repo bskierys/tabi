@@ -112,7 +112,7 @@ public class PlaceItemAdapterTest {
         assertThat(itemHolder.placeNameView).hasText("Name");
         assertThat(itemHolder.plateView).hasText("TAB");
         assertThat(itemHolder.voivodeshipView).hasText("this");
-        assertThat(itemHolder.powiatView).hasText("voivodeship");
+        assertThat(itemHolder.powiatView).hasText(formatHelper.formatVoivodeship("voivodeship"));
     }
 
     @Test public void testBindHeader() throws Exception {

@@ -94,7 +94,6 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
             holder.shadow.setVisibility(View.GONE);
         }
 
-        // TODO: 2016-12-06 this class should use PlaceAndPlateDto
         Observable.just(cursor).first().map(this::cursorToItem)
                 .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
                 .subscribe(place -> {
@@ -148,8 +147,8 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
 
         holder.placeNameView.setText(place.name());
-        holder.voivodeshipView.setText(nameFormatHelper.formatVoivodeship(place.voivodeship()));
-        holder.powiatView.setText(nameFormatHelper.formatPowiat(place.powiat()));
+        holder.voivodeshipView.setText(place.voivodeship());
+        holder.powiatView.setText(place.powiat());
         holder.icon.setImageResource(iconResourceId);
     }
 
