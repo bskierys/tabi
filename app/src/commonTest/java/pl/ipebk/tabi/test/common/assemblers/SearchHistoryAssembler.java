@@ -25,7 +25,7 @@ public class SearchHistoryAssembler {
 
     public SearchHistoryAssembler searchedFor(PlaceModel place) {
         this.placeId = place.getId();
-        this.plate = place.plates().get(0).pattern();
+        this.plate = place.plates().get(0).getDto().pattern();
         return this;
     }
 

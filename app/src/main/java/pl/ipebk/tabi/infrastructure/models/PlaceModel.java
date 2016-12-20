@@ -5,24 +5,21 @@
 */
 package pl.ipebk.tabi.infrastructure.models;
 
-import android.support.annotation.Nullable;
-
 import com.google.auto.value.AutoValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.ipebk.tabi.infrastructure.base.Model;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
+import pl.ipebk.tabi.presentation.model.place.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 @AutoValue
 public abstract class PlaceModel implements Model {
     private long id;
+    private PlaceDto dto;
 
-    public abstract String name();
-    public abstract PlaceType type();
-    @Nullable public abstract String voivodeship();
-    @Nullable public abstract String powiat();
-    @Nullable public abstract String gmina();
     public abstract List<PlateModel> plates();
     public abstract boolean hasOwnPlate();
 
@@ -34,15 +31,28 @@ public abstract class PlaceModel implements Model {
         this.id = id;
     }
 
-    public static PlaceModel create(long id, String name, PlaceType type, String voivodeship, String powiat, String gmina,
+    public PlaceDto dto() {
+        List<LicensePlateDto> licensePlates = new ArrayList<>();
+        for (PlateModel plate : plates()) {
+            licensePlates.add(plate.getDto());
+        }
+        return PlaceDto.create(dto.name(), dto.placeType(), dto.voivodeship(),
+                               dto.powiat(), dto.gmina(), licensePlates);
+    }
+
+    public static PlaceModel create(long id, String name, PlaceType type, String voivodeship, String powiat, String
+            gmina,
                                     List<PlateModel> plates, boolean hasOwnPlate) {
-        PlaceModel place = new AutoValue_PlaceModel(name, type, voivodeship, powiat, gmina, plates, hasOwnPlate);
+        PlaceModel place = PlaceModel.create(name, type, voivodeship, powiat, gmina, plates, hasOwnPlate);
         place.setId(id);
         return place;
     }
 
     public static PlaceModel create(String name, PlaceType type, String voivodeship, String powiat, String gmina,
                                     List<PlateModel> plates, boolean hasOwnPlate) {
-        return new AutoValue_PlaceModel(name, type, voivodeship, powiat, gmina, plates, hasOwnPlate);
+        PlaceDto placeDto = PlaceDto.create(name, type, voivodeship, powiat, gmina, new ArrayList<>());
+        PlaceModel place = new AutoValue_PlaceModel(plates, hasOwnPlate);
+        place.dto = placeDto;
+        return place;
     }
 }

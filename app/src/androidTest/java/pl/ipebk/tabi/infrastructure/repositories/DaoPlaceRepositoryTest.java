@@ -28,10 +28,10 @@ public class DaoPlaceRepositoryTest extends DatabaseTest {
         testSubscriber.awaitValueCount(1, 500, TimeUnit.MILLISECONDS);
         PlaceDto loadedPlace = testSubscriber.getOnNextEvents().get(0);
 
-        assertEquals(placeModel.name(), loadedPlace.name());
-        assertEquals(placeModel.voivodeship(), loadedPlace.voivodeship());
-        assertEquals(placeModel.powiat(), loadedPlace.powiat());
-        assertEquals(placeModel.gmina(), loadedPlace.gmina());
+        assertEquals(placeModel.dto().name(), loadedPlace.name());
+        assertEquals(placeModel.dto().voivodeship(), loadedPlace.voivodeship());
+        assertEquals(placeModel.dto().powiat(), loadedPlace.powiat());
+        assertEquals(placeModel.dto().gmina(), loadedPlace.gmina());
         assertEquals(placeModel.plates().size(), loadedPlace.plates().size());
 
         testSubscriber.unsubscribe();

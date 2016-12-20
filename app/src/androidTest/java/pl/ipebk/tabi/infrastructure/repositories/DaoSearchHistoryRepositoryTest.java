@@ -68,7 +68,7 @@ public class DaoSearchHistoryRepositoryTest extends DatabaseTest {
     private SearchHistory createHistory(long time, SearchType type) {
         now = new Date(time);
         long placeId = placeModel.getId();
-        String plate = placeModel.plates().get(0).pattern();
+        String plate = placeModel.plates().get(0).getDto().pattern();
         return factory.create(new AggregateId(placeId), plate, type);
     }
 }

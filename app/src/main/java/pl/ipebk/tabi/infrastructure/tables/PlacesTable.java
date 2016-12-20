@@ -127,19 +127,19 @@ public class PlacesTable extends Table<PlaceModel> {
     @Override public ContentValues modelToContentValues(PlaceModel model) {
         ContentValues values = new ContentValues();
 
-        values.put(COLUMN_NAME, model.name());
-        values.put(COLUMN_NAME_LOWER, model.name().toLowerCase());
-        values.put(COLUMN_SEARCH_PHRASE, corrector.constructSearchPhrase(model.name()));
+        values.put(COLUMN_NAME, model.dto().name());
+        values.put(COLUMN_NAME_LOWER, model.dto().name().toLowerCase());
+        values.put(COLUMN_SEARCH_PHRASE, corrector.constructSearchPhrase(model.dto().name()));
 
-        if (model.type() != null) {
-            values.put(COLUMN_PLACE_TYPE, model.type().ordinal());
+        if (model.dto().placeType() != null) {
+            values.put(COLUMN_PLACE_TYPE, model.dto().placeType().ordinal());
         } else {
             values.putNull(COLUMN_PLACE_TYPE);
         }
 
-        values.put(COLUMN_VOIVODESHIP, model.voivodeship());
-        values.put(COLUMN_POWIAT, model.powiat());
-        values.put(COLUMN_GMINA, model.gmina());
+        values.put(COLUMN_VOIVODESHIP, model.dto().voivodeship());
+        values.put(COLUMN_POWIAT, model.dto().powiat());
+        values.put(COLUMN_GMINA, model.dto().gmina());
 
         if (model.plates() != null && model.plates().size() > 0) {
             int nextRowId = placeDao.getNextRowId();
@@ -157,8 +157,8 @@ public class PlacesTable extends Table<PlaceModel> {
 
             // add main plate afterwards to not harm original model
             model.plates().add(0,mainPlate);
-            values.put(COLUMN_PLATE, mainPlate.pattern());
-            values.put(COLUMN_PLATE_END, mainPlate.end());
+            values.put(COLUMN_PLATE, mainPlate.getDto().pattern());
+            values.put(COLUMN_PLATE_END, mainPlate.getDto().end());
         }
 
         values.put(COLUMN_HAS_OWN_PLATE, model.hasOwnPlate());

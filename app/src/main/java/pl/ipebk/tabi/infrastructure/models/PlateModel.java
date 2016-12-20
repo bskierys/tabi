@@ -5,19 +5,15 @@
 */
 package pl.ipebk.tabi.infrastructure.models;
 
-import android.support.annotation.Nullable;
-
-import com.google.auto.value.AutoValue;
-
 import pl.ipebk.tabi.infrastructure.base.Model;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 
-@AutoValue
-public abstract class PlateModel implements Model {
+public class PlateModel implements Model {
     private long id;
     private long placeId;
+    private LicensePlateDto dto;
 
-    public abstract String pattern();
-    @Nullable public abstract String end();
+    private PlateModel() {}
 
     @Override public long getId() {
         return id;
@@ -25,6 +21,18 @@ public abstract class PlateModel implements Model {
 
     @Override public void setId(long id) {
         this.id = id;
+    }
+
+    public long getPlaceId() {
+        return placeId;
+    }
+
+    public LicensePlateDto getDto() {
+        return dto;
+    }
+
+    public void setDto(LicensePlateDto dto) {
+        this.dto = dto;
     }
 
     public long placeId() {
@@ -36,11 +44,13 @@ public abstract class PlateModel implements Model {
     }
 
     public static PlateModel create(String pattern, String end) {
-        return new AutoValue_PlateModel(pattern, end);
+        PlateModel model = new PlateModel();
+        model.setDto(LicensePlateDto.create(pattern, end));
+        return model;
     }
 
     public static PlateModel create(long id, long placeId, String pattern, String end) {
-        PlateModel plate = new AutoValue_PlateModel(pattern, end);
+        PlateModel plate = PlateModel.create(pattern, end);
         plate.setId(id);
         plate.setPlaceId(placeId);
         return plate;

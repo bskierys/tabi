@@ -59,7 +59,7 @@ public class PlateDaoTest extends DatabaseTest {
         assertNotNull(plates);
         assertTrue(!plates.isEmpty());
         assertEquals(2, plates.size());
-        assertEquals(PLATE1, plates.get(0).pattern());
+        assertEquals(PLATE1, plates.get(0).getDto().pattern());
     }
 
     @MediumTest public void testUpdateOrAddTest() {

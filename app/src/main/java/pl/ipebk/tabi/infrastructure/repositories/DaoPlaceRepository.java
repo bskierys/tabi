@@ -5,18 +5,14 @@
 */
 package pl.ipebk.tabi.infrastructure.repositories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
-import pl.ipebk.tabi.infrastructure.models.PlateModel;
+import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
-import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.presentation.model.place.PlaceDto;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import rx.Observable;
 
 /**
@@ -37,15 +33,6 @@ public class DaoPlaceRepository implements PlaceRepository {
     }
 
     @Override public Observable<PlaceDto> loadByIdObservable(AggregateId id) {
-        // TODO: 2016-12-04 factory to make domain place
-        return dao.getByIdObservable(id.getValue()).map(model -> {
-            List<LicensePlateDto> licensePlates = new ArrayList<>();
-            for (PlateModel plate : model.plates()) {
-                licensePlates.add(LicensePlateDto.create(plate.pattern(), plate.end()));
-            }
-
-            return PlaceDto.create(model.name(), model.type(), model.voivodeship(),
-                                   model.powiat(), model.gmina(), licensePlates);
-        });
+        return dao.getByIdObservable(id.getValue()).map(PlaceModel::dto);
     }
 }
