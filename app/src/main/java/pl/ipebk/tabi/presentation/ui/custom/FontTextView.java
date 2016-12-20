@@ -9,8 +9,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import pl.ipebk.tabi.utils.FontDecorator;
-
 /**
  * TextView with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
  */

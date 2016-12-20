@@ -44,12 +44,11 @@ import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEf
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
-import pl.ipebk.tabi.utils.AnimationHelper;
-import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.DoodleImage;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.Stopwatch;
-import pl.ipebk.tabi.utils.StopwatchManager;
+import pl.ipebk.tabi.presentation.utils.Stopwatch;
+import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -64,10 +63,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
-    @Inject AnimationHelper animationHelper;
+    @Inject AnimationCreator animationCreator;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
-    @Inject DeviceHelper deviceHelper;
+    @Inject MapScaleCalculator mapScaleCalculator;
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
     @BindView(R.id.editTxt_search) EditText searchedEditText;
@@ -177,7 +176,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
                 Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
 
-                float density = deviceHelper.getScreenDensity();
+                float density = mapScaleCalculator.getScreenDensity();
                 mapHeightStream.onNext((int) (totalHeight / density));
                 mapWidthStream.onNext((int) (totalWidth / density));
             });
@@ -188,8 +187,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         super.onStart();
 
         AnimatorSet set = new AnimatorSet();
-        set.play(animationHelper.getDetailsAnimator().createScaleAnim(panelCard))
-           .with(animationHelper.getDetailsAnimator().createFadeInAnim(panelCard));
+        set.play(animationCreator.getDetailsAnimator().createScaleAnim(panelCard))
+           .with(animationCreator.getDetailsAnimator().createFadeInAnim(panelCard));
         set.start();
     }
 

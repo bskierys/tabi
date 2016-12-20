@@ -11,7 +11,7 @@ import android.support.v4.util.Pair;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
@@ -21,8 +21,8 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.RxUtil;
 import pl.ipebk.tabi.utils.SpellCorrector;
-import pl.ipebk.tabi.utils.Stopwatch;
-import pl.ipebk.tabi.utils.StopwatchManager;
+import pl.ipebk.tabi.presentation.utils.Stopwatch;
+import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

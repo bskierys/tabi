@@ -3,7 +3,7 @@
 * date: 2016-02-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.utils;
 
 import android.os.SystemClock;
 

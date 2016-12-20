@@ -7,7 +7,7 @@ package pl.ipebk.tabi.presentation.model.placeandplate;
 
 import android.database.Cursor;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**

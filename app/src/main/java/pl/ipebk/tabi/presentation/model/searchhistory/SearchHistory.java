@@ -9,7 +9,7 @@ import com.google.auto.value.AutoValue;
 
 import java.util.Date;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 
 /**
  * This aggregate exists purely to be inserted into database. That is why it does not have getter or setter for id. Id

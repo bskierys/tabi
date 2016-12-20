@@ -3,7 +3,7 @@
 * date: 2016-05-28
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.utils.animation;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -19,10 +19,10 @@ import pl.ipebk.tabi.R;
 /**
  * Helper class to provide common animations across application
  */
-public class AnimationHelper {
+public class AnimationCreator {
     private Context context;
 
-    public AnimationHelper(Context context) {
+    public AnimationCreator(Context context) {
         this.context = context;
     }
 
@@ -103,9 +103,9 @@ public class AnimationHelper {
             AnimatorSet animator = new AnimatorSet();
 
             ObjectAnimator elevation = new AnimatorBuilder().setPropertyName("cardElevation")
-                                        .setFloatValues(panelElevationStart, panelElevationEnd)
-                                        .setTarget(target).setDuration(PANEL_SCALE_ANIM_DURATION)
-                                        .setInterpolator(new DecelerateInterpolator()).build();
+                                                            .setFloatValues(panelElevationStart, panelElevationEnd)
+                                                            .setTarget(target).setDuration(PANEL_SCALE_ANIM_DURATION)
+                                                            .setInterpolator(new DecelerateInterpolator()).build();
 
             AnimatorBuilder scaleAnimationBuilder = new AnimatorBuilder()
                     .setFloatValues(.9F, 1.0F).setTarget(target)

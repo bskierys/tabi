@@ -7,7 +7,7 @@ package pl.ipebk.tabi.infrastructure.repositories;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;

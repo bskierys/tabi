@@ -1,7 +1,10 @@
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.utils;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import pl.ipebk.tabi.presentation.utils.Stopwatch;
+import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

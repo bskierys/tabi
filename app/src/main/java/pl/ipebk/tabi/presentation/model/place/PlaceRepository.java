@@ -5,7 +5,7 @@
 */
 package pl.ipebk.tabi.presentation.model.place;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import rx.Observable;
 
 /**

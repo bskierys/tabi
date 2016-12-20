@@ -14,7 +14,7 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.ResourceHelper;
+import pl.ipebk.tabi.presentation.ui.main.ResourceHelper;
 import static org.mockito.Mockito.mock;
 
 @Module

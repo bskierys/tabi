@@ -5,7 +5,7 @@
 */
 package pl.ipebk.tabi.presentation.model.placeandplate;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;

@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.presentation.model.place.PlaceFactory;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
@@ -26,7 +26,6 @@ import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.test.common.utils.TestPlaceLocalizationHelper;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
-import pl.ipebk.tabi.utils.DeviceHelper;
 import rx.Observable;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -45,7 +44,8 @@ public class DetailsPresenterTest {
     @Mock DetailsMvpView mockMvpView;
     @Mock PlaceRepository placeRepo;
     @Mock Activity mockContext;
-    @Mock DeviceHelper mockDeviceHelper;
+    @Mock ClipboardCopyMachine mockClipboardCopyMachine;
+    @Mock MapScaleCalculator mockMapScaleCalculator;
     private TestPlaceLocalizationHelper mockNameHelper;
     private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
@@ -59,7 +59,8 @@ public class DetailsPresenterTest {
         mockNameHelper = new TestPlaceLocalizationHelper(mockContext);
         mockFactory = new PlaceFactory(mockNameHelper);
 
-        detailsPresenter = new DetailsPresenter(placeRepo, mockDeviceHelper, mockFactory);
+        detailsPresenter = new DetailsPresenter(placeRepo, mockClipboardCopyMachine,
+                                                mockMapScaleCalculator, mockFactory);
         detailsPresenter.attachView(mockMvpView);
     }
 

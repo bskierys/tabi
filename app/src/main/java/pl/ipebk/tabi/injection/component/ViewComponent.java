@@ -14,7 +14,7 @@ import pl.ipebk.tabi.presentation.ui.details.DetailsButton;
 import pl.ipebk.tabi.presentation.ui.main.MainItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
-import pl.ipebk.tabi.utils.FontDecorator;
+import pl.ipebk.tabi.presentation.ui.custom.FontDecorator;
 
 @Singleton
 @Component(dependencies = ApplicationModule.class, modules = ViewModule.class)

@@ -15,7 +15,7 @@ import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.ResourceHelper;
+import pl.ipebk.tabi.presentation.ui.main.ResourceHelper;
 
 @Module
 public class ViewModule {

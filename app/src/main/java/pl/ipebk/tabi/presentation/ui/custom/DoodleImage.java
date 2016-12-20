@@ -3,7 +3,7 @@
 * date: 2016-03-20
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.custom;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,9 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.inject.Inject;
-
-import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 
 /**

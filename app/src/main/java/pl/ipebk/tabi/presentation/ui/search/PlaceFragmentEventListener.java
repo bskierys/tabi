@@ -5,7 +5,7 @@
 */
 package pl.ipebk.tabi.presentation.ui.search;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 /**

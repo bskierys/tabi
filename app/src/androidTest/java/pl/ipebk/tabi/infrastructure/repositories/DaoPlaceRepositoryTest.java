@@ -4,7 +4,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import java.util.concurrent.TimeUnit;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.presentation.model.place.PlaceDto;

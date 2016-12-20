@@ -22,7 +22,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.utils.ResourceHelper;
 
 public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NONE = -1;

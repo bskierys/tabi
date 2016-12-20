@@ -3,7 +3,7 @@
 * date: 2016-05-28
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.utils.animation;
 
 import android.animation.ObjectAnimator;
 import android.view.animation.Interpolator;
@@ -21,22 +21,22 @@ public class AnimatorBuilder {
 
     public ObjectAnimator build() {
         ObjectAnimator animation = new ObjectAnimator();
-        if(propertyName !=null){
+        if (propertyName != null) {
             animation.setPropertyName(propertyName);
         }
-        if(values !=null){
+        if (values != null) {
             animation.setFloatValues(values);
         }
-        if(target !=null){
+        if (target != null) {
             animation.setTarget(target);
         }
-        if(duration!=null){
+        if (duration != null) {
             animation.setDuration(duration);
         }
-        if(startDelay!=null){
+        if (startDelay != null) {
             animation.setStartDelay(startDelay);
         }
-        if(interpolator!=null){
+        if (interpolator != null) {
             animation.setInterpolator(interpolator);
         }
         return animation;

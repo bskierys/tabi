@@ -3,12 +3,14 @@
 * date: 2016-06-02
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils.rxbinding;
+package pl.ipebk.tabi.presentation.ui.utils.rxbinding;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEventOnSubscribe;
 import rx.Observable;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;

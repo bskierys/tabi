@@ -27,8 +27,8 @@ import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
-import pl.ipebk.tabi.utils.DeviceHelper;
-import pl.ipebk.tabi.utils.StopwatchManager;
+import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
+import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 
 /**
  * Provide application-level dependencies.
@@ -53,32 +53,12 @@ public class ApplicationModule {
         return new StopwatchManager();
     }
 
-    @Provides public DoodleTextFormatter provideNameFormatHelper() {
+    @Provides public DoodleTextFormatter provideDoodleTextFormatter() {
         return new DoodleTextFormatter(application);
     }
 
-    @Provides public DeviceHelper provideDeviceHelper() {
-        return new DeviceHelper(application);
-    }
-
-    @Provides public SearchHistoryRepository provideSearchHistoryRepository(DaoSearchHistoryRepository repository) {
-        return repository;
-    }
-
-    @Provides public PlaceRepository providePlaceRepository(DaoPlaceRepository repository) {
-        return repository;
-    }
-
-    @Provides public LicensePlateFinder provideLicensePlateFinder(DaoLicensePlateFinder finder) {
-        return finder;
-    }
-
-    @Provides public PlaceFinder providePlaceFinder(DaoPlaceFinder finder) {
-        return finder;
-    }
-
-    @Provides public SearchHistoryFinder provideSearchHistoryFinder(DaoSearchHistoryFinder finder) {
-        return finder;
+    @Provides public ClipboardCopyMachine provideClipboardCopyMachine() {
+        return new ClipboardCopyMachine(application);
     }
 
     @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {

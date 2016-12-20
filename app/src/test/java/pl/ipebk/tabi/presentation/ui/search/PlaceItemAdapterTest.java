@@ -22,7 +22,7 @@ import java.util.List;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;

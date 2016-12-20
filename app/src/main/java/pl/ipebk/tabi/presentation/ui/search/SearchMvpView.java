@@ -7,7 +7,7 @@ package pl.ipebk.tabi.presentation.ui.search;
 
 import android.database.Cursor;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.MvpView;
 

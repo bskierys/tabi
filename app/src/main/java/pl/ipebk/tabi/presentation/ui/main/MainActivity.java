@@ -30,10 +30,10 @@ import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
-import pl.ipebk.tabi.utils.AnimationHelper;
-import pl.ipebk.tabi.utils.rxbinding.RecyclerViewTotalScrollEvent;
-import pl.ipebk.tabi.utils.rxbinding.RxAnimator;
-import pl.ipebk.tabi.utils.rxbinding.RxRecyclerViewExtension;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
+import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private static final int GRID_HEADER_POSITION = 0;
 
     @Inject MainPresenter presenter;
-    @Inject AnimationHelper animationHelper;
+    @Inject AnimationCreator animationCreator;
     @BindView(R.id.img_loading) ImageView loadingView;
     @BindView(R.id.category_list) RecyclerView recyclerView;
     @BindView(R.id.search_bar) View searchBar;
@@ -166,11 +166,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         float currentY = searchBar.getY();
 
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, currentY, targetY))
-                  .with(animationHelper.getSearchAnimator().createScaleDownAnim(searchBar))
-                  .with(animationHelper.getSearchAnimator().createMoveAnim(searchBarContent, currentY, targetY))
-                  .with(animationHelper.getSearchAnimator().createFadeInAnim(searchBarContent))
-                  .with(animationHelper.getSearchAnimator().createFadeInAnim(searchIcon));
+        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, currentY, targetY))
+                  .with(animationCreator.getSearchAnimator().createScaleDownAnim(searchBar))
+                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, currentY, targetY))
+                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchBarContent))
+                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchIcon));
 
         if (scrollPercent > 0) {
             searchAnim.start();
@@ -234,12 +234,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToSearch(String phrase) {
         // TODO: 2016-06-03 different animation when tile is clicked
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationHelper.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
-                                                                           highestSearchBarPosition))
-                  .with(animationHelper.getSearchAnimator().createScaleUpAnim(searchBar))
-                  .with(animationHelper.getSearchAnimator().createFadeOutAnim(searchIcon))
-                  .with(animationHelper.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
-                                                                           highestSearchBarPosition));
+        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
+                                                                            highestSearchBarPosition))
+                  .with(animationCreator.getSearchAnimator().createScaleUpAnim(searchBar))
+                  .with(animationCreator.getSearchAnimator().createFadeOutAnim(searchIcon))
+                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
+                                                                            highestSearchBarPosition));
 
         RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll());
         RxAnimator.animationEnd(searchAnim).doOnNext(a -> manager.unlockScroll())

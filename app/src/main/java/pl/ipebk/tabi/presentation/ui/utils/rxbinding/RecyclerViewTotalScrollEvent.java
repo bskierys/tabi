@@ -3,7 +3,7 @@
 * date: 2016-06-02
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils.rxbinding;
+package pl.ipebk.tabi.presentation.ui.utils.rxbinding;
 
 import android.content.Context;
 import android.support.annotation.CheckResult;

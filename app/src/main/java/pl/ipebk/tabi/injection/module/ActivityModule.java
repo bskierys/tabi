@@ -25,12 +25,13 @@ import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
 import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
+import pl.ipebk.tabi.presentation.ui.details.MapScaleCalculator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
-import pl.ipebk.tabi.utils.AnimationHelper;
-import pl.ipebk.tabi.utils.DeviceHelper;
+import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import timber.log.Timber;
@@ -54,7 +55,7 @@ public class ActivityModule {
         return activity;
     }
 
-    // TODO: 2016-06-14 somehow making it "ActivityContext" breaks it
+    // somehow making it "ActivityContext" breaks it
     @Provides Context provideContext() {
         return activity;
     }
@@ -71,12 +72,11 @@ public class ActivityModule {
         return fontManager;
     }
 
-    @Provides AnimationHelper provideAnimationHelper() {
-        return new AnimationHelper(activity);
+    @Provides AnimationCreator provideAnimationHelper() {
+        return new AnimationCreator(activity);
     }
 
-    // TODO: 2016-11-29 remove when activity component has app dependencies
-    @Provides DoodleTextFormatter provideNameFormatHelper() {
+    @Provides DoodleTextFormatter provideDoodleTextFormatter() {
         return new DoodleTextFormatter(activity);
     }
 
@@ -84,8 +84,12 @@ public class ActivityModule {
         return new PlaceLocalizationHelper(activity);
     }
 
-    @Provides DeviceHelper provideDeviceHelper() {
-        return new DeviceHelper(activity);
+    @Provides ClipboardCopyMachine provideClipboardCopyMachine() {
+        return new ClipboardCopyMachine(activity);
+    }
+
+    @Provides MapScaleCalculator provideMapScaleCalculator() {
+        return new MapScaleCalculator(activity);
     }
 
     @Provides public SearchHistoryRepository provideSearchHistoryRepository(DaoSearchHistoryRepository repository) {

@@ -1,12 +1,10 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-11-29
+* date: 2016-12-20
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.details;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
@@ -14,20 +12,13 @@ import android.util.DisplayMetrics;
 import javax.inject.Inject;
 
 /**
- * Helper to provide information about device that app is currently running on
+ * Util class that helps calculating map scale based on current device screen density
  */
-public class DeviceHelper {
+public class MapScaleCalculator {
     private Context context;
 
-    @Inject public DeviceHelper(Context context) {
+    @Inject public MapScaleCalculator(Context context) {
         this.context = context;
-    }
-
-    public void copyToClipBoard(String text) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-
-        ClipData clip = ClipData.newPlainText(context.getPackageName(), text);
-        clipboard.setPrimaryClip(clip);
     }
 
     public float getScreenDensity(){

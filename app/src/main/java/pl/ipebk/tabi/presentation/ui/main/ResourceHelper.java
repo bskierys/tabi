@@ -3,7 +3,7 @@
 * date: 2016-05-28
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.main;
 
 import android.content.Context;
 import android.content.res.Resources;

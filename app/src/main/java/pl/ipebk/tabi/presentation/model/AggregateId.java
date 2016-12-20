@@ -3,7 +3,7 @@
 * date: 2016-12-04
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.canonicalmodel;
+package pl.ipebk.tabi.presentation.model;
 
 /**
  * Value Object to handles id of model items in app

@@ -5,7 +5,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 import java.util.Date;
 import java.util.List;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.infrastructure.DatabaseTest;

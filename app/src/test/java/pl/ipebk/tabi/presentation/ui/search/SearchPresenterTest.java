@@ -14,7 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Date;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
@@ -26,8 +26,8 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import pl.ipebk.tabi.utils.SpellCorrector;
-import pl.ipebk.tabi.utils.Stopwatch;
-import pl.ipebk.tabi.utils.StopwatchManager;
+import pl.ipebk.tabi.presentation.utils.Stopwatch;
+import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;

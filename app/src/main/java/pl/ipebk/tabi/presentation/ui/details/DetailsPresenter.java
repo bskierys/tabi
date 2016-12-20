@@ -12,7 +12,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.presentation.model.place.PlaceFactory;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
@@ -21,7 +21,6 @@ import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
-import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
@@ -37,15 +36,18 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private String searchedPlate;
 
     private PlaceFactory placeFactory;
-    private DeviceHelper deviceHelper;
+    private ClipboardCopyMachine clipboardCopyMachine;
+    private MapScaleCalculator mapScaleCalculator;
 
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
-    @Inject public DetailsPresenter(PlaceRepository repository, DeviceHelper deviceHelper, PlaceFactory placeFactory) {
+    @Inject public DetailsPresenter(PlaceRepository repository, ClipboardCopyMachine clipboardCopyMachine,
+                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory) {
         this.repository = repository;
-        this.deviceHelper = deviceHelper;
+        this.clipboardCopyMachine = clipboardCopyMachine;
         this.placeFactory = placeFactory;
+        this.mapScaleCalculator = mapScaleCalculator;
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -154,13 +156,13 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     public void copyToClipboard() {
         placeOnce.map(Place::getFullInfo)
                  .subscribe(placeInfo -> {
-                     deviceHelper.copyToClipBoard(placeInfo);
+                     clipboardCopyMachine.copyToClipBoard(placeInfo);
                      getMvpView().showInfoMessageCopied();
                  }, ex -> Timber.e("Could not copy to clipboard"));
     }
 
     private Uri getMapUrl(Place place, int width, int height) {
-        int scale = deviceHelper.getMapScale();
+        int scale = mapScaleCalculator.getMapScale();
 
         String size = String.format(Locale.getDefault(), "%dx%d", width, height);
         String language = Locale.getDefault().getLanguage();

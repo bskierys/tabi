@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.ui.custom;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+
+import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;

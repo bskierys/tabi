@@ -9,7 +9,7 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 
 /**
  * Util factory of purpose of constructing search history with current time

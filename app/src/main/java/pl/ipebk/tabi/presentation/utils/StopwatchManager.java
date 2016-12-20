@@ -3,11 +3,13 @@
 * date: 2016-05-16
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.utils;
+package pl.ipebk.tabi.presentation.utils;
 
 import java.util.HashMap;
 
 import javax.inject.Inject;
+
+import pl.ipebk.tabi.presentation.utils.Stopwatch;
 
 /**
  * Class to manage and propagate stopwatches across our app. It can provide default, singleton and new stopwatch so you
