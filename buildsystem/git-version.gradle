@@ -1,0 +1,40 @@
+buildscript {
+    dependencies {
+        //noinspection GradleDynamicVersion
+        classpath "org.eclipse.jgit:org.eclipse.jgit:4.1.1.+"
+    }
+    repositories {
+        jcenter()
+    }
+}
+
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder
+
+def git = Git.wrap(new FileRepositoryBuilder()
+        .readEnvironment()
+        .findGitDir()
+        .build())
+
+ext.readVersionCode = {
+    def describe = git.describe().setLong(true).call()
+    def tagName = describe.tokenize("-")[0]
+    def tagNumber = tagName.replace("v","")
+
+    def versionCore = tagNumber.tokenize(".")
+    def versionMajor = versionCore[0] == null ? 0 : versionCore[0].toInteger()
+    def versionMinor = versionCore[1] == null ? 0 : versionCore[1].toInteger()
+    def versionPatch = versionCore[2] == null ? 0 : versionCore[2].toInteger()
+    def versionBuild = versionCore[3] == null ? 0 : versionCore[3].toInteger()
+
+    def versionCode = versionMajor * 10000000 + versionMinor * 100000 + versionPatch * 1000 + versionBuild.toInteger()
+
+    println("using version code: $versionCode")
+    return versionCode
+}
+
+ext.readVersionName = {
+    def version = git.describe().setLong(true).call()
+    println("using version name: $version")
+    return version
+}

@@ -39,29 +39,6 @@ get_curr_version() {
 	version=${branch#*"releases/"}
 }
 
-replace_version() {
-    sed -r -e "s/($2\s*\=\s*)[0-9]+/\1$3/" -i $1
-}
-
-set_full_version(){
-	IFS='.' read -ra ADDR <<< "$version"
-
-	for ((i=0; i<3; i++));
-	do
-		if [[ ${ADDR[$i]} = "" ]]
-			then ADDR[$i]=0
-		fi
-	done
-
-	versionMajor="${ADDR[0]}"
-	versionMinor="${ADDR[1]}"
-	versionPatch="${ADDR[2]}"
-
-	replace_version gradle.properties "versionMajor" $versionMajor
-	replace_version gradle.properties "versionMinor" $versionMinor
-	replace_version gradle.properties "versionPatch" $versionPatch
-}
-
 read_auth() {
     auth_token=$(<github_auth.priv)
 }
@@ -79,8 +56,7 @@ generate_release_notes() {
 check_git_dir
 check_if_release
 get_curr_version
-msg "Updating project version to: ${version}"
-set_full_version
+msg "Generating changelog to version: ${version}"
 
 read_auth
 msg "Generating changelog"
