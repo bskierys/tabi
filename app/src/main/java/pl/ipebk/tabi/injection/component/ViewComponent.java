@@ -10,10 +10,10 @@ import javax.inject.Singleton;
 import dagger.Component;
 import pl.ipebk.tabi.injection.module.ViewModule;
 import pl.ipebk.tabi.injection.module.ApplicationModule;
-import pl.ipebk.tabi.ui.details.DetailsButton;
-import pl.ipebk.tabi.ui.main.MainItemAdapter;
-import pl.ipebk.tabi.ui.search.PlaceItemAdapter;
-import pl.ipebk.tabi.ui.search.SearchTabPageIndicator;
+import pl.ipebk.tabi.presentation.ui.details.DetailsButton;
+import pl.ipebk.tabi.presentation.ui.main.MainItemAdapter;
+import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
+import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.utils.FontDecorator;
 
 @Singleton

@@ -4,11 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".ui.details.DetailsActivity"
+              tools:context=".presentation.ui.details.DetailsActivity"
               tools:ignore="contentDescription"
               tools:showIn="@layout/activity_details">
 
-    <pl.ipebk.tabi.ui.custom.ObservableSizeLayout
+    <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
         android:id="@+id/wrap_place_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -22,7 +22,7 @@
 
             <include layout="@layout/row_place_name"/>
         </LinearLayout>
-    </pl.ipebk.tabi.ui.custom.ObservableSizeLayout>
+    </pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout>
 
     <ImageView style="@style/Divider.Horizontal"/>
 
@@ -33,20 +33,20 @@
         android:contentDescription="@string/description_placeholder"
         android:visibility="gone"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_voivodeship"
         style="@style/Details_Text.Description"
         android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_powiat"
         style="@style/Details_Text.Description"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_gmina"
         style="@style/Details_Text.Description"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_additional"
         style="@style/Details_Text.Description"
         android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"/>

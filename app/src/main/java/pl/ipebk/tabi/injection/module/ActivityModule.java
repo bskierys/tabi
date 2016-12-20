@@ -28,7 +28,7 @@ import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.utils.AnimationHelper;
 import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.FontManager;

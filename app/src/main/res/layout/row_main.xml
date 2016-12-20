@@ -27,7 +27,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/vic_dolnoslaskie"/>
 
-        <pl.ipebk.tabi.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_category"
             style="@style/Main_Text_Tile"
             android:layout_width="match_parent"

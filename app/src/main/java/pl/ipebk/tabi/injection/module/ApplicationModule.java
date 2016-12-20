@@ -26,7 +26,7 @@ import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.utils.DeviceHelper;
 import pl.ipebk.tabi.utils.StopwatchManager;
 

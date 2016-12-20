@@ -8,9 +8,9 @@ package pl.ipebk.tabi.injection.component;
 import dagger.Subcomponent;
 import pl.ipebk.tabi.injection.PerActivity;
 import pl.ipebk.tabi.injection.module.ActivityModule;
-import pl.ipebk.tabi.ui.details.DetailsActivity;
-import pl.ipebk.tabi.ui.main.MainActivity;
-import pl.ipebk.tabi.ui.search.SearchActivity;
+import pl.ipebk.tabi.presentation.ui.details.DetailsActivity;
+import pl.ipebk.tabi.presentation.ui.main.MainActivity;
+import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 
 /**
  * This component inject dependencies to all Activities across the application

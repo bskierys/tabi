@@ -7,7 +7,7 @@ package pl.ipebk.tabi.test.common.utils;
 
 import android.content.Context;
 
-import pl.ipebk.tabi.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 
 public class TestRandomTextProvider extends RandomTextProvider {
     public static final String RANDOM_MOCK_QUESTION = "random";

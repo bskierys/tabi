@@ -13,7 +13,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
-import pl.ipebk.tabi.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.ResourceHelper;
 

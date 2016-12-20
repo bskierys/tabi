@@ -10,7 +10,7 @@
         android:scaleType="centerInside"
         android:src="@drawable/ic_doodle_search"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_place_name"
         style="@style/Details_Text.Header"
         android:layout_width="0dp"
@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:text="@string/preview_place_name"/>
 
-    <pl.ipebk.tabi.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_plate"
         style="@style/Details_Text.Header"
         android:layout_width="wrap_content"
