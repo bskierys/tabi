@@ -14,12 +14,12 @@ import com.github.bskierys.pine.Pine;
 import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 
 import io.fabric.sdk.android.Fabric;
-import pl.ipebk.tabi.di.component.DaggerViewComponent;
-import pl.ipebk.tabi.di.component.ViewComponent;
-import pl.ipebk.tabi.di.component.ApplicationComponent;
-import pl.ipebk.tabi.di.component.DaggerApplicationComponent;
-import pl.ipebk.tabi.di.module.ViewModule;
-import pl.ipebk.tabi.di.module.ApplicationModule;
+import pl.ipebk.tabi.injection.component.DaggerViewComponent;
+import pl.ipebk.tabi.injection.component.ViewComponent;
+import pl.ipebk.tabi.injection.component.ApplicationComponent;
+import pl.ipebk.tabi.injection.component.DaggerApplicationComponent;
+import pl.ipebk.tabi.injection.module.ViewModule;
+import pl.ipebk.tabi.injection.module.ApplicationModule;
 import timber.log.Timber;
 
 public class App extends Application {

@@ -3,7 +3,7 @@
 * date: 2016-12-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.searchhistory;
+package pl.ipebk.tabi.presentation.model.searchhistory;
 
 import java.util.Date;
 

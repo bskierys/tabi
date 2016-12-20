@@ -18,7 +18,7 @@ import java.util.Locale;
 import pl.ipebk.tabi.infrastructure.base.ViewDao;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.infrastructure.views.PlacesToSearchView;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import rx.Observable;
 import timber.log.Timber;
 

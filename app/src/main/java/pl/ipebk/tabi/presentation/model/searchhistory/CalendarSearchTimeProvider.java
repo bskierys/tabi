@@ -3,7 +3,7 @@
 * date: 2016-12-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.searchhistory;
+package pl.ipebk.tabi.presentation.model.searchhistory;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
 import javax.inject.Inject;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Implementation of {@link SearchTimeProvider} that uses {@link Calendar} to acquire current time.
  */
 public class CalendarSearchTimeProvider implements SearchTimeProvider {
     @Inject public CalendarSearchTimeProvider() {}

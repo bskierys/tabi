@@ -3,13 +3,13 @@
 * date: 2016-05-22
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.di.component;
+package pl.ipebk.tabi.injection.component;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
-import pl.ipebk.tabi.di.module.ViewModule;
-import pl.ipebk.tabi.di.module.ApplicationModule;
+import pl.ipebk.tabi.injection.module.ViewModule;
+import pl.ipebk.tabi.injection.module.ApplicationModule;
 import pl.ipebk.tabi.ui.details.DetailsButton;
 import pl.ipebk.tabi.ui.main.MainItemAdapter;
 import pl.ipebk.tabi.ui.search.PlaceItemAdapter;

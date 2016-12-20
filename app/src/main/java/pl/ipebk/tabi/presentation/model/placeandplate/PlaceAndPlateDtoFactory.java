@@ -3,11 +3,12 @@
 * date: 2016-12-12
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.readmodel;
+package pl.ipebk.tabi.presentation.model.placeandplate;
 
 import android.database.Cursor;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
  * Factory class to produce dto objects. It was created to separate database logic from model

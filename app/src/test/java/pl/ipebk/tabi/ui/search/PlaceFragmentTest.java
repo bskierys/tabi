@@ -22,7 +22,7 @@ import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.android.recyclerview.v7.api.Assertions.assertThat;

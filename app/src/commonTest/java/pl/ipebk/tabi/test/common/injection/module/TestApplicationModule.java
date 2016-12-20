@@ -12,9 +12,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;

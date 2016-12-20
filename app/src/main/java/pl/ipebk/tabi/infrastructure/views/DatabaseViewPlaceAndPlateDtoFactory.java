@@ -11,8 +11,8 @@ import android.provider.BaseColumns;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 public class DatabaseViewPlaceAndPlateDtoFactory extends PlaceAndPlateDtoFactory {

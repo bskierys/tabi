@@ -3,11 +3,11 @@
 * date: 2016-11-29
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.di.component;
+package pl.ipebk.tabi.injection.component;
 
 import dagger.Component;
-import pl.ipebk.tabi.di.ConfigPersistent;
-import pl.ipebk.tabi.di.module.ActivityModule;
+import pl.ipebk.tabi.injection.ConfigPersistent;
+import pl.ipebk.tabi.injection.module.ActivityModule;
 
 /**
  * A dagger component that will live during the lifecycle of an Activity but it won't be destroy during configuration

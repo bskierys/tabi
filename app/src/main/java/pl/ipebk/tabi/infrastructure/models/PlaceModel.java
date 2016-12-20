@@ -17,7 +17,6 @@ import pl.ipebk.tabi.readmodel.PlaceType;
 @AutoValue
 public abstract class PlaceModel implements Model {
     private long id;
-    // TODO: 2016-12-06 implement full model and set correct fields in some kind of converter
 
     public abstract String name();
     public abstract PlaceType type();

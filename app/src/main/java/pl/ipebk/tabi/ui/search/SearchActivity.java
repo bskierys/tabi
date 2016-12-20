@@ -30,7 +30,7 @@ import butterknife.OnClick;
 import icepick.State;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.ui.base.BaseActivity;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.utils.DoodleImage;

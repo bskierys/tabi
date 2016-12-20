@@ -6,7 +6,7 @@
 package pl.ipebk.tabi.ui.search;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 /**
  * This interface must be implemented by activities that contain this fragment to allow an interaction in this

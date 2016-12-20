@@ -7,6 +7,7 @@ package pl.ipebk.tabi.readmodel;
 
 import android.database.Cursor;
 
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import rx.Observable;
 
 /**

@@ -3,17 +3,16 @@
 * date: 2016-12-11
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.domain.searchhistory;
+package pl.ipebk.tabi.presentation.model.searchhistory;
 
 import java.util.Date;
 
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.SearchType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Util factory of purpose of constructing search history with current time
  */
 public class SearchHistoryFactory {
     private SearchTimeProvider timeProvider;
@@ -24,6 +23,6 @@ public class SearchHistoryFactory {
 
     public SearchHistory create(AggregateId placeId, String searchedPlate, SearchType type) {
         Date now = timeProvider.now();
-        return new SearchHistory(placeId, searchedPlate, now, type);
+        return new AutoValue_SearchHistory(placeId, searchedPlate, now, type);
     }
 }

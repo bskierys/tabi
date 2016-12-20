@@ -15,8 +15,8 @@ import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.models.PlateModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
-import pl.ipebk.tabi.readmodel.LicensePlateDto;
-import pl.ipebk.tabi.readmodel.PlaceDto;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
+import pl.ipebk.tabi.presentation.model.place.PlaceDto;
 import rx.Observable;
 
 /**

@@ -15,7 +15,7 @@ import com.squareup.sqlbrite.SqlBrite;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import pl.ipebk.tabi.di.ApplicationContext;
+import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.daos.PlacesToSearchDao;
 import pl.ipebk.tabi.infrastructure.daos.PlateDao;

@@ -8,7 +8,7 @@ package pl.ipebk.tabi.ui.search;
 import android.database.Cursor;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.ui.base.MvpView;
 
 public interface SearchMvpView extends MvpView {

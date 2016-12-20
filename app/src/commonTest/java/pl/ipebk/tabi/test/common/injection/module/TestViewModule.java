@@ -10,7 +10,7 @@ import android.content.Context;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;

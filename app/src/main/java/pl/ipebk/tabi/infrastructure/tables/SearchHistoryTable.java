@@ -13,7 +13,7 @@ import java.util.Date;
 
 import pl.ipebk.tabi.infrastructure.base.Table;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import timber.log.Timber;
 
 public class SearchHistoryTable extends Table<SearchHistoryModel> {

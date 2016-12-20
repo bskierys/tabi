@@ -15,10 +15,10 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import icepick.Icepick;
 import pl.ipebk.tabi.App;
-import pl.ipebk.tabi.di.component.ActivityComponent;
-import pl.ipebk.tabi.di.component.ConfigPersistentComponent;
-import pl.ipebk.tabi.di.component.DaggerConfigPersistentComponent;
-import pl.ipebk.tabi.di.module.ActivityModule;
+import pl.ipebk.tabi.injection.component.ActivityComponent;
+import pl.ipebk.tabi.injection.component.ConfigPersistentComponent;
+import pl.ipebk.tabi.injection.component.DaggerConfigPersistentComponent;
+import pl.ipebk.tabi.injection.module.ActivityModule;
 import timber.log.Timber;
 
 /**

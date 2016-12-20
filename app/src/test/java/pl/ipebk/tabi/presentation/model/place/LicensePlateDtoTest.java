@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.readmodel;
+package pl.ipebk.tabi.presentation.model.place;
 
 import org.junit.Test;
 

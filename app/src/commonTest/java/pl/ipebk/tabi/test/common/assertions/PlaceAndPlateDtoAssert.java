@@ -5,7 +5,7 @@
 */
 package pl.ipebk.tabi.test.common.assertions;
 
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 import static org.junit.Assert.assertEquals;

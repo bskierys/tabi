@@ -8,14 +8,11 @@ package pl.ipebk.tabi.presentation.model.place;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.domain.BaseAggregateRoot;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
-import pl.ipebk.tabi.readmodel.LicensePlateDto;
-import pl.ipebk.tabi.readmodel.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Full model of place that can format itself into UI
  */
 public class Place {
     private PlaceDto dto;
@@ -27,7 +24,7 @@ public class Place {
     }
 
     Place(String name, PlaceType type, String voivodeship, String powiat,
-                 String gmina, List<LicensePlateDto> plates) {
+          String gmina, List<LicensePlateDto> plates) {
         this.dto = PlaceDto.create(name, type, voivodeship, powiat, gmina, plates);
     }
 
@@ -39,18 +36,31 @@ public class Place {
         return dto.placeType();
     }
 
+    /**
+     * @return Voivodeship - already formatted
+     */
     public String getVoivodeship() {
         return localizationHelper.formatVoivodeship(dto.voivodeship());
     }
 
+    /**
+     * @return Powiat - already formatted
+     */
     public String getPowiat() {
         return localizationHelper.formatPowiat(dto.powiat());
     }
 
+    /**
+     * @return Gmina - already formatted
+     */
     public String getGmina() {
         return localizationHelper.formatGmina(dto.gmina());
     }
 
+    /**
+     * @param searchedPlate late that was searched, to exclude it from additional info
+     * @return Already formatted additional info
+     */
     public String getAdditionalInfo(String searchedPlate) {
         return localizationHelper.formatAdditionalInfo(this, searchedPlate);
     }
@@ -59,18 +69,15 @@ public class Place {
         return localizationHelper.formatPlaceInfo(this);
     }
 
-    // TODO: 2016-12-18 describe
+    /**
+     * @return String that can be put into search engine to search for place
+     */
     public String getSearchPhrase() {
         return localizationHelper.formatPlaceToSearch(this);
     }
 
     public boolean hasAdditionalPlates() {
         return dto.plates().size() > 1;
-    }
-
-    // TODO: 2016-12-18 make getters package private
-    public List<LicensePlateDto> getPlates() {
-        return dto.plates();
     }
 
     @Override public String toString() {

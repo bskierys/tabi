@@ -8,7 +8,7 @@ package pl.ipebk.tabi.infrastructure.finders;
 import java.util.List;
 
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assertions.PlaceDtoCollectionAssert;
 

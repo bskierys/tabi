@@ -3,7 +3,7 @@
 * date: 2016-12-16
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.readmodel;
+package pl.ipebk.tabi.presentation.model.place;
 
 import android.support.annotation.Nullable;
 

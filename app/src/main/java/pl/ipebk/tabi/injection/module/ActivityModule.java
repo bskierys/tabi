@@ -3,7 +3,7 @@
 * date: 2016-02-24
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.di.module;
+package pl.ipebk.tabi.injection.module;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,9 +15,9 @@ import dagger.Provides;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.domain.searchhistory.CalendarSearchTimeProvider;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
-import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;

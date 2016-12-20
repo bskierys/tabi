@@ -7,8 +7,8 @@ package pl.ipebk.tabi.test.common.assemblers;
 
 import android.database.Cursor;
 
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**

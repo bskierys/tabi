@@ -13,7 +13,7 @@ import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import pl.ipebk.tabi.test.common.assemblers.SearchHistoryAssembler;
 

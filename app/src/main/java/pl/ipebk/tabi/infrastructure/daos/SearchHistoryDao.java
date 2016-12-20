@@ -24,10 +24,10 @@ import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.infrastructure.tables.PlacesTable;
 import pl.ipebk.tabi.infrastructure.tables.SearchHistoryTable;
 import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import rx.Observable;
 import timber.log.Timber;
 

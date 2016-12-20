@@ -10,17 +10,16 @@ import android.database.Cursor;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDtoFactory;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * This class exists to inject {@link PlaceLocalizationHelper} to {@link PlaceAndPlate} object.
  */
 public class PlaceAndPlateFactory {
     private PlaceAndPlateDtoFactory dtoFactory;
     private PlaceLocalizationHelper localizationHelper;
 
-    @Inject public PlaceAndPlateFactory(PlaceAndPlateDtoFactory dtoFactory, PlaceLocalizationHelper localizationHelper) {
+    @Inject public PlaceAndPlateFactory(PlaceAndPlateDtoFactory dtoFactory, PlaceLocalizationHelper
+            localizationHelper) {
         this.dtoFactory = dtoFactory;
         this.localizationHelper = localizationHelper;
     }

@@ -8,7 +8,7 @@ package pl.ipebk.tabi.test.common.injection.component;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import pl.ipebk.tabi.di.component.ViewComponent;
+import pl.ipebk.tabi.injection.component.ViewComponent;
 import pl.ipebk.tabi.test.common.injection.module.TestViewModule;
 
 @Singleton

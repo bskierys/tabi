@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import pl.ipebk.tabi.infrastructure.daos.PlatesToSearchDao;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import rx.Observable;
 
 /**

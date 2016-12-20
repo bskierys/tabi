@@ -12,15 +12,17 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Date;
+
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
-import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistory;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import pl.ipebk.tabi.utils.SpellCorrector;
@@ -67,6 +69,7 @@ public class SearchPresenterTest {
     }
 
     @Test public void testPlaceSelected() throws Exception {
+        when(timeProvider.now()).thenReturn(new Date(10));
         searchPresenter.placeSelected(new AggregateId(0), "TAB", "TAB", SearchType.PLACE, PlaceListItemType.SEARCH);
         verify(mockMvpView).goToPlaceDetails(agIdEq(new AggregateId(0)), eq("TAB"), eq(SearchType.PLACE),
                                              eq(PlaceListItemType.SEARCH));

@@ -21,9 +21,10 @@ import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.ui.custom.SectionedCursorRecyclerViewAdapter;
 import rx.Observable;
 import timber.log.Timber;
@@ -31,7 +32,7 @@ import timber.log.Timber;
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * Adapter for items of type {@link pl.ipebk.tabi.readmodel.PlaceAndPlateDto}. Some dependencies are filled by constructor, but you have to use
+ * Adapter for items of type {@link PlaceAndPlateDto}. Some dependencies are filled by constructor, but you have to use
  * {@link #setType(SearchType)}, and {@link #setEventListener(PlaceFragmentEventListener)} before requesting any layout
  * to avoid errors.
  */

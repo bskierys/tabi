@@ -12,12 +12,12 @@ import android.support.v4.util.Pair;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryFactory;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.ui.base.BasePresenter;
 import pl.ipebk.tabi.utils.RxUtil;
 import pl.ipebk.tabi.utils.SpellCorrector;

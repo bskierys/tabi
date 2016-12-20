@@ -6,7 +6,6 @@
 package pl.ipebk.tabi.presentation.model.place;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
-import pl.ipebk.tabi.readmodel.PlaceDto;
 import rx.Observable;
 
 /**

@@ -9,7 +9,7 @@ import java.util.Date;
 
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 /**
  * Assembler of {@link SearchHistoryModel} for tests

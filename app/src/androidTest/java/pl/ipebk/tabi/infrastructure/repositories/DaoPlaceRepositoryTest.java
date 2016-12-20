@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.infrastructure.DatabaseTest;
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
-import pl.ipebk.tabi.readmodel.PlaceDto;
+import pl.ipebk.tabi.presentation.model.place.PlaceDto;
 import pl.ipebk.tabi.test.common.assemblers.PlaceModelAssembler;
 import rx.observers.TestSubscriber;
 

@@ -3,7 +3,7 @@
 * date: 2016-12-04
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.readmodel;
+package pl.ipebk.tabi.presentation.model.searchhistory;
 
 /**
  * Determines whether user is searching by place or by license plate

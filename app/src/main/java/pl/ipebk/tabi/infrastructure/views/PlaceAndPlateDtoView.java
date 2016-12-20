@@ -8,7 +8,7 @@ package pl.ipebk.tabi.infrastructure.views;
 import android.database.Cursor;
 
 import pl.ipebk.tabi.infrastructure.base.View;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 
 /**
  * Common View implementation for all views that are based on {@link PlaceAndPlateDto} model

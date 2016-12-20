@@ -3,11 +3,11 @@
 * date: 2016-02-24
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.di.component;
+package pl.ipebk.tabi.injection.component;
 
 import dagger.Subcomponent;
-import pl.ipebk.tabi.di.PerActivity;
-import pl.ipebk.tabi.di.module.ActivityModule;
+import pl.ipebk.tabi.injection.PerActivity;
+import pl.ipebk.tabi.injection.module.ActivityModule;
 import pl.ipebk.tabi.ui.details.DetailsActivity;
 import pl.ipebk.tabi.ui.main.MainActivity;
 import pl.ipebk.tabi.ui.search.SearchActivity;

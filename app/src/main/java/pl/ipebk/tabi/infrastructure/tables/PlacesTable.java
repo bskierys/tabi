@@ -70,7 +70,6 @@ public class PlacesTable extends Table<PlaceModel> {
     private PlaceDao placeDao;
     private SpellCorrector corrector;
 
-    // TODO: 2016-12-05 spellCorrector should not be here - that is responsibility of aggregate
     public PlacesTable() {
         corrector = new SpellCorrector();
     }

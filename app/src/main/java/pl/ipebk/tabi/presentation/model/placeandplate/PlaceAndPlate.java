@@ -7,12 +7,11 @@ package pl.ipebk.tabi.presentation.model.placeandplate;
 
 import pl.ipebk.tabi.canonicalmodel.AggregateId;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
-import pl.ipebk.tabi.readmodel.LicensePlateDto;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Model representing place with single plate. This is simplified object to display in single place row
  */
 public class PlaceAndPlate {
     private PlaceAndPlateDto dto;

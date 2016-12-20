@@ -11,12 +11,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.infrastructure.daos.PlaceDao;
 import pl.ipebk.tabi.infrastructure.daos.SearchHistoryDao;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import rx.Observable;
 
 /**

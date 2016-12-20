@@ -5,7 +5,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.ipebk.tabi.readmodel.LicensePlateDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 
 import static org.junit.Assert.*;
