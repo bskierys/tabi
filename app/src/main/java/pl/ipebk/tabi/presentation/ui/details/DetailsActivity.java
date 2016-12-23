@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -39,16 +40,16 @@ import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAda
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
-import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
-import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
+import pl.ipebk.tabi.utils.FontManager;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -361,9 +362,13 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void startWebSearch(String searchPhrase) {
-        Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-        intent.putExtra(SearchManager.QUERY, searchPhrase);
-        startActivity(intent);
+        String url = "http://www.google.com/search?q=" + searchPhrase;
+        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
+        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), ((activity, uri) -> {
+            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+            intent.putExtra(SearchManager.QUERY, searchPhrase);
+            startActivity(intent);
+        }));
     }
 
     @Override public void showPlaceHolder() {

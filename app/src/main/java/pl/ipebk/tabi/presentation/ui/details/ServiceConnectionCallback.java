@@ -5,8 +5,20 @@
 */
 package pl.ipebk.tabi.presentation.ui.details;
 
+import android.support.customtabs.CustomTabsClient;
+
 /**
- * TODO: Generic description. Replace with real one.
+ * Callback for events when connecting and disconnecting from Custom Tabs Service.
  */
-public class ServiceConnectionCallback {
+public interface ServiceConnectionCallback {
+    /**
+     * Called when the service is connected.
+     * @param client a CustomTabsClient
+     */
+    void onServiceConnected(CustomTabsClient client);
+
+    /**
+     * Called when the service is disconnected.
+     */
+    void onServiceDisconnected();
 }
