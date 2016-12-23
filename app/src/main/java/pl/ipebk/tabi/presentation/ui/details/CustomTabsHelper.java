@@ -1,8 +1,17 @@
-/*
-* author: Bartlomiej Kierys
-* date: 2016-12-23
-* email: bskierys@gmail.com
-*/
+// Copyright 2015 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package pl.ipebk.tabi.presentation.ui.details;
 
 import android.content.Context;
@@ -22,14 +31,12 @@ import java.util.List;
  */
 public class CustomTabsHelper {
     private static final String TAG = "CustomTabsHelper";
-    static final String STABLE_PACKAGE = "com.android.chrome";
-    static final String BETA_PACKAGE = "com.chrome.beta";
-    static final String DEV_PACKAGE = "com.chrome.dev";
-    static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
-    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE =
-            "android.support.customtabs.extra.KEEP_ALIVE";
-    private static final String ACTION_CUSTOM_TABS_CONNECTION =
-            "android.support.customtabs.action.CustomTabsService";
+    private static final String STABLE_PACKAGE = "com.android.chrome";
+    private static final String BETA_PACKAGE = "com.chrome.beta";
+    private static final String DEV_PACKAGE = "com.chrome.dev";
+    private static final String LOCAL_PACKAGE = "com.google.android.apps.chrome";
+    private static final String EXTRA_CUSTOM_TABS_KEEP_ALIVE = "android.support.customtabs.extra.KEEP_ALIVE";
+    private static final String ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
 
     private static String sPackageNameToUse;
 
@@ -37,22 +44,23 @@ public class CustomTabsHelper {
 
     public static void addKeepAliveExtra(Context context, Intent intent) {
         Intent keepAliveIntent = new Intent().setClassName(
-                context.getPackageName(), KeepAliveService.class.getCanonicalName());
+                context.getPackageName(), CustomTabsKeepAliveService.class.getCanonicalName());
         intent.putExtra(EXTRA_CUSTOM_TABS_KEEP_ALIVE, keepAliveIntent);
     }
 
     /**
-     * Goes through all apps that handle VIEW intents and have a warmup service. Picks
-     * the one chosen by the user if there is one, otherwise makes a best effort to return a
-     * valid package name.
-     *
+     * Goes through all apps that handle VIEW intents and have a warmup service. Picks the one chosen by the user if
+     * there is one, otherwise makes a best effort to return a valid package name.
+     * <p>
      * This is <strong>not</strong> threadsafe.
      *
      * @param context {@link Context} to use for accessing {@link PackageManager}.
      * @return The package name recommended to use for connecting to custom tabs related components.
      */
     public static String getPackageNameToUse(Context context) {
-        if (sPackageNameToUse != null) return sPackageNameToUse;
+        if (sPackageNameToUse != null) {
+            return sPackageNameToUse;
+        }
 
         PackageManager pm = context.getPackageManager();
         // Get default VIEW intent handler.
@@ -99,6 +107,7 @@ public class CustomTabsHelper {
 
     /**
      * Used to check whether there is a specialized handler for a given intent.
+     *
      * @param intent The intent to check with.
      * @return Whether there is a specialized handler for the given intent.
      */
@@ -113,9 +122,15 @@ public class CustomTabsHelper {
             }
             for (ResolveInfo resolveInfo : handlers) {
                 IntentFilter filter = resolveInfo.filter;
-                if (filter == null) continue;
-                if (filter.countDataAuthorities() == 0 || filter.countDataPaths() == 0) continue;
-                if (resolveInfo.activityInfo == null) continue;
+                if (filter == null) {
+                    continue;
+                }
+                if (filter.countDataAuthorities() == 0 || filter.countDataPaths() == 0) {
+                    continue;
+                }
+                if (resolveInfo.activityInfo == null) {
+                    continue;
+                }
                 return true;
             }
         } catch (RuntimeException e) {

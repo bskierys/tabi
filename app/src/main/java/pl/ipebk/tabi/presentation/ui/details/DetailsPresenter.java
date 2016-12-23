@@ -13,14 +13,14 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.presentation.model.place.PlaceFactory;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
-import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
-import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
+import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
+import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
@@ -71,10 +71,10 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             this.searchedPlate = searchedPlate.toUpperCase();
         }
 
-        // TODO: 2016-12-10 onError here
         loadPlaceSubscription = repository.loadByIdObservable(new AggregateId(id))
                                           .map(placeFactory::createFromDto)
-                                          .subscribe(placeSubject::onNext);
+                                          .subscribe(placeSubject::onNext,
+                                                     error -> Timber.e("Could not load place in details"));
 
         Observable<Place> standardPlaceStream = placeOnce.filter(p -> p.getType() != PlaceType.SPECIAL);
         standardPlaceStream.subscribeOn(Schedulers.io())
@@ -121,6 +121,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
             getMvpView().showPlate(plate.toString());
         }
 
+        getMvpView().preloadWebSearch(place.getSearchPhrase());
         getMvpView().enableActionButtons();
         getMvpView().showAdditionalInfo(place.getAdditionalInfo(searchedPlate));
         getMvpView().showPlaceName(place.getName());

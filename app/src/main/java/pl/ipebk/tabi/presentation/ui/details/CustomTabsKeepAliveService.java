@@ -14,21 +14,19 @@
 
 package pl.ipebk.tabi.presentation.ui.details;
 
-import android.support.customtabs.CustomTabsClient;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 
 /**
- * Callback for events when connecting and disconnecting from Custom Tabs Service.
+ * Empty service used by the custom tab to bind to, raising the application's importance.
  */
-public interface ServiceConnectionCallback {
-    /**
-     * Called when the service is connected.
-     *
-     * @param client a CustomTabsClient
-     */
-    void onServiceConnected(CustomTabsClient client);
+public class CustomTabsKeepAliveService extends Service {
+    private static final Binder sBinder = new Binder();
 
-    /**
-     * Called when the service is disconnected.
-     */
-    void onServiceDisconnected();
+    @Override
+    public IBinder onBind(Intent intent) {
+        return sBinder;
+    }
 }

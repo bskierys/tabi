@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -93,9 +94,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @BindView(R.id.img_placeholder) ImageView placeHolder;
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
 
+    private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+    private CustomTabActivityHelper chromeTabHelper;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
@@ -112,6 +115,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         toolbarIndicator.setVisibility(View.GONE);
         doodleHeaderFont = fontManager.get("bebas", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
+        chromeTabHelper = new CustomTabActivityHelper();
 
         stopwatch = stopwatchManager.getDefaultStopwatch();
         stopwatch.reset();
@@ -186,11 +190,21 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Override protected void onStart() {
         super.onStart();
+        chromeTabHelper.bindCustomTabsService(this);
+        if(preloadedSearchPhrase!=null) {
+            Uri uri = Uri.parse(preloadedSearchPhrase);
+            chromeTabHelper.mayLaunchUrl(uri, null, null);
+        }
 
         AnimatorSet set = new AnimatorSet();
         set.play(animationCreator.getDetailsAnimator().createScaleAnim(panelCard))
            .with(animationCreator.getDetailsAnimator().createFadeInAnim(panelCard));
         set.start();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        chromeTabHelper.unbindCustomTabsService(this);
     }
 
     @Override protected void onDestroy() {
@@ -361,10 +375,28 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         }
     }
 
+    @Override public void preloadWebSearch(String searchPhrase) {
+        preloadedSearchPhrase = getSearchUrlForPhrase(searchPhrase);
+    }
+
+    private String getSearchUrlForPhrase(String searchPhrase) {
+        return "http://www.google.com/search?q=" + searchPhrase;
+    }
+
     @Override public void startWebSearch(String searchPhrase) {
-        String url = "http://www.google.com/search?q=" + searchPhrase;
-        CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder().build();
-        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), ((activity, uri) -> {
+        String url = getSearchUrlForPhrase(searchPhrase);
+        int primaryColor = getResources().getColor(R.color.colorPrimary);
+        int secondaryColor = getResources().getColor(R.color.colorPrimaryDark);
+
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setToolbarColor(primaryColor);
+        intentBuilder.setSecondaryToolbarColor(secondaryColor);
+        intentBuilder.enableUrlBarHiding();
+        intentBuilder.setStartAnimations(this, 0, 0);
+        intentBuilder.setExitAnimations(this, 0 ,0);
+
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
+        chromeTabHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), ((activity, uri) -> {
             Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
             intent.putExtra(SearchManager.QUERY, searchPhrase);
             startActivity(intent);

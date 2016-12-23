@@ -39,6 +39,8 @@ public interface DetailsMvpView extends MvpView {
 
     void startMapApp(Uri uri);
 
+    void preloadWebSearch(String searchPhrase);
+
     void startWebSearch(String searchPhrase);
 
     void showPlaceHolder();
