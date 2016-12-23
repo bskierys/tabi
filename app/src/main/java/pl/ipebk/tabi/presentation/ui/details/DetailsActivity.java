@@ -385,12 +385,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
     @Override public void startWebSearch(String searchPhrase) {
         String url = getSearchUrlForPhrase(searchPhrase);
-        int primaryColor = getResources().getColor(R.color.colorPrimary);
-        int secondaryColor = getResources().getColor(R.color.colorPrimaryDark);
+        int primaryColor = getResources().getColor(R.color.white);
 
         CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
         intentBuilder.setToolbarColor(primaryColor);
-        intentBuilder.setSecondaryToolbarColor(secondaryColor);
         intentBuilder.enableUrlBarHiding();
         intentBuilder.setStartAnimations(this, 0, 0);
         intentBuilder.setExitAnimations(this, 0 ,0);

@@ -5,7 +5,12 @@
 */
 package pl.ipebk.tabi.presentation.ui.base;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -15,6 +20,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import icepick.Icepick;
 import pl.ipebk.tabi.App;
+import pl.ipebk.tabi.BuildConfig;
+import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.injection.component.ActivityComponent;
 import pl.ipebk.tabi.injection.component.ConfigPersistentComponent;
 import pl.ipebk.tabi.injection.component.DaggerConfigPersistentComponent;
@@ -40,6 +47,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
 
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setTaskDescription();
+        }
+
         // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
         mActivityId = savedInstanceState != null ?
@@ -56,6 +67,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             configPersistentComponent = sComponentsMap.get(mActivityId);
         }
         activityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setTaskDescription(){
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
+                getString(R.string.app_name), bm, getResources().getColor(R.color.white));
+        setTaskDescription(taskDesc);
     }
 
     public ActivityComponent getActivityComponent() {
