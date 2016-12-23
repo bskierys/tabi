@@ -42,11 +42,11 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <pl.ipebk.tabi.ui.custom.FontTextView
+                    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                         android:id="@+id/txt_searched"
                         style="@style/Details_Text.Search"/>
 
-                    <pl.ipebk.tabi.ui.custom.FontEditText
+                    <pl.ipebk.tabi.presentation.ui.custom.FontEditText
                         android:id="@+id/editTxt_search"
                         style="@style/Details_Text.Search"
                         android:hint="Jakiej rejestracji szukasz?"
@@ -68,7 +68,7 @@
                     android:src="@drawable/ic_close"/>
             </LinearLayout>
 
-            <pl.ipebk.tabi.ui.search.SearchTabPageIndicator
+            <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Search.Height.Tabs"

@@ -9,7 +9,7 @@ import java.util.Date;
 
 import pl.ipebk.tabi.infrastructure.models.PlaceModel;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
-import pl.ipebk.tabi.readmodel.SearchType;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 /**
  * Assembler of {@link SearchHistoryModel} for tests
@@ -25,7 +25,7 @@ public class SearchHistoryAssembler {
 
     public SearchHistoryAssembler searchedFor(PlaceModel place) {
         this.placeId = place.getId();
-        this.plate = place.plates().get(0).pattern();
+        this.plate = place.plates().get(0).getDto().pattern();
         return this;
     }
 

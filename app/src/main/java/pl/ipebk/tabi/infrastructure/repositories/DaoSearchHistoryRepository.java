@@ -7,8 +7,8 @@ package pl.ipebk.tabi.infrastructure.repositories;
 
 import javax.inject.Inject;
 
-import pl.ipebk.tabi.domain.searchhistory.SearchHistory;
-import pl.ipebk.tabi.domain.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistory;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.infrastructure.daos.SearchHistoryDao;
 import pl.ipebk.tabi.infrastructure.models.SearchHistoryModel;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
@@ -31,9 +31,9 @@ public class DaoSearchHistoryRepository implements SearchHistoryRepository {
     }
 
     @Override public void save(SearchHistory history) {
-        dao.updateOrAdd(SearchHistoryModel.create(0, history.getPlaceId(),
-                                                  history.getPlate(),
-                                                  history.getTimeSearched(),
-                                                  history.getSearchType().ordinal()));
+        dao.updateOrAdd(SearchHistoryModel.create(0, history.placeId().getValue(),
+                                                  history.plate(),
+                                                  history.timeSearched(),
+                                                  history.searchType().ordinal()));
     }
 }

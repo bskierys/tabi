@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.infrastructure.daos.PlacesToSearchDao;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import rx.Observable;
 

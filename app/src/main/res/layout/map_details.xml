@@ -7,7 +7,7 @@
     android:layout_marginTop="@dimen/Details.Margin.Map.Top"
     tools:ignore="contentDescription">
 
-    <pl.ipebk.tabi.ui.custom.ObservableSizeLayout
+    <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
         android:id="@+id/wrap_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,7 +19,7 @@
             android:background="@color/grey_200"
             android:contentDescription="@string/description_details_map"
             android:scaleType="centerCrop"/>
-    </pl.ipebk.tabi.ui.custom.ObservableSizeLayout>
+    </pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout>
 
     <ImageView
         android:id="@+id/img_pin"

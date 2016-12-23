@@ -9,7 +9,7 @@
     android:background="@color/grey_100"
     android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.main.MainActivity"
+    tools:context=".presentation.ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.v7.widget.RecyclerView
@@ -64,7 +64,7 @@
             android:layout_marginRight="@dimen/Main.Margin.SearchBar.Horizontal"
             android:layout_marginTop="@dimen/Main.Margin.SearchBar.Top.Lowest">
 
-            <pl.ipebk.tabi.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/txt_searched"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Main.Height.SearchBar.Inner"

@@ -58,8 +58,8 @@ public class PlatesTable extends Table<PlateModel> {
     @Override public ContentValues modelToContentValues(PlateModel model) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PLACE_ID, model.placeId());
-        values.put(COLUMN_PLATE, model.pattern());
-        values.put(COLUMN_PLATE_END, model.end());
+        values.put(COLUMN_PLATE, model.getDto().pattern());
+        values.put(COLUMN_PLATE_END, model.getDto().end());
         return values;
     }
 }

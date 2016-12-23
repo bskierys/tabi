@@ -7,7 +7,7 @@ package pl.ipebk.tabi.utils;
 
 import org.mockito.ArgumentMatcher;
 
-import pl.ipebk.tabi.canonicalmodel.AggregateId;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 
 public class AggregateIdMatcher implements ArgumentMatcher<AggregateId> {
     private final AggregateId expected;

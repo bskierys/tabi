@@ -22,6 +22,8 @@
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
  */
+apply from: 'buildsystem/git-version.gradle'
+
 allprojects {
     repositories {
         jcenter()
@@ -29,19 +31,11 @@ allprojects {
     }
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
-
-def versionMajor = properties.getProperty('versionMajor')
-def versionMinor = properties.getProperty('versionMinor')
-def versionPatch = properties.getProperty('versionPatch')
-def versionBuild = properties.getProperty('versionBuild')
-
 ext {
     //Android
     androidApplicationId = 'pl.ipebk.tabi'
-    androidVersionCode = versionMajor.toInteger() * 10000000 + versionMinor.toInteger() * 100000 + versionPatch.toInteger() * 1000 + versionBuild.toInteger()
-    androidVersionName = "${versionMajor}.${versionMinor}.${versionPatch}-b${versionBuild}"
+    androidVersionCode = readVersionCode()
+    androidVersionName = readVersionName()
     androidBuildToolsVersion = "24.0.0"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 24

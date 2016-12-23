@@ -44,14 +44,14 @@ public class PlateDao extends Dao<PlateModel> {
         String whereClause = String.format(" %s = ? AND %s = ? AND ",
                                            PlatesTable.COLUMN_PLATE, PlatesTable.COLUMN_PLACE_ID);
         List<String> whereParams = new ArrayList<>();
-        whereParams.add(plate.pattern());
+        whereParams.add(plate.getDto().pattern());
         whereParams.add(Long.toString(plate.placeId()));
 
-        if (plate.end() == null) {
+        if (plate.getDto().end() == null) {
             whereClause += PlatesTable.COLUMN_PLATE_END + " IS NULL ";
         } else {
             whereClause += String.format(" %s = ? ", PlatesTable.COLUMN_PLATE_END);
-            whereParams.add(plate.end());
+            whereParams.add(plate.getDto().end());
         }
 
         int rowsUpdated = db.update(table.getName(), table.modelToContentValues(plate),

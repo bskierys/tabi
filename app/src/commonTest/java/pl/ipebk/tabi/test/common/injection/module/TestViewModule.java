@@ -9,10 +9,12 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.readmodel.PlaceAndPlateFactory;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.utils.NameFormatHelper;
-import pl.ipebk.tabi.utils.ResourceHelper;
+import pl.ipebk.tabi.presentation.ui.main.ResourceHelper;
 import static org.mockito.Mockito.mock;
 
 @Module
@@ -24,8 +26,16 @@ public class TestViewModule {
         this.context = context;
     }
 
-    @Provides public NameFormatHelper provideNameFormatHelper() {
-        return mock(NameFormatHelper.class);
+    @Provides public DoodleTextFormatter provideNameFormatHelper() {
+        return mock(DoodleTextFormatter.class);
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return mock(RandomTextProvider.class);
+    }
+
+    @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
+        return mock(PlaceLocalizationHelper.class);
     }
 
     @Provides public FontManager provideFontManager() {
@@ -36,7 +46,7 @@ public class TestViewModule {
         return mock(ResourceHelper.class);
     }
 
-    @Provides PlaceAndPlateFactory providePlaceAndPlateFactory() {
-        return mock(PlaceAndPlateFactory.class);
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory() {
+        return mock(PlaceAndPlateDtoFactory.class);
     }
 }

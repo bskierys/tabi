@@ -28,11 +28,11 @@
             <include layout="@layout/row_place_name"/>
         </LinearLayout>
 
-        <pl.ipebk.tabi.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_voivodeship"
             style="@style/Details_Text.Description.Search"/>
 
-        <pl.ipebk.tabi.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_powiat"
             style="@style/Details_Text.Description.Search"
             android:layout_marginBottom="@dimen/Search.Margin.Row"/>

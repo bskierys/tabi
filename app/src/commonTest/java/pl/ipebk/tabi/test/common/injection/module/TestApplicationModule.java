@@ -12,12 +12,11 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.di.ApplicationContext;
-import pl.ipebk.tabi.domain.place.PlaceRepository;
-import pl.ipebk.tabi.domain.searchhistory.SearchTimeProvider;
-import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
+import pl.ipebk.tabi.injection.ApplicationContext;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
-import pl.ipebk.tabi.manager.DataManager;
+import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 
 import static org.mockito.Mockito.mock;
@@ -53,8 +52,8 @@ public class TestApplicationModule {
     }
 
     @Provides
-    @Singleton public DataManager provideDataManager() {
-        return mock(DataManager.class);
+    @Singleton public SqliteDatabaseLoader provideDataManager() {
+        return mock(SqliteDatabaseLoader.class);
     }
 
     @Provides public SearchTimeProvider provideSearchTimeProvider() {

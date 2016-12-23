@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.search.SearchActivity"
+    tools:context=".presentation.ui.search.SearchActivity"
     tools:ignore="contentDescription">
 
     <include layout="@layout/toolbar_search"/>
