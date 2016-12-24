@@ -4,7 +4,6 @@ import android.animation.AnimatorSet;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -197,8 +196,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         }
 
         AnimatorSet set = new AnimatorSet();
-        set.play(animationCreator.getDetailsAnimator().createScaleAnim(panelCard))
-           .with(animationCreator.getDetailsAnimator().createFadeInAnim(panelCard));
+        set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
+           .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
         set.start();
     }
 
