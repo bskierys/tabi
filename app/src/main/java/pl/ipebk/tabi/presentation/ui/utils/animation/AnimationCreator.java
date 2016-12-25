@@ -93,13 +93,13 @@ public class AnimationCreator {
             panelElevationStart = 0.0F;
         }
 
-        public Animator createFadeInAnim(View target) {
+        public Animator createPanelEnterFadeInAnim(View target) {
             return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
                                         .setTarget(target).setInterpolator(new LinearInterpolator())
                                         .setDuration(PANEL_FADE_ANIM_DURATION).build();
         }
 
-        public Animator createScaleAnim(View target) {
+        public Animator createPanelEnterScaleAnim(View target) {
             AnimatorSet animator = new AnimatorSet();
 
             ObjectAnimator elevation = new AnimatorBuilder().setPropertyName("cardElevation")
