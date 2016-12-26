@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
@@ -257,10 +258,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void goToAboutAppPage() {
-        new LibsBuilder()
-                //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
-                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                .start(this);
+        Intent intent = new Intent(this, AboutAppActivity.class);
+        startActivity(intent);
     }
 
     @Override public void onMenuItemClicked(String action) {
