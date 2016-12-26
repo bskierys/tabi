@@ -145,6 +145,7 @@ dependencies {
     compile mobileDependencies.design
     compile mobileDependencies.cardview
     compile mobileDependencies.recyclerView
+    compile mobileDependencies.customtabs
 
     // RxJava
     compile mobileDependencies.rxjava
@@ -159,6 +160,9 @@ dependencies {
 
     // overscroll
     compile mobileDependencies.overscroll
+    compile(mobileDependencies.aboutLibraries) {
+        transitive = true
+    }
 
     // logs
     compile mobileDependencies.pine
@@ -174,8 +178,6 @@ dependencies {
     // icepick
     compile mobileDependencies.icepick
     provided mobileDependencies.icepickProcessor
-
-    compile 'com.android.support:customtabs:24.0.0+'
 
     // sqlite
     compile mobileDependencies.sqliteAssetHelper

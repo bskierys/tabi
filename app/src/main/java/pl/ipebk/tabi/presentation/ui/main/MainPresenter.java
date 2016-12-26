@@ -135,8 +135,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
             if (actionId == 2) {
                 Timber.d("Showing feedback dialog for API key: %s", FEEDBACK_API_KEY);
                 getMvpView().showFeedbackDialog();
-            } else {
-                getMvpView().prompt("Not implemented yet");
+            } else if(actionId == 1){
+                getMvpView().goToAboutAppPage();
             }
         } catch (NumberFormatException e) {
             Timber.d("Menu item clicked has literal as action");

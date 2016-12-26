@@ -68,6 +68,7 @@ ext {
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
     autoValueVersion = '1.2';
+    aboutLibrariesVersion = "5.9.1@aar";
 
     mobileDependencies = [
             // Android
@@ -77,6 +78,7 @@ ext {
             cardview                : "com.android.support:cardview-v7:${androidSupportVersion}",
             recyclerView            : "com.android.support:recyclerview-v7:${androidSupportVersion}",
             supportannotations      : "com.android.support:support-annotations:${androidSupportVersion}",
+            customtabs              : "com.android.support:customtabs:${androidSupportVersion}",
 
             // RxJava
             rxjava                  : "io.reactivex:rxjava:${rxJavaVersion}",
@@ -113,6 +115,7 @@ ext {
 
             // overscroll
             overscroll              : "me.everything:overscroll-decor-android:${overscrollVersion}",
+            aboutLibraries          : "com.mikepenz:aboutlibraries:${aboutLibrariesVersion}",
 
             // auto-value
             autovalue               : "com.google.auto.value:auto-value:${autoValueVersion}",
