@@ -6,29 +6,40 @@
 package pl.ipebk.tabi.presentation.ui.about;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 
-import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.aboutlibraries.ui.LibsActivity;
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 
-public class AboutAppActivity extends LibsActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+
+public class AboutAppActivity extends BaseActivity {
+    @BindView(R.id.toolbar) Toolbar toolbar;
+
     @Override public void onCreate(Bundle savedInstanceState) {
-
-        LibsBuilder builder = new LibsBuilder()
-                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                .withAboutIconShown(true)
-                .withActivityTitle("O aplikacji")
-                .withAboutVersionShown(true);
-
-        setIntent(builder.intent(this));
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+        ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
 
-        // TODO: 2016-12-26 this activity should rather have fragment and custom toolbar to support ui customization 
-        // TODO: 2016-12-26 separate section about ap from about libraries?
+        LibsSupportFragment fragment = new LibsBuilder()
+                .withAboutAppName(getString(R.string.app_name))
+                .withAboutIconShown(true)
+                .withAboutVersionShownName(true)
+                .withVersionShown(true)
+                .withLicenseShown(true)
+                .supportFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
 
-    @Override public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(0, 0);
+    @OnClick(R.id.btn_back) public void onBackButton() {
+        onBackPressed();
     }
 }
