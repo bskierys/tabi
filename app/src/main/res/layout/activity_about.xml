@@ -9,7 +9,11 @@
     tools:context=".presentation.ui.about.AboutAppActivity"
     tools:ignore="contentDescription">
 
-    <include layout="@layout/toolbar_about"/>
+    <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:content="@layout/toolbar_content_about"/>
 
     <!--  This relative layout is important. If it is removed,
           layout will go above the toolbar when scrolled  -->
