@@ -143,6 +143,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     private void searchForRawTextWithLimit(String rawPhrase, Integer limit, int searchType) {
         checkViewAttached();
         RxUtil.unsubscribe(searchSubscription);
+        lastSearched = rawPhrase;
 
         searchSubscription = Observable
                 .just(rawPhrase)

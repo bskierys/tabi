@@ -34,7 +34,10 @@ import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
+import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
@@ -60,6 +63,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private BlockingLayoutManager manager;
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
+    private CompositeSubscription scrollSubscriptions;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,20 +83,21 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         feedbackApiKey = getString(R.string.feedback_api_key);
         feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
         prepareFeedbackDialog(feedbackDialog);
+        scrollSubscriptions = new CompositeSubscription();
 
-        RxRecyclerView.scrollEvents(recyclerView)
-                      .observeOn(AndroidSchedulers.mainThread())
-                      .map(RecyclerViewScrollEvent::dy)
-                      .doOnNext(dy -> doodleBack.setY(doodleBack.getY() - dy))
-                      .doOnNext(dy -> doodleFront.setY(doodleFront.getY() - dy))
-                      .subscribe();
+        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
+                                              .observeOn(AndroidSchedulers.mainThread())
+                                              .map(RecyclerViewScrollEvent::dy)
+                                              .doOnNext(dy -> doodleBack.setY(doodleBack.getY() - dy))
+                                              .doOnNext(dy -> doodleFront.setY(doodleFront.getY() - dy))
+                                              .subscribe());
 
-        RxRecyclerViewExtension.totalScrollEvents(recyclerView)
-                               .observeOn(AndroidSchedulers.mainThread())
-                               .map(RecyclerViewTotalScrollEvent::totalScrollY)
-                               .map(this::computePercentScrolled)
-                               .doOnNext(percent -> scrollPercent = percent)
-                               .subscribe(this::setAnimationState);
+        scrollSubscriptions.add(RxRecyclerViewExtension.totalScrollEvents(recyclerView)
+                                                       .observeOn(AndroidSchedulers.mainThread())
+                                                       .map(RecyclerViewTotalScrollEvent::totalScrollY)
+                                                       .map(this::computePercentScrolled)
+                                                       .doOnNext(percent -> scrollPercent = percent)
+                                                       .subscribe(this::setAnimationState));
     }
 
     private float computePercentScrolled(int scrollPosition) {
@@ -187,6 +192,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onDestroy() {
         super.onDestroy();
 
+        RxUtil.unsubscribe(scrollSubscriptions);
         presenter.detachView();
     }
 

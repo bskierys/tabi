@@ -80,7 +80,7 @@
     <string name="main_list_element_zachodniopomorskie">zachodnio-pomorskie</string>
     <string name="main_list_element_sluzbybezpieczenstwa">służby bezpieczeństwa</string>
     <string name="main_list_element_tablicewojskowe">tablice wojskowe</string>
-    <string name="main_list_element_licesnes">licencje bibliotek zewnętrznych</string>
+    <string name="main_list_element_licenses">licencje bibliotek zewnętrznych</string>
     <string name="main_list_element_rate">zgłoś nam swoje uwagi</string>
     <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>
     <string name="main_doodle_caption">Znam *wszystkie* tablice rejestracyjne. Śmiało. Pytaj!</string>
