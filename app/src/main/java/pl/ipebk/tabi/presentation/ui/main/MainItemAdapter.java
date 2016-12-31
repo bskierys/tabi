@@ -6,6 +6,8 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
+import timber.log.Timber;
 
 public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NONE = -1;
@@ -31,7 +34,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int BIG_HEADER_POSITION = 0;
 
-    @Inject ResourceHelper resourceHelper;
+    @Inject MainScreenResourceFinder resourceHelper;
     @Inject DoodleTextFormatter doodleTextFormatter;
     private List<MainListItem> categoryList;
     private Context context;
@@ -67,14 +70,28 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             MainListElementItem item = (MainListElementItem) categoryList.get(position - 1);
 
             itemViewHolder.rootView.setOnClickListener(v -> listener.onMenuItemClicked(item.getActionKey()));
-            itemViewHolder.categoryName.setText(resourceHelper.getStringResourceForKey(item.getTitleResourceKey()));
-            itemViewHolder.categoryIcon.setImageDrawable(resourceHelper.getDrawableResourceForKey(item.getImageResourceKey()));
+            String categoryName;
+            try{
+                categoryName = resourceHelper.getStringResourceForKey(item.getTitleResourceKey());
+            } catch (Resources.NotFoundException e){
+                Timber.e("Failed to find category name for name: %s", item.getTitleResourceKey());
+                categoryName = context.getString(R.string.default_resource_string);
+            }
+            itemViewHolder.categoryName.setText(categoryName);
+
+            Drawable categoryIcon;
+            try{
+                categoryIcon = resourceHelper.getDrawableResourceForKey(item.getImageResourceKey());
+            } catch (Resources.NotFoundException e){
+                Timber.e("Failed to find category drawable for name: %s", item.getTitleResourceKey());
+                categoryIcon = context.getResources().getDrawable(R.drawable.default_resource_drawable);
+            }
+            itemViewHolder.categoryIcon.setImageDrawable(categoryIcon);
         } else if (holder instanceof BigHeaderViewHolder) {
             // TODO: 2016-05-31 same holder names
             BigHeaderViewHolder headerViewHolder = (BigHeaderViewHolder) holder;
 
             // TODO: 2016-06-07 caption should be generic or depends on sharedPrefs
-            // TODO: 2016-06-07 make sharedPrefsHelper 
             String captionToSet;
             if (caption == null || caption.equals("")) {
                 captionToSet = context.getString(R.string.main_doodle_caption);
@@ -89,7 +106,14 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             SmallHeaderViewHolder headerViewHolder = (SmallHeaderViewHolder) holder;
             MainListHeaderItem item = (MainListHeaderItem) categoryList.get(position - 1);
 
-            headerViewHolder.header.setText(resourceHelper.getStringResourceForKey(item.getTitleResourceKey()));
+            String headerName;
+            try{
+                headerName = resourceHelper.getStringResourceForKey(item.getTitleResourceKey());
+            } catch (Resources.NotFoundException e){
+                Timber.e("Failed to find header for name: %s", item.getTitleResourceKey());
+                headerName = context.getString(R.string.default_resource_string);
+            }
+            headerViewHolder.header.setText(headerName);
         }
     }
 

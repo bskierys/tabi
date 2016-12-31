@@ -10,12 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.suredigit.inappfeedback.FeedbackDialog;
 import com.suredigit.inappfeedback.FeedbackSettings;
 
@@ -34,8 +31,8 @@ import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
-import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -62,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private MainItemAdapter adapter;
     private BlockingLayoutManager manager;
     private FeedbackDialog feedbackDialog;
+    private String feedbackApiKey;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +76,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         recyclerView.setLayoutManager(manager);
         adapter = new MainItemAdapter(new ArrayList<>(), this, this);
         recyclerView.setAdapter(adapter);
-        feedbackDialog = new FeedbackDialog(this, MainPresenter.FEEDBACK_API_KEY);
+        feedbackApiKey = getString(R.string.feedback_api_key);
+        feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
         prepareFeedbackDialog(feedbackDialog);
 
         RxRecyclerView.scrollEvents(recyclerView)
@@ -196,6 +195,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showFeedbackDialog() {
+        Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
         feedbackDialog.show();
     }
 
@@ -263,6 +263,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void onMenuItemClicked(String action) {
-        presenter.menuItemClicked(action);
+        presenter.showCategoryForAction(action);
     }
 }

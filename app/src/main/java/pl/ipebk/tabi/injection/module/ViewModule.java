@@ -15,7 +15,7 @@ import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.presentation.ui.main.ResourceHelper;
+import pl.ipebk.tabi.presentation.ui.main.MainScreenResourceFinder;
 
 @Module
 public class ViewModule {
@@ -32,8 +32,8 @@ public class ViewModule {
         return fontManager;
     }
 
-    @Provides ResourceHelper provideResourceHelper() {
-        return new ResourceHelper(context);
+    @Provides MainScreenResourceFinder provideResourceHelper() {
+        return new MainScreenResourceFinder(context);
     }
 
     @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
