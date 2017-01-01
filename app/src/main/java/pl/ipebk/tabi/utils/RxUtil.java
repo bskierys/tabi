@@ -6,13 +6,23 @@
 package pl.ipebk.tabi.utils;
 
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 public class RxUtil {
 
     /**
-     * Unsubscribes subscription that is not already unsubscribed
+     * Unsubscribes {@link Subscription} that is not already unsubscribed
      */
     public static void unsubscribe(Subscription subscription) {
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+    }
+
+    /**
+     * Unsubscribes {@link CompositeSubscription} that is not already unsubscribed
+     */
+    public static void unsubscribe(CompositeSubscription subscription) {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }

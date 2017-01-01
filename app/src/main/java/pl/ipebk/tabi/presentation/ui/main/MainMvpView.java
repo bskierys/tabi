@@ -22,6 +22,5 @@ public interface MainMvpView extends MvpView {
 
     void goToSearch(String phrase);
 
-    // TODO: 2016-06-03 remove this method
-    void prompt(String message);
+    void goToAboutAppPage();
 }

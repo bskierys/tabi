@@ -25,7 +25,8 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class MainPresenter extends BasePresenter<MainMvpView> {
-    public static final String FEEDBACK_API_KEY = "AF-8DE6899E68E4-F6";
+    private static final String ACTION_SHOW_LICENSES = "licenses";
+    private static final String ACTION_GIVE_FEEDBACK = "rate";
 
     private final DatabaseLoader databaseLoader;
     private Subscription loadSubscription;
@@ -70,7 +71,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         getMvpView().showCaption(caption);
     }
 
-    // TODO: 2016-05-28 presenter lifecycle
     private void loadDatabase() {
         stopwatch.reset();
         loadSubscription = databaseLoader
@@ -87,9 +87,11 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 });
     }
 
+    /**
+     * Be careful. Main screen resources are loaded by reflection. Be sure tu name your new resources appropriately.
+     * Check {@link MainScreenResourceFinder} and {@link MainListItem} for more info.
+     */
     private void loadCategories() {
-
-        // TODO: 2016-05-26 move actions to constants
         List<MainListItem> items = new ArrayList<>();
 
         items.add(new MainListHeaderItem("browse"));
@@ -115,8 +117,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
         items.add(new MainListHeaderItem("about_app"));
 
-        items.add(new MainListElementItem("licencje", "1"));
-        items.add(new MainListElementItem("ocen", "2"));
+        items.add(new MainListElementItem("licenses", ACTION_SHOW_LICENSES));
+        items.add(new MainListElementItem("rate", ACTION_GIVE_FEEDBACK));
 
         items.add(new MainListHeaderItem("none"));
 
@@ -127,18 +129,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         getMvpView().goToSearch(null);
     }
 
-    public void menuItemClicked(String action) {
-        try {
-            // TODO: 2016-06-14 better action click handling
-            int actionId = Integer.parseInt(action);
-            Timber.d("Menu item clicked has numeral as action. This number is: %d", actionId);
-            if (actionId == 2) {
-                Timber.d("Showing feedback dialog for API key: %s", FEEDBACK_API_KEY);
-                getMvpView().showFeedbackDialog();
-            } else {
-                getMvpView().prompt("Not implemented yet");
-            }
-        } catch (NumberFormatException e) {
+    public void showCategoryForAction(String action) {
+        if(ACTION_SHOW_LICENSES.equals(action)) {
+            getMvpView().goToAboutAppPage();
+        } else if(ACTION_GIVE_FEEDBACK.equals(action)) {
+            getMvpView().showFeedbackDialog();
+        } else {
             Timber.d("Menu item clicked has literal as action");
             getMvpView().goToSearch(action);
         }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="define_autovalue" translatable="false"></string>
+    <string name="library_autovalue_author" translatable="false">Google, Inc</string>
+    <string name="library_autovalue_authorWebsite" translatable="false">https://github.com/google/auto</string>
+    <string name="library_autovalue_libraryName" translatable="false">AutoValue</string>
+    <string name="library_autovalue_libraryDescription" translatable="false">AutoValue provides an easier way to create Java immutable value classes, with a lot less code and less room for error, while not restricting your freedom to code almost any aspect of your class exactly the way you want it.</string>
+    <string name="library_autovalue_libraryWebsite" translatable="false">https://github.com/google/auto/tree/master/value</string>
+    <string name="library_autovalue_libraryVersion" translatable="false">1.2</string>
+    <string name="library_autovalue_isOpenSource" translatable="false">true</string>
+    <string name="library_autovalue_repositoryLink" translatable="false">https://github.com/google/auto/tree/master/value</string>
+    <string name="library_autovalue_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_customtabs" translatable="false"></string>
+    <string name="library_customtabs_author" translatable="false">Google, Inc</string>
+    <string name="library_customtabs_authorWebsite" translatable="false">https://developer.chrome.com/multidevice/android/customtabs</string>
+    <string name="library_customtabs_libraryName" translatable="false">Chrome Custom Tabs</string>
+    <string name="library_customtabs_libraryDescription" translatable="false">Chrome Custom Tabs give apps more control over their web experience, and make transitions between native and web content more seamless without having to resort to a WebView.</string>
+    <string name="library_customtabs_libraryWebsite" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+    <string name="library_customtabs_libraryVersion" translatable="false">2.3.0</string>
+    <string name="library_customtabs_isOpenSource" translatable="false">true</string>
+    <string name="library_customtabs_repositoryLink" translatable="false">https://github.com/journeyapps/zxing-android-embedded</string>
+    <string name="library_customtabs_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_overscroll" translatable="false"></string>
+    <string name="library_overscroll_author" translatable="false">DoAT Media Ltd.</string>
+    <string name="library_overscroll_authorWebsite" translatable="false">http://everything.me//</string>
+    <string name="library_overscroll_libraryName" translatable="false">Overscroll decor</string>
+    <string name="library_overscroll_libraryDescription" translatable="false">The library provides an iOS-like over-scrolling effect applicable over almost all Android native scrollable views.</string>
+    <string name="library_overscroll_libraryWebsite" translatable="false">https://github.com/EverythingMe/overscroll-decor</string>
+    <string name="library_overscroll_libraryVersion" translatable="false">1.0.1</string>
+    <string name="library_overscroll_isOpenSource" translatable="false">true</string>
+    <string name="library_overscroll_repositoryLink" translatable="false">https://github.com/EverythingMe/overscroll-decor</string>
+    <string name="library_overscroll_licenseId" translatable="false">daot_media</string>
+
+    <string name="define_pine" translatable="false"></string>
+    <string name="library_pine_author" translatable="false">Bartlomiej Kierys</string>
+    <string name="library_pine_authorWebsite" translatable="false">https://github.com/bskierys</string>
+    <string name="library_pine_libraryName" translatable="false">Pine</string>
+    <string name="library_pine_libraryDescription" translatable="false">Pine is extension for default DebugTree. It has ability to log class, method, and line number where it was invoked. It also has package-driven tagging which works nice with MVP project structure.</string>
+    <string name="library_pine_libraryWebsite" translatable="false">https://github.com/bskierys/Pine</string>
+    <string name="library_pine_libraryVersion" translatable="false">0.2.0</string>
+    <string name="library_pine_isOpenSource" translatable="false">true</string>
+    <string name="library_pine_repositoryLink" translatable="false">https://github.com/bskierys/Pine</string>
+    <string name="library_pine_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_timbertreeutils" translatable="false"></string>
+    <string name="library_timbertreeutils_author" translatable="false">Yuya Tanaka</string>
+    <string name="library_timbertreeutils_authorWebsite" translatable="false">http://ypresto.hatenablog.jp/</string>
+    <string name="library_timbertreeutils_libraryName" translatable="false">TimberTreeUtils</string>
+    <string name="library_timbertreeutils_libraryDescription" translatable="false">Set of timber trees for Crashlytics and debugging.</string>
+    <string name="library_timbertreeutils_libraryWebsite" translatable="false">https://github.com/ypresto/TimberTreeUtils</string>
+    <string name="library_timbertreeutils_libraryVersion" translatable="false">1.0.0</string>
+    <string name="library_timbertreeutils_isOpenSource" translatable="false">true</string>
+    <string name="library_timbertreeutils_repositoryLink" translatable="false">https://github.com/ypresto/TimberTreeUtils</string>
+    <string name="library_timbertreeutils_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_sqliteassethelper" translatable="false"></string>
+    <string name="library_sqliteassethelper_author" translatable="false">Jeff Gilfelt</string>
+    <string name="library_sqliteassethelper_authorWebsite" translatable="false">http://jeffgilfelt.com/</string>
+    <string name="library_sqliteassethelper_libraryName" translatable="false">Android SQLiteAssetHelper</string>
+    <string name="library_sqliteassethelper_libraryDescription" translatable="false">An Android helper class to manage database creation and version management using an application\'s raw asset files.</string>
+    <string name="library_sqliteassethelper_libraryWebsite" translatable="false">https://github.com/jgilfelt/android-sqlite-asset-helper</string>
+    <string name="library_sqliteassethelper_libraryVersion" translatable="false">2.0.1</string>
+    <string name="library_sqliteassethelper_isOpenSource" translatable="false">true</string>
+    <string name="library_sqliteassethelper_repositoryLink" translatable="false">https://github.com/jgilfelt/android-sqlite-asset-helper</string>
+    <string name="library_sqliteassethelper_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_sqlbrite" translatable="false"></string>
+    <string name="library_sqlbrite_author" translatable="false">Square, Inc.</string>
+    <string name="library_sqlbrite_authorWebsite" translatable="false">http://square.github.io/</string>
+    <string name="library_sqlbrite_libraryName" translatable="false">SQLBrite</string>
+    <string name="library_sqlbrite_libraryDescription" translatable="false">A lightweight wrapper around SQLiteOpenHelper and ContentResolver which introduces reactive stream semantics to queries.</string>
+    <string name="library_sqlbrite_libraryWebsite" translatable="false">https://github.com/square/sqlbrite</string>
+    <string name="library_sqlbrite_libraryVersion" translatable="false">0.8.0</string>
+    <string name="library_sqlbrite_isOpenSource" translatable="false">true</string>
+    <string name="library_sqlbrite_repositoryLink" translatable="false">https://github.com/square/sqlbrite</string>
+    <string name="library_sqlbrite_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_junit" translatable="false"></string>
+    <string name="library_junit_author" translatable="false">Eclipse Foundation</string>
+    <string name="library_junit_authorWebsite" translatable="false">https://eclipse.org/org/</string>
+    <string name="library_junit_libraryName" translatable="false">JUnit</string>
+    <string name="library_junit_libraryDescription" translatable="false">A simple framework to write repeatable unit tests.</string>
+    <string name="library_junit_libraryWebsite" translatable="false">http://junit.org/</string>
+    <string name="library_junit_libraryVersion" translatable="false">4.12</string>
+    <string name="library_junit_isOpenSource" translatable="false">true</string>
+    <string name="library_junit_repositoryLink" translatable="false">https://github.com/junit-team/junit</string>
+    <string name="library_junit_licenseVersion" translatable="false">Eclipse Public License</string>
+    <string name="library_junit_licenseLink" translatable="false">https://www.eclipse.org/legal/epl-v10.html</string>
+
+    <string name="define_mockito" translatable="false"></string>
+    <string name="library_mockito_author" translatable="false">Mockito contributors</string>
+    <string name="library_mockito_authorWebsite" translatable="false">http://mockito.org/</string>
+    <string name="library_mockito_libraryName" translatable="false">Mockito</string>
+    <string name="library_mockito_libraryDescription" translatable="false">A mocking framework for unit tests written in Java.</string>
+    <string name="library_mockito_libraryWebsite" translatable="false">http://mockito.org/</string>
+    <string name="library_mockito_libraryVersion" translatable="false">2.2.26</string>
+    <string name="library_mockito_isOpenSource" translatable="false">true</string>
+    <string name="library_mockito_repositoryLink" translatable="false">https://github.com/mockito/mockito</string>
+    <string name="library_mockito_licenseId" translatable="false">mit</string>
+
+    <string name="define_easeinterpolator" translatable="false"></string>
+    <string name="library_easeinterpolator_author" translatable="false">Cimi Chen</string>
+    <string name="library_easeinterpolator_authorWebsite" translatable="false">https://github.com/cimi-chen</string>
+    <string name="library_easeinterpolator_libraryName" translatable="false">EaseInterpolator</string>
+    <string name="library_easeinterpolator_libraryDescription" translatable="false">Thirty different easing animation interpolators for Android.</string>
+    <string name="library_easeinterpolator_libraryWebsite" translatable="false">https://github.com/cimi-chen/EaseInterpolator</string>
+    <string name="library_easeinterpolator_libraryVersion" translatable="false">1.1</string>
+    <string name="library_easeinterpolator_isOpenSource" translatable="false">true</string>
+    <string name="library_easeinterpolator_repositoryLink" translatable="false">https://github.com/cimi-chen/EaseInterpolator</string>
+    <string name="library_easeinterpolator_licenseId" translatable="false">apache_2_0</string>
+
+    <string name="define_inappfeedback" translatable="false"></string>
+    <string name="library_inappfeedback_author" translatable="false">Suredigit</string>
+    <string name="library_inappfeedback_authorWebsite" translatable="false">http://www.suredigit.com/</string>
+    <string name="library_inappfeedback_libraryName" translatable="false">Android inApp Feedback</string>
+    <string name="library_inappfeedback_libraryDescription" translatable="false">inApp Feedback allows for direct communication between you, the developer, and your customers.</string>
+    <string name="library_inappfeedback_libraryWebsite" translatable="false">http://www.android-feedback.com/</string>
+    <string name="library_inappfeedback_libraryVersion" translatable="false">v6</string>
+    <string name="library_inappfeedback_isOpenSource" translatable="false">false</string>
+    <string name="library_inappfeedback_licenseId" translatable="false">mit</string>
+</resources>
