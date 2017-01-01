@@ -43,7 +43,6 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
-    private static final int GRID_HEADER_POSITION = 0;
 
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
@@ -218,18 +217,24 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showCategories(List<MainListItem> categories) {
-        final List<Integer> headerIndexes = new ArrayList<>();
-        headerIndexes.add(GRID_HEADER_POSITION);
+        int footerPosition = MainItemAdapter.getFooterPosition(categories);
+        int bigHeaderPosition = MainItemAdapter.getBigHeaderPosition();
+
+        // TODO: 2017-01-01 move to helper
+        // TODO: 2017-01-01 more generic text styles in views
+        final List<Integer> spannedIndexes = new ArrayList<>();
+        spannedIndexes.add(bigHeaderPosition);
+        spannedIndexes.add(footerPosition);
         for (int i = 0; i < categories.size(); i++) {
             MainListItem item = categories.get(i);
             if (item instanceof MainListHeaderItem) {
-                headerIndexes.add(i + 1);
+                spannedIndexes.add(i + 1);
             }
         }
 
         manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override public int getSpanSize(int position) {
-                if (headerIndexes.contains(position)) {
+                if (spannedIndexes.contains(position)) {
                     return GRID_COLUMNS_NUMBER;
                 } else {
                     return GRID_COLUMNS_SINGLE;

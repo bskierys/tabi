@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.App;
+import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import timber.log.Timber;
 
@@ -31,8 +32,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_BIG_HEADER = 0;
     private static final int TYPE_SMALL_HEADER = 1;
     private static final int TYPE_ITEM = 2;
-
-    private static final int BIG_HEADER_POSITION = 0;
+    private static final int TYPE_FOOTER = 3;
 
     @Inject MainScreenResourceFinder resourceHelper;
     @Inject DoodleTextFormatter doodleTextFormatter;
@@ -58,6 +58,9 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (viewType == TYPE_SMALL_HEADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_header, parent, false);
             return new SmallHeaderViewHolder(view);
+        } else if (viewType == TYPE_FOOTER) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main_footer, parent, false);
+            return new FooterViewHolder(view);
         }
 
         throw new RuntimeException("there is no type that matches the type "
@@ -114,16 +117,24 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 headerName = context.getString(R.string.default_resource_string);
             }
             headerViewHolder.header.setText(headerName);
+        } else if (holder instanceof FooterViewHolder) {
+            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            // TODO: 2017-01-01 should be provided by presenter - same with big header
+            // TODO: 2017-01-01 resource
+            String versionName = String.format("Version %s", BuildConfig.VERSION_NAME);
+            footerViewHolder.version.setText(versionName);
         }
     }
 
     @Override public int getItemCount() {
-        return categoryList.size() + 1;
+        return categoryList.size() + 2;
     }
 
     @Override public int getItemViewType(int position) {
         if (isSectionHeaderPosition(position)) {
             return TYPE_BIG_HEADER;
+        } else if(isSectionFooterPosition(position)) {
+            return TYPE_FOOTER;
         } else {
             MainListItem item = categoryList.get(position - 1);
             if (item instanceof MainListElementItem) {
@@ -138,7 +149,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setCaption(String caption) {
         this.caption = caption;
-        notifyItemChanged(BIG_HEADER_POSITION);
+        notifyItemChanged(getBigHeaderPosition());
     }
 
     public void swapItems(List<MainListItem> items) {
@@ -148,8 +159,21 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
+    // TODO: 2017-01-01 simple helper
+    public static int getBigHeaderPosition() {
+        return 0;
+    }
+
+    public static int getFooterPosition(List<MainListItem> items) {
+        return items.size() + 1;
+    }
+
     protected boolean isSectionHeaderPosition(int position) {
-        return position == 0;
+        return position == getBigHeaderPosition();
+    }
+
+    protected boolean isSectionFooterPosition(int position) {
+        return position == getFooterPosition(categoryList);
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -182,6 +206,15 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.rootView = itemView;
+        }
+    }
+
+    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.txt_version) TextView version;
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 

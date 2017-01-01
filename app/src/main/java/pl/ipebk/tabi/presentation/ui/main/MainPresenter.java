@@ -120,8 +120,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         items.add(new MainListElementItem("licenses", ACTION_SHOW_LICENSES));
         items.add(new MainListElementItem("rate", ACTION_GIVE_FEEDBACK));
 
-        items.add(new MainListHeaderItem("none"));
-
         getMvpView().showCategories(items);
     }
 

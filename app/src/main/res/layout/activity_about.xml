@@ -6,8 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/grey_100"
     tools:context=".presentation.ui.about.AboutAppActivity"
     tools:ignore="contentDescription">
+
+    <!--TODO: refactor colors for "background_grey", background_white-->
 
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
         android:layout_width="match_parent"
