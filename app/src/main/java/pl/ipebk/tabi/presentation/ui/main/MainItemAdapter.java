@@ -5,9 +5,6 @@
 */
 package pl.ipebk.tabi.presentation.ui.main;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,35 +15,26 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.ipebk.tabi.App;
-import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
-import timber.log.Timber;
 
-public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NONE = -1;
     private static final int TYPE_BIG_HEADER = 0;
     private static final int TYPE_SMALL_HEADER = 1;
     private static final int TYPE_ITEM = 2;
     private static final int TYPE_FOOTER = 3;
 
-    @Inject MainScreenResourceFinder resourceHelper;
-    @Inject DoodleTextFormatter doodleTextFormatter;
+    private DoodleTextFormatter doodleTextFormatter;
     private List<MainListItem> categoryList;
-    private Context context;
     private final MenuItemClickListener listener;
-    private String caption;
-    private String version;
 
-    public MainItemAdapter(List<MainListItem> categoryList, Context context, @NonNull MenuItemClickListener listener) {
+    MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter,
+                    @NonNull MenuItemClickListener listener) {
         this.categoryList = categoryList;
-        this.context = context;
         this.listener = listener;
-        App.get(context).getViewComponent().inject(this);
+        this.doodleTextFormatter = doodleTextFormatter;
     }
 
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -71,164 +59,104 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-            MainListElementItem item = (MainListElementItem) categoryList.get(position - 1);
+            MainListElementItem item = (MainListElementItem) categoryList.get(position);
 
             itemViewHolder.rootView.setOnClickListener(v -> listener.onMenuItemClicked(item.getActionKey()));
-            String categoryName;
-            try{
-                categoryName = resourceHelper.getStringResourceForKey(item.getTitleResourceKey());
-            } catch (Resources.NotFoundException e){
-                Timber.e("Failed to find category name for name: %s", item.getTitleResourceKey());
-                categoryName = context.getString(R.string.default_resource_string);
-            }
-            itemViewHolder.categoryName.setText(categoryName);
-
-            Drawable categoryIcon;
-            try{
-                categoryIcon = resourceHelper.getDrawableResourceForKey(item.getImageResourceKey());
-            } catch (Resources.NotFoundException e){
-                Timber.e("Failed to find category drawable for name: %s", item.getTitleResourceKey());
-                categoryIcon = context.getResources().getDrawable(R.drawable.default_resource_drawable);
-            }
-            itemViewHolder.categoryIcon.setImageDrawable(categoryIcon);
+            itemViewHolder.categoryName.setText(item.getElementName());
+            itemViewHolder.categoryIcon.setImageDrawable(item.getElementIcon());
         } else if (holder instanceof BigHeaderViewHolder) {
             BigHeaderViewHolder headerViewHolder = (BigHeaderViewHolder) holder;
+            MainListBigHeaderItem item = (MainListBigHeaderItem) categoryList.get(position);
 
-            String captionToSet;
-            if (caption == null || caption.equals("")) {
-                captionToSet = context.getString(R.string.main_doodle_caption);
-            } else {
-                captionToSet = caption;
-            }
-
-            headerViewHolder.caption.setText(doodleTextFormatter.formatDoodleCaption(captionToSet),
+            headerViewHolder.caption.setText(doodleTextFormatter.formatDoodleCaption(item.getCaption()),
                                              TextView.BufferType.SPANNABLE);
-            headerViewHolder.greeting.setText(doodleTextFormatter.formatDoodleGreeting());
+            headerViewHolder.greeting.setText(item.getGreeting());
         } else if (holder instanceof SmallHeaderViewHolder) {
             SmallHeaderViewHolder headerViewHolder = (SmallHeaderViewHolder) holder;
-            MainListHeaderItem item = (MainListHeaderItem) categoryList.get(position - 1);
-
-            String headerName;
-            try{
-                headerName = resourceHelper.getStringResourceForKey(item.getTitleResourceKey());
-            } catch (Resources.NotFoundException e){
-                Timber.e("Failed to find header for name: %s", item.getTitleResourceKey());
-                headerName = context.getString(R.string.default_resource_string);
-            }
-            headerViewHolder.header.setText(headerName);
+            MainListHeaderItem item = (MainListHeaderItem) categoryList.get(position);
+            headerViewHolder.header.setText(item.getHeaderText());
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            MainListFooterItem item = (MainListFooterItem) categoryList.get(position);
 
-            String versionToSet;
-            if(version == null || version.equals("")){
-                String loading = context.getString(R.string.main_loading);
-                versionToSet = context.getString(R.string.main_version, loading);
-            } else {
-                versionToSet = context.getString(R.string.main_version, version);
-            }
-
-            footerViewHolder.version.setText(versionToSet);
+            footerViewHolder.version.setText(item.getVersionName());
         }
     }
 
+    void refreshItem(MainListItem item, int index) {
+        categoryList.set(index, item);
+        notifyItemChanged(index);
+    }
+
     @Override public int getItemCount() {
-        return categoryList.size() + 2;
+        return categoryList.size();
     }
 
     @Override public int getItemViewType(int position) {
-        if (isSectionHeaderPosition(position)) {
+        MainListItem item = categoryList.get(position);
+        if (item instanceof MainListBigHeaderItem) {
             return TYPE_BIG_HEADER;
-        } else if(isSectionFooterPosition(position)) {
+        } else if (item instanceof MainListHeaderItem) {
+            return TYPE_SMALL_HEADER;
+        } else if (item instanceof MainListElementItem) {
+            return TYPE_ITEM;
+        } else if (item instanceof MainListFooterItem) {
             return TYPE_FOOTER;
-        } else {
-            MainListItem item = categoryList.get(position - 1);
-            if (item instanceof MainListElementItem) {
-                return TYPE_ITEM;
-            } else if (item instanceof MainListHeaderItem) {
-                return TYPE_SMALL_HEADER;
-            }
         }
 
         return TYPE_NONE;
     }
 
-    public void setCaption(String caption) {
-        this.caption = caption;
-        notifyItemChanged(getBigHeaderPosition());
-    }
-
-    public void setVersion(String versionName) {
-        this.version = versionName;
-        notifyItemChanged(getFooterPosition(categoryList));
-    }
-
-    public void swapItems(List<MainListItem> items) {
+    void swapItems(List<MainListItem> items) {
         this.categoryList.clear();
         this.categoryList = items;
 
         notifyDataSetChanged();
     }
 
-    // TODO: 2017-01-01 simple helper
-    public static int getBigHeaderPosition() {
-        return 0;
-    }
-
-    public static int getFooterPosition(List<MainListItem> items) {
-        return items.size() + 1;
-    }
-
-    protected boolean isSectionHeaderPosition(int position) {
-        return position == getBigHeaderPosition();
-    }
-
-    protected boolean isSectionFooterPosition(int position) {
-        return position == getFooterPosition(categoryList);
-    }
-
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    static class ItemViewHolder extends RecyclerView.ViewHolder {
         View rootView;
         @BindView(R.id.txt_category) TextView categoryName;
         @BindView(R.id.ic_category) ImageView categoryIcon;
 
-        public ItemViewHolder(View itemView) {
+        ItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.rootView = itemView;
         }
     }
 
-    public static class SmallHeaderViewHolder extends RecyclerView.ViewHolder {
+    static class SmallHeaderViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.txt_header) TextView header;
 
-        public SmallHeaderViewHolder(View view) {
+        SmallHeaderViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
 
-    public static class BigHeaderViewHolder extends RecyclerView.ViewHolder {
+    static class BigHeaderViewHolder extends RecyclerView.ViewHolder {
         View rootView;
         @BindView(R.id.txt_caption) TextView caption;
         @BindView(R.id.txt_greeting) TextView greeting;
 
-        public BigHeaderViewHolder(View itemView) {
+        BigHeaderViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.rootView = itemView;
         }
     }
 
-    public static class FooterViewHolder extends RecyclerView.ViewHolder {
+    static class FooterViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.txt_version) TextView version;
 
-        public FooterViewHolder(View itemView) {
+        FooterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
 
-    public interface MenuItemClickListener {
+    interface MenuItemClickListener {
         void onMenuItemClicked(String action);
     }
 }

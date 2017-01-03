@@ -6,19 +6,7 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 /**
- * List items for main screen categories. Names and drawables are found by reflection. See subclasses for guide how to
- * name your resources properly
+ * List items for main screen categories.
  */
-public abstract class MainListItem {
-    protected static final String MAIN_LIST_ITEM_PREFIX = "main_list_";
-    protected String resourceKey;
-
-    /**
-     * Constructor for {@link MainListItem} Object
-     */
-    public MainListItem(String resourceKey) {
-        this.resourceKey = resourceKey;
-    }
-
-    public abstract String getTitleResourceKey();
+abstract class MainListItem {
 }
