@@ -29,7 +29,8 @@
 
         <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_category"
-            style="@style/Main_Text_Tile"
+            style="@style/Text_Light.Display.Caption"
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/preview_category_name"/>

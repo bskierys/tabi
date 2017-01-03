@@ -29,7 +29,7 @@
 
         <ScrollView
             android:id="@+id/scroll_container"
-            style="@style/Details"
+            android:background="@color/colorBackgroundLight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="@bool/isPortrait"

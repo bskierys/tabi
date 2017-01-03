@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="12dp"/>
+        android:layout_height="@dimen/Search.Height.Header"/>
+
+    <ImageView
+        android:layout_width="@dimen/Main.Width.Header.Divider"
+        android:layout_height="@dimen/Search.Height.Header.Divider"
+        android:layout_gravity="center_horizontal"
+        android:src="@color/colorPrimary"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_version"
+        style="@style/Text_Light.Display.Caption"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        style="@style/Main_Text_Tile"
+        android:layout_height="@dimen/Search.Height.Header"
         android:gravity="center"
-        android:text="v0.0.1-56-ge56ed1"/>
+        android:text="@string/preview_version"/>
 </LinearLayout>

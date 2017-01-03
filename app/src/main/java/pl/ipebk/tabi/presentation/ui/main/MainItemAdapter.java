@@ -120,8 +120,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             // TODO: 2017-01-01 should be provided by presenter - same with big header
-            // TODO: 2017-01-01 resource
-            String versionName = String.format("Version %s", BuildConfig.VERSION_NAME);
+            String versionName = context.getString(R.string.main_version, BuildConfig.VERSION_NAME);
             footerViewHolder.version.setText(versionName);
         }
     }

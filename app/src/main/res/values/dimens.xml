@@ -8,6 +8,12 @@
     <dimen name="Doodle.Width.Default">300dp</dimen>
     <dimen name="Doodle.Margin.Minimal">44dp</dimen>
 
+    <!--  FONTS  -->
+    <dimen name="Text.Header">32sp</dimen>
+    <dimen name="Text.Header.Small">20sp</dimen>
+    <dimen name="Text.Display.Title">16sp</dimen>
+    <dimen name="Text.Display.Body">14sp</dimen>
+
     <!--  DETAILS  -->
     <dimen name="Details.Height.Map">264dp</dimen>
     <dimen name="Details.Height.Placeholder">336dp</dimen>
@@ -20,8 +26,6 @@
     <dimen name="Details.Height.Button">72dp</dimen>
     <dimen name="Details.Height.Button.Image">24dp</dimen>
     <dimen name="Details.Elevation.Button">4dp</dimen>
-    <dimen name="Details.Text.Header">16sp</dimen>
-    <dimen name="Details.Text.Description">14sp</dimen>
     <dimen name="Details.Margin.Outer">20dp</dimen>
     <dimen name="Details.Radius.Panel">1dp</dimen>
     <dimen name="Details.Height.Map.Pin">72dp</dimen>
@@ -30,14 +34,12 @@
     <dimen name="Details.Height.Row.Icon">20dp</dimen>
     <dimen name="Details.Width.Row.Icon">16dp</dimen>
     <dimen name="Details.Margin.Right">56dp</dimen>
-    <dimen name="Details.Margin.Description.Vertical">5dp</dimen>
     <dimen name="Details.Margin.Description.Horizontal">20dp</dimen>
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
     <dimen name="Details.Elevation">3dp</dimen>
     <dimen name="Details.Height.Text.Description">22dp</dimen>
 
     <!--  SEARCH  -->
-    <dimen name="Search.Text.Header">20sp</dimen>
     <dimen name="Search.Height.Tabs">48dp</dimen>
     <dimen name="Search.Height.Tabs.Underline">4dp</dimen>
     <dimen name="Search.Height.Doodle">236dp</dimen>
@@ -54,7 +56,6 @@
     <dimen name="Main.Width.Header.Divider">56dp</dimen>
     <dimen name="Main.Margin.Greeting.Top">76dp</dimen>
     <dimen name="Main.Margin.Greeting.Horizontal">56dp</dimen>
-    <dimen name="Main.Text.Greeting.Large">32sp</dimen>
     <dimen name="Main.Height.Greeting.Doodle">128dp</dimen>
     <dimen name="Main.Margin.Greeting.Doodle.Top">140dp</dimen>
     <dimen name="Main.Margin.Greeting.Doodle.Right">36dp</dimen>
@@ -68,7 +69,6 @@
     <dimen name="Main.Margin.SearchBar.Inner.Horizontal">8dp</dimen>
     <dimen name="Main.Margin.SearchBar.Text.Horizontal">44dp</dimen>
     <dimen name="Main.Margin.SearchBar.Icon">24dp</dimen>
-    <dimen name="Main.Text.Tile">14sp</dimen>
     <dimen name="Main.Height.Tile">180dp</dimen>
     <dimen name="Main.Margin.Tile">4dp</dimen>
     <dimen name="Main.Padding.Tile">20dp</dimen>

@@ -15,7 +15,7 @@
 
         <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_greeting"
-            style="@style/Main_Text_Greeting"
+            style="@style/Text_Light.Header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/preview_doodle_greeting"/>
