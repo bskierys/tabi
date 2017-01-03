@@ -208,6 +208,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter.setCaption(caption);
     }
 
+    @Override public void showVersion(String versionName) {
+        adapter.setVersion(versionName);
+    }
+
     @Override public void showLoading() {
         loadingView.setVisibility(View.VISIBLE);
     }

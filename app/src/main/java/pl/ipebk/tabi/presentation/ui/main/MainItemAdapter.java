@@ -40,6 +40,7 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context context;
     private final MenuItemClickListener listener;
     private String caption;
+    private String version;
 
     public MainItemAdapter(List<MainListItem> categoryList, Context context, @NonNull MenuItemClickListener listener) {
         this.categoryList = categoryList;
@@ -91,10 +92,8 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             itemViewHolder.categoryIcon.setImageDrawable(categoryIcon);
         } else if (holder instanceof BigHeaderViewHolder) {
-            // TODO: 2016-05-31 same holder names
             BigHeaderViewHolder headerViewHolder = (BigHeaderViewHolder) holder;
 
-            // TODO: 2016-06-07 caption should be generic or depends on sharedPrefs
             String captionToSet;
             if (caption == null || caption.equals("")) {
                 captionToSet = context.getString(R.string.main_doodle_caption);
@@ -119,9 +118,16 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             headerViewHolder.header.setText(headerName);
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            // TODO: 2017-01-01 should be provided by presenter - same with big header
-            String versionName = context.getString(R.string.main_version, BuildConfig.VERSION_NAME);
-            footerViewHolder.version.setText(versionName);
+
+            String versionToSet;
+            if(version == null || version.equals("")){
+                String loading = context.getString(R.string.main_loading);
+                versionToSet = context.getString(R.string.main_version, loading);
+            } else {
+                versionToSet = context.getString(R.string.main_version, version);
+            }
+
+            footerViewHolder.version.setText(versionToSet);
         }
     }
 
@@ -149,6 +155,11 @@ public class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setCaption(String caption) {
         this.caption = caption;
         notifyItemChanged(getBigHeaderPosition());
+    }
+
+    public void setVersion(String versionName) {
+        this.version = versionName;
+        notifyItemChanged(getFooterPosition(categoryList));
     }
 
     public void swapItems(List<MainListItem> items) {

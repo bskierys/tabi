@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
@@ -69,6 +70,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
             caption = context.getString(R.string.main_doodle_caption);
         }
         getMvpView().showCaption(caption);
+        getMvpView().showVersion(BuildConfig.VERSION_NAME);
     }
 
     private void loadDatabase() {

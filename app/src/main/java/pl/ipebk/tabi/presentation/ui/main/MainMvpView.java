@@ -11,16 +11,11 @@ import pl.ipebk.tabi.presentation.ui.base.MvpView;
 
 public interface MainMvpView extends MvpView {
     void showFeedbackDialog();
-
     void showCaption(String caption);
-
+    void showVersion(String versionName);
     void showLoading();
-
     void hideLoading();
-
     void showCategories(List<MainListItem> categories);
-
     void goToSearch(String phrase);
-
     void goToAboutAppPage();
 }

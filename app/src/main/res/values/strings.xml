@@ -89,6 +89,7 @@
     <string name="main_search_bar_hint_plates">Jakiej rejestracji szukasz?</string>
     <string name="main_doodle_caption_feedback">Masz jakieś *uwagi?* Zjedź na dół strony.</string>
     <string name="main_version">Version %s</string>
+    <string name="main_loading">ładuję&#8230;</string>
 
     <string name="main_feedback_title">Wyślij komentarz do autora</string>
     <string name="main_feedback_body">Prześlij do nas swój komentarz na temat aplikacji</string>
