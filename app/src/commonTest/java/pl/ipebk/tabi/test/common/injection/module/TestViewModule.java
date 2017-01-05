@@ -14,7 +14,6 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.utils.FontManager;
-import pl.ipebk.tabi.presentation.ui.main.MainScreenResourceFinder;
 import static org.mockito.Mockito.mock;
 
 @Module
@@ -40,10 +39,6 @@ public class TestViewModule {
 
     @Provides public FontManager provideFontManager() {
         return mock(FontManager.class);
-    }
-
-    @Provides MainScreenResourceFinder provideResourceHelper() {
-        return mock(MainScreenResourceFinder.class);
     }
 
     @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory() {

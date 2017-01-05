@@ -30,11 +30,6 @@ public class DoodleTextFormatter {
         this.context = context;
     }
 
-    public String formatDoodleGreeting() {
-        // TODO: 2016-06-05 different greetings
-        return context.getString(R.string.main_doodle_greeting);
-    }
-
     public SpannableString formatDoodleCaption(String base) {
         List<Integer> positions = getSpanKeyPoints(base);
         if (positions.size() % 2 == 1) {

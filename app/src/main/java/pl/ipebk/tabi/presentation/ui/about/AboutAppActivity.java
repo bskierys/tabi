@@ -28,9 +28,6 @@ public class AboutAppActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         LibsSupportFragment fragment = new LibsBuilder()
-                .withAboutAppName(getString(R.string.app_name))
-                .withAboutIconShown(true)
-                .withAboutVersionShownName(true)
                 .withVersionShown(true)
                 .withLicenseShown(true)
                 .supportFragment();

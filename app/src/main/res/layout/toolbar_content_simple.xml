@@ -7,5 +7,5 @@
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_title"
-        style="@style/Details_Text.Search"/>
+        style="@style/Text_Toolbar"/>
 </LinearLayout>

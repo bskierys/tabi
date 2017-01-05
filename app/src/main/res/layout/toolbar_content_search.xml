@@ -24,13 +24,13 @@
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/txt_searched"
-                style="@style/Details_Text.Search"/>
+                style="@style/Text_Toolbar"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontEditText
                 android:id="@+id/editTxt_search"
-                style="@style/Details_Text.Search"
+                style="@style/Text_Toolbar"
                 android:background="@android:color/transparent"
-                android:hint="Jakiej rejestracji szukasz?"
+                android:hint="@string/preview_search_hint"
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:inputType="textNoSuggestions"
                 android:textColorHint="@color/white_semi_transparent"
@@ -50,14 +50,11 @@
 
     <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
         android:id="@+id/indicator"
+        style="@style/Text_Light.Header.Small"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Search.Height.Tabs"
         android:background="@color/white"
-        android:textColor="@color/grey_850"
-        android:textSize="@dimen/Search.Text.Header"
         app:fades="false"
-        app:fontFamily="bebas"
         app:lineHeight="@dimen/Search.Height.Tabs.Underline"
         app:selectedTextColor="@color/colorPrimary"/>
-
 </LinearLayout>

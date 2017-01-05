@@ -35,18 +35,20 @@ import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.utils.RxUtil;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
+    private static final String ACTION_SHOW_LICENSES = "licenses";
+    private static final String ACTION_GIVE_FEEDBACK = "rate";
+
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
-    private static final int GRID_HEADER_POSITION = 0;
 
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
+    @Inject DoodleTextFormatter doodleTextFormatter;
     @BindView(R.id.img_loading) ImageView loadingView;
     @BindView(R.id.category_list) RecyclerView recyclerView;
     @BindView(R.id.search_bar) View searchBar;
@@ -60,6 +62,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     private float scrollPercent;
     private MainItemAdapter adapter;
+    private int bigHeaderIndex;
+    private int footerIndex;
     private BlockingLayoutManager manager;
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
@@ -78,7 +82,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         manager = new BlockingLayoutManager(this, GRID_COLUMNS_NUMBER);
 
         recyclerView.setLayoutManager(manager);
-        adapter = new MainItemAdapter(new ArrayList<>(), this, this);
+        adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
+        prepareMenuItems();
         recyclerView.setAdapter(adapter);
         feedbackApiKey = getString(R.string.feedback_api_key);
         feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
@@ -110,6 +115,84 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         percent = 1 - percent;
 
         return percent;
+    }
+
+    private void prepareMenuItems() {
+        List<MainListItem> items = new ArrayList<>();
+
+        items.add(new MainListBigHeaderItem(getString(R.string.main_doodle_greeting),
+                                            getString(R.string.main_doodle_caption)));
+        bigHeaderIndex = 0;
+        items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
+
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dolnoslaskie),
+                                          getResources().getDrawable(R.drawable.vic_dolnoslaskie), "d"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_kujawskopomorskie),
+                                          getResources().getDrawable(R.drawable.vic_kujawskopomorskie), "c"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lodzkie),
+                                          getResources().getDrawable(R.drawable.vic_lodzkie), "e"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lubelskie),
+                                          getResources().getDrawable(R.drawable.vic_lubelskie), "l"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lubuskie),
+                                          getResources().getDrawable(R.drawable.vic_lubuskie), "f"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_malopolskie),
+                                          getResources().getDrawable(R.drawable.vic_malopolskie), "k"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_mazowieckie),
+                                          getResources().getDrawable(R.drawable.vic_mazowieckie), "w"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_opolskie),
+                                          getResources().getDrawable(R.drawable.vic_opolskie), "o"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_podkarpackie),
+                                          getResources().getDrawable(R.drawable.vic_podkarpackie), "r"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_podlaskie),
+                                          getResources().getDrawable(R.drawable.vic_podlaskie), "b"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_pomorskie),
+                                          getResources().getDrawable(R.drawable.vic_pomorskie), "g"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_slaskie),
+                                          getResources().getDrawable(R.drawable.vic_slaskie), "s"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_swietokrzyskie),
+                                          getResources().getDrawable(R.drawable.vic_swietokrzyskie), "t"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_warminskomazurskie),
+                                          getResources().getDrawable(R.drawable.vic_warminskomazurskie), "n"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_wielkopolskie),
+                                          getResources().getDrawable(R.drawable.vic_wielkopolskie), "p"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_zachodniopomorskie),
+                                          getResources().getDrawable(R.drawable.vic_zachodniopomorskie), "z"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_sluzbybezpieczenstwa),
+                                          getResources().getDrawable(R.drawable.vic_sluzbybezpieczenstwa), "h"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_tablicewojskowe),
+                                          getResources().getDrawable(R.drawable.vic_tablicewojskowe), "u"));
+
+        items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
+
+        items.add(new MainListElementItem(getString(R.string.main_list_element_licenses),
+                                          getResources().getDrawable(R.drawable.vic_licenses), ACTION_SHOW_LICENSES));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_rate),
+                                          getResources().getDrawable(R.drawable.vic_rate), ACTION_GIVE_FEEDBACK));
+
+        items.add(new MainListFooterItem(getString(R.string.main_loading)));
+        footerIndex = items.size() - 1;
+
+        final List<Integer> spannedIndexes = new ArrayList<>();
+        spannedIndexes.add(bigHeaderIndex);
+        spannedIndexes.add(footerIndex);
+        for (int i = 0; i < items.size(); i++) {
+            MainListItem item = items.get(i);
+            if (item instanceof MainListHeaderItem) {
+                spannedIndexes.add(i);
+            }
+        }
+
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override public int getSpanSize(int position) {
+                if (spannedIndexes.contains(position)) {
+                    return GRID_COLUMNS_NUMBER;
+                } else {
+                    return GRID_COLUMNS_SINGLE;
+                }
+            }
+        });
+
+        adapter.swapItems(items);
     }
 
     private void prepareFeedbackDialog(FeedbackDialog dialog) {
@@ -205,8 +288,21 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         feedbackDialog.show();
     }
 
-    @Override public void showCaption(String caption) {
-        adapter.setCaption(caption);
+    @Override public void showGreetingCaption() {
+        showCaption(getString(R.string.main_doodle_caption));
+    }
+
+    @Override public void showFeedbackCaption() {
+        showCaption(getString(R.string.main_doodle_caption_feedback));
+    }
+
+    private void showCaption(String caption) {
+        adapter.refreshItem(new MainListBigHeaderItem(getString(R.string.main_doodle_greeting),
+                                                      caption), bigHeaderIndex);
+    }
+
+    @Override public void showVersion(String versionName) {
+        adapter.refreshItem(new MainListFooterItem(getString(R.string.main_version, versionName)), footerIndex);
     }
 
     @Override public void showLoading() {
@@ -215,29 +311,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void hideLoading() {
         loadingView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override public void showCategories(List<MainListItem> categories) {
-        final List<Integer> headerIndexes = new ArrayList<>();
-        headerIndexes.add(GRID_HEADER_POSITION);
-        for (int i = 0; i < categories.size(); i++) {
-            MainListItem item = categories.get(i);
-            if (item instanceof MainListHeaderItem) {
-                headerIndexes.add(i + 1);
-            }
-        }
-
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override public int getSpanSize(int position) {
-                if (headerIndexes.contains(position)) {
-                    return GRID_COLUMNS_NUMBER;
-                } else {
-                    return GRID_COLUMNS_SINGLE;
-                }
-            }
-        });
-
-        adapter.swapItems(categories);
     }
 
     @Override public void goToSearch(String phrase) {
@@ -269,6 +342,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void onMenuItemClicked(String action) {
-        presenter.showCategoryForAction(action);
+        if (ACTION_SHOW_LICENSES.equals(action)) {
+            goToAboutAppPage();
+        } else if (ACTION_GIVE_FEEDBACK.equals(action)) {
+            showFeedbackDialog();
+        } else {
+            Timber.d("Menu item clicked has literal as action");
+            goToSearch(action);
+        }
     }
 }
