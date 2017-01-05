@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <pl.ipebk.tabi.ui.details.DetailsButton
+        <pl.ipebk.tabi.presentation.ui.details.DetailsButton
             android:id="@+id/btn_google_it"
             style="@style/Details_Button"
             app:doodle="@drawable/dic_google_it"
@@ -27,7 +27,7 @@
 
         <ImageView style="@style/Divider.Vertical"/>
 
-        <pl.ipebk.tabi.ui.details.DetailsButton
+        <pl.ipebk.tabi.presentation.ui.details.DetailsButton
             android:id="@+id/btn_map"
             style="@style/Details_Button"
             app:doodle="@drawable/dic_maps"
@@ -35,7 +35,7 @@
 
         <ImageView style="@style/Divider.Vertical"/>
 
-        <pl.ipebk.tabi.ui.details.DetailsButton
+        <pl.ipebk.tabi.presentation.ui.details.DetailsButton
             android:id="@+id/btn_copy"
             style="@style/Details_Button"
             app:doodle="@drawable/dic_copy"

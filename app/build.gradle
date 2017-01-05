@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.4.2'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.2'
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
@@ -19,6 +19,10 @@ apply plugin: 'com.getkeepsafe.dexcount'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
+
+def keystoreStorePass="default"
+def keystoreKeyAlias="default"
+def keystoreKeyPass="default"
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -74,15 +78,28 @@ android {
         }
     }
 
-    //todo: remove from this file
-    signingConfigs {
-        release {
-            storeFile file("keystore/ipebk.jks")
-            storePassword "gwh28dgcmp"
-            keyAlias "ipe_bk_keystore"
-            keyPassword "gwh28dgcmp"
-        }
-    }
+    File signFile = rootProject.file('buildsystem/sign.properties')
+	if (signFile.exists()) {
+		Properties p = new Properties()
+		p.load(new FileInputStream(signFile))
+		
+		keystoreStorePass=p.storePassword
+		keystoreKeyAlias=p.keyAlias
+		keystoreKeyPass=p.keyPassword
+	} else {
+		keystoreStorePass=System.getenv('KEYSTORE_STORE_PASS')
+		keystoreKeyAlias=System.getenv('KEYSTORE_KEY_ALIAS')
+		keystoreKeyPass=System.getenv('KEYSTORE_KAY_PASS')
+	}
+	
+	signingConfigs {
+			release {
+				storeFile file("keystore/ipebk.jks")
+				storePassword keystoreStorePass
+				keyAlias keystoreKeyAlias
+				keyPassword keystoreKeyPass
+			}
+		}
 
     buildTypes {
         release {
@@ -118,12 +135,17 @@ dependencies {
     def mobileDependencies = rootProject.ext.mobileDependencies
     compile project(':viewpagerindicator')
 
+    // auto-value
+    provided mobileDependencies.autovalue // needed for Android Studio
+    apt mobileDependencies.autovalue
+
     // Android
     compile mobileDependencies.appcompat
     compile mobileDependencies.support
     compile mobileDependencies.design
     compile mobileDependencies.cardview
     compile mobileDependencies.recyclerView
+    compile mobileDependencies.customtabs
 
     // RxJava
     compile mobileDependencies.rxjava
@@ -133,16 +155,20 @@ dependencies {
     compile mobileDependencies.rxbinding_support
 
     // butterknife
-    compile mobileDependencies.butterKnife
+    compile mobileDependencies.butterknife
+    apt mobileDependencies.butterknife_compiler
 
     // overscroll
     compile mobileDependencies.overscroll
-
-    // otto
-    compile mobileDependencies.otto
+    compile(mobileDependencies.aboutLibraries) {
+        transitive = true
+        exclude group: "com.android.support", module: "appcompat-v7"
+        exclude group: "com.android.support", module: "cardview-v7"
+        exclude group: "com.android.support", module: "recyclerview-v7"
+    }
 
     // logs
-    compile mobileDependencies.timber
+    compile mobileDependencies.pine
     compile mobileDependencies.timbertreeutils
     compile(mobileDependencies.crashlytics) {
         transitive = true;
@@ -169,7 +195,7 @@ dependencies {
 
     // unit
     testCompile mobileDependencies.junit
-    testCompile mobileDependencies.mockito
+    testCompile mobileDependencies.mockitoTwo
     testCompile mobileDependencies.robolectric
     testCompile mobileDependencies.robolectric_shadows
     testCompile mobileDependencies.assertj
@@ -183,7 +209,7 @@ dependencies {
     }
 
     // integration
-    androidTestCompile mobileDependencies.mockito
+    androidTestCompile mobileDependencies.mockitoOne
     androidTestCompile mobileDependencies.dexmaker
     androidTestCompile mobileDependencies.dexmaker_mockito
     androidTestCompile(mobileDependencies.testrules) {

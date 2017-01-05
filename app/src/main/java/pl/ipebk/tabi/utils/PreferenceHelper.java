@@ -20,6 +20,7 @@ public class PreferenceHelper {
 
     private SharedPreferences sharedPreferences;
 
+    // TODO: 2016-12-19 SharedPreferences should be injected
     @Inject public PreferenceHelper(Context context) {
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }

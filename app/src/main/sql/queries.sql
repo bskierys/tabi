@@ -1,35 +1,48 @@
--- wyszukiwanie po tablicy
-select places._id, places.place_name, places.plate, places.plate_end, k.searched_plate, k.searched_plate_end from
-	-- wybierz id miejsc o odpowiednich tablicach {
-	(select m.ID as ID, m.plate as searched_plate, m.plate_end as searched_plate_end from
-		-- pobiera wszystkie tablice zarówno podstawowe jak i dodatkowe w jednakowej formie jako tablicę łączoną {
-		(select _id as ID, plate, plate_end from places where has_own_plate = 1 
-		union 
-		-- pobiera wszystkie dodatkowe tablice w miastach które mają własne tablice {
-		select w._id as ID, w.plate_b as plate, w.plate_end as plate_end from 
-		-- pobiera wszystkie dodatkowe tablice w odpowiedniej formie {
-			(select p._id, a.plate as plate_b, a.plate_end as plate_end, p.has_own_plate from plates p join additional_plates a on p._id = a.place_id) 
-			--}
-		as w where w.has_own_plate = 1)
-		--}		
-		-- }
-	as m where m.plate like "WW%" group by m.ID order by length(m.plate) asc, m.plate asc, m.plate_end asc) 
-	-- }
-as k left join places on k.ID = places._id;
+-- =================== wyszukiwanie po tablicy =========================
+SELECT _id, place_name, place_type, voivodeship, powiat, searched_plate, searched_plate_end FROM (
 
--- wypisanie wszystkich kategorii na ekranie głównym
-select places.voivodeship, places.plate, places.place_type from places where place_type = 0 or place_type = 5 group by places.voivodeship, places.place_type order by places.place_type asc, places.voivodeship collate localized asc;
+	SELECT * FROM (
+		SELECT _id, MAX(plate_priority) AS max_plate_priority FROM plates_to_search WHERE searched_plate LIKE 'py%' GROUP BY _id
+	) as o LEFT JOIN plates_to_search p ON o._id = p._id WHERE o.max_plate_priority = p.plate_priority
+	
+) as w WHERE searched_plate LIKE 'py%' ORDER BY place_type ASC, length(searched_plate) ASC, searched_plate ASC,  searched_plate_end ASC;
 
--- wyszukiwanie po nazwie miejsca
-SELECT _id, place_name, place_name_to_lower,search_phrase,place_type,voivodeship,powiat,gmina,plate,plate_end,has_own_plate,
-       MIN(grp) AS source_group FROM
+-- =================== wyszukiwanie po nazwie miejsca ===================
+SELECT t._id as _id, t.place_name as place_name, t.place_type as place_type, t.voivodeship as voivodeship, t.powiat as powiat, t.searched_plate as searched_plate,  t.searched_plate_end as searched_plate_end FROM (
 
-(SELECT *, 1 as grp FROM places where place_name_to_lower like "sw%" 
-UNION ALL
-SELECT *, 2 as grp FROM places where search_phrase like "sw%" ) as t
+	SELECT *,  1 as grp FROM places_to_search WHERE place_name_to_lower LIKE "sam%"  
+		UNION ALL  
+	SELECT *,  2 as grp FROM places_to_search WHERE place_name_to_lower_no_diacritics LIKE "sam%" 
+	
+) AS t GROUP BY _id ORDER BY has_own_plate DESC, MIN(grp) ASC, place_type ASC, length(searched_plate) ASC, place_name COLLATE LOCALIZED ASC;
 
-GROUP  BY _id
-ORDER  BY MIN(grp) asc, place_type asc, place_name collate localized asc;
+-- =================== wypisanie wszystkich kategorii na ekranie głównym =======
+SELECT * FROM categories ORDER BY place_type ASC, voivodeship COLLATE localized ASC;
 
--- wyszukiwanie w historii
-SELECT * FROM search_history WHERE place_type = 1 GROUP BY place_id HAVING time_searched = MAX(time_searched);
+-- =================== wyszukiwanie w historii =========================
+SELECT f1._id as _id,f1.place_name as place_name, f1.place_type as place_type, f1.voivodeship as voivodeship, f1.powiat as powiat, 
+f1.plate as searched_plate, f1.plate_end as searched_plate_end FROM (
+ 
+	SELECT p._id as _id,p.place_name as place_name, p.place_type as place_type,p.voivodeship as voivodeship, p.powiat as powiat, s.plate as plate,null as plate_end FROM 
+			search_history s left join places p on s.place_id = p._id WHERE s.search_type = 0 ORDER BY s.time_searched DESC LIMIT 2
+		
+) AS f1  
+-- dołącz losową tablicę
+UNION ALL 
+
+SELECT f2._id as _id,f2.place_name as place_name, f2.place_type as place_type,f2.voivodeship as voivodeship,f2.powiat as powiat,
+f2.plate as searched_plate,f2.plate_end as searched_plate_end FROM (
+	-- dla miejsc
+	SELECT _id,place_name,6 as place_type,voivodeship,powiat,plate,plate_end
+	FROM places WHERE place_type < 5 LIMIT 1 OFFSET ABS(RANDOM() % 44045)
+	
+	-- lub dla tablic
+	--SELECT _id,place_name,6 as place_type,voivodeship,powiat,plate,plate_end
+	--FROM places WHERE place_type < 5 AND has_own_plate = 1 LIMIT 1 OFFSET ABS(RANDOM() % 397)
+	
+) as f2
+
+-- ilość miejsc
+SELECT COUNT(*) FROM places WHERE place_type < 5;
+-- ilość tablic
+SELECT COUNT(*) FROM places WHERE place_type < 5 AND has_own_plate = 1

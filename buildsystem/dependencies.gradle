@@ -22,6 +22,8 @@
  *
  * Contact: Txus Ballesteros <txus.ballesteros@gmail.com>
  */
+apply from: 'buildsystem/git-version.gradle'
+
 allprojects {
     repositories {
         jcenter()
@@ -29,51 +31,44 @@ allprojects {
     }
 }
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('gradle.properties').newDataInputStream())
-
-def versionMajor = properties.getProperty('versionMajor')
-def versionMinor = properties.getProperty('versionMinor')
-def versionPatch = properties.getProperty('versionPatch')
-def versionBuild = properties.getProperty('versionBuild')
-
 ext {
     //Android
     androidApplicationId = 'pl.ipebk.tabi'
-    androidVersionCode = versionMajor.toInteger() * 10000000 + versionMinor.toInteger() * 100000 + versionPatch.toInteger() * 1000 + versionBuild.toInteger()
-    androidVersionName = "${versionMajor}.${versionMinor}.${versionPatch}-b${versionBuild}"
-    androidBuildToolsVersion = "22.0.1"
+    androidVersionCode = readVersionCode()
+    androidVersionName = readVersionName()
+    androidBuildToolsVersion = "24.0.0"
     androidMinSdkVersion = 16
-    androidTargetSdkVersion = 23
-    androidCompileSdkVersion = 23
+    androidTargetSdkVersion = 24
+    androidCompileSdkVersion = 24
 
     //Libraries
     javaxAnnotationVersion = '10.0-b28'
-    daggerVersion = '2.0.2'
-    androidSupportVersion = '23.1.1'
+    daggerVersion = '2.8'
+    androidSupportVersion = '24.2.1'
     sqliteAssetHelperVersion = '2.0.1'
-    sqlbriteVersion = '0.6.0'
+    sqlbriteVersion = '0.8.0'
     junitVersion = '4.12'
-    mockitoVersion = '1.10.19'
-    butterKnifeVersion = '7.0.1'
-    ottoVersion = '1.3.8'
-    timberVersion = '4.1.1'
+    mockitoTwoVersion = '2.2.26'
+    mockitoOneVersion = '1.10.19'
+    butterKnifeVersion = '8.4.0'
+    pineVersion = '0.2.0'
     picassoVersion = '2.5.2'
-    okhttpVersion = '3.2.0'
+    okhttpVersion = '3.4.2'
     dexmakerVersion = '1.1'
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
-    robolectricVerion = '3.0'
-    rxJavaVersion = '1.1.1'
-    rxAndroidVersion = '1.1.0'
+    robolectricVerion = '3.1.4'
+    rxJavaVersion = '1.2.3'
+    rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';
-    rxDebugVersion = '1.+';
     timberUtilsVersion = '1.0.0';
     crashlyticsVersion = '2.5.6@aar';
     overscrollVersion = '1.0.1';
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
+    autoValueVersion = '1.2';
+    aboutLibrariesVersion = "5.9.1@aar";
 
     mobileDependencies = [
             // Android
@@ -83,6 +78,7 @@ ext {
             cardview                : "com.android.support:cardview-v7:${androidSupportVersion}",
             recyclerView            : "com.android.support:recyclerview-v7:${androidSupportVersion}",
             supportannotations      : "com.android.support:support-annotations:${androidSupportVersion}",
+            customtabs              : "com.android.support:customtabs:${androidSupportVersion}",
 
             // RxJava
             rxjava                  : "io.reactivex:rxjava:${rxJavaVersion}",
@@ -90,16 +86,13 @@ ext {
             rxbinding               : "com.jakewharton.rxbinding:rxbinding:${rxBindingVersion}",
             rxbinding_recyclerview  : "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${rxBindingVersion}",
             rxbinding_support       : "com.jakewharton.rxbinding:rxbinding-support-v4:${rxBindingVersion}",
-            rxdebug                 : "io.reactivex:rxjava-debug:${rxDebugVersion}",
 
             // ButterKnife
-            butterKnife             : "com.jakewharton:butterknife:${butterKnifeVersion}",
-
-            // otto
-            otto                    : "com.squareup:otto:${ottoVersion}",
+            butterknife             : "com.jakewharton:butterknife:${butterKnifeVersion}",
+            butterknife_compiler    : "com.jakewharton:butterknife-compiler:${butterKnifeVersion}",
 
             // logs
-            timber                  : "com.jakewharton.timber:timber:${timberVersion}",
+            pine                    : "com.github.bskierys.pine:pine:${pineVersion}",
             timbertreeutils         : "net.ypresto.timbertreeutils:timbertreeutils:${timberUtilsVersion}",
             crashlytics             : "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}",
 
@@ -122,12 +115,17 @@ ext {
 
             // overscroll
             overscroll              : "me.everything:overscroll-decor-android:${overscrollVersion}",
+            aboutLibraries          : "com.mikepenz:aboutlibraries:${aboutLibrariesVersion}",
+
+            // auto-value
+            autovalue               : "com.google.auto.value:auto-value:${autoValueVersion}",
 
             // Unit test dependencies
             junit                   : "junit:junit:${junitVersion}",
             robolectric             : "org.robolectric:robolectric:${robolectricVerion}",
             robolectric_shadows     : "org.robolectric:shadows-support-v4:${robolectricVerion}",
-            mockito                 : "org.mockito:mockito-core:${mockitoVersion}",
+            mockitoTwo              : "org.mockito:mockito-core:${mockitoTwoVersion}",
+            mockitoOne              : "org.mockito:mockito-core:${mockitoOneVersion}",
             assertj                 : "org.assertj:assertj-core:${assertjVersion}",
             assertj_android         : "com.squareup.assertj:assertj-android:${assertjAndroidVersion}",
             assertj_android_recycler: "com.squareup.assertj:assertj-android-recyclerview-v7:${assertjAndroidVersion}@aar",

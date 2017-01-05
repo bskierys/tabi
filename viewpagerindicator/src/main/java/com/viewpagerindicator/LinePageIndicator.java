@@ -27,14 +27,12 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
 /**
- * Draws a line for each page. The current page line is colored differently
- * than the unselected page lines.
+ * Draws a line for each page. The current page line is colored differently than the unselected page lines.
  */
 public class LinePageIndicator extends View implements PageIndicator {
     private static final int INVALID_POINTER = -1;
@@ -53,7 +51,6 @@ public class LinePageIndicator extends View implements PageIndicator {
     private int mActivePointerId = INVALID_POINTER;
     private boolean mIsDragging;
 
-
     public LinePageIndicator(Context context) {
         this(context, null);
     }
@@ -64,7 +61,9 @@ public class LinePageIndicator extends View implements PageIndicator {
 
     public LinePageIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        if (isInEditMode()) return;
+        if (isInEditMode()) {
+            return;
+        }
 
         final Resources res = getResources();
 
@@ -88,7 +87,7 @@ public class LinePageIndicator extends View implements PageIndicator {
 
         Drawable background = a.getDrawable(R.styleable.LinePageIndicator_android_background);
         if (background != null) {
-          setBackgroundDrawable(background);
+            setBackgroundDrawable(background);
         }
 
         a.recycle();
@@ -96,7 +95,6 @@ public class LinePageIndicator extends View implements PageIndicator {
         final ViewConfiguration configuration = ViewConfiguration.get(context);
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
-
 
     public void setCentered(boolean centered) {
         mCentered = centered;
@@ -186,7 +184,8 @@ public class LinePageIndicator extends View implements PageIndicator {
         for (int i = 0; i < count; i++) {
             float dx1 = horizontalOffset + (i * lineWidthAndGap);
             float dx2 = dx1 + mLineWidth;
-            canvas.drawLine(dx1, verticalOffset, dx2, verticalOffset, (i == mCurrentPage) ? mPaintSelected : mPaintUnselected);
+            canvas.drawLine(dx1, verticalOffset, dx2, verticalOffset, (i == mCurrentPage) ? mPaintSelected :
+                    mPaintUnselected);
         }
     }
 
@@ -249,7 +248,9 @@ public class LinePageIndicator extends View implements PageIndicator {
 
                 mIsDragging = false;
                 mActivePointerId = INVALID_POINTER;
-                if (mViewPager.isFakeDragging()) mViewPager.endFakeDrag();
+                if (mViewPager.isFakeDragging()) {
+                    mViewPager.endFakeDrag();
+                }
                 break;
 
             case MotionEventCompat.ACTION_POINTER_DOWN: {
@@ -348,8 +349,7 @@ public class LinePageIndicator extends View implements PageIndicator {
     /**
      * Determines the width of this view
      *
-     * @param measureSpec
-     *            A measureSpec packed into an int
+     * @param measureSpec A measureSpec packed into an int
      * @return The width of the view, honoring constraints from measureSpec
      */
     private int measureWidth(int measureSpec) {
@@ -369,14 +369,13 @@ public class LinePageIndicator extends View implements PageIndicator {
                 result = Math.min(result, specSize);
             }
         }
-        return (int)FloatMath.ceil(result);
+        return (int) Math.ceil(result);
     }
 
     /**
      * Determines the height of this view
      *
-     * @param measureSpec
-     *            A measureSpec packed into an int
+     * @param measureSpec A measureSpec packed into an int
      * @return The height of the view, honoring constraints from measureSpec
      */
     private int measureHeight(int measureSpec) {
@@ -395,12 +394,12 @@ public class LinePageIndicator extends View implements PageIndicator {
                 result = Math.min(result, specSize);
             }
         }
-        return (int)FloatMath.ceil(result);
+        return (int) Math.ceil(result);
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
-        SavedState savedState = (SavedState)state;
+        SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
         mCurrentPage = savedState.currentPage;
         requestLayout();
