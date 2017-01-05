@@ -29,14 +29,15 @@ get_curr_branch() {
 
 check_if_release() {
     get_curr_branch
-    if ! echo $branch | grep -E 'releases/.*' > /dev/null; then
+    if ! echo $branch | grep -E 'release/.*' > /dev/null; then
         error_exit "$branch is not a release branch"  
     fi
 }
 
 get_curr_version() {
 	get_curr_branch
-	version=${branch#*"releases/"}
+	version=${branch#*"release/"}
+	version="v${version}"
 }
 
 read_auth() {
