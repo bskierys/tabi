@@ -1,6 +1,8 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.animation.AnimatorSet;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -339,6 +341,23 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToAboutAppPage() {
         Intent intent = new Intent(this, AboutAppActivity.class);
         startActivity(intent);
+    }
+
+    // TODO: 2017-01-15 handle rotation
+    @Override public void showDemoGreeting() {
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DemoGreetingDialog newFragment = new DemoGreetingDialog();
+        newFragment.show(ft, "dialog");
     }
 
     @Override public void onMenuItemClicked(String action) {

@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.injection.module.ApplicationModule;
+import pl.ipebk.tabi.presentation.localization.DemoGreetingPredicate;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 
@@ -26,4 +27,6 @@ public interface ApplicationComponent {
     DatabaseOpenHelper databaseHelper();
 
     SearchHistoryFactory searchHistoryFactory();
+
+    DemoGreetingPredicate demoGreetingPredicate();
 }

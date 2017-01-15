@@ -114,5 +114,8 @@
     <string name="main_feedback_reply_button">ZAMKNIJ</string>
     <string name="main_feedback_reply_rate">Oceń aplikację</string>
 
+    <!--  MAIN ENGLISH GREETING  -->
+    <bool name="use_english_greeting">false</bool>
+
     <string name="title_activity_about">O aplikacji</string>
 </resources>

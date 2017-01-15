@@ -122,6 +122,13 @@
     <string name="main_feedback_reply_button">CLOSE</string>
     <string name="main_feedback_reply_rate">Rate this app</string>
 
+    <!--  MAIN ENGLISH GREETING  -->
+    <bool name="use_english_greeting">true</bool>
+    <string name="english_greeting_title" translatable="false">Nobody is perfect</string>
+    <string name="english_greeting_body" translatable="false">This is an english version of the Tabi mobile app. It serves mainly for demonstrative purposes - some of the features may not
+        be working properly.</string>
+    <string name="english_greeting_confirm" translatable="false">Aye aye, sir</string>
+
     <string name="app_name" translatable="false">Tabi</string>
     <string name="action_settings">Settings</string>
     <string name="feedback_api_key" translatable="false">AF-8DE6899E68E4-F6</string>
