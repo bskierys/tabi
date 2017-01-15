@@ -1,1 +1,0 @@
-Screens in xhdpi. 1dp is 2 px. Pleasu use 8px rid for proper google material design formatting.
