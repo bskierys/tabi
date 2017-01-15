@@ -35,7 +35,6 @@ tabi.iml
 *.priv
 /local.properties
 /buildsystem/sign.properties
-/app/keystore
 /app/fabric.properties
 
 # fabric
