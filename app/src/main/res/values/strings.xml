@@ -124,7 +124,7 @@
 
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">true</bool>
-    <string name="english_greeting_title" translatable="false">Nobody is perfect</string>
+    <string name="english_greeting_title" translatable="false">Nobody is perfect&#8230;</string>
     <string name="english_greeting_body" translatable="false">This is an english version of the Tabi mobile app. It serves mainly for demonstrative purposes - some of the features may not
         be working properly.</string>
     <string name="english_greeting_confirm" translatable="false">Aye aye, sir</string>
