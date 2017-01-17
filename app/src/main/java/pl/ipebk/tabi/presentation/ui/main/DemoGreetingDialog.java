@@ -22,6 +22,7 @@ public class DemoGreetingDialog extends DialogFragment {
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_demo_greeting, container, false);
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
         ButterKnife.bind(this, v);
         return v;
     }

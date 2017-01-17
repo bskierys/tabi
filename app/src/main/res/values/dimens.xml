@@ -79,6 +79,7 @@
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
     <dimen name="StatusBar">22dp</dimen>
+    <dimen name="Button.Secondary.Radius">28dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
