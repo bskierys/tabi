@@ -50,7 +50,7 @@
 
     <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
         android:id="@+id/indicator"
-        style="@style/Text_Light.Header.Small"
+        style="@style/Text_Header.Primary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Search.Height.Tabs"
         android:background="@color/white"

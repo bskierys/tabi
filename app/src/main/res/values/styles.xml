@@ -62,47 +62,7 @@
         <attr name="lineHeight" format="dimension"/>
     </declare-styleable>
 
-    <!--  COMMON TEXT STYLES  -->
-    <style name="Text_Light">
-        <item name="android:textColor">@color/black_80</item>
-    </style>
-
-    <style name="Text_Dark">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Text_Light.Header" parent="Text_Light">
-        <item name="fontFamily">bebas</item>
-        <item name="android:textSize">@dimen/Text.Header</item>
-    </style>
-
-    <style name="Text_Light.Header.Small" parent="Text_Light.Header">
-        <item name="android:textSize">@dimen/Text.Header.Small</item>
-    </style>
-
-    <style name="Text_Light.Display" parent="Text_Light">
-        <item name="fontFamily">montserrat</item>
-    </style>
-
-    <style name="Text_Light.Display.Title" parent="Text_Light.Display">
-        <item name="android:textSize">@dimen/Text.Display.Title</item>
-    </style>
-
-    <style name="Text_Light.Display.Caption" parent="Text_Light.Display">
-        <item name="android:textSize">@dimen/Text.Display.Body</item>
-    </style>
-
-    <style name="Text_Light.Display.Body" parent="Text_Light.Display">
-        <item name="android:textSize">@dimen/Text.Display.Body</item>
-        <item name="android:textColor">@color/black_50</item>
-    </style>
-
-    <style name="Text_Dark.Display.Title" parent="Text_Dark">
-        <item name="fontFamily">montserrat</item>
-        <item name="android:textSize">@dimen/Text.Display.Title</item>
-    </style>
-
-    <style name="Text_Toolbar" parent="Text_Dark.Display.Title">
+    <style name="Text_Toolbar" parent="Text_Body2.Dark">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
@@ -118,7 +78,7 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
-    <style name="Main_Text_Caption" parent="Text_Light.Display">
+    <style name="Main_Text_Caption" parent="Text_Body2.Primary">
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:layout_marginBottom">12dp</item>
         <item name="android:layout_marginRight">80dp</item>
@@ -148,7 +108,7 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="Details_Text.Description" parent="Text_Light.Display.Body">
+    <style name="Details_Text.Description" parent="Text_Body.Secondary">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">@dimen/Details.Height.Text.Description</item>
