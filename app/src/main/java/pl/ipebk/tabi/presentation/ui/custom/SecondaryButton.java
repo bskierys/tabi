@@ -8,7 +8,6 @@ package pl.ipebk.tabi.presentation.ui.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import butterknife.BindView;
@@ -50,6 +49,10 @@ public class SecondaryButton extends FrameLayout {
             buttonText = buttonText.toUpperCase();
             button.setText(buttonText);
         }
+    }
+
+    public void setText(CharSequence text) {
+        button.setText(text);
     }
 
     @Override public void setOnClickListener(OnClickListener listener) {

@@ -356,7 +356,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DemoGreetingDialog newFragment = new DemoGreetingDialog();
+        MessageDialog newFragment = MessageDialog
+                .newInstance(getString(R.string.english_greeting_title),
+                             getString(R.string.english_greeting_body),
+                             getString(R.string.english_greeting_confirm));
         newFragment.show(ft, "dialog");
     }
 

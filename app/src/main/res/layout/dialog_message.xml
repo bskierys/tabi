@@ -10,22 +10,24 @@
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         style="@style/Text_Display.Primary"
+        android:id="@+id/txt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Title"
-        android:text="@string/english_greeting_title"/>
+        android:text="@string/preview_title"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         style="@style/Text_Body.Primary"
+        android:id="@+id/txt_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Body"
-        android:text="@string/english_greeting_body"/>
+        android:text="@string/preview_body"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
-        android:id="@+id/btn_demo_confirm"
+        android:id="@+id/btn_confirm"
         android:layout_width="@dimen/Button.Secondary.Width"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/english_greeting_confirm"/>
+        android:text="@string/preview_confirm"/>
 </LinearLayout>
