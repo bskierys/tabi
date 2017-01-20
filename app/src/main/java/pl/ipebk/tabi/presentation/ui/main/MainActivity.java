@@ -27,6 +27,7 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.State;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
@@ -44,6 +45,7 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final String ACTION_SHOW_LICENSES = "licenses";
     private static final String ACTION_GIVE_FEEDBACK = "rate";
+    private static final String PARAM_DIALOG = "dialog";
 
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
@@ -70,6 +72,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
+    @State boolean shouldDemoDialogBeShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -345,22 +348,25 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     // TODO: 2017-01-15 handle rotation
     @Override public void showDemoGreeting() {
-        // DialogFragment.show() will take care of adding the fragment
-        // in a transaction.  We also want to remove any currently showing
-        // dialog, so make our own transaction and take care of that here.
+        if(shouldDemoDialogBeShown) {
+            return;
+        }
+
+        shouldDemoDialogBeShown = true;
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
         if (prev != null) {
             ft.remove(prev);
         }
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        MessageDialog newFragment = MessageDialog
+        MessageDialog demoDialog = MessageDialog
                 .newInstance(getString(R.string.english_greeting_title),
                              getString(R.string.english_greeting_body),
                              getString(R.string.english_greeting_confirm));
-        newFragment.show(ft, "dialog");
+        demoDialog.setOnClickListener(v -> shouldDemoDialogBeShown = false);
+        demoDialog.show(ft, PARAM_DIALOG);
     }
 
     @Override public void onMenuItemClicked(String action) {

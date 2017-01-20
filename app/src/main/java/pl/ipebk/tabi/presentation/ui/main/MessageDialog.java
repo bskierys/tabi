@@ -34,6 +34,7 @@ public class MessageDialog extends DialogFragment {
     private String title;
     private String body;
     private String buttonText;
+    private View.OnClickListener defaultClickListener = v -> onConfirm();
 
     public static MessageDialog newInstance(String title, String body, String buttonText) {
         MessageDialog dialog = new MessageDialog();
@@ -57,18 +58,33 @@ public class MessageDialog extends DialogFragment {
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.dialog_message, container, false);
+        View view = inflater.inflate(R.layout.dialog_message, container, false);
         getDialog().getWindow().setBackgroundDrawableResource(R.drawable.dialog_bg);
-        ButterKnife.bind(this, v);
+        ButterKnife.bind(this, view);
 
         titleView.setText(title);
         bodyView.setText(body);
         button.setText(buttonText);
+        button.setOnClickListener(defaultClickListener);
 
-        return v;
+        return view;
     }
 
-    @OnClick(R.id.btn_confirm) public void onConfirm() {
+    public void setOnClickListener(View.OnClickListener listener) {
+        if(button!=null) {
+            button.setOnClickListener(v -> {
+                listener.onClick(v);
+                onConfirm();
+            });
+        } else {
+            defaultClickListener = v -> {
+                listener.onClick(v);
+                onConfirm();
+            };
+        }
+    }
+
+    private void onConfirm() {
         this.dismiss();
     }
 }
