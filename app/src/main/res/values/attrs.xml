@@ -2,4 +2,8 @@
     <declare-styleable name="Toolbar">
         <attr name="content" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="SecondaryButton">
+        <attr name="android:text"/>
+    </declare-styleable>
 </resources>
