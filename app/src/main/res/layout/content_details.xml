@@ -30,6 +30,8 @@
         android:id="@+id/img_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/Details.Padding.Doodle.Horizontal"
+        android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
         android:contentDescription="@string/description_placeholder"
         android:visibility="gone"/>
 

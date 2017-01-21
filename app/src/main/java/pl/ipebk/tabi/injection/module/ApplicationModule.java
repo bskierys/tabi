@@ -7,7 +7,8 @@ package pl.ipebk.tabi.injection.module;
 
 import android.app.Application;
 import android.content.Context;
-
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import javax.inject.Singleton;
 
@@ -63,5 +64,9 @@ public class ApplicationModule {
 
     @Provides public SearchTimeProvider provideSearchTimeProvider(CalendarSearchTimeProvider provider) {
         return provider;
+    }
+
+    @Provides public SharedPreferences provideSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 }

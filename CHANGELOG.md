@@ -1,10 +1,23 @@
 # Change Log
 
+## [v0.2.1](https://github.com/bskierys/tabi/tree/v0.2.1) (2017-01-21)
+[Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.0...v0.2.1)
+
+**Fixed bugs:**
+
+- Doodle captions has too small leading [\#23](https://github.com/bskierys/tabi/issues/23)
+
+**Closed issues:**
+
+- Add english translation for app [\#13](https://github.com/bskierys/tabi/issues/13)
+- Add code style settings to project and repository [\#2](https://github.com/bskierys/tabi/issues/2)
+
 ## [v0.2.0](https://github.com/bskierys/tabi/tree/v0.2.0) (2017-01-05)
 [Full Changelog](https://github.com/bskierys/tabi/compare/v0.1.3...v0.2.0)
 
 **Closed issues:**
 
+- Remove not neccessary files from version controll [\#26](https://github.com/bskierys/tabi/issues/26)
 - App version at the bottom of main screen [\#25](https://github.com/bskierys/tabi/issues/25)
 - Simple about page accessible from main screen [\#21](https://github.com/bskierys/tabi/issues/21)
 - Add versioning from tags [\#18](https://github.com/bskierys/tabi/issues/18)

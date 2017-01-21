@@ -35,7 +35,10 @@ tabi.iml
 *.priv
 /local.properties
 /buildsystem/sign.properties
-/keystore
+/app/fabric.properties
+
+# fabric
+/app/session_analytics_to_send
 
 # others
 .DS_Store

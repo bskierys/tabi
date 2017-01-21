@@ -6,16 +6,19 @@
 package pl.ipebk.tabi.presentation.localization;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.readmodel.PlaceType;
+import timber.log.Timber;
 
 /**
  * Helper class that handles text formatting for places.
  */
 public class PlaceLocalizationHelper {
     private final static String POWIAT_REPLACE_FORMAT = "$z$";
+    private final static String VOIVODESHIP_NAME_RESOURCE_KEY = "voivodeship_name_";
 
     private Context context;
 
@@ -24,17 +27,36 @@ public class PlaceLocalizationHelper {
     }
 
     public String formatVoivodeship(String voivodeship) {
-        return context.getString(R.string.details_voivodeship) + " " + voivodeship;
+        String resourceName = VOIVODESHIP_NAME_RESOURCE_KEY + voivodeship.replace("#", "");
+        String voivodeshipName;
+        try {
+            voivodeshipName = getStringResourceForKey(resourceName);
+        } catch (Resources.NotFoundException e) {
+            Timber.e(e, "Could not found resource for name: %s", resourceName);
+            voivodeshipName = context.getString(R.string.default_resource_string);
+        }
+        return voivodeshipName;
+    }
+
+    private String getStringResourceForKey(String key) throws Resources.NotFoundException {
+        int resourceId = context.getResources().getIdentifier(key, "string", context.getPackageName());
+        return context.getString(resourceId);
     }
 
     public String formatPowiat(String powiat) {
         String zReplacement = context.getString(R.string.details_powiat_territorial);
-        powiat = powiat.replace(POWIAT_REPLACE_FORMAT, zReplacement);
-        return context.getString(R.string.details_powiat) + " " + powiat;
+        String fullName;
+        if (powiat.contains(POWIAT_REPLACE_FORMAT)) {
+            powiat = powiat.replace(POWIAT_REPLACE_FORMAT, "").trim();
+            fullName = context.getString(R.string.details_powiat, powiat, zReplacement);
+        } else {
+            fullName = context.getString(R.string.details_powiat, powiat, "");
+        }
+        return fullName.trim().replaceAll("\\s+", " ");
     }
 
     public String formatGmina(String gmina) {
-        return context.getString(R.string.details_gmina) + " " + gmina;
+        return context.getString(R.string.details_gmina, gmina);
     }
 
     /**
@@ -53,14 +75,14 @@ public class PlaceLocalizationHelper {
         if (place.getType().ordinal() < PlaceType.PART_OF_TOWN.ordinal()) {
             placeType = context.getString(R.string.details_additional_town);
         } else if (place.getType() == PlaceType.PART_OF_TOWN) {
-            placeType = context.getString(R.string.details_additional_part_of_town) + " " + place.getGmina();
+            placeType = context.getString(R.string.details_additional_part_of_town, place.getGmina());
         } else if (place.getType() == PlaceType.VILLAGE) {
             placeType = context.getString(R.string.details_additional_village);
         }
 
         String otherPlates = "";
         if (place.hasAdditionalPlates()) {
-            otherPlates = ", " + context.getString(R.string.details_additional_other_plates) + ": "
+            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)
                     + place.platesToStringExceptMatchingPattern(searchedPlate);
         }
 

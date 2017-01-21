@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <familyset>
-    <!--  Bebas Neue -->
+    <!--  Bebas Neue Regular-->
     <family>
         <nameset>
             <name>bebas</name>
         </nameset>
         <fileset>
             <file>fonts/BebasNeue-Regular.otf</file>
+        </fileset>
+    </family>
+
+    <!--  Bebas Neue Book-->
+    <family>
+        <nameset>
+            <name>bebas-book</name>
+        </nameset>
+        <fileset>
+            <file>fonts/BebasNeue-Book.otf</file>
         </fileset>
     </family>
 
@@ -17,6 +27,16 @@
         </nameset>
         <fileset>
             <file>fonts/Montserrat-Regular.otf</file>
+        </fileset>
+    </family>
+
+    <!--  Montserrat -->
+    <family>
+        <nameset>
+            <name>montserrat-light</name>
+        </nameset>
+        <fileset>
+            <file>fonts/Montserrat-Light.otf</file>
         </fileset>
     </family>
 </familyset>

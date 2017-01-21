@@ -1,6 +1,8 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.animation.AnimatorSet;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,6 +27,7 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.State;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
@@ -42,6 +45,7 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final String ACTION_SHOW_LICENSES = "licenses";
     private static final String ACTION_GIVE_FEEDBACK = "rate";
+    private static final String PARAM_DIALOG = "dialog";
 
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
@@ -68,6 +72,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
+    @State boolean isDemoDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -339,6 +344,22 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToAboutAppPage() {
         Intent intent = new Intent(this, AboutAppActivity.class);
         startActivity(intent);
+    }
+
+    @Override public void showDemoGreeting() {
+        if(!isDemoDialogShown) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
+            if (prev == null) {
+                MessageDialog demoDialog = MessageDialog
+                        .newInstance(getString(R.string.english_greeting_title),
+                                     getString(R.string.english_greeting_body),
+                                     getString(R.string.english_greeting_confirm));
+                demoDialog.setOnClickListener(v -> isDemoDialogShown = false);
+                demoDialog.show(ft, PARAM_DIALOG);
+                isDemoDialogShown = true;
+            }
+        }
     }
 
     @Override public void onMenuItemClicked(String action) {

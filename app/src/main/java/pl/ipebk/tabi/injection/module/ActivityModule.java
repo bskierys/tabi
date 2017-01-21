@@ -7,6 +7,8 @@ package pl.ipebk.tabi.injection.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -118,5 +120,9 @@ public class ActivityModule {
 
     @Provides public DatabaseLoader provideDatabaseLoader(SqliteDatabaseLoader loader) {
         return loader;
+    }
+
+    @Provides public SharedPreferences provideSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(activity);
     }
 }
