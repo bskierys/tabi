@@ -72,8 +72,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
-    boolean shouldDemoDialogBeShown;
-    boolean isDemoDialogShown;
+    @State boolean isDemoDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -349,7 +348,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void showDemoGreeting() {
         if(!isDemoDialogShown) {
-            shouldDemoDialogBeShown = true;
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
             if (prev == null) {
@@ -357,10 +355,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                         .newInstance(getString(R.string.english_greeting_title),
                                      getString(R.string.english_greeting_body),
                                      getString(R.string.english_greeting_confirm));
-                demoDialog.setOnClickListener(v -> {
-                    shouldDemoDialogBeShown = false;
-                    isDemoDialogShown = false;
-                });
+                demoDialog.setOnClickListener(v -> isDemoDialogShown = false);
                 demoDialog.show(ft, PARAM_DIALOG);
                 isDemoDialogShown = true;
             }
