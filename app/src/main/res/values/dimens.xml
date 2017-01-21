@@ -7,6 +7,7 @@
     <dimen name="Doodle.Height.Default">150dp</dimen>
     <dimen name="Doodle.Width.Default">300dp</dimen>
     <dimen name="Doodle.Margin.Minimal">44dp</dimen>
+    <dimen name="Doodle.Leading.Description">6dp</dimen>
 
     <!--  FONTS  -->
     <dimen name="Text.Header">32sp</dimen>
@@ -22,6 +23,7 @@
     <dimen name="Details.Height.Doodle.Map.Space.After">16dp</dimen>
     <dimen name="Details.Height.Doodle.Empty.Space.Before">48dp</dimen>
     <dimen name="Details.Height.Doodle.Empty.Space.After">40dp</dimen>
+    <dimen name="Details.Padding.Doodle.Horizontal">48dp</dimen>
     <dimen name="Details.Text.Button">18sp</dimen>
     <dimen name="Details.Height.Button">72dp</dimen>
     <dimen name="Details.Height.Button.Image">24dp</dimen>
