@@ -49,15 +49,11 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     public void refreshView() {
         preferenceHelper.increaseMainScreenVisited();
-
         int mainScreenVisitedNumber = preferenceHelper.howManyTimesMainScreenVisited();
-        // TODO: 2017-01-15 should be shown only once
-       // if(greetingPredicate.shouldShowDemoGreeting()) {
-            //getMvpView().showDemoGreeting();
-        //}
 
-        if(mainScreenVisitedNumber % 2 == 0) {
+        if(greetingPredicate.shouldShowDemoGreeting()) {
             getMvpView().showDemoGreeting();
+            greetingPredicate.markDemoGreetingShown();
         }
 
         // TODO: 2016-06-14 use better method than 1/3 entrances

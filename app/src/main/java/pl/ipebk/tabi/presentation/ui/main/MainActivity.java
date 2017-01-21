@@ -72,7 +72,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
-    @State boolean shouldDemoDialogBeShown;
+    boolean shouldDemoDialogBeShown;
+    boolean isDemoDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -346,27 +347,24 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         startActivity(intent);
     }
 
-    // TODO: 2017-01-15 handle rotation
     @Override public void showDemoGreeting() {
-        if(shouldDemoDialogBeShown) {
-            return;
+        if(!isDemoDialogShown) {
+            shouldDemoDialogBeShown = true;
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
+            if (prev == null) {
+                MessageDialog demoDialog = MessageDialog
+                        .newInstance(getString(R.string.english_greeting_title),
+                                     getString(R.string.english_greeting_body),
+                                     getString(R.string.english_greeting_confirm));
+                demoDialog.setOnClickListener(v -> {
+                    shouldDemoDialogBeShown = false;
+                    isDemoDialogShown = false;
+                });
+                demoDialog.show(ft, PARAM_DIALOG);
+                isDemoDialogShown = true;
+            }
         }
-
-        shouldDemoDialogBeShown = true;
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        MessageDialog demoDialog = MessageDialog
-                .newInstance(getString(R.string.english_greeting_title),
-                             getString(R.string.english_greeting_body),
-                             getString(R.string.english_greeting_confirm));
-        demoDialog.setOnClickListener(v -> shouldDemoDialogBeShown = false);
-        demoDialog.show(ft, PARAM_DIALOG);
     }
 
     @Override public void onMenuItemClicked(String action) {
