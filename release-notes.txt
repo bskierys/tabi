@@ -1,4 +1,7 @@
 Release Notes
+## [v0.2.1] (2017-01-21)
+- Doodle captions has too small leading 
+- Add english translation for app 
 ## [v0.2.0] (2017-01-05)
 - App version at the bottom of main screen 
 - Simple about page accessible from main screen 
