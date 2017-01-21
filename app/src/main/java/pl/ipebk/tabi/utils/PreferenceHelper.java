@@ -5,9 +5,7 @@
 */
 package pl.ipebk.tabi.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
@@ -17,15 +15,15 @@ import javax.inject.Inject;
 public class PreferenceHelper {
     // constants for preferences
     private static final String MAIN_SCREEN_VIEWS = "main_screen_views_number";
+    private static final String DEMO_GREETING_WAS_SHOWN = "demo_greeting_was_shown";
 
     private SharedPreferences sharedPreferences;
 
-    // TODO: 2016-12-19 SharedPreferences should be injected
-    @Inject public PreferenceHelper(Context context) {
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    @Inject public PreferenceHelper(SharedPreferences preferences) {
+        this.sharedPreferences = preferences;
     }
 
-    public void increaseMainScreenVisited(){
+    public void increaseMainScreenVisited() {
         int alreadyVisited = howManyTimesMainScreenVisited();
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -37,17 +35,13 @@ public class PreferenceHelper {
         return sharedPreferences.getInt(MAIN_SCREEN_VIEWS, 0);
     }
 
-    public void setVisited(Class c, String additional, boolean isVisited) {
+    public void demoGreetingShown() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(getKey(c, additional), isVisited);
+        editor.putBoolean(DEMO_GREETING_WAS_SHOWN, true);
         editor.apply();
     }
 
-    public boolean isVisited(Class c, String additional) {
-        return sharedPreferences.getBoolean(getKey(c, additional), false);
-    }
-
-    private String getKey(Class c, String additional) {
-        return c.getCanonicalName() + ";" + additional;
+    public boolean wasDemoGreetingShown() {
+        return sharedPreferences.getBoolean(DEMO_GREETING_WAS_SHOWN, false);
     }
 }

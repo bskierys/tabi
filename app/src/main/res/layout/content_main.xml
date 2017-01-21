@@ -74,7 +74,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/main_search_bar_hint_plates"
                 android:textColor="@color/white_semi_transparent"
-                style="@style/Text_Dark.Display.Title"/>
+                style="@style/Text_Body2.Dark.Secondary"/>
 
             <ImageView
                 android:id="@+id/ic_search"

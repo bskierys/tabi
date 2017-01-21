@@ -47,6 +47,7 @@ public class DoodleImage {
     private List<String> headerLines;
     private List<String> descriptionLines;
     private Bitmap originalImage;
+    private float descriptionLeading;
     float scale;
 
     public DoodleImage(final Builder builder) {
@@ -79,7 +80,7 @@ public class DoodleImage {
 
     private void initPaintingFields() {
         float headerTextSize = resources.getDimensionPixelSize(R.dimen.Doodle_Text_Header);
-        int headerFontColor = resources.getColor(R.color.grey_850);
+        int headerFontColor = resources.getColor(R.color.black_80);
         headerPaint.setColor(headerFontColor);
         headerPaint.setTextSize(headerTextSize);
         headerPaint.setTextAlign(Paint.Align.CENTER);
@@ -88,7 +89,8 @@ public class DoodleImage {
 
         float descriptionTextSize = resources
                 .getDimensionPixelSize(R.dimen.Doodle_Text_Description);
-        int descriptionFontColor = resources.getColor(R.color.grey_700);
+        int descriptionFontColor = resources.getColor(R.color.black_50);
+        descriptionLeading = resources.getDimensionPixelSize(R.dimen.Doodle_Leading_Description);
         descriptionPaint.setColor(descriptionFontColor);
         descriptionPaint.setTextSize(descriptionTextSize);
         descriptionPaint.setTextAlign(Paint.Align.CENTER);
@@ -221,7 +223,7 @@ public class DoodleImage {
         for (int i = 0; i < descriptionLines.size(); i++) {
             String line = descriptionLines.get(i);
             getTextWidth(line, descriptionPaint, descriptionBounds);
-            descriptionBottom += descriptionBounds.height();
+            descriptionBottom += descriptionBounds.height() + descriptionLeading;
 
             canvas.drawText(line, width / 2, descriptionBottom, descriptionPaint);
         }

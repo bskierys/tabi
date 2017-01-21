@@ -85,7 +85,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         setSupportActionBar(toolbar);
         presenter.attachView(this);
 
-        doodleHeaderFont = fontManager.get("bebas", Typeface.NORMAL);
+        doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
 
         RxViewPager.pageSelections(searchPager)

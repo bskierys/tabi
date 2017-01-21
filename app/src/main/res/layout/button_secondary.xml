@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <pl.ipebk.tabi.presentation.ui.custom.FontButton
+        android:id="@+id/btn_inner"
+        style="@style/Text_Header.Accent2"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:minHeight="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_secondary"
+        android:padding="@dimen/Button.Secondary.Padding"
+        android:text="@string/preview_command"/>
+</FrameLayout>

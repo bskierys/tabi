@@ -87,7 +87,7 @@ public class DetailsButton extends Button {
     }
 
     private void invalidateTextPaintAndMeasurements() {
-        Typeface bebas = fontManager.get("bebas", Typeface.NORMAL);
+        Typeface bebas = fontManager.get("bebas-book", Typeface.NORMAL);
 
         textPaint.setTypeface(bebas);
         textPaint.setTextSize(getContext().getResources().getDimensionPixelSize(R.dimen.Details_Text_Button));

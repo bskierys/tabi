@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Text_Display">
+        <item name="fontFamily">bebas-book</item>
+        <item name="android:textSize">@dimen/Text.Header</item>
+    </style>
+
+    <style name="Text_Header">
+        <item name="fontFamily">bebas-book</item>
+        <item name="android:textSize">@dimen/Text.Header.Small</item>
+    </style>
+
+    <style name="Text_Header2">
+        <item name="fontFamily">bebas</item>
+        <item name="android:textSize">@dimen/Text.Header.Small</item>
+    </style>
+
+    <style name="Text_Subheader">
+        <item name="fontFamily">bebas-book</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text_Subheader2">
+        <item name="fontFamily">bebas-book</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text_Title">
+        <item name="fontFamily">montserrat-light</item>
+        <item name="android:textSize">@dimen/Text.Display.Title</item>
+    </style>
+
+    <style name="Text_Title2">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:textSize">@dimen/Text.Display.Title</item>
+    </style>
+
+    <style name="Text_Body">
+        <item name="fontFamily">montserrat-light</item>
+        <item name="android:textSize">@dimen/Text.Display.Body</item>
+    </style>
+
+    <style name="Text_Body2">
+        <item name="fontFamily">montserrat</item>
+        <item name="android:textSize">@dimen/Text.Display.Body</item>
+    </style>
+
+    <style name="Text_Small">
+        <item name="fontFamily">montserrat-light</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <!--  PRIMARY  -->
+    <style name="Text_Display.Primary" parent="Text_Display">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Header.Primary" parent="Text_Header">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Header.Primary2" parent="Text_Header2">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Subheader.Primary" parent="Text_Subheader">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Subheader2.Primary" parent="Text_Subheader2">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Title.Primary" parent="Text_Title">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Title2.Primary" parent="Text_Title2">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Body.Primary" parent="Text_Body">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Body2.Primary" parent="Text_Body2">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <style name="Text_Small.Primary" parent="Text_Small">
+        <item name="android:textColor">@color/black_80</item>
+    </style>
+
+    <!--  SECONDARY  -->
+    <style name="Text_Display.Secondary" parent="Text_Display">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Header.Secondary" parent="Text_Header">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Header.Secondary2" parent="Text_Header2">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Subheader.Secondary" parent="Text_Subheader">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Subheader2.Secondary" parent="Text_Subheader2">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Title.Secondary" parent="Text_Title">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Title2.Secondary" parent="Text_Title2">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Body.Secondary" parent="Text_Body">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Body2.Secondary" parent="Text_Body2">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <style name="Text_Small.Secondary" parent="Text_Small">
+        <item name="android:textColor">@color/black_50</item>
+    </style>
+
+    <!--  ACCENT  -->
+    <style name="Text_Display.Accent" parent="Text_Display">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Header.Accent" parent="Text_Header">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Header.Accent2" parent="Text_Header2">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Subheader.Accent" parent="Text_Subheader">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Subheader2.Accent" parent="Text_Subheader2">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Title.Accent" parent="Text_Title">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Title2.Accent" parent="Text_Title2">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Body.Accent" parent="Text_Body">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Body2.Accent" parent="Text_Body2">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Text_Small.Accent" parent="Text_Small">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <!--  DARK  -->
+    <style name="Text_Display.Dark" parent="Text_Display">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Header.Dark" parent="Text_Header">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Header.Dark2" parent="Text_Header2">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Subheader.Dark" parent="Text_Subheader">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Subheader2.Dark" parent="Text_Subheader2">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Title.Dark" parent="Text_Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Title2.Dark" parent="Text_Title2">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Body.Dark" parent="Text_Body">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Body2.Dark" parent="Text_Body2">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Text_Small.Dark" parent="Text_Small">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!--  DARK - Secondary  -->
+    <style name="Text_Display.Dark.Secondary" parent="Text_Display">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Header.Dark.Secondary" parent="Text_Header">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Header.Dark.Secondary2" parent="Text_Header2">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Subheader.Dark.Secondary" parent="Text_Subheader">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Subheader2.Dark.Secondary" parent="Text_Subheader2">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Title.Dark.Secondary" parent="Text_Title">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Title2.Dark.Secondary" parent="Text_Title2">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Body.Dark.Secondary" parent="Text_Body">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Body2.Dark.Secondary" parent="Text_Body2">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+
+    <style name="Text_Small.Dark.Secondary" parent="Text_Small">
+        <item name="android:textColor">@color/white_semi_transparent</item>
+    </style>
+</resources>

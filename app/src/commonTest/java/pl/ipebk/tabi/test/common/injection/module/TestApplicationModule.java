@@ -7,6 +7,7 @@ package pl.ipebk.tabi.test.common.injection.module;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import javax.inject.Singleton;
 
@@ -66,5 +67,9 @@ public class TestApplicationModule {
 
     @Provides public SearchHistoryFinder provideSearchHistoryFinder() {
         return mock(SearchHistoryFinder.class);
+    }
+
+    @Provides public SharedPreferences provideSharedPreferences() {
+        return mock(SharedPreferences.class);
     }
 }

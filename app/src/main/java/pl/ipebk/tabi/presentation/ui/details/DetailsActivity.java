@@ -112,7 +112,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
 
         presenter.attachView(this);
         toolbarIndicator.setVisibility(View.GONE);
-        doodleHeaderFont = fontManager.get("bebas", Typeface.NORMAL);
+        doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
         chromeTabHelper = new CustomTabActivityHelper();
 

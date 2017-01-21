@@ -7,6 +7,7 @@
     <dimen name="Doodle.Height.Default">150dp</dimen>
     <dimen name="Doodle.Width.Default">300dp</dimen>
     <dimen name="Doodle.Margin.Minimal">44dp</dimen>
+    <dimen name="Doodle.Leading.Description">6dp</dimen>
 
     <!--  FONTS  -->
     <dimen name="Text.Header">32sp</dimen>
@@ -22,6 +23,7 @@
     <dimen name="Details.Height.Doodle.Map.Space.After">16dp</dimen>
     <dimen name="Details.Height.Doodle.Empty.Space.Before">48dp</dimen>
     <dimen name="Details.Height.Doodle.Empty.Space.After">40dp</dimen>
+    <dimen name="Details.Padding.Doodle.Horizontal">48dp</dimen>
     <dimen name="Details.Text.Button">18sp</dimen>
     <dimen name="Details.Height.Button">72dp</dimen>
     <dimen name="Details.Height.Button.Image">24dp</dimen>
@@ -54,7 +56,7 @@
     <!--  MAIN  -->
     <dimen name="Main.Height.Header">304dp</dimen>
     <dimen name="Main.Width.Header.Divider">56dp</dimen>
-    <dimen name="Main.Margin.Greeting.Top">76dp</dimen>
+    <dimen name="Main.Margin.Greeting.Top">88dp</dimen>
     <dimen name="Main.Margin.Greeting.Horizontal">56dp</dimen>
     <dimen name="Main.Height.Greeting.Doodle">128dp</dimen>
     <dimen name="Main.Margin.Greeting.Doodle.Top">140dp</dimen>
@@ -75,10 +77,17 @@
     <dimen name="Main.Height.Tile.Image">48dp</dimen>
     <dimen name="Main.Text.Caption.Small">12sp</dimen>
     <dimen name="Main.Text.Caption.Large">16sp</dimen>
+    <dimen name="Main.Padding.DemoDialog.Horizontal">32dp</dimen>
+    <dimen name="Main.Padding.DemoDialog.Vertical">48dp</dimen>
+    <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
+    <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
 
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
     <dimen name="StatusBar">22dp</dimen>
+    <dimen name="Button.Secondary.Radius">32dp</dimen>
+    <dimen name="Button.Secondary.Padding">8dp</dimen>
+    <dimen name="Button.Secondary.Width">144dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

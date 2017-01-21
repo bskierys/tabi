@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/Main.Padding.DemoDialog.Vertical"
+              android:paddingLeft="@dimen/Main.Padding.DemoDialog.Horizontal"
+              android:paddingRight="@dimen/Main.Padding.DemoDialog.Horizontal"
+              android:paddingTop="@dimen/Main.Padding.DemoDialog.Vertical">
+
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        style="@style/Text_Display.Primary"
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Title"
+        android:text="@string/preview_title"/>
+
+    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        style="@style/Text_Body.Primary"
+        android:id="@+id/txt_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Body"
+        android:text="@string/preview_body"/>
+
+    <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
+        android:id="@+id/btn_confirm"
+        android:layout_width="@dimen/Button.Secondary.Width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/preview_confirm"/>
+</LinearLayout>

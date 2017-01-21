@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
+import pl.ipebk.tabi.presentation.localization.DemoGreetingPredicate;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
@@ -24,12 +25,14 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     private Subscription loadSubscription;
     private Stopwatch stopwatch;
     private PreferenceHelper preferenceHelper;
+    private DemoGreetingPredicate greetingPredicate;
 
     @Inject public MainPresenter(DatabaseLoader databaseLoader, StopwatchManager stopwatchManager,
-                                 PreferenceHelper preferenceHelper) {
+                                 PreferenceHelper preferenceHelper, DemoGreetingPredicate greetingPredicate) {
         this.databaseLoader = databaseLoader;
         this.stopwatch = stopwatchManager.getDefaultStopwatch();
         this.preferenceHelper = preferenceHelper;
+        this.greetingPredicate = greetingPredicate;
     }
 
     @Override public void attachView(MainMvpView mvpView) {
@@ -46,8 +49,12 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     public void refreshView() {
         preferenceHelper.increaseMainScreenVisited();
-
         int mainScreenVisitedNumber = preferenceHelper.howManyTimesMainScreenVisited();
+
+        if(greetingPredicate.shouldShowDemoGreeting()) {
+            getMvpView().showDemoGreeting();
+            greetingPredicate.markDemoGreetingShown();
+        }
 
         // TODO: 2016-06-14 use better method than 1/3 entrances
         if (mainScreenVisitedNumber % 3 == 0) {

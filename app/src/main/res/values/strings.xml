@@ -1,112 +1,142 @@
 <resources>
     <!--  PREVIEWS  -->
-    <string name="preview_place_name">Białogard</string>
-    <string name="preview_plate">ZBI</string>
-    <string name="preview_doodle_greeting">Hej! Jestem Tabi!</string>
-    <string name="preview_doodle_caption">Znam wszystkie tablice rejestracyjne. Śmiało. Pytaj!</string>
-    <string name="preview_category_name">wygwizdów</string>
-    <string name="preview_version">Version v0.1.3-77-gc3980f2</string>
-    <string name="preview_search_hint">Jakiej rejestracji szukasz?</string>
+    <string name="preview_place_name" translatable="false">Białogard</string>
+    <string name="preview_plate" translatable="false">ZBI</string>
+    <string name="preview_doodle_greeting" translatable="false">Hej! Jestem Tabi!</string>
+    <string name="preview_doodle_caption" translatable="false">Znam wszystkie tablice rejestracyjne. Śmiało. Pytaj!</string>
+    <string name="preview_category_name" translatable="false">wygwizdów</string>
+    <string name="preview_version" translatable="false">Wersja v0.1.3-77-gc3980f2</string>
+    <string name="preview_search_hint" translatable="false">Jakiej rejestracji szukasz?</string>
+    <string name="preview_command" translatable="false">Command</string>
+    <string name="preview_title" translatable="false">Title of dialog</string>
+    <string name="preview_body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec urna enim. Suspendisse condimentum quam a risus ullamcorper accumsan.</string>
+    <string name="preview_confirm" translatable="false">OK</string>
 
     <!--  DEFAULTS  -->
-    <string name="default_resource_string">brak tekstu</string>
+    <string name="default_resource_string">no text</string>
 
     <!--  DETAILS  -->
-    <string name="details_gmina">gmina</string>
-    <string name="details_powiat">powiat</string>
-    <string name="details_voivodeship">województwo</string>
-    <string name="details_powiat_territorial">(ziemski)</string>
-    <string name="details_additional_town">miasto</string>
-    <string name="details_additional_part_of_town">część miasta</string>
-    <string name="details_additional_village">wioska</string>
-    <string name="details_additional_other_plates">inne tablice</string>
-    <string name="details_country">Polska</string>
-    <string name="details_doodle_loading_header">Poczekaj chwilę&#8230;</string>
-    <string name="details_doodle_loading_description">Zaznaczam teren</string>
-    <string name="details_doodle_error_header">Ojej, ojej, ojej!</string>
-    <string name="details_doodle_error_description">Nie mogę dotrzeć do lokacji</string>
-    <string name="details_doodle_empty_header">Nic tu nie ma</string>
-    <string name="details_doodle_empty_description">Chociaż całkiem możliwe, że coś było, ale to zjadłem&#8230;</string>
-    <string name="details_button_google_it">WIĘCEJ</string>
-    <string name="details_button_maps">MAPY</string>
-    <string name="details_button_copy">SKOPIUJ</string>
-    <string name="details_info_copy_done">Skopiowałem do schowka :)</string>
+    <string name="details_gmina" formatted="false">%s commune</string>
+    <string name="details_powiat" formatted="false">%1$s %2$s district</string>
+    <string name="details_powiat_territorial">land</string>
+    <string name="details_additional_town">town</string>
+    <string name="details_additional_part_of_town">part of town: %s</string>
+    <string name="details_additional_village">village</string>
+    <string name="details_additional_other_plates">other plates</string>
+    <string name="details_country">Poland</string>
+    <string name="details_doodle_loading_header">Hold on a minute&#8230;</string>
+    <string name="details_doodle_loading_description">I\'m marking the territory</string>
+    <string name="details_doodle_error_header">Oh my, oh my, oh my!</string>
+    <string name="details_doodle_error_description">I can\'t reach the location</string>
+    <string name="details_doodle_empty_header">Nothing\'s here</string>
+    <string name="details_doodle_empty_description">Or maybe something was here, but I ate it&#8230;</string>
+    <string name="details_button_google_it">MORE</string>
+    <string name="details_button_maps">MAPS</string>
+    <string name="details_button_copy">COPY</string>
+    <string name="details_info_copy_done">Copied to clipboard</string>
+
+    <!--  TRANSLATABLES FROM DB  -->
+    <string name="voivodeship_name_dol">Lower Silesia Province</string>
+    <string name="voivodeship_name_kuj">Kuyavia-Pomerania Province</string>
+    <string name="voivodeship_name_lod">Lodz Province</string>
+    <string name="voivodeship_name_lbl">Lublin Province</string>
+    <string name="voivodeship_name_lbu">Lubusz Province</string>
+    <string name="voivodeship_name_mal">Lesser Poland Province</string>
+    <string name="voivodeship_name_maz">Masovia Province</string>
+    <string name="voivodeship_name_opo">Opole Province</string>
+    <string name="voivodeship_name_rze">Subcarpathia Province</string>
+    <string name="voivodeship_name_bie">Podlasie Province</string>
+    <string name="voivodeship_name_pom">Pomerania Province</string>
+    <string name="voivodeship_name_sla">Silesia Province</string>
+    <string name="voivodeship_name_swi">Swietokrzyskie Province</string>
+    <string name="voivodeship_name_war">Warmia-Masuria Province</string>
+    <string name="voivodeship_name_wie">Greater Poland Province</string>
+    <string name="voivodeship_name_zah">West Pomerania Province</string>
+    <string name="voivodeship_name_slu">Security Services</string>
+    <string name="voivodeship_name_woj">Military Plates</string>
 
     <!--  SEARCH  -->
-    <string name="search_header_best">NAJLEPSZE WYNIKI</string>
-    <string name="search_header_all">WSZYSTKIE WYNIKI</string>
-    <string name="search_header_click">KLIKNIJ ABY WYSZUKAĆ WIĘCEJ</string>
-    <string name="search_header_suggestions">PODPOWIEDZI</string>
-    <string name="search_tab_plate">PO TABLICY</string>
-    <string name="search_tab_place">PO MIEJSCU</string>
-    <string name="search_tab_unknown">CZO TY CHCESZ?</string>
-    <string name="search_doodle_no_results_header">Brak wyników</string>
-    <string name="search_doodle_no_results_description">Chyba nie tego szukałem</string>
-    <string name="search_question_where">gdzie to jest?</string>
-    <string name="search_question_plates">jakie tam som tablice?</string>
-    <string name="search_question_what">Co to za miejsce?</string>
-    <string name="search_random_question_0">chcesz się pobawić?</string>
-    <string name="search_random_question_1">co się dzieje?</string>
-    <string name="search_random_question_2">skąd klikash?</string>
-    <string name="search_random_question_3">która godzina?</string>
-    <string name="search_random_question_4">dokąd zmierzamy?</string>
-    <string name="search_random_question_5">ale o so chosi?</string>
-    <string name="search_random_question_6">gdzie jest Zbyszek?</string>
-    <string name="search_random_question_7">co się stało się?</string>
-    <string name="search_random_question_8">jaka jest stolica Bułgarii?</string>
+    <string name="search_header_best">BEST RESULTS</string>
+    <string name="search_header_all">ALL RESULTS</string>
+    <string name="search_header_click">CLICK FOR MORE RESULTS</string>
+    <string name="search_header_suggestions">SUGGESTIONS</string>
+    <string name="search_tab_plate">BY PLATE</string>
+    <string name="search_tab_place">BY PLACE</string>
+    <string name="search_tab_unknown">WHATCHA WANT?</string>
+    <string name="search_doodle_no_results_header">No results</string>
+    <string name="search_doodle_no_results_description">This is not the result I was looking for</string>
+    <string name="search_question_where">where is it?</string>
+    <string name="search_question_plates">wut plates urr there?</string>
+    <string name="search_question_what">What is this place?</string>
+    <string name="search_random_question_0">wanna play?</string>
+    <string name="search_random_question_1">what is happening?</string>
+    <string name="search_random_question_2">how u doin?</string>
+    <string name="search_random_question_3">what time is it?</string>
+    <string name="search_random_question_4">what is the answer to life?</string>
+    <string name="search_random_question_5">can you cry underwater?</string>
+    <string name="search_random_question_6">where is Waldo?</string>
+    <string name="search_random_question_7">what just happened?</string>
+    <string name="search_random_question_8">what is the capital of Bulgaria?</string>
 
     <!--  DOODLE DEFAULT  -->
-    <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>
-    <string name="doodle_default_description">A to peszek</string>
-    
+    <string name="doodle_default_header">SOMEONE FORGOT ABOUT DESCRIPTION</string>
+    <string name="doodle_default_description">Oh snap</string>
+
     <!--  MAIN  -->
-    <string name="main_list_header_browse">PRZEGLĄDAJ</string>
-    <string name="main_list_header_about_app">O APLIKACJI</string>
+    <string name="main_list_header_browse">BROWSE</string>
+    <string name="main_list_header_about_app">ABOUT APP</string>
     <string name="main_list_header_none"> </string>
-    <string name="main_list_element_dolnoslaskie">dolnośląskie</string>
-    <string name="main_list_element_kujawskopomorskie">kujawsko-pomorskie</string>
-    <string name="main_list_element_lodzkie">łódzkie</string>
-    <string name="main_list_element_lubelskie">lubelskie</string>
-    <string name="main_list_element_lubuskie">lubuskie</string>
-    <string name="main_list_element_malopolskie">małopolskie</string>
-    <string name="main_list_element_mazowieckie">mazowieckie</string>
-    <string name="main_list_element_opolskie">opolskie</string>
-    <string name="main_list_element_podkarpackie">podkarpackie</string>
-    <string name="main_list_element_podlaskie">podlaskie</string>
-    <string name="main_list_element_pomorskie">pomorskie</string>
-    <string name="main_list_element_slaskie">śląskie</string>
-    <string name="main_list_element_swietokrzyskie">świętokrzyskie</string>
-    <string name="main_list_element_warminskomazurskie">warmińsko-mazurskie</string>
-    <string name="main_list_element_wielkopolskie">wielkopolskie</string>
-    <string name="main_list_element_zachodniopomorskie">zachodnio-pomorskie</string>
-    <string name="main_list_element_sluzbybezpieczenstwa">służby bezpieczeństwa</string>
-    <string name="main_list_element_tablicewojskowe">tablice wojskowe</string>
-    <string name="main_list_element_licenses">licencje bibliotek zewnętrznych</string>
-    <string name="main_list_element_rate">zgłoś nam swoje uwagi</string>
-    <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>
-    <string name="main_doodle_caption">Znam *wszystkie* tablice rejestracyjne. Śmiało. Pytaj!</string>
-    <string name="main_search_bar_hint_places">Skąd szukasz rejestracji?</string>
-    <string name="main_search_bar_hint_plates">Jakiej rejestracji szukasz?</string>
-    <string name="main_doodle_caption_feedback">Masz jakieś *uwagi?* Zjedź na dół strony.</string>
+    <string name="main_list_element_dolnoslaskie">Lower Silesia</string>
+    <string name="main_list_element_kujawskopomorskie">Kuyavia-Pomerania</string>
+    <string name="main_list_element_lodzkie">Lodz</string>
+    <string name="main_list_element_lubelskie">Lublin</string>
+    <string name="main_list_element_lubuskie">Lubusz</string>
+    <string name="main_list_element_malopolskie">Lesser Poland</string>
+    <string name="main_list_element_mazowieckie">Masovia</string>
+    <string name="main_list_element_opolskie">Opole</string>
+    <string name="main_list_element_podkarpackie">Subcarpathia</string>
+    <string name="main_list_element_podlaskie">Podlasie</string>
+    <string name="main_list_element_pomorskie">Pomerania</string>
+    <string name="main_list_element_slaskie">Silesia</string>
+    <string name="main_list_element_swietokrzyskie">Swietokrzyskie</string>
+    <string name="main_list_element_warminskomazurskie">Warmia-Masuria</string>
+    <string name="main_list_element_wielkopolskie">Greater Poland</string>
+    <string name="main_list_element_zachodniopomorskie">West Pomerania</string>
+    <string name="main_list_element_sluzbybezpieczenstwa">Security Services</string>
+    <string name="main_list_element_tablicewojskowe">Military Plates</string>
+    <string name="main_list_element_licenses">Third-party libraries</string>
+    <string name="main_list_element_rate">Send us your remarks</string>
+    <string name="main_doodle_greeting">Hi! My name is Tabi!</string>
+    <string name="main_doodle_caption">I know *every single* plate. Go on. Ask!</string>
+    <string name="main_search_bar_hint_plates">Looking for a license plate?</string>
+    <string name="main_search_bar_hint_places">&#8230;or a place?</string>
+    <string name="main_doodle_caption_feedback">Got any *remarks?* Go to the bottom of this page</string>
     <string name="main_version">Version %s</string>
-    <string name="main_loading">ładuję&#8230;</string>
+    <string name="main_loading">loading&#8230;</string>
 
-    <string name="main_feedback_title">Wyślij komentarz do autora</string>
-    <string name="main_feedback_body">Prześlij do nas swój komentarz na temat aplikacji</string>
-    <string name="main_feedback_cancel">ANULUJ</string>
-    <string name="main_feedback_send">WYŚLIJ KOMENTARZ</string>
-    <string name="main_feedback_done">Dzięki za opinię :)</string>
-    <string name="main_feedback_bug">Błąd</string>
-    <string name="main_feedback_idea">Pomysł</string>
-    <string name="main_feedback_question">Pytanie</string>
-    <string name="main_feedback_reply_title">Odpowiedź od autora</string>
-    <string name="main_feedback_reply_button">ZAMKNIJ</string>
-    <string name="main_feedback_reply_rate">Oceń aplikację</string>
+    <string name="main_feedback_title">Send a comment to the author</string>
+    <string name="main_feedback_body">Give us a comment about the application</string>
+    <string name="main_feedback_cancel">CANCEL</string>
+    <string name="main_feedback_send">SEND A COMMENT</string>
+    <string name="main_feedback_done">Thanks for opinion :)</string>
+    <string name="main_feedback_bug">Bug</string>
+    <string name="main_feedback_idea">Idea</string>
+    <string name="main_feedback_question">Question</string>
+    <string name="main_feedback_reply_title">Author\'s response</string>
+    <string name="main_feedback_reply_button">CLOSE</string>
+    <string name="main_feedback_reply_rate">Rate this app</string>
 
-    <string name="app_name">Tabi</string>
+    <!--  MAIN ENGLISH GREETING  -->
+    <bool name="use_english_greeting">true</bool>
+    <string name="english_greeting_title" translatable="false">Nobody is perfect&#8230;</string>
+    <string name="english_greeting_body" translatable="false">This is an english version of the Tabi mobile app. It serves mainly for demonstrative purposes - some of the features may not
+        be working properly.</string>
+    <string name="english_greeting_confirm" translatable="false">Aye aye, sir</string>
+
+    <string name="app_name" translatable="false">Tabi</string>
     <string name="action_settings">Settings</string>
-    <string name="feedback_api_key">AF-8DE6899E68E4-F6</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="title_activity_details">DetailsActivity</string>
-    <string name="title_activity_about">O aplikacji</string>
+    <string name="feedback_api_key" translatable="false">AF-8DE6899E68E4-F6</string>
+    <string name="title_activity_search" translatable="false">SearchActivity</string>
+    <string name="title_activity_details" translatable="false">DetailsActivity</string>
+    <string name="title_activity_about">About app</string>
 </resources>
