@@ -79,7 +79,7 @@
     </style>
 
     <style name="Main_Text_Caption" parent="Text_Body2.Primary">
-        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">12dp</item>
         <item name="android:layout_marginRight">80dp</item>
     </style>

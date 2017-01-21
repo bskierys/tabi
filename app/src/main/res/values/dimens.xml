@@ -54,7 +54,7 @@
     <!--  MAIN  -->
     <dimen name="Main.Height.Header">304dp</dimen>
     <dimen name="Main.Width.Header.Divider">56dp</dimen>
-    <dimen name="Main.Margin.Greeting.Top">76dp</dimen>
+    <dimen name="Main.Margin.Greeting.Top">88dp</dimen>
     <dimen name="Main.Margin.Greeting.Horizontal">56dp</dimen>
     <dimen name="Main.Height.Greeting.Doodle">128dp</dimen>
     <dimen name="Main.Margin.Greeting.Doodle.Top">140dp</dimen>
