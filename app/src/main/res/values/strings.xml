@@ -145,5 +145,5 @@
     <string name="feedback_api_key" translatable="false">AF-8DE6899E68E4-F6</string>
     <string name="title_activity_search" translatable="false">SearchActivity</string>
     <string name="title_activity_details" translatable="false">DetailsActivity</string>
-    <string name="title_activity_about">About app</string>
+    <string name="title_activity_about">Third-party libraries</string>
 </resources>

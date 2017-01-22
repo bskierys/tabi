@@ -121,5 +121,5 @@
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">false</bool>
 
-    <string name="title_activity_about">O aplikacji</string>
+    <string name="title_activity_about">Biblioteki zewnętrzne</string>
 </resources>
