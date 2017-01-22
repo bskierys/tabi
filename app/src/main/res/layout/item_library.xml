@@ -5,10 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginBottom="@dimen/Libraries.Margin.Card.Vertical"
+    android:layout_marginLeft="@dimen/Libraries.Margin.Card.Horizontal"
+    android:layout_marginRight="@dimen/Libraries.Margin.Card.Horizontal"
+    android:layout_marginTop="@dimen/Libraries.Margin.Card.Vertical"
     android:clickable="true"
     android:foreground="?selectableItemBackground">
 
@@ -16,10 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="32dp"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
-        android:paddingTop="32dp">
+        android:paddingBottom="@dimen/Libraries.Padding.Card.Vertical"
+        android:paddingLeft="@dimen/Libraries.Padding.Card.Horizontal"
+        android:paddingRight="@dimen/Libraries.Padding.Card.Horizontal"
+        android:paddingTop="@dimen/Libraries.Padding.Card.Vertical">
 
         <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/libraryName"
@@ -30,8 +30,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="@dimen/Libraries.ClickableTex.Height"
+            android:layout_marginBottom="@dimen/Libraries.Paragraph.Break">
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/libraryCreator_label"
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                tools:text="by "/>
+                android:text="@string/about_author_prefix"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/libraryCreator"
@@ -47,6 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:maxLines="1"
                 android:layout_toRightOf="@id/libraryCreator_label"
                 tools:text="Creator"/>
         </RelativeLayout>
@@ -56,14 +57,14 @@
             style="@style/Text_Body.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/Libraries.Paragraph.Break"
             android:maxLines="20"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in aliquet justo. Donec tincidunt, leo imperdiet pretium posuere, sapien leo auctor mi, ac scelerisque diam leo vel sapien. Morbi lobortis, sem sed molestie fermentum."/>
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginBottom="24dp">
+            android:layout_height="@dimen/Libraries.ClickableTex.Height"
+            android:layout_marginBottom="@dimen/Libraries.Margin.Button">
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/libraryLicense_label"
@@ -71,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:text="licensed under "/>
+                android:text="@string/about_license_prefix"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
                 android:id="@+id/libraryLicense"
