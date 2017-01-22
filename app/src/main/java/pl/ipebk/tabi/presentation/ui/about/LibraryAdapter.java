@@ -18,6 +18,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<LibsItem> libraries;
     protected Context context;
+    private BackClickListener backListener;
 
     public LibraryAdapter(Context context, List<LibsItem> libraries) {
         this.libraries = libraries;
@@ -64,6 +66,9 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
             holder.progress.getIndeterminateDrawable().setColorFilter(
                     context.getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            if(backListener != null) {
+                holder.backArrow.setOnClickListener(v -> backListener.onBackClicked());
+            }
             if (getItemCount() > 1) {
                 holder.progress.setVisibility(View.GONE);
             } else {
@@ -111,9 +116,14 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
+    public void setBackListener(BackClickListener backListener) {
+        this.backListener = backListener;
+    }
+
     public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.progress) ProgressBar progress;
+        @BindView(R.id.btn_back) ImageView backArrow;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -182,5 +192,9 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public void appendList(List<LibsItem> list) {
         libraries.addAll(list);
+    }
+
+    public interface BackClickListener {
+        void onBackClicked();
     }
 }
