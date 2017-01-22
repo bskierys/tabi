@@ -64,6 +64,7 @@
     <dimen name="Libraries.Margin.Title.Horizontal">56dp</dimen>
     <dimen name="Libraries.Margin.Title.Top">32dp</dimen>
     <dimen name="Libraries.Margin.Title.Bottom">24dp</dimen>
+    <dimen name="Libraries.Space.Click">4dp</dimen>
 
     <!--  MAIN  -->
     <dimen name="Main.Height.Header">304dp</dimen>

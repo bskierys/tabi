@@ -39,6 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/Libraries.Space.Click"
                 android:text="@string/about_author_prefix"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
@@ -72,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_marginRight="@dimen/Libraries.Space.Click"
                 android:text="@string/about_license_prefix"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
