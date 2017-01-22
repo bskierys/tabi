@@ -88,6 +88,7 @@
     <dimen name="Button.Secondary.Radius">32dp</dimen>
     <dimen name="Button.Secondary.Padding">8dp</dimen>
     <dimen name="Button.Secondary.Width">144dp</dimen>
+    <dimen name="Toolbar.Icon.Margin">16dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

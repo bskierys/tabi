@@ -82,6 +82,10 @@
     <string name="doodle_default_header">SOMEONE FORGOT ABOUT DESCRIPTION</string>
     <string name="doodle_default_description">Oh snap</string>
 
+    <!--  ABOUT APP  -->
+    <string name="about_third_party_title">Third-party libraries licenses</string>
+    <string name="about_third_party_description">Third-party libraries that has helped us to build this app.</string>
+
     <!--  MAIN  -->
     <string name="main_list_header_browse">BROWSE</string>
     <string name="main_list_header_about_app">ABOUT APP</string>
