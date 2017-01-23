@@ -82,6 +82,13 @@
     <string name="doodle_default_header">SOMEONE FORGOT ABOUT DESCRIPTION</string>
     <string name="doodle_default_description">Oh snap</string>
 
+    <!--  ABOUT APP  -->
+    <string name="about_third_party_title">Third-party libraries licenses</string>
+    <string name="about_third_party_description">Third-party libraries that has helped us to build this app.</string>
+    <string name="about_button_text" translatable="false">Go to webpage</string>
+    <string name="about_author_prefix" translatable="false">by </string>
+    <string name="about_license_prefix" translatable="false">licensed under </string>
+
     <!--  MAIN  -->
     <string name="main_list_header_browse">BROWSE</string>
     <string name="main_list_header_about_app">ABOUT APP</string>
@@ -138,5 +145,5 @@
     <string name="feedback_api_key" translatable="false">AF-8DE6899E68E4-F6</string>
     <string name="title_activity_search" translatable="false">SearchActivity</string>
     <string name="title_activity_details" translatable="false">DetailsActivity</string>
-    <string name="title_activity_about">About app</string>
+    <string name="title_activity_about">Third-party libraries</string>
 </resources>

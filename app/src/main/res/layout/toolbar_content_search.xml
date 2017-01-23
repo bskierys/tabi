@@ -42,9 +42,9 @@
             android:layout_width="@dimen/Details.Margin.Right"
             android:layout_height="match_parent"
             android:contentDescription="@string/description_close_button"
-            android:paddingLeft="@dimen/Details.Margin.Outer"
-            android:paddingRight="@dimen/Details.Margin.Outer"
-            android:src="@drawable/ic_close"
+            android:paddingLeft="@dimen/Toolbar.Icon.Margin"
+            android:paddingRight="@dimen/Toolbar.Icon.Margin"
+            android:src="@drawable/ic_close_dark"
             android:visibility="gone"/>
     </LinearLayout>
 

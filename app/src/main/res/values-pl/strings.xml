@@ -70,6 +70,10 @@
     <string name="doodle_default_header">KTOŚ NIE DODAŁ OPISU</string>
     <string name="doodle_default_description">A to peszek</string>
 
+    <!--  ABOUT APP  -->
+    <string name="about_third_party_title">Licencje bibliotek zewnętrznych</string>
+    <string name="about_third_party_description">Biblioteki zewnętrzne, które pomogły nam zbudować tą aplikację.</string>
+
     <!--  MAIN  -->
     <string name="main_list_header_browse">PRZEGLĄDAJ</string>
     <string name="main_list_header_about_app">O APLIKACJI</string>
@@ -117,5 +121,5 @@
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">false</bool>
 
-    <string name="title_activity_about">O aplikacji</string>
+    <string name="title_activity_about">Biblioteki zewnętrzne</string>
 </resources>

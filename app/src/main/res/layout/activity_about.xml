@@ -5,29 +5,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="@color/colorBackground"
     tools:context=".presentation.ui.about.AboutAppActivity"
     tools:ignore="contentDescription">
 
-    <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:content="@layout/toolbar_content_about"/>
+        android:background="@color/white"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <!--  This relative layout is important. If it is removed,
-          layout will go above the toolbar when scrolled  -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <FrameLayout
-            android:id="@+id/frame_container"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    </RelativeLayout>
+            <include layout="@layout/toolbar_content_about"/>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/libraries_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_library"/>
 </android.support.design.widget.CoordinatorLayout>
