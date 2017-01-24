@@ -32,6 +32,7 @@ import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
@@ -79,8 +80,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
-
-        Timber.e("Problem computing bounds");
 
         presenter.attachView(this);
 
@@ -368,8 +367,12 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         } else if (ACTION_GIVE_FEEDBACK.equals(action)) {
             showFeedbackDialog();
         } else {
+            // TODO: 2017-01-24 presenter?
             Timber.d("Menu item clicked has literal as action");
-            goToSearch(action);
+            Intent categoryIntent = new Intent(this, CategoryActivity.class);
+            categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, action);
+            startActivity(categoryIntent);
+            //goToSearch(action);
         }
     }
 }

@@ -13,15 +13,15 @@ import android.graphics.drawable.Drawable;
 class MainListElementItem extends MainListItem {
     private String elementName;
     private Drawable elementIcon;
-    private String actionKey;
+    private String plateStart;
 
     /**
      * Constructor for {@link MainListElementItem} Object
      */
-    MainListElementItem(String elementName, Drawable elementIcon, String actionKey) {
+    MainListElementItem(String elementName, Drawable elementIcon, String plateStart) {
         this.elementName = elementName;
         this.elementIcon = elementIcon;
-        this.actionKey = actionKey;
+        this.plateStart = plateStart;
     }
 
     String getElementName() {
@@ -32,7 +32,7 @@ class MainListElementItem extends MainListItem {
         return elementIcon;
     }
 
-    String getActionKey() {
-        return actionKey;
+    String getPlateStart() {
+        return plateStart;
     }
 }

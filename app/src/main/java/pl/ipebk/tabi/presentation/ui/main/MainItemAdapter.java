@@ -61,7 +61,7 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             MainListElementItem item = (MainListElementItem) categoryList.get(position);
 
-            itemViewHolder.rootView.setOnClickListener(v -> listener.onMenuItemClicked(item.getActionKey()));
+            itemViewHolder.rootView.setOnClickListener(v -> listener.onMenuItemClicked(item.getPlateStart()));
             itemViewHolder.categoryName.setText(item.getElementName());
             itemViewHolder.categoryIcon.setImageDrawable(item.getElementIcon());
         } else if (holder instanceof BigHeaderViewHolder) {

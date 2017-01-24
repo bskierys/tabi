@@ -25,8 +25,8 @@
             android:name=".presentation.ui.search.SearchActivity"
             android:label="@string/title_activity_search"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".presentation.ui.details.DetailsActivity"
@@ -46,9 +46,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>
         </activity>
+        <activity
+            android:name=".presentation.ui.category.CategoryActivity"
+            android:parentActivityName=".presentation.ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.main.MainActivity"/>
+        </activity>
+
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="b6da5b975f1016a9f9d5bbd45ef7244f820af050" />
+            android:value="b6da5b975f1016a9f9d5bbd45ef7244f820af050"/>
     </application>
 
 </manifest>
