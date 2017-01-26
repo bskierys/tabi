@@ -9,8 +9,10 @@
     tools:ignore="contentDescription">
 
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+        android:id="@+id/toolbar_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/white"
         app:content="@layout/toolbar_content_category"/>

@@ -95,6 +95,9 @@
     <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
 
+    <!--  CATEGORIES  -->
+    <dimen name="Category.Toolbar.Limit">8dp</dimen>
+
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
     <dimen name="StatusBar">22dp</dimen>
@@ -103,6 +106,7 @@
     <dimen name="Button.Secondary.Width">144dp</dimen>
     <dimen name="Toolbar.Icon.Margin">16dp</dimen>
     <dimen name="Toolbar.Height.Min">56dp</dimen>
+    <dimen name="Toolbar.Elevation">4dp</dimen>
     <dimen name="Paragraph.Margin.Display">12dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->

@@ -1,6 +1,7 @@
 package pl.ipebk.tabi.presentation.ui.category;
 
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,15 +10,18 @@ import android.widget.ProgressBar;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.search.PlaceFragmentEventListener;
-import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
+import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -32,12 +36,16 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Inject CategoryPresenter presenter;
     @Inject LicensePlateFinder plateFinder;
 
+    @BindView(R.id.toolbar_parent) View toolbar;
     @BindView(R.id.place_list) RecyclerView recyclerView;
     @BindView(R.id.progress) ProgressBar progressBar;
+    @BindDimen(R.dimen.Toolbar_Elevation) float toolbarElevation;
+    @BindDimen(R.dimen.Category_Toolbar_Limit) float toolbarLimit;
 
     private String categoryKey;
     Subscription searchSubscription;
     CategoryPlaceItemAdapter adapter;
+    Subscription scrollSubscription;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +57,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
         try {
             categoryKey = getIntent().getStringExtra(EXTRA_CATEGORY_KEY);
-            if(categoryKey == null) {
+            if (categoryKey == null) {
                 throw new NullPointerException("Category key is null");
             }
         } catch (NullPointerException e) {
@@ -66,13 +74,33 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(results -> showSearchResults(results),
                            e -> Timber.e(e, "Error during searching for places", e));
+
+        scrollSubscription = RxRecyclerViewExtension.totalScrollEvents(recyclerView)
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .map(RecyclerViewTotalScrollEvent::totalScrollY)
+                                                    .subscribe(this::raiseToolbar);
+    }
+
+    private void raiseToolbar(int scrolled) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (scrolled < toolbarLimit) {
+                toolbar.setElevation(0);
+            } else {
+                toolbar.setElevation(toolbarElevation);
+            }
+        }
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
 
         RxUtil.unsubscribe(searchSubscription);
+        RxUtil.unsubscribe(scrollSubscription);
         presenter.detachView();
+    }
+
+    @OnClick(R.id.btn_back) public void onBack() {
+        onBackPressed();
     }
 
     /**
