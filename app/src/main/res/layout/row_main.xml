@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:contentDescription="@string/description_category_image"
             android:scaleType="centerInside"
-            android:src="@drawable/vic_dolnoslaskie"/>
+            android:src="@drawable/vic_dol"/>
 
         <pl.ipebk.tabi.presentation.ui.custom.FontTextView
             android:id="@+id/txt_category"

@@ -54,6 +54,83 @@
     <string name="voivodeship_name_zah">West Pomerania Province</string>
     <string name="voivodeship_name_slu">Security Services</string>
     <string name="voivodeship_name_woj">Military Plates</string>
+    <string name="voivodeship_plate_dol" translatable="false">d</string>
+    <string name="voivodeship_plate_kuj" translatable="false">c</string>
+    <string name="voivodeship_plate_lod" translatable="false">e</string>
+    <string name="voivodeship_plate_lbl" translatable="false">l</string>
+    <string name="voivodeship_plate_lbu" translatable="false">f</string>
+    <string name="voivodeship_plate_mal" translatable="false">k</string>
+    <string name="voivodeship_plate_maz" translatable="false">w</string>
+    <string name="voivodeship_plate_opo" translatable="false">o</string>
+    <string name="voivodeship_plate_rze" translatable="false">r</string>
+    <string name="voivodeship_plate_bie" translatable="false">b</string>
+    <string name="voivodeship_plate_pom" translatable="false">g</string>
+    <string name="voivodeship_plate_sla" translatable="false">s</string>
+    <string name="voivodeship_plate_swi" translatable="false">t</string>
+    <string name="voivodeship_plate_war" translatable="false">n</string>
+    <string name="voivodeship_plate_wie" translatable="false">p</string>
+    <string name="voivodeship_plate_zah" translatable="false">z</string>
+    <string name="voivodeship_plate_slu" translatable="false">h</string>
+    <string name="voivodeship_plate_woj" translatable="false">u</string>
+
+    <string name="category_title_dol">Wroclaw\'s Gnomes</string>
+    <string name="category_title_kuj">The city of gingerbread</string>
+    <string name="category_title_lod">Łódź - say my name</string>
+    <string name="category_title_lbl">Lubelski Hops</string>
+    <string name="category_title_lbu">Lubuskie land of wine</string>
+    <string name="category_title_mal">The legend of the Wawel Dragon</string>
+    <string name="category_title_maz">Warsaw Mermaid</string>
+    <string name="category_title_opo">National Festival of Polish Song in Opole</string>
+    <string name="category_title_rze">Subcarpathian land of oil</string>
+    <string name="category_title_bie">Green lungs of Poland</string>
+    <string name="category_title_pom">Neptune of Gdansk</string>
+    <string name="category_title_sla">Land of coal and metal</string>
+    <string name="category_title_swi">The Sanctuary of the Holy Cross Wood Relic</string>
+    <string name="category_title_war">Mazury - land of thousand lakes</string>
+    <string name="category_title_wie">Poznań goats</string>
+    <string name="category_title_zah">Sea of adventure</string>
+    <string name="category_title_slu">To serve and protect</string>
+    <string name="category_title_woj">How to recognize the military forces?</string>
+
+    <string name="category_body_dol">One of Wrocław\’s most popular, memorable and iconic attractions is not a cathedral, not a castle or monument, but a legion of
+        little people: Gnomes.</string>
+    <string name="category_body_kuj">Toruń gingerbread, instantly recognizable as part of Toruń heritage, tradition and legend, is undoubtedly the city\’s trademark
+        and pride.</string>
+    <string name="category_body_lod">Can you think of a four letter word which throughout history has caused so much shock, embarrassment and sniggers of laughter?</string>
+    <string name="category_body_lbl">Poland has roughly 2,500 hectares of hops which is mostly grown around the city of Lublin, including Pulawy.</string>
+    <string name="category_body_lbu">Traveling across Lubuskie Region, green land of wine and meadow, you may try the taste of passion, tradition and memory of the region.</string>
+    <string name="category_body_mal">In Poland, a long time ago, in a den at the foot of Wawel Hill, there lived a terrible dragon. People said there was no weapon and no way to defeat it.</string>
+    <string name="category_body_maz">According to legend, a Mermaid swimming in the sea stopped on the riverbank near the Old Town to rest. She found the place so admirable that she decided to stay.</string>
+    <string name="category_body_opo">Annual music festival is the most important cultural event in Opole, with a tradition going back 50 years.</string>
+    <string name="category_body_rze">The Polish inventor and pharmacist Ignacy Lukasiewicz was the inventor of the kerosene lamp and an important figure in the early European oil industry.</string>
+    <string name="category_body_bie">Tucked away in the north eastern pocket of Poland, brushing shoulders with both Lithuania and Belarus, Podlaskie is often perceived as a chilly, rural outpost.</string>
+    <string name="category_body_pom">In the heart of the old town on the Long Market you\’ll find this bronze statue of Neptune which dates from 1549.</string>
+    <string name="category_body_sla">Upper Silesian Industrial Region is an area with enormous concentration of industry, mainly coal, steel and iron.</string>
+    <string name="category_body_swi">For ages, especially between the 12th and 17th C., the sanctuary on the Łysiec Mountain has been the most significant centre of the Holy Cross relic cult.</string>
+    <string name="category_body_war">Stretching across over 200 miles and surrounded by forests and meadows, are over 2000 lakes, many of them interconnected by rivers and canals.</string>
+    <string name="category_body_wie">Two goats are one of the attractions of Poznan City Hall. At noon they appear from the central towers and for a minute they butt horns.</string>
+    <string name="category_body_zah">For sailing enthusiasts, Westpomerania is a true paradise. Picturesque water trails, unique water reservoirs of diversified specificity, landscape values and hospitable ports.</string>
+    <string name="category_body_slu">Vehicles utilised used by the Polish Ministry of Internal Affairs and Administration use licence plates beginning with "H", instead of the voivodeship code.</string>
+    <string name="category_body_woj">The Polish military uses licence plates beginning with "U" instead of the voivodeship code. The following letter denotes the usage of the vehicle.</string>
+
+    <string name="category_link_dol">https://www.inyourpocket.com/wroclaw/Gnomenclature_70297f</string>
+    <string name="category_link_kuj">http://www.visittorun.pl/237,l2.html</string>
+    <string name="category_link_lod">https://www.inyourpocket.com/lodz/Say-My-Name,-Say-My-Name_73109f</string>
+    <string name="category_link_lbl">http://beerlegends.com/lublin-lubelski-hops</string>
+    <string name="category_link_lbu">http://atrakcjelubuskie.pl/wine-en.html</string>
+    <string name="category_link_mal">http://myths.e2bn.org/mythsandlegends/userstory6306-the-legend-of-the-wawel-dragon-a-polish-traditional-legend.html</string>
+    <string name="category_link_maz">http://www.warsawtour.pl/en/warsaw-for-everyone/for-kids/warsaw-legends-3160.html</string>
+    <string name="category_link_opo">https://en.m.wikipedia.org/wiki/National_Festival_of_Polish_Song_in_Opole</string>
+    <string name="category_link_rze">http://www.encyclopedia.com/history/encyclopedias-almanacs-transcripts-and-maps/lukasiewicz-ignacy</string>
+    <string name="category_link_bie">http://poland-today.pl/magazine/all-issues/issue03/polands-green-lungs</string>
+    <string name="category_link_pom">http://grownuptravelguide.com/grown-travel-guide-daily-photo-neptune-fountain-gdansk-poland</string>
+    <string name="category_link_sla">https://en.m.wikipedia.org/wiki/Upper_Silesian_Industrial_Region</string>
+    <string name="category_link_swi">https://www.wrota-swietokrzyskie.pl/611</string>
+    <string name="category_link_war">https://www.polandtrips.co.uk/2011/06/01/mazury-lake-region/</string>
+    <string name="category_link_wie">http://kocham-poznan.wikia.com/wiki/Poznań_Goats</string>
+    <string name="category_link_zah">http://seaofadventure.eu/?page_id=658</string>
+    <string name="category_link_slu">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
+    <string name="category_link_woj">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
 
     <!--  SEARCH  -->
     <string name="search_header_best">BEST RESULTS</string>
@@ -93,24 +170,24 @@
     <string name="main_list_header_browse">BROWSE</string>
     <string name="main_list_header_about_app">ABOUT APP</string>
     <string name="main_list_header_none"> </string>
-    <string name="main_list_element_dolnoslaskie">Lower Silesia</string>
-    <string name="main_list_element_kujawskopomorskie">Kuyavia-Pomerania</string>
-    <string name="main_list_element_lodzkie">Lodz</string>
-    <string name="main_list_element_lubelskie">Lublin</string>
-    <string name="main_list_element_lubuskie">Lubusz</string>
-    <string name="main_list_element_malopolskie">Lesser Poland</string>
-    <string name="main_list_element_mazowieckie">Masovia</string>
-    <string name="main_list_element_opolskie">Opole</string>
-    <string name="main_list_element_podkarpackie">Subcarpathia</string>
-    <string name="main_list_element_podlaskie">Podlasie</string>
-    <string name="main_list_element_pomorskie">Pomerania</string>
-    <string name="main_list_element_slaskie">Silesia</string>
-    <string name="main_list_element_swietokrzyskie">Swietokrzyskie</string>
-    <string name="main_list_element_warminskomazurskie">Warmia-Masuria</string>
-    <string name="main_list_element_wielkopolskie">Greater Poland</string>
-    <string name="main_list_element_zachodniopomorskie">West Pomerania</string>
-    <string name="main_list_element_sluzbybezpieczenstwa">Security Services</string>
-    <string name="main_list_element_tablicewojskowe">Military Plates</string>
+    <string name="main_list_element_dol">Lower Silesia</string>
+    <string name="main_list_element_kuj">Kuyavia-Pomerania</string>
+    <string name="main_list_element_lod">Lodz</string>
+    <string name="main_list_element_lbl">Lublin</string>
+    <string name="main_list_element_lbu">Lubusz</string>
+    <string name="main_list_element_mal">Lesser Poland</string>
+    <string name="main_list_element_maz">Masovia</string>
+    <string name="main_list_element_opo">Opole</string>
+    <string name="main_list_element_rze">Subcarpathia</string>
+    <string name="main_list_element_bie">Podlasie</string>
+    <string name="main_list_element_pom">Pomerania</string>
+    <string name="main_list_element_sla">Silesia</string>
+    <string name="main_list_element_swi">Swietokrzyskie</string>
+    <string name="main_list_element_war">Warmia-Masuria</string>
+    <string name="main_list_element_wie">Greater Poland</string>
+    <string name="main_list_element_zah">West Pomerania</string>
+    <string name="main_list_element_slu">Security Services</string>
+    <string name="main_list_element_woj">Military Plates</string>
     <string name="main_list_element_licenses">Third-party libraries</string>
     <string name="main_list_element_rate">Send us your remarks</string>
     <string name="main_doodle_greeting">Hi! My name is Tabi!</string>

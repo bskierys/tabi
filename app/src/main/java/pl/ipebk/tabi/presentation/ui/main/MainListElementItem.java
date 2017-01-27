@@ -14,14 +14,16 @@ class MainListElementItem extends MainListItem {
     private String elementName;
     private Drawable elementIcon;
     private String plateStart;
+    private String categoryKey;
 
     /**
      * Constructor for {@link MainListElementItem} Object
      */
-    MainListElementItem(String elementName, Drawable elementIcon, String plateStart) {
+    public MainListElementItem(String elementName, Drawable elementIcon, String plateStart, String categoryKey) {
         this.elementName = elementName;
         this.elementIcon = elementIcon;
         this.plateStart = plateStart;
+        this.categoryKey = categoryKey;
     }
 
     String getElementName() {
@@ -34,5 +36,9 @@ class MainListElementItem extends MainListItem {
 
     String getPlateStart() {
         return plateStart;
+    }
+
+    public String getCategoryKey() {
+        return categoryKey;
     }
 }

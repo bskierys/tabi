@@ -17,10 +17,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/img_icon"
                 android:layout_width="16dp"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/vic_dolnoslaskie"/>
+                android:src="@drawable/vic_dol"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -47,7 +48,7 @@
                 android:text="We wrocławskim Podziemnym Mieście Krasnali żyje blisko trzysta skrzatów. I ciągle wprowadzają się nowe."/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
-                android:id="@+id/txt_more"
+                android:id="@+id/btn_more"
                 style="@style/Text_Body2.Accent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

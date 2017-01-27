@@ -129,49 +129,49 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         bigHeaderIndex = 0;
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
-        items.add(new MainListElementItem(getString(R.string.main_list_element_dolnoslaskie),
-                                          getResources().getDrawable(R.drawable.vic_dolnoslaskie), "d"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_kujawskopomorskie),
-                                          getResources().getDrawable(R.drawable.vic_kujawskopomorskie), "c"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lodzkie),
-                                          getResources().getDrawable(R.drawable.vic_lodzkie), "e"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lubelskie),
-                                          getResources().getDrawable(R.drawable.vic_lubelskie), "l"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lubuskie),
-                                          getResources().getDrawable(R.drawable.vic_lubuskie), "f"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_malopolskie),
-                                          getResources().getDrawable(R.drawable.vic_malopolskie), "k"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_mazowieckie),
-                                          getResources().getDrawable(R.drawable.vic_mazowieckie), "w"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_opolskie),
-                                          getResources().getDrawable(R.drawable.vic_opolskie), "o"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_podkarpackie),
-                                          getResources().getDrawable(R.drawable.vic_podkarpackie), "r"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_podlaskie),
-                                          getResources().getDrawable(R.drawable.vic_podlaskie), "b"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_pomorskie),
-                                          getResources().getDrawable(R.drawable.vic_pomorskie), "g"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_slaskie),
-                                          getResources().getDrawable(R.drawable.vic_slaskie), "s"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_swietokrzyskie),
-                                          getResources().getDrawable(R.drawable.vic_swietokrzyskie), "t"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_warminskomazurskie),
-                                          getResources().getDrawable(R.drawable.vic_warminskomazurskie), "n"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_wielkopolskie),
-                                          getResources().getDrawable(R.drawable.vic_wielkopolskie), "p"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_zachodniopomorskie),
-                                          getResources().getDrawable(R.drawable.vic_zachodniopomorskie), "z"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_sluzbybezpieczenstwa),
-                                          getResources().getDrawable(R.drawable.vic_sluzbybezpieczenstwa), "h"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_tablicewojskowe),
-                                          getResources().getDrawable(R.drawable.vic_tablicewojskowe), "u"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
+                                          getResources().getDrawable(R.drawable.vic_dol), "d", "dol"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
+                                          getResources().getDrawable(R.drawable.vic_kuj), "c", "kuj"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
+                                          getResources().getDrawable(R.drawable.vic_lod), "e", "lod"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
+                                          getResources().getDrawable(R.drawable.vic_lbl), "l", "lbl"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
+                                          getResources().getDrawable(R.drawable.vic_lbu), "f", "lbu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
+                                          getResources().getDrawable(R.drawable.vic_mal), "k", "mal"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
+                                          getResources().getDrawable(R.drawable.vic_maz), "w", "maz"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
+                                          getResources().getDrawable(R.drawable.vic_opo), "o", "opo"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
+                                          getResources().getDrawable(R.drawable.vic_rze), "r", "rze"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
+                                          getResources().getDrawable(R.drawable.vic_bie), "b", "bie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
+                                          getResources().getDrawable(R.drawable.vic_pom), "g", "pom"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
+                                          getResources().getDrawable(R.drawable.vic_sla), "s", "sla"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
+                                          getResources().getDrawable(R.drawable.vic_swi), "t", "swi"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_war),
+                                          getResources().getDrawable(R.drawable.vic_war), "n", "war"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
+                                          getResources().getDrawable(R.drawable.vic_wie), "p", "wie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
+                                          getResources().getDrawable(R.drawable.vic_zah), "z", "zah"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
+                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
+                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_licenses),
-                                          getResources().getDrawable(R.drawable.vic_licenses), ACTION_SHOW_LICENSES));
+                                          getResources().getDrawable(R.drawable.vic_licenses), null, ACTION_SHOW_LICENSES));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rate),
-                                          getResources().getDrawable(R.drawable.vic_rate), ACTION_GIVE_FEEDBACK));
+                                          getResources().getDrawable(R.drawable.vic_rate), null, ACTION_GIVE_FEEDBACK));
 
         items.add(new MainListFooterItem(getString(R.string.main_loading)));
         footerIndex = items.size() - 1;
@@ -361,18 +361,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         }
     }
 
-    @Override public void onMenuItemClicked(String action) {
-        if (ACTION_SHOW_LICENSES.equals(action)) {
+    @Override public void onMenuItemClicked(MainListElementItem item) {
+        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
             goToAboutAppPage();
-        } else if (ACTION_GIVE_FEEDBACK.equals(action)) {
+        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
             showFeedbackDialog();
         } else {
             // TODO: 2017-01-24 presenter?
             Timber.d("Menu item clicked has literal as action");
             Intent categoryIntent = new Intent(this, CategoryActivity.class);
-            categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, action);
+            categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, item.getCategoryKey());
             startActivity(categoryIntent);
-            //goToSearch(action);
         }
     }
 }
