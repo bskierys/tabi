@@ -20,8 +20,6 @@ import timber.log.Timber;
 public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
     private CategoryLocalizationHelper localizationHelper;
     private LicensePlateFinder plateFinder;
-
-    private String categoryKey;
     private Subscription searchSubscription;
 
     @Inject public CategoryPresenter(CategoryLocalizationHelper localizationHelper, LicensePlateFinder plateFinder) {
@@ -29,9 +27,7 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
         this.plateFinder = plateFinder;
     }
 
-    public void initCategory(String key) {
-        this.categoryKey = key;
-
+    public void initCategory(String categoryKey) {
         getMvpView().showCategoryName(localizationHelper.formatCategory(categoryKey));
         getMvpView().showCategoryPlate(localizationHelper.getCategoryPlate(categoryKey));
 

@@ -31,6 +31,7 @@ import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
+import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.MapScaleCalculator;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
@@ -140,5 +141,9 @@ public class ActivityModule {
 
     @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
         return factory;
+    }
+
+    @Provides CustomTabActivityHelper provideCustomTabActivityHelper() {
+        return new CustomTabActivityHelper();
     }
 }

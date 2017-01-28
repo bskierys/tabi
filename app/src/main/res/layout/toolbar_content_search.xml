@@ -39,7 +39,7 @@
 
         <ImageView
             android:id="@+id/btn_clear"
-            android:layout_width="@dimen/Details.Margin.Right"
+            android:layout_width="@dimen/Margin.Horizontal"
             android:layout_height="match_parent"
             android:contentDescription="@string/description_close_button"
             android:paddingLeft="@dimen/Toolbar.Icon.Margin"

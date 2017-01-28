@@ -100,6 +100,10 @@
     <string name="category_link_slu">http://mojafirma.infor.pl/moto/niezbednik/artykul/270185,Tablice-rejestracyjne-aut-nalezacych-do-sluzb-publicznych.html</string>
     <string name="category_link_woj">http://mojafirma.infor.pl/moto/niezbednik/artykul/270185,Tablice-rejestracyjne-aut-nalezacych-do-sluzb-publicznych.html</string>
 
+    <!--  CATEGORY  -->
+    <string name="category_read_more">Czytaj dalej</string>
+    <string name="category_plates_section">TABLICE</string>
+
     <!--  SEARCH  -->
     <string name="search_header_best">NAJLEPSZE WYNIKI</string>
     <string name="search_header_all">WSZYSTKIE WYNIKI</string>

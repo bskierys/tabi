@@ -112,7 +112,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">@dimen/Details.Height.Text.Description</item>
-        <item name="android:layout_marginLeft">@dimen/Details.Margin.Right</item>
+        <item name="android:layout_marginLeft">@dimen/Margin.Horizontal</item>
         <item name="android:layout_marginRight">@dimen/Details.Margin.Outer</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:gravity">center_vertical</item>
@@ -127,7 +127,7 @@
     </style>
 
     <style name="BackArrow">
-        <item name="android:layout_width">@dimen/Details.Margin.Right</item>
+        <item name="android:layout_width">@dimen/Margin.Horizontal</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:contentDescription">@string/description_back_button</item>
         <item name="android:paddingLeft">@dimen/Toolbar.Icon.Margin</item>

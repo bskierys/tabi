@@ -1,9 +1,12 @@
 package pl.ipebk.tabi.presentation.ui.category;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +24,7 @@ import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
@@ -38,6 +42,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Inject PlaceLocalizationHelper localizationHelper;
     @Inject RandomTextProvider randomTextProvider;
     @Inject PlaceAndPlateFactory placeFactory;
+    @Inject CustomTabActivityHelper chromeTabHelper;
 
     @BindView(R.id.toolbar_parent) View toolbar;
     @BindView(R.id.place_list) RecyclerView recyclerView;
@@ -89,11 +94,21 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         }
     }
 
+    @Override protected void onStart() {
+        super.onStart();
+        chromeTabHelper.bindCustomTabsService(this);
+    }
+
     @Override protected void onDestroy() {
         super.onDestroy();
 
         RxUtil.unsubscribe(scrollSubscription);
         presenter.detachView();
+    }
+
+    @Override protected void onStop() {
+        super.onStop();
+        chromeTabHelper.unbindCustomTabsService(this);
     }
 
     @OnClick(R.id.btn_back) public void onBack() {
@@ -115,10 +130,31 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
             adapter.setPlaceClickListener((id, plate, sType, pType) -> {
 
             });
-            adapter.setMoreInfoClickListener(url -> Timber.d("Link to go to: %s ", url));
+            adapter.setMoreInfoClickListener(url -> {
+                Timber.d("Link to go to: %s ", url);
+                launchUri(url);
+            });
         }
 
         return adapter;
+    }
+
+    private void launchUri(String url) {
+        int primaryColor = getResources().getColor(R.color.white);
+
+        CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
+        intentBuilder.setToolbarColor(primaryColor);
+        intentBuilder.enableUrlBarHiding();
+        intentBuilder.setStartAnimations(this, 0, 0);
+        intentBuilder.setExitAnimations(this, 0, 0);
+
+        CustomTabsIntent customTabsIntent = intentBuilder.build();
+
+        chromeTabHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), ((activity, uri) -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+        }));
     }
 
     @Override public void showCategoryName(String name) {
@@ -131,6 +167,8 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
     @Override public void showCategoryInfo(CategoryInfo info) {
         getAdapter().setCategoryInfo(info);
+
+        chromeTabHelper.mayLaunchUrl(Uri.parse(info.link()), null, null);
     }
 
     @Override public void showPlates(Cursor cursor) {

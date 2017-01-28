@@ -68,6 +68,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
     @Inject MapScaleCalculator mapScaleCalculator;
+    @Inject CustomTabActivityHelper chromeTabHelper;
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
     @BindView(R.id.editTxt_search) EditText searchedEditText;
@@ -97,7 +98,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
-    private CustomTabActivityHelper chromeTabHelper;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
@@ -114,7 +114,6 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         toolbarIndicator.setVisibility(View.GONE);
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
-        chromeTabHelper = new CustomTabActivityHelper();
 
         stopwatch = stopwatchManager.getDefaultStopwatch();
         stopwatch.reset();

@@ -17,28 +17,32 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Adapter for items of type {@link PlaceAndPlateDto}. Some dependencies are filled by constructor, but you have to use {@link #setType(SearchType)}, {@link
+ * #setPlaceClickListener(PlaceClickListener)} and {@link #setMoreInfoClickListener(MoreInfoClickListener)} before requesting any layout to avoid errors.
  */
 public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
 
     private CategoryInfo categoryInfo;
-    private CategoryInfo defaultInfo;
+    private static CategoryInfo DEFAULT_INFO;
     private MoreInfoClickListener mClickListener;
 
     public CategoryPlaceItemAdapter(Cursor cursor, Context context,
                                     RandomTextProvider randomTextProvider,
                                     PlaceAndPlateFactory itemFactory) {
         super(cursor, context, randomTextProvider, itemFactory);
-        sections.put(0, new Section("Tablice", null));
-        // TODO: 2017-01-28 another way of constructing default
-        defaultInfo = new AutoValue_CategoryInfo("title", "body", "link", context.getResources().getDrawable(R.drawable.vic_default));
+        sections.put(0, new Section(context.getString(R.string.category_plates_section), null));
+        String noText = context.getString(R.string.default_resource_string);
+        DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText,
+                                                 context.getResources().getDrawable(R.drawable.vic_default));
     }
 
     public void setCategoryInfo(CategoryInfo categoryInfo) {
@@ -64,7 +68,7 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
                                                   int position, Section section) {
         checkAllArgumentsFilled();
         if (categoryInfo == null) {
-            categoryInfo = defaultInfo;
+            categoryInfo = DEFAULT_INFO;
         }
 
         BigHeaderViewHolder holder = (BigHeaderViewHolder) viewHolder;

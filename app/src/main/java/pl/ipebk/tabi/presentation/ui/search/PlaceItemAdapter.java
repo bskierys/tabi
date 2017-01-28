@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
@@ -29,7 +30,7 @@ import timber.log.Timber;
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Adapter for items of type {@link PlaceAndPlateDto}.
  */
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     private RandomTextProvider randomTextProvider;
@@ -88,11 +89,11 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
                   .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
                   .subscribe(place -> {
                       PlaceType type = place.placeType();
-                      if(type.ordinal() < PlaceType.SPECIAL.ordinal()){
+                      if (type.ordinal() < PlaceType.SPECIAL.ordinal()) {
                           bindStandardPlaceViewHolder(holder, place);
-                      } else if(type == PlaceType.SPECIAL) {
+                      } else if (type == PlaceType.SPECIAL) {
                           bindSpecialPlaceViewHolder(holder, place);
-                      } else if(type == PlaceType.RANDOM) {
+                      } else if (type == PlaceType.RANDOM) {
                           bindRandomPlaceViewHolder(holder, place);
                       }
                   }, ex -> Timber.e(ex, "Error rendering row view"));
@@ -109,7 +110,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        if(type == SearchType.PLACE){
+        if (type == SearchType.PLACE) {
             holder.placeNameView.setText(place.name());
             holder.plateView.setText(randomTextProvider.getUnknownPlatePlaceholder());
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));

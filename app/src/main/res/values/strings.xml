@@ -11,6 +11,8 @@
     <string name="preview_title" translatable="false">Title of dialog</string>
     <string name="preview_body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec urna enim. Suspendisse condimentum quam a risus ullamcorper accumsan.</string>
     <string name="preview_confirm" translatable="false">OK</string>
+    <string name="preview_category_info_body">We wrocławskim Podziemnym Mieście Krasnali żyje blisko trzysta skrzatów. I ciągle wprowadzają się nowe.</string>
+    <string name="preview_category_info_title">Wrocław - miasto krasnali</string>
 
     <!--  DEFAULTS  -->
     <string name="default_resource_string">no text</string>
@@ -131,6 +133,10 @@
     <string name="category_link_zah">http://seaofadventure.eu/?page_id=658</string>
     <string name="category_link_slu">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
     <string name="category_link_woj">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
+
+    <!--  CATEGORY  -->
+    <string name="category_read_more">Read more</string>
+    <string name="category_plates_section">PLATES</string>
 
     <!--  SEARCH  -->
     <string name="search_header_best">BEST RESULTS</string>
