@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 public class PlaceFragmentTest {
     private TestablePlaceFragment fragment;
     @Mock LinearLayoutManager mockLayoutManager;
-    @Mock PlaceItemAdapter mockAdapter;
+    @Mock SearchPlaceItemAdapter mockAdapter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -271,7 +271,7 @@ public class PlaceFragmentTest {
 
     public static class TestablePlaceFragment extends PlaceFragment {
         private RecyclerView.LayoutManager layoutManager;
-        private PlaceItemAdapter adapter;
+        private SearchPlaceItemAdapter adapter;
 
         @Override public RecyclerView.LayoutManager getLayoutManager() {
             return layoutManager;
@@ -281,11 +281,11 @@ public class PlaceFragmentTest {
             this.layoutManager = layoutManager;
         }
 
-        @Override public PlaceItemAdapter getAdapter() {
+        @Override public SearchPlaceItemAdapter getAdapter() {
             return adapter;
         }
 
-        public void setAdapter(PlaceItemAdapter adapter) {
+        public void setAdapter(SearchPlaceItemAdapter adapter) {
             this.adapter = adapter;
         }
     }

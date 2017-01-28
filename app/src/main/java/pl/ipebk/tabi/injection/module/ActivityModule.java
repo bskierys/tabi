@@ -15,25 +15,29 @@ import com.squareup.picasso.Picasso;
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
-import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
 import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
 import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
+import pl.ipebk.tabi.presentation.localization.CategoryLocalizationHelper;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
+import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
+import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
+import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
 import pl.ipebk.tabi.presentation.ui.details.MapScaleCalculator;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
-import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
-import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.SpellCorrector;
 import timber.log.Timber;
@@ -86,6 +90,10 @@ public class ActivityModule {
         return new PlaceLocalizationHelper(activity);
     }
 
+    @Provides CategoryLocalizationHelper provideCategoryLocalizationHelper() {
+        return new CategoryLocalizationHelper(activity);
+    }
+
     @Provides ClipboardCopyMachine provideClipboardCopyMachine() {
         return new ClipboardCopyMachine(activity);
     }
@@ -124,5 +132,13 @@ public class ActivityModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(activity);
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return new RandomTextProvider(activity);
+    }
+
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
+        return factory;
     }
 }

@@ -6,9 +6,7 @@
 package pl.ipebk.tabi.presentation.ui.category;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,30 +14,41 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import javax.annotation.Resource;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
-import timber.log.Timber;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
+
+import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
  * TODO: Generic description. Replace with real one.
  */
 public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
 
-    private BigHeader header;
+    private CategoryInfo categoryInfo;
+    private CategoryInfo defaultInfo;
+    private MoreInfoClickListener mClickListener;
 
-    public CategoryPlaceItemAdapter(Cursor cursor, Context context, BigHeader header) {
-        super(cursor, context);
-        this.header = header;
+    public CategoryPlaceItemAdapter(Cursor cursor, Context context,
+                                    RandomTextProvider randomTextProvider,
+                                    PlaceAndPlateFactory itemFactory) {
+        super(cursor, context, randomTextProvider, itemFactory);
         sections.put(0, new Section("Tablice", null));
+        // TODO: 2017-01-28 another way of constructing default
+        defaultInfo = new AutoValue_CategoryInfo("title", "body", "link", context.getResources().getDrawable(R.drawable.vic_default));
     }
 
-    @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_place, parent, false);
-        return new ItemViewHolder(view);
+    public void setCategoryInfo(CategoryInfo categoryInfo) {
+        this.categoryInfo = categoryInfo;
+        notifyItemChanged(0);
+    }
+
+    @Override protected void checkAllArgumentsFilled() {
+        super.checkAllArgumentsFilled();
+        checkNotNull(mClickListener, "MoreInfoClickListener is not set");
     }
 
     @Override protected RecyclerView.ViewHolder createSectionViewHolder(ViewGroup parent) {
@@ -47,29 +56,24 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         return new BigHeaderViewHolder(view);
     }
 
+    public void setMoreInfoClickListener(MoreInfoClickListener mClickListener) {
+        this.mClickListener = mClickListener;
+    }
+
     @Override protected void bindHeaderViewHolder(RecyclerView.ViewHolder viewHolder,
                                                   int position, Section section) {
+        checkAllArgumentsFilled();
+        if (categoryInfo == null) {
+            categoryInfo = defaultInfo;
+        }
+
         BigHeaderViewHolder holder = (BigHeaderViewHolder) viewHolder;
         holder.header.setText(section.getTitle());
         holder.shadow.setVisibility(View.VISIBLE);
-        holder.icon.setImageDrawable(header.icon);
-        holder.title.setText(header.title);
-        holder.body.setText(header.body);
-        holder.moreButton.setOnClickListener(v -> Timber.d("Link to go to: %s ", header.link));
-    }
-
-    public static class BigHeader {
-        private String title;
-        private String body;
-        private String link;
-        private Drawable icon;
-
-        public BigHeader(String title, String body, String link, Drawable icon) {
-            this.title = title;
-            this.body = body;
-            this.link = link;
-            this.icon = icon;
-        }
+        holder.icon.setImageDrawable(categoryInfo.icon());
+        holder.title.setText(categoryInfo.title());
+        holder.body.setText(categoryInfo.body());
+        holder.moreButton.setOnClickListener(v -> mClickListener.onMoreInfoClick(categoryInfo.link()));
     }
 
     public static class BigHeaderViewHolder extends RecyclerView.ViewHolder {
@@ -84,5 +88,9 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    public interface MoreInfoClickListener {
+        void onMoreInfoClick(String url);
     }
 }
