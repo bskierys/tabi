@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-02-26
+* date: 2017-01-28
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.presentation.ui.details;
@@ -30,7 +30,7 @@ import rx.schedulers.Schedulers;
 import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
-public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
+public class DetailsFragmentPresenter extends BasePresenter<DetailsMvpFragmentView> {
     private PlaceRepository repository;
     private Observable<Place> placeOnce;
     private BehaviorSubject<Place> placeSubject;
@@ -44,9 +44,9 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
-    @Inject public DetailsPresenter(PlaceRepository repository, ClipboardCopyMachine clipboardCopyMachine,
-                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory,
-                                    PlaceLocalizationHelper localizationHelper) {
+    @Inject public DetailsFragmentPresenter(PlaceRepository repository, ClipboardCopyMachine clipboardCopyMachine,
+                                            MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory,
+                                            PlaceLocalizationHelper localizationHelper) {
         this.repository = repository;
         this.clipboardCopyMachine = clipboardCopyMachine;
         this.placeFactory = placeFactory;
@@ -54,7 +54,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         this.localizationHelper = localizationHelper;
     }
 
-    @Override public void attachView(DetailsMvpView mvpView) {
+    @Override public void attachView(DetailsMvpFragmentView mvpView) {
         super.attachView(mvpView);
         this.placeSubject = BehaviorSubject.create();
         this.placeOnce = placeSubject.asObservable();
@@ -68,7 +68,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
     public void loadPlace(long id, String searchedPlate, SearchType searchType, PlaceListItemType itemType) {
         getMvpView().disableActionButtons();
-        getMvpView().showSearchedText(searchedPlate);
         showPlaceIconBasedOnItemType(itemType);
 
         if (searchedPlate != null && searchType == SearchType.LICENSE_PLATE) {

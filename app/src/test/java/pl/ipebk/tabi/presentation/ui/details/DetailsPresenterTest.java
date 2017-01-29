@@ -14,6 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.place.Place;
 import pl.ipebk.tabi.presentation.model.place.PlaceFactory;
@@ -46,6 +47,7 @@ public class DetailsPresenterTest {
     @Mock Activity mockContext;
     @Mock ClipboardCopyMachine mockClipboardCopyMachine;
     @Mock MapScaleCalculator mockMapScaleCalculator;
+    @Mock PlaceLocalizationHelper placeLocalizationHelper;
     private TestPlaceLocalizationHelper mockNameHelper;
     private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
@@ -60,7 +62,8 @@ public class DetailsPresenterTest {
         mockFactory = new PlaceFactory(mockNameHelper);
 
         detailsPresenter = new DetailsPresenter(placeRepo, mockClipboardCopyMachine,
-                                                mockMapScaleCalculator, mockFactory);
+                                                mockMapScaleCalculator, mockFactory,
+                                                placeLocalizationHelper);
         detailsPresenter.attachView(mockMvpView);
     }
 

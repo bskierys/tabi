@@ -38,6 +38,15 @@
                 android:value=".presentation.ui.search.SearchActivity"/>
         </activity>
         <activity
+            android:name=".presentation.ui.details.DetailsSearchActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".presentation.ui.search.SearchActivity"
+            android:theme="@style/AppTheme.Transparent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.search.SearchActivity"/>
+        </activity>
+        <activity
             android:name=".presentation.ui.about.AboutAppActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.main.MainActivity"
