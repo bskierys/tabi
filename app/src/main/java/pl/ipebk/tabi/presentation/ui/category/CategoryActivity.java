@@ -129,13 +129,8 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
             adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
-            adapter.setPlaceClickListener((id, plate, sType, pType) -> {
-                goToPlaceDetails(id,plate);
-            });
-            adapter.setMoreInfoClickListener(url -> {
-                Timber.d("Link to go to: %s ", url);
-                launchUri(url);
-            });
+            adapter.setPlaceClickListener((id, plate, sType, pType) -> presenter.loadPlaceDetails(id,plate));
+            adapter.setMoreInfoClickListener(this::launchUri);
         }
 
         return adapter;
@@ -181,10 +176,12 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    public void goToPlaceDetails(AggregateId placeId, String searchedPlate) {
+    @Override public void goToDetails(AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate) {
         Intent intent = new Intent(this, DetailsCategoryActivity.class);
         intent.putExtra(DetailsCategoryActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsCategoryActivity.PARAM_SEARCHED_PLATE, searchedPlate);
+        intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_NAME, categoryName);
+        intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
         startActivity(intent);
     }
 }

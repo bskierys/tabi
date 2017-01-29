@@ -8,6 +8,7 @@ package pl.ipebk.tabi.presentation.ui.category;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.presentation.localization.CategoryLocalizationHelper;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.utils.RxUtil;
@@ -21,6 +22,7 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
     private CategoryLocalizationHelper localizationHelper;
     private LicensePlateFinder plateFinder;
     private Subscription searchSubscription;
+    private String categoryKey;
 
     @Inject public CategoryPresenter(CategoryLocalizationHelper localizationHelper, LicensePlateFinder plateFinder) {
         this.localizationHelper = localizationHelper;
@@ -28,6 +30,8 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
     }
 
     public void initCategory(String categoryKey) {
+        this.categoryKey = categoryKey;
+
         getMvpView().showCategoryName(localizationHelper.formatCategory(categoryKey));
         getMvpView().showCategoryPlate(localizationHelper.getCategoryPlate(categoryKey));
 
@@ -45,6 +49,12 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cursor -> getMvpView().showPlates(cursor),
                            e -> Timber.e(e, "Error during searching for places", e));
+    }
+
+    public void loadPlaceDetails(AggregateId placeId, String searchedPlate) {
+        getMvpView().goToDetails(placeId, searchedPlate,
+                                 localizationHelper.formatCategory(categoryKey),
+                                 localizationHelper.getCategoryPlate(categoryKey));
     }
 
     @Override public void detachView() {
