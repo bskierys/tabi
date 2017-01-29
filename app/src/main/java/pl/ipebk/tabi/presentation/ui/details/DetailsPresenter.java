@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-02-26
+* date: 2017-01-28
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.presentation.ui.details;
@@ -68,7 +68,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
     public void loadPlace(long id, String searchedPlate, SearchType searchType, PlaceListItemType itemType) {
         getMvpView().disableActionButtons();
-        getMvpView().showSearchedText(searchedPlate);
         showPlaceIconBasedOnItemType(itemType);
 
         if (searchedPlate != null && searchType == SearchType.LICENSE_PLATE) {

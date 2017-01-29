@@ -29,15 +29,6 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.ui.details.DetailsActivity"
-            android:label="@string/title_activity_details"
-            android:parentActivityName=".presentation.ui.search.SearchActivity"
-            android:theme="@style/AppTheme.Transparent">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.ui.search.SearchActivity"/>
-        </activity>
-        <activity
             android:name=".presentation.ui.details.DetailsSearchActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
@@ -67,6 +58,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b6da5b975f1016a9f9d5bbd45ef7244f820af050"/>
+
+        <activity android:name=".presentation.ui.details.DetailsCategoryActivity">
+        </activity>
     </application>
 
 </manifest>

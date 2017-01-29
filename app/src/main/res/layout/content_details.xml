@@ -4,9 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".presentation.ui.details.DetailsActivity"
-              tools:ignore="contentDescription"
-              tools:showIn="@layout/activity_details">
+              tools:background="@color/white"
+              tools:ignore="contentDescription">
 
     <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
         android:id="@+id/wrap_place_header"

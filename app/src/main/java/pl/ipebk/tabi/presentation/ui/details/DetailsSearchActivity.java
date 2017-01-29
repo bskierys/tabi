@@ -12,10 +12,9 @@ import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
@@ -23,7 +22,10 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
+import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
+import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
 import timber.log.Timber;
 
 public class DetailsSearchActivity extends BaseActivity {
@@ -41,13 +43,16 @@ public class DetailsSearchActivity extends BaseActivity {
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
     @BindView(R.id.content_container) FrameLayout contentContainer;
 
+    private Subscription overScrollSubscription;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-        //getActivityComponent().inject(this);
+
+        toolbarIndicator.setVisibility(View.GONE);
 
         prepareOverScroll();
         loadData();
@@ -68,11 +73,10 @@ public class DetailsSearchActivity extends BaseActivity {
                         -1
                 );
 
-        // TODO: 2017-01-29 subscription and unsubscribe
-        decorator.getReleaseEventStream()
-                 .filter(scroll -> scroll != null)
-                 .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
-                 .subscribe(scroll -> Timber.d("Overscrolled"));
+        overScrollSubscription = decorator.getReleaseEventStream()
+                                          .filter(scroll -> scroll != null)
+                                          .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
+                                          .subscribe(scroll -> Timber.d("Overscrolled"));
     }
 
     private void loadData() {
@@ -83,10 +87,47 @@ public class DetailsSearchActivity extends BaseActivity {
         SearchType searchType = SearchType.values()
                 [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
 
+        showSearchedText(searchedPlate);
+
         DetailsFragment fragment = DetailsFragment.newInstance(placeId, searchedPlate, itemType, searchType);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.content_container, fragment);
         ft.commit();
+    }
+
+    private void showSearchedText(String searchedText) {
+        searchedEditText.setVisibility(View.GONE);
+        searchedTextView.setText(searchedText);
+        if (searchedText != null && !searchedText.equals("")) {
+            clearButton.setVisibility(View.VISIBLE);
+        } else {
+            clearButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        RxUtil.unsubscribe(overScrollSubscription);
+    }
+
+    @OnClick(R.id.btn_back) public void onBackButton() {
+        // TODO: 2016-03-30 animation on back
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_clear) public void onClearButton() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
+        intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, "");
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.txt_searched) public void onSearchClicked() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, true);
+        startActivity(intent);
     }
 }

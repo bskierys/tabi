@@ -32,7 +32,6 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
-import pl.ipebk.tabi.presentation.ui.details.DetailsActivity;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
 import pl.ipebk.tabi.utils.FontManager;
@@ -319,12 +318,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void goToPlaceDetails(AggregateId placeId, String searchedPlate,
                                            SearchType searchType, PlaceListItemType itemType) {
-        //Intent intent = new Intent(this, DetailsActivity.class);
         Intent intent = new Intent(this, DetailsSearchActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId.getValue());
-        intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
-        intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
-        intent.putExtra(DetailsActivity.PARAM_ITEM_TYPE, itemType);
+        intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
+        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
+        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
+        intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
         startActivity(intent);
     }
 

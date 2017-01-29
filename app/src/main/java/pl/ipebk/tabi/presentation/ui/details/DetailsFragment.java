@@ -55,13 +55,13 @@ import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
-public class DetailsFragment extends BaseFragment implements DetailsMvpFragmentView, Callback {
+public class DetailsFragment extends BaseFragment implements DetailsMvpView, Callback {
     private final static String ARG_PLACE_ID = "param_place_id";
     private final static String ARG_SEARCHED_PLATE = "param_searched_plate";
     private final static String ARG_SEARCHED_TYPE = "param_searched_type";
     private final static String ARG_ITEM_TYPE = "param_item_type";
 
-    @Inject DetailsFragmentPresenter presenter;
+    @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
     @Inject AnimationCreator animationCreator;
     @Inject StopwatchManager stopwatchManager;
