@@ -321,7 +321,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         Intent intent = new Intent(this, DetailsSearchActivity.class);
         intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
-        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
+        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
         startActivity(intent);
     }

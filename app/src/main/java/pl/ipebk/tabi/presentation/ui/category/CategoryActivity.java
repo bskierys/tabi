@@ -21,10 +21,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
+import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
@@ -128,7 +130,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
             adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
             adapter.setPlaceClickListener((id, plate, sType, pType) -> {
-
+                goToPlaceDetails(id,plate);
             });
             adapter.setMoreInfoClickListener(url -> {
                 Timber.d("Link to go to: %s ", url);
@@ -177,5 +179,12 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         Timber.d("Number of places found: %d", placesFound);
         recyclerView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    public void goToPlaceDetails(AggregateId placeId, String searchedPlate) {
+        Intent intent = new Intent(this, DetailsCategoryActivity.class);
+        intent.putExtra(DetailsCategoryActivity.PARAM_PLACE_ID, placeId.getValue());
+        intent.putExtra(DetailsCategoryActivity.PARAM_SEARCHED_PLATE, searchedPlate);
+        startActivity(intent);
     }
 }

@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/activity_details_category"
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity">
+    tools:context=".presentation.ui.details.DetailsCategoryActivity"
+    tools:ignore="contentDescription">
 
-</RelativeLayout>
+    <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+        android:id="@+id/toolbar_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/white"
+        app:content="@layout/toolbar_content_category"/>
+
+    <!--  This relative layout is important. If it is removed,
+          layout will go above the toolbar when scrolled  -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/black_30"/>
+
+        <ScrollView
+            android:id="@+id/scroll_container"
+            android:background="@color/colorBackgroundLight"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="@bool/isPortrait"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <FrameLayout
+                android:id="@+id/content_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </ScrollView>
+
+        <ImageView style="@style/Shadow.2dp"/>
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

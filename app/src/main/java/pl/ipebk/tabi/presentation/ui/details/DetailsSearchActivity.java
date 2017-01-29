@@ -41,7 +41,6 @@ public class DetailsSearchActivity extends BaseActivity {
     @BindView(R.id.btn_clear) View clearButton;
     // others
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
-    @BindView(R.id.content_container) FrameLayout contentContainer;
 
     private Subscription overScrollSubscription;
 
@@ -84,8 +83,7 @@ public class DetailsSearchActivity extends BaseActivity {
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
         PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
-        SearchType searchType = SearchType.values()
-                [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
+        SearchType searchType = (SearchType) intent.getSerializableExtra(PARAM_SEARCHED_TYPE);
 
         showSearchedText(searchedPlate);
 
