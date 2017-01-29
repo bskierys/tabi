@@ -25,6 +25,7 @@ import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
 import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;

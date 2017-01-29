@@ -42,8 +42,7 @@ public class DetailsCategoryActivity extends BaseActivity {
 
     private Subscription overScrollSubscription;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -112,6 +112,8 @@ public class PlaceLocalizationHelper {
      * Formats place data into format that is understandable by search engines.
      */
     public String formatPlaceToSearch(Place place) {
-        return place + "," + context.getString(R.string.details_country);
+        String land = context.getString(R.string.details_powiat_territorial);
+        String formattedPlace = place.toString().replace(land, "").replace("(", "").replace(")","");
+        return formattedPlace + "," + context.getString(R.string.details_country);
     }
 }

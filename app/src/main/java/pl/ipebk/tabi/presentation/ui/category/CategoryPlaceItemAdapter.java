@@ -30,16 +30,18 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
  * #setPlaceClickListener(PlaceClickListener)} and {@link #setMoreInfoClickListener(MoreInfoClickListener)} before requesting any layout to avoid errors.
  */
 public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
+    private static final int SECTION_HEADER_INDEX = 0;
 
     private CategoryInfo categoryInfo;
     private static CategoryInfo DEFAULT_INFO;
     private MoreInfoClickListener mClickListener;
+    private String platesSectionName;
 
     public CategoryPlaceItemAdapter(Cursor cursor, Context context,
                                     RandomTextProvider randomTextProvider,
                                     PlaceAndPlateFactory itemFactory) {
         super(cursor, context, randomTextProvider, itemFactory);
-        sections.put(0, new Section(context.getString(R.string.category_plates_section), null));
+        platesSectionName = context.getString(R.string.category_plates_section);
         String noText = context.getString(R.string.default_resource_string);
         DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText,
                                                  context.getResources().getDrawable(R.drawable.vic_default));
@@ -62,6 +64,11 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
 
     public void setMoreInfoClickListener(MoreInfoClickListener mClickListener) {
         this.mClickListener = mClickListener;
+    }
+
+    @Override public void changeCursor(Cursor newCursor) {
+        super.changeCursor(newCursor);
+        addSection(SECTION_HEADER_INDEX, platesSectionName, null);
     }
 
     @Override protected void bindHeaderViewHolder(RecyclerView.ViewHolder viewHolder,
