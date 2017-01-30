@@ -133,6 +133,20 @@
     <string name="main_feedback_reply_button">CLOSE</string>
     <string name="main_feedback_reply_rate">Rate this app</string>
 
+    <!--  FEEDBACK  -->
+    <string name="feedback_title">Describe to us your remarks</string>
+    <string name="feedback_subtitle">What is bothering you?</string>
+    <string name="feedback_button_bug">Bug</string>
+    <string name="feedback_title_bug">Describe to us your problem</string>
+    <string name="feedback_hint_bug">What is wrong?</string>
+    <string name="feedback_button_idea">Idea</string>
+    <string name="feedback_title_idea">Describe to us your idea</string>
+    <string name="feedback_hint_idea">What\'s on your mind?</string>
+    <string name="feedback_button_question">Question</string>
+    <string name="feedback_title_question">Describe to us your question</string>
+    <string name="feedback_hint_question">What do you want to ask?</string>
+    <string name="feedback_send">Send</string>
+
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">true</bool>
     <string name="english_greeting_title" translatable="false">Nobody is perfect&#8230;</string>

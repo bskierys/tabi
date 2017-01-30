@@ -8,9 +8,11 @@
     android:background="@color/colorBackgroundLight"
     tools:context="pl.ipebk.tabi.presentation.ui.feedback.FeedbackEntryActivity">
 
-    <FrameLayout android:id="@+id/toolbar"
+    <FrameLayout
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <include layout="@layout/toolbar_content_feedback"/>
     </FrameLayout>
 
@@ -19,23 +21,22 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btn_send"
         android:layout_below="@+id/toolbar">
+
         <pl.ipebk.tabi.presentation.ui.custom.FontEditText
             android:id="@+id/edit_issue"
+            style="@style/Text_Body.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Text_Body.Primary"
-            android:layout_marginLeft="56dp"
-            android:layout_marginRight="56dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="4dp"
-            android:paddingTop="16dp"
-            android:lineSpacingExtra="2dp"
+            android:layout_marginLeft="@dimen/Button.Icon.Square"
+            android:layout_marginRight="@dimen/Button.Icon.Square"
+            android:layout_marginTop="@dimen/Feedback.Margin.Toolbar"
+            android:background="@android:color/transparent"
             android:focusable="true"
             android:inputType="textMultiLine|textCapSentences"
+            android:lineSpacingExtra="2dp"
             android:textColorHint="@color/black_30"
-            android:background="@android:color/transparent"
             android:textCursorDrawable="@drawable/cursor_accent"
-            android:hint="Zaproponuj coś od siebie..."/>
+            tools:hint="@string/feedback_hint_idea"/>
 
         <ImageView
             android:id="@+id/btn_clear"
@@ -46,10 +47,10 @@
 
     <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
         android:id="@+id/btn_send"
-        android:layout_width="248dp"
+        android:layout_width="@dimen/Feedback.Width.Button"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Wyślij"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/Feedback.Margin.Button"
+        android:text="@string/feedback_send"/>
 </RelativeLayout>

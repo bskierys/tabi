@@ -95,6 +95,14 @@
     <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
 
+    <!--  FEEDBACK  -->
+    <dimen name="Feedback.Margin.Top">32dp</dimen>
+    <dimen name="Feedback.Margin">20dp</dimen>
+    <dimen name="Feedback.Margin.Inner">16dp</dimen>
+    <dimen name="Feedback.Width.Button">248dp</dimen>
+    <dimen name="Feedback.Margin.Button">16dp</dimen>
+    <dimen name="Feedback.Margin.Toolbar">20dp</dimen>
+
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
     <dimen name="StatusBar">22dp</dimen>

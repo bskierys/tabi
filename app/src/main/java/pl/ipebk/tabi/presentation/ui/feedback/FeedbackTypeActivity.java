@@ -50,7 +50,6 @@ public class FeedbackTypeActivity extends BaseActivity {
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_ENTRY) {
             if (resultCode == RESULT_OK) {
-                // The user entered issue
                 String issueEntryText = data.getStringExtra(PARAM_ISSUE_RESULT);
                 Toast.makeText(this, issueEntryText, Toast.LENGTH_SHORT).show();
             }

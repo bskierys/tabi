@@ -2,7 +2,6 @@ package pl.ipebk.tabi.presentation.ui.feedback;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,27 +22,31 @@ public class FeedbackEntryActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         int issueType = getIntent().getIntExtra(FeedbackTypeActivity.PARAM_ISSUE_TYPE, 0);
+        tailorTextsToIssueType(issueType);
+    }
+
+    private void tailorTextsToIssueType(int issueType) {
         String hint;
         String title;
         switch (issueType) {
             case FeedbackTypeActivity.ISSUE_TYPE_BUG: {
-                hint = "Z czym masz problem?";
-                title = "Zgłoś nam swój problem";
+                hint = getString(R.string.feedback_hint_bug);
+                title = getString(R.string.feedback_title_bug);
                 break;
             }
             case FeedbackTypeActivity.ISSUE_TYPE_IDEA: {
-                hint = "Zaproponuj coś od siebie...";
-                title = "Zgłoś nam swój pomysł";
+                hint = getString(R.string.feedback_hint_idea);
+                title = getString(R.string.feedback_title_idea);
                 break;
             }
             case FeedbackTypeActivity.ISSUE_TYPE_QUESTION: {
-                hint = "O co chesz zapytać?";
-                title = "Zadaj nam swoje pytanie";
+                hint = getString(R.string.feedback_hint_question);
+                title = getString(R.string.feedback_title_question);
                 break;
             }
             default: {
-                hint = "brak tekstu";
-                title = "brak tekstu";
+                hint = getString(R.string.default_resource_string);
+                title = getString(R.string.default_resource_string);
                 break;
             }
         }
@@ -71,6 +74,6 @@ public class FeedbackEntryActivity extends BaseActivity {
         returnIntent.putExtra(FeedbackTypeActivity.PARAM_ISSUE_RESULT, issueEntryText);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 }
