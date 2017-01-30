@@ -34,7 +34,7 @@
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:inputType="textNoSuggestions"
                 android:textColorHint="@color/white_semi_transparent"
-                android:textCursorDrawable="@drawable/dark_cursor"/>
+                android:textCursorDrawable="@drawable/cursor_dark"/>
         </RelativeLayout>
 
         <ImageView

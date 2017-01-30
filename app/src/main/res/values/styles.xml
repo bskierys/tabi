@@ -127,11 +127,12 @@
     </style>
 
     <style name="BackArrow">
-        <item name="android:layout_width">@dimen/Details.Margin.Right</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">@dimen/Button.Icon.Square</item>
+        <item name="android:layout_height">@dimen/Button.Icon.Square</item>
         <item name="android:contentDescription">@string/description_back_button</item>
         <item name="android:paddingLeft">@dimen/Toolbar.Icon.Margin</item>
         <item name="android:paddingRight">@dimen/Toolbar.Icon.Margin</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:src">@drawable/ic_back_dark</item>
     </style>
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_feedback_entry"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundLight"
+    tools:context="pl.ipebk.tabi.presentation.ui.feedback.FeedbackEntryActivity">
+
+    <FrameLayout android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/toolbar_content_feedback"/>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_send"
+        android:layout_below="@+id/toolbar">
+        <pl.ipebk.tabi.presentation.ui.custom.FontEditText
+            android:id="@+id/edit_issue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Text_Body.Primary"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="56dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="6dp"
+            android:paddingTop="16dp"
+            android:lineSpacingExtra="2dp"
+            android:focusable="true"
+            android:inputType="textMultiLine|textCapSentences"
+            android:textColorHint="@color/black_30"
+            android:background="@android:color/transparent"
+            android:textCursorDrawable="@drawable/cursor_accent"
+            android:hint="Zaproponuj coś od siebie..."/>
+
+        <ImageView
+            android:id="@+id/btn_clear"
+            style="@style/BackArrow"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_close_light"/>
+    </RelativeLayout>
+
+    <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
+        android:id="@+id/btn_send"
+        android:layout_width="248dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Wyślij"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

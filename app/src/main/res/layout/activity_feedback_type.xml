@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_feedback_type"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackgroundLight"
+    tools:context="pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity">
+
+    <FrameLayout
+        android:id="@+id/fake_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Toolbar.Height.Min">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            style="@style/BackArrow"
+            android:src="@drawable/ic_back_light"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="20dp"
+        android:layout_below="@+id/fake_toolbar"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            style="@style/Text_Display.Primary"
+            android:text="ZGŁOŚ NAM SWOJE UWAGI"/>
+
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Text_Body2.Primary"
+            android:text="Co ci leży na sercu?"
+            android:layout_marginBottom="32dp"/>
+
+        <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
+            android:id="@+id/btn_issue_bug"
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Błąd"/>
+
+        <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
+            android:id="@+id/btn_issue_idea"
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Pomysł"/>
+
+        <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
+            android:id="@+id/btn_issue_question"
+            android:layout_width="144dp"
+            android:layout_height="wrap_content"
+            android:text="Pytanie"/>
+    </LinearLayout>
+
+</RelativeLayout>

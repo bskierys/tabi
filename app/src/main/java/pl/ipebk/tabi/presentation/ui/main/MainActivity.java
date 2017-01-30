@@ -32,6 +32,7 @@ import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
@@ -290,7 +291,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void showFeedbackDialog() {
         Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
-        feedbackDialog.show();
+        //feedbackDialog.show();
+        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
+        startActivity(feedbackIntent);
     }
 
     @Override public void showGreetingCaption() {
