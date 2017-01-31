@@ -165,6 +165,7 @@ dependencies {
         exclude group: "com.android.support", module: "appcompat-v7"
         exclude group: "com.android.support", module: "cardview-v7"
         exclude group: "com.android.support", module: "recyclerview-v7"
+        exclude group: "com.squareup.okio", module: "okio"
     }
 
     // logs
@@ -175,8 +176,10 @@ dependencies {
     }
 
     // image downloading
-    compile mobileDependencies.picasso
-    compile mobileDependencies.okhttp
+    compile (mobileDependencies.picasso) {
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+    }
+    //compile mobileDependencies.okhttp
 
     // icepick
     compile mobileDependencies.icepick
@@ -185,6 +188,19 @@ dependencies {
     // sqlite
     compile mobileDependencies.sqliteAssetHelper
     compile mobileDependencies.sqlbrite
+
+    // Retrofit
+    compile (mobileDependencies.retrofit){
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+    }
+    /*compile (mobileDependencies.retrofitConverter){
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+    }*/
+    compile (mobileDependencies.retrofitRxAdapter){
+        exclude group: "com.squareup.okhttp3", module: "okhttp"
+    }
+    compile (mobileDependencies.okLog)
+    compile (mobileDependencies.loggingInterceptor)
 
     // dagger
     compile mobileDependencies.dagger

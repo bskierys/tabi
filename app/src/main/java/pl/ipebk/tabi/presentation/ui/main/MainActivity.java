@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import icepick.State;
 import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
@@ -54,6 +55,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
     @Inject DoodleTextFormatter doodleTextFormatter;
+    @Inject FeedbackClient feedbackClient;
     @BindView(R.id.img_loading) ImageView loadingView;
     @BindView(R.id.category_list) RecyclerView recyclerView;
     @BindView(R.id.search_bar) View searchBar;
@@ -95,6 +97,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
         prepareFeedbackDialog(feedbackDialog);
         scrollSubscriptions = new CompositeSubscription();
+
+        // TODO: 2017-01-31 should be initialized during app start
+        feedbackClient.initialise(feedbackApiKey);
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
                                               .observeOn(AndroidSchedulers.mainThread())
@@ -292,8 +297,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void showFeedbackDialog() {
         Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
         //feedbackDialog.show();
-        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        startActivity(feedbackIntent);
+        //Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
+        //startActivity(feedbackIntent);
+        feedbackClient.sendFeedback("Test commonet", "BUG");
     }
 
     @Override public void showGreetingCaption() {

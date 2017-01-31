@@ -121,8 +121,4 @@ public class ActivityModule {
     @Provides public DatabaseLoader provideDatabaseLoader(SqliteDatabaseLoader loader) {
         return loader;
     }
-
-    @Provides public SharedPreferences provideSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(activity);
-    }
 }
