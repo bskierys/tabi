@@ -6,40 +6,49 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.feedback.FeedbackClient;
+import pl.ipebk.tabi.feedback.FeedbackType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 
 public class FeedbackEntryActivity extends BaseActivity {
+    @Inject FeedbackClient feedbackClient;
+
     @BindView(R.id.edit_issue) EditText issueEntry;
     @BindView(R.id.txt_title) TextView titleBar;
+
+    private FeedbackType feedbackType;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_entry);
         ButterKnife.bind(this);
+        getActivityComponent().inject(this);
 
-        int issueType = getIntent().getIntExtra(FeedbackTypeActivity.PARAM_ISSUE_TYPE, 0);
-        tailorTextsToIssueType(issueType);
+        feedbackType = (FeedbackType) getIntent().getSerializableExtra(FeedbackTypeActivity.PARAM_ISSUE_TYPE);
+        tailorTextsToIssueType(feedbackType);
     }
 
-    private void tailorTextsToIssueType(int issueType) {
+    private void tailorTextsToIssueType(FeedbackType issueType) {
         String hint;
         String title;
         switch (issueType) {
-            case FeedbackTypeActivity.ISSUE_TYPE_BUG: {
+            case BUG: {
                 hint = getString(R.string.feedback_hint_bug);
                 title = getString(R.string.feedback_title_bug);
                 break;
             }
-            case FeedbackTypeActivity.ISSUE_TYPE_IDEA: {
+            case IDEA: {
                 hint = getString(R.string.feedback_hint_idea);
                 title = getString(R.string.feedback_title_idea);
                 break;
             }
-            case FeedbackTypeActivity.ISSUE_TYPE_QUESTION: {
+            case QUESTION: {
                 hint = getString(R.string.feedback_hint_question);
                 title = getString(R.string.feedback_title_question);
                 break;
@@ -68,10 +77,14 @@ public class FeedbackEntryActivity extends BaseActivity {
         issueEntry.setText(null);
     }
 
+    // TODO: 2017-01-31 progress and delay for sending feedback
     @OnClick(R.id.btn_send) public void onSend() {
         String issueEntryText = issueEntry.getText().toString();
+
+        // TODO: 2017-01-31 should be observable we can subscribe to 
+        feedbackClient.sendFeedback(issueEntryText, feedbackType);
+
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(FeedbackTypeActivity.PARAM_ISSUE_RESULT, issueEntryText);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
         overridePendingTransition(0, 0);

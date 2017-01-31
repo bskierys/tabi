@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private FeedbackDialog feedbackDialog;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
     @State boolean isDemoDialogShown;
@@ -94,12 +93,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
         feedbackApiKey = getString(R.string.feedback_api_key);
-        feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
-        prepareFeedbackDialog(feedbackDialog);
+        feedbackClient.init(feedbackApiKey);
         scrollSubscriptions = new CompositeSubscription();
-
-        // TODO: 2017-01-31 should be initialized during app start
-        feedbackClient.initialise(feedbackApiKey);
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
                                               .observeOn(AndroidSchedulers.mainThread())
@@ -206,41 +201,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter.swapItems(items);
     }
 
-    private void prepareFeedbackDialog(FeedbackDialog dialog) {
-        dialog.setDebug(BuildConfig.DEBUG);
-
-        FeedbackSettings feedbackSettings = new FeedbackSettings();
-        //SUBMIT-CANCEL BUTTONS
-        feedbackSettings.setCancelButtonText(getString(R.string.main_feedback_cancel));
-        feedbackSettings.setSendButtonText(getString(R.string.main_feedback_send));
-
-        //DIALOG TEXT
-        feedbackSettings.setText(getString(R.string.main_feedback_body));
-        feedbackSettings.setYourComments("");
-        feedbackSettings.setTitle(getString(R.string.main_feedback_title));
-
-        //TOAST MESSAGE
-        feedbackSettings.setToast(getString(R.string.main_feedback_done));
-
-        //RADIO BUTTONS
-        feedbackSettings.setBugLabel(getString(R.string.main_feedback_bug));
-        feedbackSettings.setIdeaLabel(getString(R.string.main_feedback_idea));
-        feedbackSettings.setQuestionLabel(getString(R.string.main_feedback_question));
-
-        //RADIO BUTTONS ORIENTATION AND GRAVITY
-        feedbackSettings.setOrientation(LinearLayout.VERTICAL);
-        feedbackSettings.setGravity(Gravity.LEFT);
-
-        //DEVELOPER REPLIES
-        feedbackSettings.setReplyTitle(getString(R.string.main_feedback_reply_title));
-        feedbackSettings.setReplyCloseButtonText(getString(R.string.main_feedback_reply_button));
-        feedbackSettings.setReplyRateButtonText(getString(R.string.main_feedback_reply_rate));
-
-        feedbackSettings.setModal(true);
-
-        dialog.setSettings(feedbackSettings);
-    }
-
     private void setAnimationState(float percent) {
         float moveSearchTo = (lowestSearchBarPosition - highestSearchBarPosition)
                 * scrollPercent
@@ -280,7 +240,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override protected void onPause() {
         super.onPause();
-        feedbackDialog.dismiss();
     }
 
     @Override protected void onDestroy() {
@@ -295,11 +254,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showFeedbackDialog() {
-        Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
-        //feedbackDialog.show();
-        //Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        //startActivity(feedbackIntent);
-        feedbackClient.sendFeedback("Test commonet", "BUG");
+        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
+        startActivity(feedbackIntent);
     }
 
     @Override public void showGreetingCaption() {

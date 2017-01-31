@@ -179,7 +179,6 @@ dependencies {
     compile (mobileDependencies.picasso) {
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
-    //compile mobileDependencies.okhttp
 
     // icepick
     compile mobileDependencies.icepick
@@ -193,9 +192,9 @@ dependencies {
     compile (mobileDependencies.retrofit){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
-    /*compile (mobileDependencies.retrofitConverter){
+    compile (mobileDependencies.retrofitConverter){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
-    }*/
+    }
     compile (mobileDependencies.retrofitRxAdapter){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }

@@ -85,7 +85,7 @@ public class FeedbackRestClient {
         }
     }
 
-    public Observable<String> getPengingReplies(String uuid) {
+    public Observable<String> getPendingReplies(String uuid) {
         try {
             checkConfigurationValid();
             return restService.getPendingReplies(uuid);

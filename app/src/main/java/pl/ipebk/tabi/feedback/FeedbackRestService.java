@@ -19,5 +19,5 @@ public interface FeedbackRestService {
     @FormUrlEncoded
     @POST("/service/2") Observable<String> postFeedback(@Field("json") String feedbackJson);
 
-    @GET("/service/2/{uuid}") Observable<String> getPendingReplies(@Path("uuid") String uuid);
+    @GET("/service/2/getPending/{uuid}") Observable<String> getPendingReplies(@Path("uuid") String uuid);
 }
