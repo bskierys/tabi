@@ -81,7 +81,7 @@ public class FeedbackEntryActivity extends BaseActivity {
     @OnClick(R.id.btn_send) public void onSend() {
         String issueEntryText = issueEntry.getText().toString();
 
-        // TODO: 2017-01-31 should be observable we can subscribe to 
+        // TODO: 2017-01-31 should be observable we can subscribe to
         feedbackClient.sendFeedback(issueEntryText, feedbackType);
 
         Intent returnIntent = new Intent();

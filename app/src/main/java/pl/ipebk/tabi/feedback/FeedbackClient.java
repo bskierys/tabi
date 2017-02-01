@@ -124,7 +124,7 @@ public class FeedbackClient {
                 list.put(e.toJson());
             }
 
-            submitJson.put("applicationId", applicationId);
+            submitJson.put("APPUID", applicationId);
             submitJson.put("feedback", list);
         } catch (JSONException var22) {
             var22.printStackTrace();
