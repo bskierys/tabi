@@ -7,16 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
-import com.suredigit.inappfeedback.FeedbackDialog;
-import com.suredigit.inappfeedback.FeedbackSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
-import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
@@ -74,7 +69,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private BlockingLayoutManager manager;
     private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
-    @State boolean isDemoDialogShown;
+    @State boolean isDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +87,21 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
+        // TODO: 2017-02-05 move to presenter
         feedbackApiKey = getString(R.string.feedback_api_key);
         feedbackClient.init(feedbackApiKey);
+        feedbackClient.sendUnsentFeedback()
+                      .subscribe(v -> Timber.d("Feedback has been sent"), error -> {
+                          Timber.w(error, "Could not send feedback. Postponing");
+                      }, () -> {
+                          Timber.d("Success. Previously unsent feedback was just sent");
+                      });
+        feedbackClient.getPendingResponses().subscribe(response -> {
+            Timber.d("Response from developer: %s", response);
+            showResponseToFeedback(response);
+        }, error -> {
+            Timber.e(error, "Problem getting pending responses");
+        });
         scrollSubscriptions = new CompositeSubscription();
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
@@ -312,7 +320,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showDemoGreeting() {
-        if(!isDemoDialogShown) {
+        if (!isDialogShown) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
             if (prev == null) {
@@ -320,9 +328,24 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                         .newInstance(getString(R.string.english_greeting_title),
                                      getString(R.string.english_greeting_body),
                                      getString(R.string.english_greeting_confirm));
-                demoDialog.setOnClickListener(v -> isDemoDialogShown = false);
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
                 demoDialog.show(ft, PARAM_DIALOG);
-                isDemoDialogShown = true;
+                isDialogShown = true;
+            }
+        }
+    }
+
+    @Override public void showResponseToFeedback(String response) {
+        if (!isDialogShown) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
+            if (prev == null) {
+                MessageDialog demoDialog = MessageDialog
+                        .newInstance(getString(R.string.main_feedback_response_title), response,
+                                     getString(R.string.main_feedback_response_confirm));
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
+                demoDialog.show(ft, PARAM_DIALOG);
+                isDialogShown = true;
             }
         }
     }

@@ -136,8 +136,8 @@ dependencies {
     compile project(':viewpagerindicator')
 
     // auto-value
-    provided mobileDependencies.autovalue // needed for Android Studio
-    apt mobileDependencies.autovalue
+    apt mobileDependencies.autoValueGson
+    provided mobileDependencies.autoValueGson
 
     // Android
     compile mobileDependencies.appcompat

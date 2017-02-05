@@ -9,6 +9,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -44,4 +46,6 @@ public interface ApplicationComponent {
     FeedbackRestClient feedbackRestClient();
 
     FeedbackClient feedbackClient();
+
+    Gson gson();
 }

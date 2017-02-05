@@ -48,7 +48,7 @@
             android:layout_width="@dimen/Button.Secondary.Width"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/Feedback.Margin.Inner"
-            android:layout_marginTop="@dimen/Feedback.Margin.Top"
+            android:layout_marginTop="@dimen/Feedback.Margin.Buttons.Top"
             android:text="@string/feedback_button_bug"/>
 
         <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton

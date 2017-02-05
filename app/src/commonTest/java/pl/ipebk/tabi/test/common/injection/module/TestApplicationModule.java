@@ -9,6 +9,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -71,5 +73,9 @@ public class TestApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return mock(SharedPreferences.class);
+    }
+
+    @Provides public Gson provideGson() {
+        return mock(Gson.class);
     }
 }

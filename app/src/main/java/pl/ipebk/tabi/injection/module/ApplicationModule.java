@@ -10,10 +10,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.ipebk.tabi.feedback.FeedbackTypeAdapterFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
@@ -68,5 +72,9 @@ public class ApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    @Provides public Gson provideGson() {
+        return new GsonBuilder().registerTypeAdapterFactory(FeedbackTypeAdapterFactory.create()).create();
     }
 }

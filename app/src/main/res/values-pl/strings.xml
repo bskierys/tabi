@@ -105,18 +105,8 @@
     <string name="main_doodle_caption_feedback">Masz jakieś *uwagi?* Zjedź na dół strony.</string>
     <string name="main_version">Wersja %s</string>
     <string name="main_loading">ładuję&#8230;</string>
-
-    <string name="main_feedback_title">Wyślij komentarz do autora</string>
-    <string name="main_feedback_body">Prześlij do nas swój komentarz na temat aplikacji</string>
-    <string name="main_feedback_cancel">ANULUJ</string>
-    <string name="main_feedback_send">WYŚLIJ KOMENTARZ</string>
-    <string name="main_feedback_done">Dzięki za opinię :)</string>
-    <string name="main_feedback_bug">Błąd</string>
-    <string name="main_feedback_idea">Pomysł</string>
-    <string name="main_feedback_question">Pytanie</string>
-    <string name="main_feedback_reply_title">Odpowiedź od autora</string>
-    <string name="main_feedback_reply_button">ZAMKNIJ</string>
-    <string name="main_feedback_reply_rate">Oceń aplikację</string>
+    <string name="main_feedback_response_title">Odpowiedź</string>
+    <string name="main_feedback_response_confirm">Zamknij</string>
 
     <!--  FEEDBACK  -->
     <string name="feedback_title">Zgłoś nam swoje uwagi</string>
@@ -131,6 +121,8 @@
     <string name="feedback_title_question">Zgłoś nam swoje pytanie</string>
     <string name="feedback_hint_question">O co chcesz zapytać?</string>
     <string name="feedback_send">Wyślij</string>
+    <string name="feedback_sending">Wysyłanie uwag&#8230;</string>
+    <string name="main_feedback_done">Dziękujemy za opinię</string>
 
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">false</bool>

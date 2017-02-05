@@ -97,6 +97,7 @@
 
     <!--  FEEDBACK  -->
     <dimen name="Feedback.Margin.Top">32dp</dimen>
+    <dimen name="Feedback.Margin.Buttons.Top">32dp</dimen>
     <dimen name="Feedback.Margin">20dp</dimen>
     <dimen name="Feedback.Margin.Inner">16dp</dimen>
     <dimen name="Feedback.Width.Button">248dp</dimen>

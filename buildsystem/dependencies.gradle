@@ -68,6 +68,7 @@ ext {
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
     autoValueVersion = '1.2';
+    autoValueGsonVersion = '0.4.4';
     aboutLibrariesVersion = "5.9.1@aar";
     retrofitVersion = '2.1.0'
     okLogVersion = '1.0.1'
@@ -129,6 +130,7 @@ ext {
 
             // auto-value
             autovalue               : "com.google.auto.value:auto-value:${autoValueVersion}",
+            autoValueGson           : "com.ryanharter.auto.value:auto-value-gson:${autoValueGsonVersion}",
 
             // Unit test dependencies
             junit                   : "junit:junit:${junitVersion}",

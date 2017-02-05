@@ -12,12 +12,7 @@ import pl.ipebk.tabi.feedback.FeedbackType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 
 public class FeedbackTypeActivity extends BaseActivity {
-    static final int REQUEST_CODE_ENTRY = 56;
     static final String PARAM_ISSUE_TYPE = "param_issue_type";
-    static final String PARAM_ISSUE_RESULT = "param_issue_result";
-    static final int ISSUE_TYPE_BUG = 1;
-    static final int ISSUE_TYPE_IDEA = 2;
-    static final int ISSUE_TYPE_QUESTION = 3;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +39,6 @@ public class FeedbackTypeActivity extends BaseActivity {
     private void promptIssueInput(FeedbackType type) {
         Intent issueIntent = new Intent(this, FeedbackEntryActivity.class);
         issueIntent.putExtra(PARAM_ISSUE_TYPE, type);
-        startActivityForResult(issueIntent, REQUEST_CODE_ENTRY);
-        overridePendingTransition(0,0);
-    }
-
-    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_ENTRY) {
-            if (resultCode == RESULT_OK) {
-                String issueEntryText = data.getStringExtra(PARAM_ISSUE_RESULT);
-                Toast.makeText(this, issueEntryText, Toast.LENGTH_SHORT).show();
-            }
-        }
+        startActivity(issueIntent);
     }
 }

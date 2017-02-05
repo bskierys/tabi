@@ -7,10 +7,7 @@ package pl.ipebk.tabi.feedback;
 
 import android.content.SharedPreferences;
 
-import com.suredigit.inappfeedback.FeedBackItem;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Class to support storing feedback that could not be sent instantly. It is based on {@link SharedPreferences}
  */
 public class FeedbackStorage {
     private static final String PREF_UNSENT_ITEMS_COUNT = "com.suredigit.feedbackdialog.pending_size";
@@ -26,25 +23,38 @@ public class FeedbackStorage {
     private static final int MAX_ITEMS_COUNT = 20;
 
     private SharedPreferences sharedPreferences;
+    private Gson gson;
 
-    @Inject public FeedbackStorage(SharedPreferences sharedPreferences) {
+    /**
+     * Constructor for {@link FeedbackStorage} class
+     * @param sharedPreferences Instance of {@link SharedPreferences} to store data
+     * @param gson Instance of {@link Gson} to serialize objects
+     */
+    @Inject public FeedbackStorage(SharedPreferences sharedPreferences, Gson gson) {
         this.sharedPreferences = sharedPreferences;
+        this.gson = gson;
     }
 
+    /**
+     * @return Number of items that are currently stored in storage
+     */
     public int getUnsentItemsCount() {
         return sharedPreferences.getInt(PREF_UNSENT_ITEMS_COUNT, 0);
     }
 
-    public List<FeedBackItem> getUnsentItems() {
+    /**
+     * @return List of items stored in storage
+     */
+    public List<FeedbackItem> getUnsentItems() {
         int size = getUnsentItemsCount();
         if (size < 0) {
             return new ArrayList<>();
         } else {
-            List<FeedBackItem> items = new ArrayList<>();
+            List<FeedbackItem> items = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 String jsonTxt = sharedPreferences.getString(getElementPrefKey(i), null);
-                FeedBackItem item = parseJsonToItem(jsonTxt);
-                if(item!=null) {
+                FeedbackItem item = gson.fromJson(jsonTxt, FeedbackItem.class);
+                if (item != null) {
                     items.add(item);
                 }
             }
@@ -52,68 +62,46 @@ public class FeedbackStorage {
         }
     }
 
-    private FeedBackItem parseJsonToItem(String jsonTxt) {
-        if (jsonTxt != null) {
-            JSONObject json = null;
-
-            try {
-                json = new JSONObject(jsonTxt);
-            } catch (JSONException ex) {
-                ex.printStackTrace();
-            }
-
-            try {
-                if (json != null) {
-                    return new FeedBackItem(json.get("comment").toString(),
-                                            json.get("type").toString(),
-                                            json.get("ts").toString(),
-                                            json.get("model").toString(),
-                                            json.get("manufacturer").toString(),
-                                            json.get("sdk").toString(),
-                                            json.get("pname").toString(),
-                                            json.get("UUID").toString(),
-                                            json.get("libver").toString(),
-                                            json.get("versionname").toString(),
-                                            json.get("versioncode").toString(),
-                                            json.get("custommessage").toString());
-                }
-            } catch (JSONException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        }
-        return null;
-    }
-
     private String getElementPrefKey(int i) {
         return PREF_UNSENT_ITEM_ELEMENT + Integer.toString(i);
     }
 
-    public void putUnsentItems(List<FeedBackItem> items) {
-        List<FeedBackItem> itemsStored = getUnsentItems();
+    /**
+     * Adds new items to that stored already in storage. Max number of stored items is 20.
+     */
+    public void putUnsentItems(List<FeedbackItem> items) {
+        List<FeedbackItem> itemsStored = getUnsentItems();
         itemsStored.addAll(items);
-        if(itemsStored.size() > MAX_ITEMS_COUNT) {
-            int difference = MAX_ITEMS_COUNT - itemsStored.size();
-            for(int i = 0; i< difference; i++) {
+        if (itemsStored.size() > MAX_ITEMS_COUNT) {
+            int difference = itemsStored.size() - MAX_ITEMS_COUNT;
+            for (int i = 0; i < difference; i++) {
                 itemsStored.remove(0);
             }
         }
+        clearUnsentItems();
         saveAll(itemsStored);
     }
 
-    private void saveAll(List<FeedBackItem> items) {
+    private void saveAll(List<FeedbackItem> items) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        for(int i=0; i< items.size(); i++) {
-            editor.putString(getElementPrefKey(i), items.get(i).toString());
+        for (int i = 0; i < items.size(); i++) {
+            editor.putString(getElementPrefKey(i), gson.toJson(items.get(i)));
         }
+
+        editor.putInt(PREF_UNSENT_ITEMS_COUNT, items.size());
         editor.apply();
     }
 
+    /**
+     * Deletes all unsent items.
+     */
     public void clearUnsentItems() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        for(int i=0; i< MAX_ITEMS_COUNT; i++) {
+        for (int i = 0; i < MAX_ITEMS_COUNT; i++) {
             editor.remove(getElementPrefKey(i));
         }
+
+        editor.putInt(PREF_UNSENT_ITEMS_COUNT, 0);
         editor.apply();
     }
 }
