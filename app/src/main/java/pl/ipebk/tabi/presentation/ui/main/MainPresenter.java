@@ -8,6 +8,7 @@ package pl.ipebk.tabi.presentation.ui.main;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.BuildConfig;
+import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.localization.DemoGreetingPredicate;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;
@@ -23,16 +24,20 @@ import timber.log.Timber;
 public class MainPresenter extends BasePresenter<MainMvpView> {
     private final DatabaseLoader databaseLoader;
     private Subscription loadSubscription;
+    private Subscription responseSubscription;
     private Stopwatch stopwatch;
     private PreferenceHelper preferenceHelper;
     private DemoGreetingPredicate greetingPredicate;
+    private FeedbackClient feedbackClient;
 
     @Inject public MainPresenter(DatabaseLoader databaseLoader, StopwatchManager stopwatchManager,
-                                 PreferenceHelper preferenceHelper, DemoGreetingPredicate greetingPredicate) {
+                                 PreferenceHelper preferenceHelper, DemoGreetingPredicate greetingPredicate,
+                                 FeedbackClient feedbackClient) {
         this.databaseLoader = databaseLoader;
         this.stopwatch = stopwatchManager.getDefaultStopwatch();
         this.preferenceHelper = preferenceHelper;
         this.greetingPredicate = greetingPredicate;
+        this.feedbackClient = feedbackClient;
     }
 
     @Override public void attachView(MainMvpView mvpView) {
@@ -40,18 +45,32 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
         getMvpView().showLoading();
         loadDatabase();
+        feedbackClient.sendUnsentFeedback()
+                      .subscribe(v -> {
+                      }, error -> {
+                          Timber.w(error, "Could not send feedback. Postponing");
+                      }, () -> {
+                          Timber.d("Success. Previously unsent feedback was just sent");
+                      });
+        responseSubscription = feedbackClient.getPendingResponses().subscribe(response -> {
+            Timber.d("Response from developer: %s", response);
+            getMvpView().showResponseToFeedback(response);
+        }, error -> {
+            Timber.e(error, "Problem getting pending responses");
+        });
     }
 
     @Override public void detachView() {
         super.detachView();
         RxUtil.unsubscribe(loadSubscription);
+        RxUtil.unsubscribe(responseSubscription);
     }
 
     public void refreshView() {
         preferenceHelper.increaseMainScreenVisited();
         int mainScreenVisitedNumber = preferenceHelper.howManyTimesMainScreenVisited();
 
-        if(greetingPredicate.shouldShowDemoGreeting()) {
+        if (greetingPredicate.shouldShowDemoGreeting()) {
             getMvpView().showDemoGreeting();
             greetingPredicate.markDemoGreetingShown();
         }

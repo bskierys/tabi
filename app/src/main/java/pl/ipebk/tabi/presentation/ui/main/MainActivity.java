@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
     @Inject DoodleTextFormatter doodleTextFormatter;
-    @Inject FeedbackClient feedbackClient;
     @BindView(R.id.img_loading) ImageView loadingView;
     @BindView(R.id.category_list) RecyclerView recyclerView;
     @BindView(R.id.search_bar) View searchBar;
@@ -86,19 +85,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
-        // TODO: 2017-02-05 move to presenter
-        feedbackClient.sendUnsentFeedback()
-                      .subscribe(v -> Timber.d("Feedback has been sent"), error -> {
-                          Timber.w(error, "Could not send feedback. Postponing");
-                      }, () -> {
-                          Timber.d("Success. Previously unsent feedback was just sent");
-                      });
-        feedbackClient.getPendingResponses().subscribe(response -> {
-            Timber.d("Response from developer: %s", response);
-            showResponseToFeedback(response);
-        }, error -> {
-            Timber.e(error, "Problem getting pending responses");
-        });
         scrollSubscriptions = new CompositeSubscription();
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
