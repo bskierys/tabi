@@ -1,1 +1,1 @@
-include ':app', ':viewpagerindicator', ':feedback'
+include ':app', ':feedback'

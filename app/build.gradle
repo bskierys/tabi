@@ -133,7 +133,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
-    compile project(':viewpagerindicator')
     compile project(':feedback')
 
     // auto-value
