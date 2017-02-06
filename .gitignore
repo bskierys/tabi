@@ -3,12 +3,14 @@
 /app/build
 /viewpagerindicator/build
 /viewpagerindicator/build/
+/feedback/build/
 .gradle
 
 # iml files ignores
 viewpagerindicator/viewpagerindicator.iml
 app/app.iml
 tabi.iml
+feedback/feedback.iml
 
 # git produced files
 *.class
