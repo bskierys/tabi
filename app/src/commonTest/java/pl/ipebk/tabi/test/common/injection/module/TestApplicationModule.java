@@ -9,13 +9,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.feedback.FeedbackClient;
+import com.suredigit.inappfeedback.FeedbackClient;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;

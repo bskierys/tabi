@@ -3,7 +3,7 @@
 * date: 2017-02-05
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;

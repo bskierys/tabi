@@ -8,7 +8,7 @@ package pl.ipebk.tabi.presentation.ui.main;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.BuildConfig;
-import pl.ipebk.tabi.feedback.FeedbackClient;
+import com.suredigit.inappfeedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.localization.DemoGreetingPredicate;
 import pl.ipebk.tabi.presentation.ui.base.BasePresenter;

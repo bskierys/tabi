@@ -12,7 +12,7 @@ import android.content.SharedPreferences;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import pl.ipebk.tabi.feedback.FeedbackClient;
+import com.suredigit.inappfeedback.FeedbackClient;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.injection.module.ApplicationModule;

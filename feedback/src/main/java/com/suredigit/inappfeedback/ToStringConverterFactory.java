@@ -3,7 +3,7 @@
 * date: 2017-01-31
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

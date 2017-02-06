@@ -3,7 +3,7 @@
 * date: 2017-02-04
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.test.common.utils;
+package com.suredigit.inappfeedback;
 
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;

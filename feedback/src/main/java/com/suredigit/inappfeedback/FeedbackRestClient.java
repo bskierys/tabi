@@ -3,11 +3,9 @@
 * date: 2017-01-31
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import com.github.simonpercic.oklog3.OkLogInterceptor;
-
-import javax.inject.Inject;
 
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;

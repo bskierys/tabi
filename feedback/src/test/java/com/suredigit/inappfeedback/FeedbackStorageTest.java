@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,8 +8,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import pl.ipebk.tabi.test.common.utils.ShadowSharedPreferences;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

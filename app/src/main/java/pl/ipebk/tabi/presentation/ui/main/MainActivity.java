@@ -25,7 +25,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;

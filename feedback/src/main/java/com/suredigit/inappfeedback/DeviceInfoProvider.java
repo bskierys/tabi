@@ -3,14 +3,12 @@
 * date: 2017-01-31
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
-import com.suredigit.inappfeedback.Installation;
 
 /**
  * TODO: Generic description. Replace with real one.

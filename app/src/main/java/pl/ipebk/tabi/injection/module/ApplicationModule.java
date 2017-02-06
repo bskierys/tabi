@@ -10,29 +10,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import pl.ipebk.tabi.feedback.Feedback;
-import pl.ipebk.tabi.feedback.FeedbackClient;
-import pl.ipebk.tabi.feedback.FeedbackTypeAdapterFactory;
+import com.suredigit.inappfeedback.Feedback;
+import com.suredigit.inappfeedback.FeedbackClient;
+
 import pl.ipebk.tabi.injection.ApplicationContext;
-import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
-import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
-import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
-import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
-import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
-import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
-import pl.ipebk.tabi.readmodel.LicensePlateFinder;
-import pl.ipebk.tabi.readmodel.PlaceFinder;
-import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;

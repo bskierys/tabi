@@ -134,6 +134,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
     compile project(':viewpagerindicator')
+    compile project(':feedback')
 
     // auto-value
     apt mobileDependencies.autoValueGson
@@ -187,19 +188,6 @@ dependencies {
     // sqlite
     compile mobileDependencies.sqliteAssetHelper
     compile mobileDependencies.sqlbrite
-
-    // Retrofit
-    compile (mobileDependencies.retrofit){
-        exclude group: "com.squareup.okhttp3", module: "okhttp"
-    }
-    compile (mobileDependencies.retrofitConverter){
-        exclude group: "com.squareup.okhttp3", module: "okhttp"
-    }
-    compile (mobileDependencies.retrofitRxAdapter){
-        exclude group: "com.squareup.okhttp3", module: "okhttp"
-    }
-    compile (mobileDependencies.okLog)
-    compile (mobileDependencies.loggingInterceptor)
 
     // dagger
     compile mobileDependencies.dagger

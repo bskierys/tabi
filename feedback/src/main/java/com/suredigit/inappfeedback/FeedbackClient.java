@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.feedback;
+package com.suredigit.inappfeedback;
 
 import android.support.annotation.NonNull;
 
