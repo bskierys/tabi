@@ -21,13 +21,13 @@ import timber.log.Timber;
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class FeedbackRestClient {
+class FeedbackRestClient {
     private static final String BASE_URL = "http://www.android-feedback.com";
 
     private FeedbackRestService restService;
     private boolean isConfigured;
 
-    @Inject public FeedbackRestClient() {}
+    FeedbackRestClient() {}
 
     private void setupConnection() {
         OkHttpClient.Builder httpBuilder = new OkHttpClient.Builder();
@@ -85,7 +85,7 @@ public class FeedbackRestClient {
         }
     }
 
-    public Observable<String> getPendingReplies(String uuid) {
+    Observable<String> getPendingReplies(String uuid) {
         try {
             checkConfigurationValid();
             return restService.getPendingReplies(uuid);
@@ -94,7 +94,7 @@ public class FeedbackRestClient {
         }
     }
 
-    public Observable<String> postFeedback(String json) {
+    Observable<String> postFeedback(String json) {
         try {
             checkConfigurationValid();
             return restService.postFeedback(json);

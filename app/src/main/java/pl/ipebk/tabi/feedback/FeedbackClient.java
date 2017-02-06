@@ -8,17 +8,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import rx.Observable;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-/*
-* TODO: Generic description. Replace with real one.
-*/
-@Singleton
+/**
+ * Class that handles sending feedback and receiving answers from the web.
+ */
 public class FeedbackClient {
     private static final String LIBRARY_VERSION = "6";
     private String applicationId;
@@ -31,27 +27,40 @@ public class FeedbackClient {
     private FeedbackStorage storage;
     private Gson gson;
 
-    @Inject public FeedbackClient(DeviceInfoProvider infoProvider, FeedbackRestClient restClient,
-                                  FeedbackStorage storage, Gson gson) {
+    private FeedbackClient() {}
+
+    /**
+     * Constructor for {@link FeedbackClient}. Be sure to call {@link #init(String)} before any other method.
+     */
+    FeedbackClient(DeviceInfoProvider infoProvider, FeedbackRestClient restClient,
+                   FeedbackStorage storage, Gson gson) {
         this.deviceInfoProvider = infoProvider;
         this.restClient = restClient;
         this.storage = storage;
         this.gson = gson;
     }
 
-    public void init(@NonNull String appId) {
-        // TODO: 2017-01-31 better initialization
-        if (appId.equals(applicationId)) {
-            return;
+    /**
+     * Initialises client for given application
+     *
+     * @param appId Application id from web page
+     */
+    void init(@NonNull String appId) {
+        if (!appId.equals(applicationId)) {
+            this.feedbackItems = new ArrayList<>();
+            this.applicationId = appId;
+            this.installationId = deviceInfoProvider.getInstallationId();
+            this.loadUnsentItems();
         }
-
-        this.feedbackItems = new ArrayList<>();
-        this.applicationId = appId;
-        this.installationId = deviceInfoProvider.getInstallationId();
-        this.loadUnsentItems();
     }
 
+    /**
+     * Current version of library does not send unsent feedback by default. Use this to invoke this method when needed.
+     *
+     * @return Observable that completes when sending is completed
+     */
     public Observable<Void> sendUnsentFeedback() {
+        checkNotNull(applicationId, "Feedback client was not initialised");
         this.loadUnsentItems();
         if (this.feedbackItems.size() > 0) {
             Timber.d("Found pending feedback items");
@@ -61,26 +70,33 @@ public class FeedbackClient {
         }
     }
 
-    // TODO: 2017-01-31 doc?
+    /**
+     * Sends feedback of given type to server.
+     *
+     * @param comment Comment given by the user
+     * @param type Type of given feedback
+     * @return Observable emitting onComplete when feedback is sent
+     */
     public Observable<Void> sendFeedback(String comment, FeedbackType type) {
+        checkNotNull(applicationId, "Feedback client was not initialised");
         return sendFeedback(createFeedBackItem(comment, type));
     }
 
     private FeedbackItem createFeedBackItem(String comment, FeedbackType type) {
-        String currentSeconds = Long.toString(System.currentTimeMillis() / 1000L);
+        long currentSeconds = System.currentTimeMillis() / 1000L;
         String model = deviceInfoProvider.getDeviceModel();
         String manufacturer = deviceInfoProvider.getDeviceManufacturer();
-        String sdk = String.valueOf(deviceInfoProvider.getSdkVersion());
+        int sdkVersion = deviceInfoProvider.getSdkVersion();
         String uuid = this.installationId;
         String versionName = deviceInfoProvider.getAppVersionName();
-        String versionCode = Integer.toString(deviceInfoProvider.getAppVersionCode());
+        int versionCode = deviceInfoProvider.getAppVersionCode();
 
-        return FeedbackItem.create(comment, type.toString(), currentSeconds, model,
-                                   manufacturer, sdk, deviceInfoProvider.getPackageName(),
+        return FeedbackItem.create(comment, type, currentSeconds, model,
+                                   manufacturer, sdkVersion, deviceInfoProvider.getPackageName(),
                                    uuid, LIBRARY_VERSION, versionName, versionCode, "");
     }
 
-    protected Observable<Void> sendFeedback(FeedbackItem fi) {
+    private Observable<Void> sendFeedback(FeedbackItem fi) {
         String submitJson = getJsonForFeedbackItem(fi);
         Timber.d("Sending feedback: %s", submitJson);
         return Observable.create(subscriber -> {
@@ -123,6 +139,11 @@ public class FeedbackClient {
         return gson.toJson(submit);
     }
 
+    /**
+     * Current version of library does not get responses automatically. Use this to invoke this method when needed.
+     *
+     * @return Observable that emits received feedback
+     */
     public Observable<String> getPendingResponses() {
         return restClient.getPendingReplies(installationId)
                          .subscribeOn(Schedulers.io())
@@ -137,5 +158,17 @@ public class FeedbackClient {
     private void loadUnsentItems() {
         this.feedbackItems.clear();
         this.feedbackItems = storage.getUnsentItems();
+    }
+
+    private void checkNotNull(Object o, String message) {
+        if (o == null) {
+            throw new FeedbackClientException(message);
+        }
+    }
+
+    public static class FeedbackClientException extends RuntimeException {
+        FeedbackClientException(String message) {
+            super(message);
+        }
     }
 }

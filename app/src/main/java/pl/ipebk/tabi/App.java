@@ -14,6 +14,7 @@ import com.github.bskierys.pine.Pine;
 import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 
 import io.fabric.sdk.android.Fabric;
+import pl.ipebk.tabi.feedback.Feedback;
 import pl.ipebk.tabi.injection.component.DaggerViewComponent;
 import pl.ipebk.tabi.injection.component.ViewComponent;
 import pl.ipebk.tabi.injection.component.ApplicationComponent;
@@ -33,6 +34,7 @@ public class App extends Application {
     @Override public void onCreate() {
         super.onCreate();
 
+        Feedback.init(this, "AF-8DE6899E68E4-F6");
         if (BuildConfig.DEBUG) {
             Timber.plant(new Pine.Builder().addPackageReplacePattern(getPackageName(),"TABI").grow());
         } else {

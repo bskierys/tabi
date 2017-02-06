@@ -67,7 +67,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
     @State boolean isDialogShown;
 
@@ -88,8 +87,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
         // TODO: 2017-02-05 move to presenter
-        feedbackApiKey = getString(R.string.feedback_api_key);
-        feedbackClient.init(feedbackApiKey);
         feedbackClient.sendUnsentFeedback()
                       .subscribe(v -> Timber.d("Feedback has been sent"), error -> {
                           Timber.w(error, "Could not send feedback. Postponing");

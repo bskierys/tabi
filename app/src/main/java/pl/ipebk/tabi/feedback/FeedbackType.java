@@ -5,9 +5,6 @@
 */
 package pl.ipebk.tabi.feedback;
 
-/**
- * TODO: Generic description. Replace with real one.
- */
 public enum FeedbackType {
     BUG,
     IDEA,

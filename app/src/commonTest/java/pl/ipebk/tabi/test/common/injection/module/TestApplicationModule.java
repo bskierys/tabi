@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
@@ -75,7 +76,7 @@ public class TestApplicationModule {
         return mock(SharedPreferences.class);
     }
 
-    @Provides public Gson provideGson() {
-        return mock(Gson.class);
+    @Provides public FeedbackClient provideFeedbackClient() {
+        return mock(FeedbackClient.class);
     }
 }

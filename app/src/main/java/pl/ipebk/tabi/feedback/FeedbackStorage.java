@@ -12,12 +12,10 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 /**
  * Class to support storing feedback that could not be sent instantly. It is based on {@link SharedPreferences}
  */
-public class FeedbackStorage {
+class FeedbackStorage {
     private static final String PREF_UNSENT_ITEMS_COUNT = "com.suredigit.feedbackdialog.pending_size";
     private static final String PREF_UNSENT_ITEM_ELEMENT = "com.suredigit.feedbackdialog.pending_item_";
     private static final int MAX_ITEMS_COUNT = 20;
@@ -25,12 +23,14 @@ public class FeedbackStorage {
     private SharedPreferences sharedPreferences;
     private Gson gson;
 
+    private FeedbackStorage() {}
+
     /**
      * Constructor for {@link FeedbackStorage} class
      * @param sharedPreferences Instance of {@link SharedPreferences} to store data
      * @param gson Instance of {@link Gson} to serialize objects
      */
-    @Inject public FeedbackStorage(SharedPreferences sharedPreferences, Gson gson) {
+    FeedbackStorage(SharedPreferences sharedPreferences, Gson gson) {
         this.sharedPreferences = sharedPreferences;
         this.gson = gson;
     }
@@ -38,14 +38,14 @@ public class FeedbackStorage {
     /**
      * @return Number of items that are currently stored in storage
      */
-    public int getUnsentItemsCount() {
+    int getUnsentItemsCount() {
         return sharedPreferences.getInt(PREF_UNSENT_ITEMS_COUNT, 0);
     }
 
     /**
      * @return List of items stored in storage
      */
-    public List<FeedbackItem> getUnsentItems() {
+    List<FeedbackItem> getUnsentItems() {
         int size = getUnsentItemsCount();
         if (size < 0) {
             return new ArrayList<>();
@@ -69,7 +69,7 @@ public class FeedbackStorage {
     /**
      * Adds new items to that stored already in storage. Max number of stored items is 20.
      */
-    public void putUnsentItems(List<FeedbackItem> items) {
+    void putUnsentItems(List<FeedbackItem> items) {
         List<FeedbackItem> itemsStored = getUnsentItems();
         itemsStored.addAll(items);
         if (itemsStored.size() > MAX_ITEMS_COUNT) {
@@ -95,7 +95,7 @@ public class FeedbackStorage {
     /**
      * Deletes all unsent items.
      */
-    public void clearUnsentItems() {
+    void clearUnsentItems() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         for (int i = 0; i < MAX_ITEMS_COUNT; i++) {
             editor.remove(getElementPrefKey(i));

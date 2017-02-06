@@ -13,23 +13,23 @@ import com.google.gson.annotations.SerializedName;
 @AutoValue
 public abstract class FeedbackItem {
     abstract String comment();
-    abstract String type();
-    abstract String ts();
+    abstract FeedbackType type();
+    @SerializedName("ts")abstract long timeCreated();
     @SerializedName("model") abstract String deviceModel();
     @SerializedName("manufacturer") abstract String deviceManufacturer();
-    abstract String sdk();
+    @SerializedName("sdk") abstract int sdkVersion();
     @SerializedName("pname") abstract String packageName();
     @SerializedName("UUID") abstract String installId();
     @SerializedName("libver") abstract String libraryVersion();
     @SerializedName("versionname") abstract String versionName();
-    @SerializedName("versioncode") abstract String versionCode();
+    @SerializedName("versioncode") abstract int versionCode();
     @SerializedName("custommessage") abstract String customMessage();
 
-    public static FeedbackItem create(String comment, String type, String ts, String model, String manufact,
-                                      String sdk, String pname, String UUID, String LIBVER, String versionName,
-                                      String versionCode, String customMesssage) {
-        return new AutoValue_FeedbackItem(comment, type, ts, model, manufact, sdk, pname, UUID, LIBVER,
-                                          versionName, versionCode, customMesssage);
+    public static FeedbackItem create(String comment, FeedbackType type, long time, String model, String manufact,
+                                      int sdkVersion, String packageName, String UUID, String libVersion, String versionName,
+                                      int versionCode, String customMessage) {
+        return new AutoValue_FeedbackItem(comment, type, time, model, manufact, sdkVersion, packageName, UUID, libVersion,
+                                          versionName, versionCode, customMessage);
     }
 
     public static TypeAdapter<FeedbackItem> typeAdapter(Gson gson) {

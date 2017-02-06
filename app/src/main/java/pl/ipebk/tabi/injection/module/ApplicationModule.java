@@ -17,6 +17,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import pl.ipebk.tabi.feedback.Feedback;
+import pl.ipebk.tabi.feedback.FeedbackClient;
 import pl.ipebk.tabi.feedback.FeedbackTypeAdapterFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
@@ -74,7 +76,7 @@ public class ApplicationModule {
         return PreferenceManager.getDefaultSharedPreferences(application);
     }
 
-    @Provides public Gson provideGson() {
-        return new GsonBuilder().registerTypeAdapterFactory(FeedbackTypeAdapterFactory.create()).create();
+    @Provides public FeedbackClient provideFeedbackClient() {
+        return Feedback.getClient();
     }
 }

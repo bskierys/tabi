@@ -129,9 +129,9 @@ public class FeedbackStorageTest {
         }
 
         private FeedbackItem createFeedbackItem(String comment, FeedbackType type) {
-            return FeedbackItem.create(comment, type.toString(), "ts", "model", "manufact",
-                                       "sdk", "pname", "uuid", "libver", "versionName",
-                                       "versionCode", "custom");
+            return FeedbackItem.create(comment, type, 1234L, "model", "manufact",
+                                       16, "pname", "uuid", "libver", "versionName",
+                                       245, "custom");
         }
     }
 

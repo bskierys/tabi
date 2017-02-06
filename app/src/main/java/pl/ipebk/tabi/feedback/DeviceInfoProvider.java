@@ -6,50 +6,55 @@
 package pl.ipebk.tabi.feedback;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 
 import com.suredigit.inappfeedback.Installation;
 
-import javax.inject.Inject;
-
-import pl.ipebk.tabi.BuildConfig;
-import pl.ipebk.tabi.injection.ApplicationContext;
-
 /**
  * TODO: Generic description. Replace with real one.
  */
-public class DeviceInfoProvider {
+class DeviceInfoProvider {
+    private PackageInfo packageInfo;
     private Context context;
 
-    @Inject public DeviceInfoProvider(@ApplicationContext Context context) {
+    private DeviceInfoProvider() {}
+
+    DeviceInfoProvider(Context context) {
         this.context = context;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException("Could not find package info for package");
+        }
     }
 
-    public String getInstallationId() {
+    String getInstallationId() {
         return Installation.id(context);
     }
 
-    public int getAppVersionCode() {
-        return BuildConfig.VERSION_CODE;
+    int getAppVersionCode() {
+        return packageInfo.versionCode;
     }
 
-    public String getAppVersionName() {
-        return BuildConfig.VERSION_NAME;
+    String getAppVersionName() {
+        return packageInfo.versionName;
     }
 
-    public String getPackageName() {
+    String getPackageName() {
         return context.getPackageName();
     }
 
-    public String getDeviceModel() {
+    String getDeviceModel() {
         return Build.MODEL;
     }
 
-    public String getDeviceManufacturer() {
+    String getDeviceManufacturer() {
         return Build.MANUFACTURER;
     }
 
-    public int getSdkVersion() {
+    int getSdkVersion() {
         return Build.VERSION.SDK_INT;
     }
 }
