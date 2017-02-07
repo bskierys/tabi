@@ -9,8 +9,8 @@
         android:layout_height="match_parent"
         android:background="@color/colorBackgroundLight"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/Category.Padding.Info.Vertical"
-        android:paddingTop="@dimen/Category.Padding.Info.Vertical">
+        android:paddingBottom="@dimen/Category.Padding.Info.Bottom"
+        android:paddingTop="@dimen/Category.Padding.Info.Top">
 
         <RelativeLayout
             android:layout_width="@dimen/Margin.Horizontal"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/Margin.Horizontal"
+            android:paddingLeft="@dimen/Category.Margin.Horizontal.MinusButton"
             android:paddingRight="@dimen/Margin.Horizontal">
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
@@ -37,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/Category.Paragraph.Margin"
+                android:paddingLeft="@dimen/Category.Margin.Left.NoButton"
                 android:text="@string/preview_category_info_title"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
@@ -44,7 +45,7 @@
                 style="@style/Text_Body.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/Category.Paragraph.Margin"
+                android:paddingLeft="@dimen/Category.Margin.Left.NoButton"
                 android:text="@string/preview_category_info_body"/>
 
             <pl.ipebk.tabi.presentation.ui.custom.FontTextView
@@ -52,6 +53,12 @@
                 style="@style/Text_Body2.Accent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:minHeight="@dimen/Button.Height.Min"
+                android:paddingLeft="@dimen/Category.Margin.Left.NoButton"
+                android:paddingRight="@dimen/Category.Margin.Left.NoButton"
                 android:text="@string/category_read_more"/>
         </LinearLayout>
     </RelativeLayout>
