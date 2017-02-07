@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:tools="http://schemas.android.com/tools"
-       tools:ignore="contentDescription">
+       tools:ignore="contentDescription"
+       tools:showIn="@layout/content_details">
 
     <ImageView
         android:id="@+id/ic_row"
@@ -18,12 +19,12 @@
         android:layout_marginLeft="@dimen/Details.Margin.Outer"
         android:layout_marginRight="@dimen/Details.Margin.Outer"
         android:layout_weight="1"
-        android:text="@string/preview_place_name"/>
+        tools:text="@string/preview_place_name"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_plate"
         style="@style/Text_Title2.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/preview_plate"/>
+        tools:text="@string/preview_plate"/>
 </merge>

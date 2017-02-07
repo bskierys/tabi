@@ -40,18 +40,19 @@ import static org.mockito.Mockito.*;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
-public class PlaceItemAdapterTest {
+public class SearchPlaceItemAdapterTest {
 
     @Mock List<PlaceAndPlateDto> mockItems;
-    @Mock PlaceFragmentEventListener eventListener;
+    @Mock PlaceItemAdapter.PlaceClickListener placeListener;
+    @Mock SearchPlaceItemAdapter.HeaderClickListener headerListener;
     @Mock Cursor cursor;
 
     private TestPlaceLocalizationHelper localizationHelper;
     private TestRandomTextProvider randomProvider;
     private PlaceAndPlateFactory factory;
-    private PlaceItemAdapter.HeaderViewHolder headerHolder;
-    private PlaceItemAdapter.ItemViewHolder itemHolder;
-    private PlaceItemAdapter adapter;
+    private SearchPlaceItemAdapter.HeaderViewHolder headerHolder;
+    private SearchPlaceItemAdapter.ItemViewHolder itemHolder;
+    private SearchPlaceItemAdapter adapter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -66,18 +67,19 @@ public class PlaceItemAdapterTest {
         application.setViewComponent(testComponent);
 
         when(cursor.getCount()).thenReturn(1);
-        adapter = new TestablePlaceItemAdapter(cursor, application);
-        adapter.setEventListener(eventListener);
+        adapter = new TestablePlaceItemAdapter(cursor, application, randomProvider, factory);
+        adapter.setPlaceClickListener(placeListener);
+        adapter.setHeaderClickListener(headerListener);
         adapter.setType(SearchType.LICENSE_PLATE);
 
         LayoutInflater inflater = (LayoutInflater) RuntimeEnvironment
                 .application.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View listItemView = inflater.inflate(R.layout.row_place, null, false);
-        itemHolder = new PlaceItemAdapter.ItemViewHolder(listItemView);
+        itemHolder = new SearchPlaceItemAdapter.ItemViewHolder(listItemView);
 
         View listHeaderView = inflater.inflate(R.layout.row_place_header, null, false);
-        headerHolder = new PlaceItemAdapter.HeaderViewHolder(listHeaderView);
+        headerHolder = new SearchPlaceItemAdapter.HeaderViewHolder(listHeaderView);
     }
 
     // TODO: 2016-12-14 separate into more tests
@@ -100,7 +102,7 @@ public class PlaceItemAdapterTest {
 
         itemHolder.root.performClick();
 
-        verify(eventListener).onPlaceItemClicked(agIdEq(new AggregateId(10)), eq("TAB"),
+        verify(placeListener).onPlaceItemClicked(agIdEq(new AggregateId(10)), eq("TAB"),
                                                  eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH));
     }
 
@@ -132,7 +134,7 @@ public class PlaceItemAdapterTest {
 
         headerHolder.root.performClick();
 
-        verify(eventListener).onHeaderClicked(1);
+        verify(headerListener).onHeaderClicked(1);
     }
 
     @Test public void testBindRandomPlacePlateSection() throws Exception {
@@ -175,9 +177,11 @@ public class PlaceItemAdapterTest {
         return argThat(new AggregateIdMatcher(expected));
     }
 
-    public class TestablePlaceItemAdapter extends PlaceItemAdapter {
-        public TestablePlaceItemAdapter(Cursor cursor, Context context) {
-            super(cursor, context);
+    public class TestablePlaceItemAdapter extends SearchPlaceItemAdapter {
+        public TestablePlaceItemAdapter(Cursor cursor, Context context,
+                                        RandomTextProvider randomTextProvider,
+                                        PlaceAndPlateFactory factory) {
+            super(cursor, context, randomTextProvider, factory);
         }
 
         @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {

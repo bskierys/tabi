@@ -35,7 +35,6 @@
     <dimen name="Details.Margin.Map.Top">44dp</dimen>
     <dimen name="Details.Height.Row.Icon">20dp</dimen>
     <dimen name="Details.Width.Row.Icon">16dp</dimen>
-    <dimen name="Details.Margin.Right">56dp</dimen>
     <dimen name="Details.Margin.Description.Horizontal">20dp</dimen>
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
     <dimen name="Details.Elevation">3dp</dimen>
@@ -95,6 +94,16 @@
     <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
 
+    <!--  CATEGORIES  -->
+    <dimen name="Category.Toolbar.Limit">8dp</dimen>
+    <dimen name="Category.Paragraph.Margin">8dp</dimen>
+    <dimen name="Category.Padding.Info.Top">24dp</dimen>
+    <dimen name="Category.Padding.Info.Bottom">12dp</dimen>
+    <dimen name="Category.Height.Info.Icon">30dp</dimen>
+    <dimen name="Category.Width.Info.Icon">16dp</dimen>
+    <dimen name="Category.Margin.Left.NoButton">16dp</dimen>
+    <dimen name="Category.Margin.Horizontal.MinusButton">40dp</dimen>
+
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
     <dimen name="StatusBar">22dp</dimen>
@@ -103,7 +112,10 @@
     <dimen name="Button.Secondary.Width">144dp</dimen>
     <dimen name="Toolbar.Icon.Margin">16dp</dimen>
     <dimen name="Toolbar.Height.Min">56dp</dimen>
+    <dimen name="Toolbar.Elevation">4dp</dimen>
     <dimen name="Paragraph.Margin.Display">12dp</dimen>
+    <dimen name="Margin.Horizontal">56dp</dimen>
+    <dimen name="Button.Height.Min">36dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

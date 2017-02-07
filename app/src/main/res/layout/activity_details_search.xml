@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.ui.details.DetailsActivity"
+    tools:context=".presentation.ui.details.DetailsSearchActivity"
     tools:ignore="contentDescription">
 
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
@@ -21,23 +21,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@color/black_30"/>
-
-        <ScrollView
-            android:id="@+id/scroll_container"
-            android:background="@color/colorBackgroundLight"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="@bool/isPortrait"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <include layout="@layout/content_details"/>
-        </ScrollView>
-
-        <ImageView style="@style/Shadow.2dp"/>
+        <include layout="@layout/content_details_scroll"/>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
