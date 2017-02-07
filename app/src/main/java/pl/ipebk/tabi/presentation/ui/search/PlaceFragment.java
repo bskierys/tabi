@@ -12,9 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
 /**
@@ -25,13 +29,15 @@ public class PlaceFragment extends Fragment {
     static final int SECTION_FIRST_POSITION = 0;
     static final int SECTION_SECOND_POSITION = 4;
 
+    @Inject RandomTextProvider randomTextProvider;
+    @Inject PlaceAndPlateFactory placeFactory;
     @BindView(R.id.img_no_results) ImageView noResultsImage;
     @BindView(R.id.place_list) RecyclerView recyclerView;
 
     protected SearchType type;
     private boolean viewCreated;
     private Cursor placeCursor;
-    private PlaceItemAdapter adapter;
+    private SearchPlaceItemAdapter adapter;
     private PlaceFragmentEventListener fragmentEventListener;
 
     @SuppressWarnings("unused")
@@ -45,6 +51,7 @@ public class PlaceFragment extends Fragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.get(getActivity()).getViewComponent().inject(this);
 
         if (getArguments() != null) {
             int typeOrdinal = getArguments().getInt(ARG_FRAGMENT_TYPE);
@@ -86,10 +93,11 @@ public class PlaceFragment extends Fragment {
     /**
      * Test methods to be replaced with mocks
      */
-    public PlaceItemAdapter getAdapter() {
+    public SearchPlaceItemAdapter getAdapter() {
         if (adapter == null) {
-            adapter = new PlaceItemAdapter(placeCursor, getActivity());
-            adapter.setEventListener(fragmentEventListener);
+            adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory);
+            adapter.setHeaderClickListener(s -> fragmentEventListener.onHeaderClicked(s));
+            adapter.setPlaceClickListener((id, plate, sType, pType) -> fragmentEventListener.onPlaceItemClicked(id, plate, sType, pType));
             adapter.setType(type);
         }
 

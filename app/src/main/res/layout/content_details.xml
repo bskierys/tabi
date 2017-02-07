@@ -4,9 +4,8 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".presentation.ui.details.DetailsActivity"
-              tools:ignore="contentDescription"
-              tools:showIn="@layout/activity_details">
+              tools:background="@color/white"
+              tools:ignore="contentDescription">
 
     <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
         android:id="@+id/wrap_place_header"
@@ -30,28 +29,32 @@
         android:id="@+id/img_placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/description_placeholder"
         android:paddingLeft="@dimen/Details.Padding.Doodle.Horizontal"
         android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
-        android:contentDescription="@string/description_placeholder"
         android:visibility="gone"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_voivodeship"
         style="@style/Details_Text.Description"
-        android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"/>
+        android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
+        tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_powiat"
-        style="@style/Details_Text.Description"/>
+        style="@style/Details_Text.Description"
+        tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_gmina"
-        style="@style/Details_Text.Description"/>
+        style="@style/Details_Text.Description"
+        tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_additional"
         style="@style/Details_Text.Description"
-        android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"/>
+        android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"
+        tools:text="example text"/>
 
     <RelativeLayout
         android:id="@+id/map_with_panel"

@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-02-26
+* date: 2017-01-28
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.presentation.ui.details;
@@ -12,6 +12,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.presentation.model.place.Place;
@@ -38,16 +39,19 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private PlaceFactory placeFactory;
     private ClipboardCopyMachine clipboardCopyMachine;
     private MapScaleCalculator mapScaleCalculator;
+    private PlaceLocalizationHelper localizationHelper;
 
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
     @Inject public DetailsPresenter(PlaceRepository repository, ClipboardCopyMachine clipboardCopyMachine,
-                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory) {
+                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory,
+                                    PlaceLocalizationHelper localizationHelper) {
         this.repository = repository;
         this.clipboardCopyMachine = clipboardCopyMachine;
         this.placeFactory = placeFactory;
         this.mapScaleCalculator = mapScaleCalculator;
+        this.localizationHelper = localizationHelper;
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -64,7 +68,6 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
     public void loadPlace(long id, String searchedPlate, SearchType searchType, PlaceListItemType itemType) {
         getMvpView().disableActionButtons();
-        getMvpView().showSearchedText(searchedPlate);
         showPlaceIconBasedOnItemType(itemType);
 
         if (searchedPlate != null && searchType == SearchType.LICENSE_PLATE) {
@@ -167,7 +170,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
 
         String size = String.format(Locale.getDefault(), "%dx%d", width, height);
         String language = Locale.getDefault().getLanguage();
-        String placeName = place + "," + getMvpView().getLocalizedPoland();
+        String placeName = localizationHelper.formatPlaceToSearch(place);
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http");

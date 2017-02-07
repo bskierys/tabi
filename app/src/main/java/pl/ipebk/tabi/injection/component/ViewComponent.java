@@ -12,13 +12,14 @@ import pl.ipebk.tabi.injection.module.ApplicationModule;
 import pl.ipebk.tabi.injection.module.ViewModule;
 import pl.ipebk.tabi.presentation.ui.custom.FontDecorator;
 import pl.ipebk.tabi.presentation.ui.details.DetailsButton;
-import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
+import pl.ipebk.tabi.presentation.ui.search.PlaceFragment;
+import pl.ipebk.tabi.presentation.ui.search.SearchPlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 
 @Singleton
 @Component(dependencies = ApplicationModule.class, modules = ViewModule.class)
 public interface ViewComponent {
-    void inject(PlaceItemAdapter adapter);
+    void inject(PlaceFragment fragment);
     void inject(FontDecorator decorator);
     void inject(DetailsButton button);
     void inject(SearchTabPageIndicator indicator);

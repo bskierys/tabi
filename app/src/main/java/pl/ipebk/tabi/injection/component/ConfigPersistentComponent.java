@@ -8,6 +8,7 @@ package pl.ipebk.tabi.injection.component;
 import dagger.Component;
 import pl.ipebk.tabi.injection.ConfigPersistent;
 import pl.ipebk.tabi.injection.module.ActivityModule;
+import pl.ipebk.tabi.injection.module.FragmentModule;
 
 /**
  * A dagger component that will live during the lifecycle of an Activity but it won't be destroy during configuration
@@ -19,4 +20,5 @@ import pl.ipebk.tabi.injection.module.ActivityModule;
 @Component(dependencies = {ApplicationComponent.class})
 public interface ConfigPersistentComponent {
     ActivityComponent activityComponent(ActivityModule activityModule);
+    FragmentComponent fragmentComponent(FragmentModule fragmentModule);
 }

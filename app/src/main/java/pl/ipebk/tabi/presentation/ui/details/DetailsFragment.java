@@ -1,3 +1,8 @@
+/*
+* author: Bartlomiej Kierys
+* date: 2017-01-28
+* email: bskierys@gmail.com
+*/
 package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.AnimatorSet;
@@ -7,19 +12,18 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,17 +39,12 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
-import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
-import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
-import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
-import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
-import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
@@ -56,11 +55,11 @@ import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
 import timber.log.Timber;
 
-public class DetailsActivity extends BaseActivity implements DetailsMvpView, Callback {
-    public final static String PARAM_PLACE_ID = "param_place_id";
-    public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
-    public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
-    public final static String PARAM_ITEM_TYPE = "param_item_type";
+public class DetailsFragment extends BaseFragment implements DetailsMvpView, Callback {
+    private final static String ARG_PLACE_ID = "param_place_id";
+    private final static String ARG_SEARCHED_PLATE = "param_searched_plate";
+    private final static String ARG_SEARCHED_TYPE = "param_searched_type";
+    private final static String ARG_ITEM_TYPE = "param_item_type";
 
     @Inject DetailsPresenter presenter;
     @Inject Picasso picasso;
@@ -68,11 +67,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
     @Inject MapScaleCalculator mapScaleCalculator;
-    // toolbar
-    @BindView(R.id.txt_searched) TextView searchedTextView;
-    @BindView(R.id.editTxt_search) EditText searchedEditText;
-    @BindView(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
-    @BindView(R.id.btn_clear) View clearButton;
+    @Inject CustomTabActivityHelper chromeTabHelper;
+
     // texts
     @BindView(R.id.txt_place_name) TextView placeNameView;
     @BindView(R.id.txt_plate) TextView plateView;
@@ -91,38 +87,49 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     @BindView((R.id.ic_row)) ImageView placeIcon;
     @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @BindView(R.id.img_placeholder) ImageView placeHolder;
-    @BindView(R.id.scroll_container) ScrollView scrollContainer;
 
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
-    private CustomTabActivityHelper chromeTabHelper;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_details);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
-        getActivityComponent().inject(this);
+    public static DetailsFragment newInstance(long placeId, String searchedPlate,
+                                              PlaceListItemType itemType, SearchType searchType) {
+        Bundle args = new Bundle();
 
+        DetailsFragment fragment = new DetailsFragment();
+        args.putLong(ARG_PLACE_ID, placeId);
+        args.putString(ARG_SEARCHED_PLATE, searchedPlate);
+        args.putSerializable(ARG_ITEM_TYPE, itemType);
+        args.putSerializable(ARG_SEARCHED_TYPE, searchType);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        fragmentComponent().inject(this);
         presenter.attachView(this);
-        toolbarIndicator.setVisibility(View.GONE);
+    }
+
+    @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.content_details, container, false);
+        ButterKnife.bind(this, view);
+
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
-        chromeTabHelper = new CustomTabActivityHelper();
 
         stopwatch = stopwatchManager.getDefaultStopwatch();
         stopwatch.reset();
         clearPreviewLayout();
-        prepareOverScroll();
         loadData();
 
-        Timber.d("Activity creation time: %s", stopwatch.getElapsedTimeString());
+        Timber.d("Fragment layout creation time: %s", stopwatch.getElapsedTimeString());
+
+        return view;
     }
 
     private void clearPreviewLayout() {
@@ -136,34 +143,12 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         plateView.setTextIsSelectable(true);
     }
 
-    private void prepareOverScroll() {
-        float marginOffset = getResources()
-                .getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            scrollContainer.setElevation(getResources().getDimensionPixelSize(R.dimen.Details_Elevation));
-        }
-
-        ObservableVerticalOverScrollBounceEffectDecorator decorator =
-                new ObservableVerticalOverScrollBounceEffectDecorator(
-                        new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f,
-                        VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK,
-                        -1
-                );
-
-        decorator.getReleaseEventStream()
-                 .filter(scroll -> scroll != null)
-                 .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
-                 .subscribe(scroll -> Timber.d("Overscrolled"));
-    }
-
     private void loadData() {
-        Intent intent = getIntent();
-        long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
-        String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
-        PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
-        SearchType searchType = SearchType.values()
-                [intent.getIntExtra(PARAM_SEARCHED_TYPE, SearchType.UNKNOWN.ordinal())];
+        Bundle args = getArguments();
+        long placeId = args.getLong(ARG_PLACE_ID, 0L);
+        String searchedPlate = args.getString(ARG_SEARCHED_PLATE);
+        PlaceListItemType itemType = (PlaceListItemType) args.getSerializable(ARG_ITEM_TYPE);
+        SearchType searchType = (SearchType) args.getSerializable(ARG_SEARCHED_TYPE);
         if (placeId > 0) {
             presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
@@ -187,10 +172,10 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         });
     }
 
-    @Override protected void onStart() {
+    @Override public void onStart() {
         super.onStart();
-        chromeTabHelper.bindCustomTabsService(this);
-        if(preloadedSearchPhrase!=null) {
+        chromeTabHelper.bindCustomTabsService(getActivity());
+        if (preloadedSearchPhrase != null) {
             Uri uri = Uri.parse(preloadedSearchPhrase);
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
@@ -201,28 +186,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         set.start();
     }
 
-    @Override protected void onStop() {
-        super.onStop();
-        chromeTabHelper.unbindCustomTabsService(this);
-    }
-
-    @Override protected void onDestroy() {
+    @Override public void onDestroy() {
         super.onDestroy();
         presenter.detachView();
-    }
-
-    @OnClick(R.id.btn_back) public void onBackButton() {
-        // TODO: 2016-03-30 animation on back
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.btn_clear) public void onClearButton() {
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
-        intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, "");
-        startActivity(intent);
     }
 
     @OnClick(R.id.btn_google_it) public void onSearchMore() {
@@ -237,24 +203,8 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         presenter.copyToClipboard();
     }
 
-    @OnClick(R.id.txt_searched) public void onSearchClicked() {
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, true);
-        startActivity(intent);
-    }
-
     @Override public void showPlaceIcon(int iconResId) {
         placeIcon.setImageResource(iconResId);
-    }
-
-    @Override public void showSearchedText(String searchedText) {
-        searchedEditText.setVisibility(View.GONE);
-        searchedTextView.setText(searchedText);
-        if (searchedText != null && !searchedText.equals("")) {
-            clearButton.setVisibility(View.VISIBLE);
-        } else {
-            clearButton.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override public void showPlaceName(String name) {
@@ -282,7 +232,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showMap(Uri uri) {
-        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(getActivity())
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
                 .headerFont(doodleHeaderFont)
@@ -315,7 +265,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showMapError() {
-        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(getActivity())
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
                 .headerFont(doodleHeaderFont)
@@ -360,14 +310,14 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     @Override public void showInfoMessageCopied() {
-        Toast.makeText(this, getString(R.string.details_info_copy_done), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.details_info_copy_done), Toast.LENGTH_SHORT).show();
     }
 
     @Override public void startMapApp(Uri geoLocation) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         intent.setPackage("com.google.android.apps.maps");
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivity(intent);
         } else {
             Timber.e("Cannot find activity to start for maps");
@@ -389,11 +339,11 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         CustomTabsIntent.Builder intentBuilder = new CustomTabsIntent.Builder();
         intentBuilder.setToolbarColor(primaryColor);
         intentBuilder.enableUrlBarHiding();
-        intentBuilder.setStartAnimations(this, 0, 0);
-        intentBuilder.setExitAnimations(this, 0 ,0);
+        intentBuilder.setStartAnimations(getActivity(), 0, 0);
+        intentBuilder.setExitAnimations(getActivity(), 0, 0);
 
         CustomTabsIntent customTabsIntent = intentBuilder.build();
-        chromeTabHelper.openCustomTab(this, customTabsIntent, Uri.parse(url), ((activity, uri) -> {
+        chromeTabHelper.openCustomTab(getActivity(), customTabsIntent, Uri.parse(url), ((activity, uri) -> {
             Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
             intent.putExtra(SearchManager.QUERY, searchPhrase);
             startActivity(intent);
@@ -430,13 +380,9 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
         return mapHeightStream.asObservable();
     }
 
-    @Override public String getLocalizedPoland() {
-        return getString(R.string.details_country);
-    }
-
     private void setPlaceHolderImage() {
         DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int headerHeight = getActionBarSize() + getStatusBarHeight() + placeHeaderWrapper.getHeight();
 
         int preferredPlaceholderSize = getResources().getDimensionPixelSize(R.dimen.Details_Height_Placeholder);
@@ -448,7 +394,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
             height = preferredPlaceholderSize;
         }
 
-        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(this)
+        DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(getActivity())
                 .height(height - placeHolder.getPaddingTop() - placeHolder.getPaddingBottom())
                 .width(width - placeHolder.getPaddingRight() - placeHolder.getPaddingLeft())
                 .headerFont(doodleHeaderFont)
@@ -483,7 +429,7 @@ public class DetailsActivity extends BaseActivity implements DetailsMvpView, Cal
     }
 
     private int getActionBarSize() {
-        final TypedArray styledAttributes = getTheme().obtainStyledAttributes(
+        final TypedArray styledAttributes = getActivity().getTheme().obtainStyledAttributes(
                 new int[]{android.R.attr.actionBarSize});
         int actionBarSize = (int) styledAttributes.getDimension(0, 0);
         styledAttributes.recycle();

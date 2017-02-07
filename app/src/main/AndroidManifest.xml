@@ -29,7 +29,16 @@
             android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
-            android:name=".presentation.ui.details.DetailsActivity"
+            android:name=".presentation.ui.details.DetailsSearchActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".presentation.ui.search.SearchActivity"
+            android:theme="@style/AppTheme.Transparent">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.search.SearchActivity"/>
+        </activity>
+        <activity
+            android:name=".presentation.ui.details.DetailsCategoryActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
             android:theme="@style/AppTheme.Transparent">
@@ -44,6 +53,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>
+        </activity>
+        <activity
+            android:name=".presentation.ui.category.CategoryActivity"
+            android:parentActivityName=".presentation.ui.main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.main.MainActivity"/>        
         </activity>
         <activity
             android:name=".presentation.ui.feedback.FeedbackTypeActivity"

@@ -19,7 +19,7 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Search.Height.Header.Divider"
-        android:layout_marginLeft="@dimen/Details.Margin.Right"
-        android:layout_marginRight="@dimen/Details.Margin.Right"
+        android:layout_marginLeft="@dimen/Margin.Horizontal"
+        android:layout_marginRight="@dimen/Margin.Horizontal"
         android:src="@color/colorPrimary"/>
 </LinearLayout>
