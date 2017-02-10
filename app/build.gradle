@@ -133,11 +133,11 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
-    compile project(':viewpagerindicator')
+    compile project(':feedback')
 
     // auto-value
-    provided mobileDependencies.autovalue // needed for Android Studio
-    apt mobileDependencies.autovalue
+    apt mobileDependencies.autoValueGson
+    provided mobileDependencies.autoValueGson
 
     // Android
     compile mobileDependencies.appcompat
@@ -165,6 +165,7 @@ dependencies {
         exclude group: "com.android.support", module: "appcompat-v7"
         exclude group: "com.android.support", module: "cardview-v7"
         exclude group: "com.android.support", module: "recyclerview-v7"
+        exclude group: "com.squareup.okio", module: "okio"
     }
 
     // logs
@@ -176,7 +177,6 @@ dependencies {
 
     // image downloading
     compile mobileDependencies.picasso
-    compile mobileDependencies.okhttp
 
     // icepick
     compile mobileDependencies.icepick

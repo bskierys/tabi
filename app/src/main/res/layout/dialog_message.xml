@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
@@ -11,23 +12,30 @@
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         style="@style/Text_Display.Primary"
         android:id="@+id/txt_title"
+        android:layout_weight="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Title"
-        android:text="@string/preview_title"/>
+        tools:text="@string/preview_title"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
-        style="@style/Text_Body.Primary"
-        android:id="@+id/txt_body"
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/Main.Margin.DemoDialog.Body"
-        android:text="@string/preview_body"/>
+        android:layout_weight="1">
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            style="@style/Text_Body.Primary"
+            android:id="@+id/txt_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="@string/preview_body"/>
+    </ScrollView>
 
     <pl.ipebk.tabi.presentation.ui.custom.SecondaryButton
         android:id="@+id/btn_confirm"
         android:layout_width="@dimen/Button.Secondary.Width"
+        android:layout_weight="0"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/Main.Margin.DemoDialog.Body"
         android:layout_gravity="center_horizontal"
-        android:text="@string/preview_confirm"/>
+        tools:text="@string/preview_confirm"/>
 </LinearLayout>

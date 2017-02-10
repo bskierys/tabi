@@ -34,12 +34,4 @@ public class ViewModule {
     @Provides PlaceLocalizationHelper providePlaceLocalizationHelper() {
         return new PlaceLocalizationHelper(context);
     }
-
-    @Provides public RandomTextProvider provideRandomTextProvider() {
-        return new RandomTextProvider(context);
-    }
-
-    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
-        return factory;
-    }
 }

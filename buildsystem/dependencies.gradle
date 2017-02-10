@@ -53,7 +53,7 @@ ext {
     butterKnifeVersion = '8.4.0'
     pineVersion = '0.2.0'
     picassoVersion = '2.5.2'
-    okhttpVersion = '3.4.2'
+    okhttpVersion = '3.6.0'
     dexmakerVersion = '1.1'
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
@@ -68,7 +68,11 @@ ext {
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
     autoValueVersion = '1.2';
+    autoValueGsonVersion = '0.4.4';
     aboutLibrariesVersion = "5.9.1@aar";
+    retrofitVersion = '2.1.0'
+    okLogVersion = '1.0.1'
+    loggingInterceptorVersion = '3.3.0'
 
     mobileDependencies = [
             // Android
@@ -96,6 +100,13 @@ ext {
             timbertreeutils         : "net.ypresto.timbertreeutils:timbertreeutils:${timberUtilsVersion}",
             crashlytics             : "com.crashlytics.sdk.android:crashlytics:${crashlyticsVersion}",
 
+            // Retrofit
+            retrofit                : "com.squareup.retrofit2:retrofit:${retrofitVersion}",
+            retrofitConverter       : "com.squareup.retrofit2:converter-gson:${retrofitVersion}",
+            retrofitRxAdapter       : "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}",
+            okLog                   : "com.github.simonpercic:oklog3:${okLogVersion}",
+            loggingInterceptor      : "com.squareup.okhttp3:logging-interceptor:${loggingInterceptorVersion}",
+
             // icepick
             icepick                 : "frankiesardo:icepick:${icepickVersion}",
             icepickProcessor        : "frankiesardo:icepick-processor:${icepickVersion}",
@@ -119,6 +130,7 @@ ext {
 
             // auto-value
             autovalue               : "com.google.auto.value:auto-value:${autoValueVersion}",
+            autoValueGson           : "com.ryanharter.auto.value:auto-value-gson:${autoValueGsonVersion}",
 
             // Unit test dependencies
             junit                   : "junit:junit:${junitVersion}",

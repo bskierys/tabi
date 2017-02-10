@@ -17,4 +17,5 @@ public interface MainMvpView extends MvpView {
     void goToSearch(String phrase);
     void goToAboutAppPage();
     void showDemoGreeting();
+    void showResponseToFeedback(String response);
 }

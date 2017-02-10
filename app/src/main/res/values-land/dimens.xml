@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="Main.Padding.DemoDialog.Vertical">24dp</dimen>
+    <dimen name="Main.Margin.DemoDialog.Body">16dp</dimen>
+    <dimen name="Feedback.Margin.Top">0dp</dimen>
+</resources>

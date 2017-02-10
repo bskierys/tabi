@@ -13,11 +13,16 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import com.suredigit.inappfeedback.FeedbackClient;
+
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 
 import static org.mockito.Mockito.mock;
@@ -71,5 +76,17 @@ public class TestApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return mock(SharedPreferences.class);
+    }
+
+    @Provides public FeedbackClient provideFeedbackClient() {
+        return mock(FeedbackClient.class);
+    }
+
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory() {
+        return mock(PlaceAndPlateDtoFactory.class);
+    }
+
+    @Provides RandomTextProvider provideRandomTextProvider() {
+        return mock(RandomTextProvider.class);
     }
 }

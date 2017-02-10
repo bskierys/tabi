@@ -131,8 +131,8 @@ public class ActivityModule {
         return loader;
     }
 
-    @Provides public SharedPreferences provideSharedPreferences() {
-        return PreferenceManager.getDefaultSharedPreferences(activity);
+    @Provides CustomTabActivityHelper provideCustomTabActivityHelper() {
+        return new CustomTabActivityHelper();
     }
 
     @Provides public RandomTextProvider provideRandomTextProvider() {

@@ -21,12 +21,11 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 
-import com.viewpagerindicator.UnderlinePageIndicator;
-
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.custom.UnderlinePageIndicator;
 import pl.ipebk.tabi.utils.FontManager;
 
 /**

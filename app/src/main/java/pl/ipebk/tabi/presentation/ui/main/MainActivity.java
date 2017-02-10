@@ -7,16 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
-import com.suredigit.inappfeedback.FeedbackDialog;
-import com.suredigit.inappfeedback.FeedbackSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +24,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
-import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
@@ -70,10 +66,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private FeedbackDialog feedbackDialog;
-    private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
-    @State boolean isDemoDialogShown;
+    @State boolean isDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,9 +83,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
-        feedbackApiKey = getString(R.string.feedback_api_key);
-        feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
-        prepareFeedbackDialog(feedbackDialog);
         scrollSubscriptions = new CompositeSubscription();
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
@@ -199,41 +190,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter.swapItems(items);
     }
 
-    private void prepareFeedbackDialog(FeedbackDialog dialog) {
-        dialog.setDebug(BuildConfig.DEBUG);
-
-        FeedbackSettings feedbackSettings = new FeedbackSettings();
-        //SUBMIT-CANCEL BUTTONS
-        feedbackSettings.setCancelButtonText(getString(R.string.main_feedback_cancel));
-        feedbackSettings.setSendButtonText(getString(R.string.main_feedback_send));
-
-        //DIALOG TEXT
-        feedbackSettings.setText(getString(R.string.main_feedback_body));
-        feedbackSettings.setYourComments("");
-        feedbackSettings.setTitle(getString(R.string.main_feedback_title));
-
-        //TOAST MESSAGE
-        feedbackSettings.setToast(getString(R.string.main_feedback_done));
-
-        //RADIO BUTTONS
-        feedbackSettings.setBugLabel(getString(R.string.main_feedback_bug));
-        feedbackSettings.setIdeaLabel(getString(R.string.main_feedback_idea));
-        feedbackSettings.setQuestionLabel(getString(R.string.main_feedback_question));
-
-        //RADIO BUTTONS ORIENTATION AND GRAVITY
-        feedbackSettings.setOrientation(LinearLayout.VERTICAL);
-        feedbackSettings.setGravity(Gravity.LEFT);
-
-        //DEVELOPER REPLIES
-        feedbackSettings.setReplyTitle(getString(R.string.main_feedback_reply_title));
-        feedbackSettings.setReplyCloseButtonText(getString(R.string.main_feedback_reply_button));
-        feedbackSettings.setReplyRateButtonText(getString(R.string.main_feedback_reply_rate));
-
-        feedbackSettings.setModal(true);
-
-        dialog.setSettings(feedbackSettings);
-    }
-
     private void setAnimationState(float percent) {
         float moveSearchTo = (lowestSearchBarPosition - highestSearchBarPosition)
                 * scrollPercent
@@ -273,7 +229,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override protected void onPause() {
         super.onPause();
-        feedbackDialog.dismiss();
     }
 
     @Override protected void onDestroy() {
@@ -288,8 +243,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showFeedbackDialog() {
-        Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
-        feedbackDialog.show();
+        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
+        startActivity(feedbackIntent);
     }
 
     @Override public void showGreetingCaption() {
@@ -346,7 +301,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showDemoGreeting() {
-        if(!isDemoDialogShown) {
+        if (!isDialogShown) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
             if (prev == null) {
@@ -354,9 +309,24 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                         .newInstance(getString(R.string.english_greeting_title),
                                      getString(R.string.english_greeting_body),
                                      getString(R.string.english_greeting_confirm));
-                demoDialog.setOnClickListener(v -> isDemoDialogShown = false);
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
                 demoDialog.show(ft, PARAM_DIALOG);
-                isDemoDialogShown = true;
+                isDialogShown = true;
+            }
+        }
+    }
+
+    @Override public void showResponseToFeedback(String response) {
+        if (!isDialogShown) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
+            if (prev == null) {
+                MessageDialog demoDialog = MessageDialog
+                        .newInstance(getString(R.string.main_feedback_response_title), response,
+                                     getString(R.string.main_feedback_response_confirm));
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
+                demoDialog.show(ft, PARAM_DIALOG);
+                isDialogShown = true;
             }
         }
     }

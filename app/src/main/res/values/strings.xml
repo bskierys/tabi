@@ -203,18 +203,24 @@
     <string name="main_doodle_caption_feedback">Got any *remarks?* Go to the bottom of this page</string>
     <string name="main_version">Version %s</string>
     <string name="main_loading">loading&#8230;</string>
+    <string name="main_feedback_response_title">Response</string>
+    <string name="main_feedback_response_confirm">Close</string>
 
-    <string name="main_feedback_title">Send a comment to the author</string>
-    <string name="main_feedback_body">Give us a comment about the application</string>
-    <string name="main_feedback_cancel">CANCEL</string>
-    <string name="main_feedback_send">SEND A COMMENT</string>
-    <string name="main_feedback_done">Thanks for opinion :)</string>
-    <string name="main_feedback_bug">Bug</string>
-    <string name="main_feedback_idea">Idea</string>
-    <string name="main_feedback_question">Question</string>
-    <string name="main_feedback_reply_title">Author\'s response</string>
-    <string name="main_feedback_reply_button">CLOSE</string>
-    <string name="main_feedback_reply_rate">Rate this app</string>
+    <!--  FEEDBACK  -->
+    <string name="feedback_title">Describe to us your remarks</string>
+    <string name="feedback_subtitle">What is bothering you?</string>
+    <string name="feedback_button_bug">Bug</string>
+    <string name="feedback_title_bug">Describe to us your problem</string>
+    <string name="feedback_hint_bug">What is wrong?</string>
+    <string name="feedback_button_idea">Idea</string>
+    <string name="feedback_title_idea">Describe to us your idea</string>
+    <string name="feedback_hint_idea">What\'s on your mind?</string>
+    <string name="feedback_button_question">Question</string>
+    <string name="feedback_title_question">Describe to us your question</string>
+    <string name="feedback_hint_question">What do you want to ask?</string>
+    <string name="feedback_send">Send</string>
+    <string name="feedback_sending">Sending feedback&#8230;</string>
+    <string name="main_feedback_done">Thanks for opinion</string>
 
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">true</bool>

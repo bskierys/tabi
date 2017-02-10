@@ -94,6 +94,15 @@
     <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
 
+    <!--  FEEDBACK  -->
+    <dimen name="Feedback.Margin.Top">32dp</dimen>
+    <dimen name="Feedback.Margin.Buttons.Top">32dp</dimen>
+    <dimen name="Feedback.Margin">20dp</dimen>
+    <dimen name="Feedback.Margin.Inner">16dp</dimen>
+    <dimen name="Feedback.Width.Button">248dp</dimen>
+    <dimen name="Feedback.Margin.Button">16dp</dimen>
+    <dimen name="Feedback.Margin.Toolbar">20dp</dimen>
+
     <!--  CATEGORIES  -->
     <dimen name="Category.Toolbar.Limit">8dp</dimen>
     <dimen name="Category.Paragraph.Margin">8dp</dimen>
@@ -114,6 +123,7 @@
     <dimen name="Toolbar.Height.Min">56dp</dimen>
     <dimen name="Toolbar.Elevation">4dp</dimen>
     <dimen name="Paragraph.Margin.Display">12dp</dimen>
+    <dimen name="Button.Icon.Square">56dp</dimen>
     <dimen name="Margin.Horizontal">56dp</dimen>
     <dimen name="Button.Height.Min">36dp</dimen>
 
