@@ -134,16 +134,4 @@ public class ActivityModule {
     @Provides CustomTabActivityHelper provideCustomTabActivityHelper() {
         return new CustomTabActivityHelper();
     }
-
-    @Provides public RandomTextProvider provideRandomTextProvider() {
-        return new RandomTextProvider(activity);
-    }
-
-    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
-        return factory;
-    }
-
-    @Provides CustomTabActivityHelper provideCustomTabActivityHelper() {
-        return new CustomTabActivityHelper();
-    }
 }
