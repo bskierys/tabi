@@ -17,7 +17,9 @@ import pl.ipebk.tabi.infrastructure.openHelper.DatabaseOpenHelper;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.injection.module.ApplicationModule;
 import pl.ipebk.tabi.presentation.localization.DemoGreetingPredicate;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryFactory;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 
 @Singleton
 @Component(modules = ApplicationModule.class)
@@ -35,4 +37,8 @@ public interface ApplicationComponent {
     SharedPreferences sharedPreferences();
 
     FeedbackClient feedbackClient();
+
+    RandomTextProvider randomTextProvider();
+
+    PlaceAndPlateDtoFactory placeAndPlateDtoFactory();
 }

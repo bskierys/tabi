@@ -65,8 +65,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @State String currentSearch;
     @State boolean isFullySearched;
 
-    private PlaceFragment searchPlacesFragment;
-    private PlaceFragment searchPlatesFragment;
+    private PlaceListFragment searchPlacesFragment;
+    private PlaceListFragment searchPlatesFragment;
 
     private BehaviorSubject<Integer> viewCreationSubject;
     private Bitmap noResultsBitmap;
@@ -378,17 +378,17 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     //endregion
 
     //region View pager management
-    protected PlaceFragment retainSearchFragment(int position) {
+    protected PlaceListFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (savedFragment != null) {
-            return (PlaceFragment) savedFragment;
+            return (PlaceListFragment) savedFragment;
         } else {
             switch (position) {
                 case SEARCH_PLATES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchType.LICENSE_PLATE);
+                    return PlaceListFragment.newInstance(SearchType.LICENSE_PLATE);
                 case SEARCH_PLACES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchType.PLACE);
+                    return PlaceListFragment.newInstance(SearchType.PLACE);
             }
         }
         return null;

@@ -38,15 +38,15 @@ import static org.mockito.Mockito.when;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
-public class PlaceFragmentTest {
-    private TestablePlaceFragment fragment;
+public class PlaceListFragmentTest {
+    private TestablePlaceListFragment fragment;
     @Mock LinearLayoutManager mockLayoutManager;
     @Mock SearchPlaceItemAdapter mockAdapter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        fragment = new TestablePlaceFragment();
+        fragment = new TestablePlaceListFragment();
         fragment.type = SearchType.PLACE;
         fragment.setLayoutManager(mockLayoutManager);
         fragment.setAdapter(mockAdapter);
@@ -93,8 +93,8 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection,
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection,
                                        SearchActivity.EVENT_ID_HEADER_ALL);
     }
 
@@ -111,8 +111,8 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection,
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection,
                                        SearchActivity.EVENT_ID_HEADER_ALL);
     }
 
@@ -129,9 +129,9 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
         // should not add second section
-        verify(mockAdapter, never()).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection,
+        verify(mockAdapter, never()).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection,
                                                 SearchActivity.EVENT_ID_HEADER_ALL);
     }
 
@@ -148,8 +148,8 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection, null);
     }
 
     @Test public void testShowFullHeadersWhen3() throws Exception {
@@ -165,9 +165,9 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
         // should not add second section
-        verify(mockAdapter, never()).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection, null);
+        verify(mockAdapter, never()).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection, null);
     }
 
     @Test public void testShowFullHeadersWhenLessThan3() throws Exception {
@@ -183,9 +183,9 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(false);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
         // should not add second section
-        verify(mockAdapter, never()).addSection(PlaceFragment.SECTION_SECOND_POSITION, secondSection, null);
+        verify(mockAdapter, never()).addSection(PlaceListFragment.SECTION_SECOND_POSITION, secondSection, null);
     }
 
     @Test public void testShowInitialHeaders() throws Exception {
@@ -200,9 +200,9 @@ public class PlaceFragmentTest {
 
         verify(mockAdapter).changeCursor(any(Cursor.class));
         verify(mockAdapter).setHistorical(true);
-        verify(mockAdapter).addSection(PlaceFragment.SECTION_FIRST_POSITION, firstSection, null);
+        verify(mockAdapter).addSection(PlaceListFragment.SECTION_FIRST_POSITION, firstSection, null);
         // should not add second section
-        verify(mockAdapter, never()).addSection(eq(PlaceFragment.SECTION_SECOND_POSITION),
+        verify(mockAdapter, never()).addSection(eq(PlaceListFragment.SECTION_SECOND_POSITION),
                                                 anyString(), any(Integer.class));
     }
 
@@ -269,7 +269,7 @@ public class PlaceFragmentTest {
         }
     }
 
-    public static class TestablePlaceFragment extends PlaceFragment {
+    public static class TestablePlaceListFragment extends PlaceListFragment {
         private RecyclerView.LayoutManager layoutManager;
         private SearchPlaceItemAdapter adapter;
 

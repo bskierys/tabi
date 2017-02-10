@@ -176,9 +176,7 @@ dependencies {
     }
 
     // image downloading
-    compile (mobileDependencies.picasso) {
-        exclude group: "com.squareup.okhttp3", module: "okhttp"
-    }
+    compile mobileDependencies.picasso
 
     // icepick
     compile mobileDependencies.icepick

@@ -17,11 +17,14 @@ import dagger.Provides;
 import com.suredigit.inappfeedback.Feedback;
 import com.suredigit.inappfeedback.FeedbackClient;
 
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 
 /**
@@ -65,5 +68,13 @@ public class ApplicationModule {
 
     @Provides public FeedbackClient provideFeedbackClient() {
         return Feedback.getClient();
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return new RandomTextProvider(application);
+    }
+
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
+        return factory;
     }
 }

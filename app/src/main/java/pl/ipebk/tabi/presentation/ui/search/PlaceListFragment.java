@@ -20,11 +20,12 @@ import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
+import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
 
 /**
  * A fragment representing a list of Places.
  */
-public class PlaceFragment extends Fragment {
+public class PlaceListFragment extends BaseFragment {
     private static final String ARG_FRAGMENT_TYPE = "fragmentType";
     static final int SECTION_FIRST_POSITION = 0;
     static final int SECTION_SECOND_POSITION = 4;
@@ -41,8 +42,8 @@ public class PlaceFragment extends Fragment {
     private PlaceFragmentEventListener fragmentEventListener;
 
     @SuppressWarnings("unused")
-    public static PlaceFragment newInstance(SearchType type) {
-        PlaceFragment fragment = new PlaceFragment();
+    public static PlaceListFragment newInstance(SearchType type) {
+        PlaceListFragment fragment = new PlaceListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_FRAGMENT_TYPE, type.ordinal());
         fragment.setArguments(args);
@@ -51,7 +52,7 @@ public class PlaceFragment extends Fragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.get(getActivity()).getViewComponent().inject(this);
+        fragmentComponent().inject(this);
 
         if (getArguments() != null) {
             int typeOrdinal = getArguments().getInt(ARG_FRAGMENT_TYPE);

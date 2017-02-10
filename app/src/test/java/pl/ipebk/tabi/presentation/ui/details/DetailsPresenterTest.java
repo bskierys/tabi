@@ -47,7 +47,6 @@ public class DetailsPresenterTest {
     @Mock ClipboardCopyMachine mockClipboardCopyMachine;
     @Mock MapScaleCalculator mockMapScaleCalculator;
     @Mock PlaceLocalizationHelper placeLocalizationHelper;
-    private TestPlaceLocalizationHelper mockNameHelper;
     private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
 
@@ -57,8 +56,7 @@ public class DetailsPresenterTest {
 
         when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
         when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
-        mockNameHelper = new TestPlaceLocalizationHelper(mockContext);
-        mockFactory = new PlaceFactory(mockNameHelper);
+        mockFactory = new PlaceFactory(placeLocalizationHelper);
 
         detailsPresenter = new DetailsPresenter(placeRepo, mockClipboardCopyMachine,
                                                 mockMapScaleCalculator, mockFactory,
@@ -73,21 +71,24 @@ public class DetailsPresenterTest {
     // TODO: 2016-12-14 get rid of mock-driven tests
     @Test public void testStandardPlaceIsLoaded() {
         String name = "Malbork";
-        // TODO: 2016-12-14 factory class
         List<LicensePlateDto> plates = new ArrayList<>();
         plates.add(LicensePlateDto.create("TAB", null));
         PlaceDto malbork = PlaceDto.create(name, PlaceType.TOWN, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
+        when(placeLocalizationHelper.formatVoivodeship(anyString())).thenReturn(malbork.voivodeship());
+        when(placeLocalizationHelper.formatPowiat(anyString())).thenReturn(malbork.powiat());
+        when(placeLocalizationHelper.formatGmina(anyString())).thenReturn(malbork.gmina());
+        when(placeLocalizationHelper.formatAdditionalInfo(any(), anyString())).thenReturn(malbork.gmina());
 
         detailsPresenter.loadPlace(1L, "k", SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate("TAB");
-        verify(mockMvpView).showVoivodeship(contains(mockNameHelper.formatVoivodeship(name + "1")));
-        verify(mockMvpView).showPowiat(contains(mockNameHelper.formatPowiat(name + "2")));
-        verify(mockMvpView).showGmina(contains(mockNameHelper.formatGmina(name + "3")));
-        verify(mockMvpView).showAdditionalInfo(anyString());
+        verify(mockMvpView).showVoivodeship(contains(malbork.voivodeship()));
+        verify(mockMvpView).showPowiat(contains(malbork.powiat()));
+        verify(mockMvpView).showGmina(contains(malbork.gmina()));
+        verify(mockMvpView).showAdditionalInfo(malbork.gmina());
         verify(mockMvpView, atMost(2)).showMap(any());
     }
 
@@ -136,7 +137,7 @@ public class DetailsPresenterTest {
         PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
-        when(mockNameHelper.formatPlaceToSearch(any())).thenReturn(name);
+        when(placeLocalizationHelper.formatPlaceToSearch(any())).thenReturn(name);
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();
