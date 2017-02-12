@@ -33,8 +33,8 @@ import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private CompositeSubscription scrollSubscriptions;
+    private Subscription scrollSubscription;
     @State boolean isDialogShown;
     @State int scrolledY;
 
@@ -83,16 +83,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
-        scrollSubscriptions = new CompositeSubscription();
 
-        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
-                                              .observeOn(AndroidSchedulers.mainThread())
-                                              .map(RecyclerViewScrollEvent::dy)
-                                              .map(y -> y += scrolledY)
-                                              .doOnNext(y -> scrolledY = y)
-                                              .map(this::computePercentScrolled)
-                                              .doOnNext(percent -> scrollPercent = percent)
-                                              .subscribe(this::setAnimationState));
+        scrollSubscription = RxRecyclerView.scrollEvents(recyclerView)
+                                           .observeOn(AndroidSchedulers.mainThread())
+                                           .map(RecyclerViewScrollEvent::dy)
+                                           .map(y -> y += scrolledY)
+                                           .doOnNext(y -> scrolledY = y)
+                                           .map(this::computePercentScrolled)
+                                           .doOnNext(percent -> scrollPercent = percent)
+                                           .subscribe(this::setAnimationState);
     }
 
     private float computePercentScrolled(int scrollPosition) {
@@ -234,7 +233,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscriptions);
+        RxUtil.unsubscribe(scrollSubscription);
         presenter.detachView();
     }
 
