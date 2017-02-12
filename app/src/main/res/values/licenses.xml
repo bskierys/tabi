@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  OVERRIDES -->
+    <string name="library_AboutLibraries_libraryDescription">AboutLibrariesis a library to offer you all the information you need of your libraries!</string>
+    <string name="library_rxandroid_libraryDescription">Android specific bindings for RxJava.&lt;br />&lt;br />This module adds the minimum classes to RxJava that make writing reactive components in Android applications easy and hassle-free.</string>
+    <string name="library_rxjava_libraryDescription">RxJavais a Java VM implementation of Reactive Extensions: a library for composing asynchronous and event-based programs by using observable sequences.</string>
+
     <string name="define_autovalue" translatable="false"></string>
     <string name="library_autovalue_author" translatable="false">Google, Inc</string>
     <string name="library_autovalue_authorWebsite" translatable="false">https://github.com/google/auto</string>
@@ -37,7 +42,8 @@
     <string name="library_pine_author" translatable="false">Bartlomiej Kierys</string>
     <string name="library_pine_authorWebsite" translatable="false">https://github.com/bskierys</string>
     <string name="library_pine_libraryName" translatable="false">Pine</string>
-    <string name="library_pine_libraryDescription" translatable="false">Pine is extension for default DebugTree. It has ability to log class, method, and line number where it was invoked. It also has package-driven tagging which works nice with MVP project structure.</string>
+    <string name="library_pine_libraryDescription" translatable="false">Pine is extension for default Timber DebugTree that logs class, method, and line number where
+        it was invoked to help the developer locate log source easily.</string>
     <string name="library_pine_libraryWebsite" translatable="false">https://github.com/bskierys/Pine</string>
     <string name="library_pine_libraryVersion" translatable="false">0.2.0</string>
     <string name="library_pine_isOpenSource" translatable="false">true</string>

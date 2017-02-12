@@ -14,21 +14,17 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import com.suredigit.inappfeedback.Feedback;
+import com.suredigit.inappfeedback.FeedbackClient;
+
+import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
-import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
-import pl.ipebk.tabi.infrastructure.finders.DaoLicensePlateFinder;
-import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
-import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
-import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
-import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
-import pl.ipebk.tabi.readmodel.LicensePlateFinder;
-import pl.ipebk.tabi.readmodel.PlaceFinder;
-import pl.ipebk.tabi.readmodel.SearchHistoryFinder;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
+import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 
 /**
@@ -68,5 +64,17 @@ public class ApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    @Provides public FeedbackClient provideFeedbackClient() {
+        return Feedback.getClient();
+    }
+
+    @Provides public RandomTextProvider provideRandomTextProvider() {
+        return new RandomTextProvider(application);
+    }
+
+    @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory(DatabaseViewPlaceAndPlateDtoFactory factory) {
+        return factory;
     }
 }

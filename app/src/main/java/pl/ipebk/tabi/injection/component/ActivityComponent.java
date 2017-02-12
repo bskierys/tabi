@@ -8,7 +8,8 @@ package pl.ipebk.tabi.injection.component;
 import dagger.Subcomponent;
 import pl.ipebk.tabi.injection.PerActivity;
 import pl.ipebk.tabi.injection.module.ActivityModule;
-import pl.ipebk.tabi.presentation.ui.details.DetailsActivity;
+import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.feedback.FeedbackEntryActivity;
 import pl.ipebk.tabi.presentation.ui.main.MainActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 
@@ -22,5 +23,7 @@ public interface ActivityComponent {
 
     void inject(SearchActivity searchActivity);
 
-    void inject(DetailsActivity detailsActivity);
+    void inject(CategoryActivity categoryActivity);
+
+    void inject(FeedbackEntryActivity activity);
 }

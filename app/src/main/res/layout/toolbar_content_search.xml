@@ -34,17 +34,17 @@
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:inputType="textNoSuggestions"
                 android:textColorHint="@color/white_semi_transparent"
-                android:textCursorDrawable="@drawable/dark_cursor"/>
+                android:textCursorDrawable="@drawable/cursor_dark"/>
         </RelativeLayout>
 
         <ImageView
             android:id="@+id/btn_clear"
-            android:layout_width="@dimen/Details.Margin.Right"
+            android:layout_width="@dimen/Margin.Horizontal"
             android:layout_height="match_parent"
             android:contentDescription="@string/description_close_button"
-            android:paddingLeft="@dimen/Details.Margin.Outer"
-            android:paddingRight="@dimen/Details.Margin.Outer"
-            android:src="@drawable/ic_close"
+            android:paddingLeft="@dimen/Toolbar.Icon.Margin"
+            android:paddingRight="@dimen/Toolbar.Icon.Margin"
+            android:src="@drawable/ic_close_dark"
             android:visibility="gone"/>
     </LinearLayout>
 

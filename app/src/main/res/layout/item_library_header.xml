@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/container"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Toolbar.Height.Min">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            style="@style/BackArrow"
+            android:src="@drawable/ic_back_light"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/Libraries.Margin.Title.Bottom"
+        android:layout_marginLeft="@dimen/Libraries.Margin.Title.Horizontal"
+        android:layout_marginRight="@dimen/Libraries.Margin.Title.Horizontal"
+        android:layout_marginTop="@dimen/Libraries.Margin.Title.Top"
+        android:orientation="vertical">
+
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            style="@style/Text_Display.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/Paragraph.Margin.Display"
+            android:text="@string/about_third_party_title"/>
+
+        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            style="@style/Text_Body2.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_third_party_description"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+</LinearLayout>

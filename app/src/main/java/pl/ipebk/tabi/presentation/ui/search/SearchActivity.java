@@ -32,8 +32,8 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
-import pl.ipebk.tabi.presentation.ui.details.DetailsActivity;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
+import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -65,8 +65,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @State String currentSearch;
     @State boolean isFullySearched;
 
-    private PlaceFragment searchPlacesFragment;
-    private PlaceFragment searchPlatesFragment;
+    private PlaceListFragment searchPlacesFragment;
+    private PlaceListFragment searchPlatesFragment;
 
     private BehaviorSubject<Integer> viewCreationSubject;
     private Bitmap noResultsBitmap;
@@ -318,11 +318,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override public void goToPlaceDetails(AggregateId placeId, String searchedPlate,
                                            SearchType searchType, PlaceListItemType itemType) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.PARAM_PLACE_ID, placeId.getValue());
-        intent.putExtra(DetailsActivity.PARAM_SEARCHED_PLATE, searchedPlate);
-        intent.putExtra(DetailsActivity.PARAM_SEARCHED_TYPE, searchType.ordinal());
-        intent.putExtra(DetailsActivity.PARAM_ITEM_TYPE, itemType);
+        Intent intent = new Intent(this, DetailsSearchActivity.class);
+        intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
+        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
+        intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
+        intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
         startActivity(intent);
     }
 
@@ -378,17 +378,17 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     //endregion
 
     //region View pager management
-    protected PlaceFragment retainSearchFragment(int position) {
+    protected PlaceListFragment retainSearchFragment(int position) {
         String fragmentTag = "android:switcher:" + searchPager.getId() + ":" + position;
         Fragment savedFragment = getSupportFragmentManager().findFragmentByTag(fragmentTag);
         if (savedFragment != null) {
-            return (PlaceFragment) savedFragment;
+            return (PlaceListFragment) savedFragment;
         } else {
             switch (position) {
                 case SEARCH_PLATES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchType.LICENSE_PLATE);
+                    return PlaceListFragment.newInstance(SearchType.LICENSE_PLATE);
                 case SEARCH_PLACES_FRAGMENT_POSITION:
-                    return PlaceFragment.newInstance(SearchType.PLACE);
+                    return PlaceListFragment.newInstance(SearchType.PLACE);
             }
         }
         return null;

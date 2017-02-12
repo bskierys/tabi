@@ -7,16 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
 import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
-import com.suredigit.inappfeedback.FeedbackDialog;
-import com.suredigit.inappfeedback.FeedbackSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +24,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
-import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
+import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
@@ -69,18 +66,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private FeedbackDialog feedbackDialog;
-    private String feedbackApiKey;
     private CompositeSubscription scrollSubscriptions;
-    @State boolean isDemoDialogShown;
+    @State boolean isDialogShown;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
-
-        Timber.e("Problem computing bounds");
 
         presenter.attachView(this);
 
@@ -90,9 +83,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
-        feedbackApiKey = getString(R.string.feedback_api_key);
-        feedbackDialog = new FeedbackDialog(this, feedbackApiKey);
-        prepareFeedbackDialog(feedbackDialog);
         scrollSubscriptions = new CompositeSubscription();
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
@@ -130,49 +120,49 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         bigHeaderIndex = 0;
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
-        items.add(new MainListElementItem(getString(R.string.main_list_element_dolnoslaskie),
-                                          getResources().getDrawable(R.drawable.vic_dolnoslaskie), "d"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_kujawskopomorskie),
-                                          getResources().getDrawable(R.drawable.vic_kujawskopomorskie), "c"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lodzkie),
-                                          getResources().getDrawable(R.drawable.vic_lodzkie), "e"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lubelskie),
-                                          getResources().getDrawable(R.drawable.vic_lubelskie), "l"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lubuskie),
-                                          getResources().getDrawable(R.drawable.vic_lubuskie), "f"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_malopolskie),
-                                          getResources().getDrawable(R.drawable.vic_malopolskie), "k"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_mazowieckie),
-                                          getResources().getDrawable(R.drawable.vic_mazowieckie), "w"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_opolskie),
-                                          getResources().getDrawable(R.drawable.vic_opolskie), "o"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_podkarpackie),
-                                          getResources().getDrawable(R.drawable.vic_podkarpackie), "r"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_podlaskie),
-                                          getResources().getDrawable(R.drawable.vic_podlaskie), "b"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_pomorskie),
-                                          getResources().getDrawable(R.drawable.vic_pomorskie), "g"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_slaskie),
-                                          getResources().getDrawable(R.drawable.vic_slaskie), "s"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_swietokrzyskie),
-                                          getResources().getDrawable(R.drawable.vic_swietokrzyskie), "t"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_warminskomazurskie),
-                                          getResources().getDrawable(R.drawable.vic_warminskomazurskie), "n"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_wielkopolskie),
-                                          getResources().getDrawable(R.drawable.vic_wielkopolskie), "p"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_zachodniopomorskie),
-                                          getResources().getDrawable(R.drawable.vic_zachodniopomorskie), "z"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_sluzbybezpieczenstwa),
-                                          getResources().getDrawable(R.drawable.vic_sluzbybezpieczenstwa), "h"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_tablicewojskowe),
-                                          getResources().getDrawable(R.drawable.vic_tablicewojskowe), "u"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
+                                          getResources().getDrawable(R.drawable.vic_dol), "d", "dol"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
+                                          getResources().getDrawable(R.drawable.vic_kuj), "c", "kuj"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
+                                          getResources().getDrawable(R.drawable.vic_lod), "e", "lod"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
+                                          getResources().getDrawable(R.drawable.vic_lbl), "l", "lbl"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
+                                          getResources().getDrawable(R.drawable.vic_lbu), "f", "lbu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
+                                          getResources().getDrawable(R.drawable.vic_mal), "k", "mal"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
+                                          getResources().getDrawable(R.drawable.vic_maz), "w", "maz"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
+                                          getResources().getDrawable(R.drawable.vic_opo), "o", "opo"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
+                                          getResources().getDrawable(R.drawable.vic_rze), "r", "rze"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
+                                          getResources().getDrawable(R.drawable.vic_bie), "b", "bie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
+                                          getResources().getDrawable(R.drawable.vic_pom), "g", "pom"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
+                                          getResources().getDrawable(R.drawable.vic_sla), "s", "sla"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
+                                          getResources().getDrawable(R.drawable.vic_swi), "t", "swi"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_war),
+                                          getResources().getDrawable(R.drawable.vic_war), "n", "war"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
+                                          getResources().getDrawable(R.drawable.vic_wie), "p", "wie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
+                                          getResources().getDrawable(R.drawable.vic_zah), "z", "zah"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
+                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
+                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_licenses),
-                                          getResources().getDrawable(R.drawable.vic_licenses), ACTION_SHOW_LICENSES));
+                                          getResources().getDrawable(R.drawable.vic_licenses), null, ACTION_SHOW_LICENSES));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rate),
-                                          getResources().getDrawable(R.drawable.vic_rate), ACTION_GIVE_FEEDBACK));
+                                          getResources().getDrawable(R.drawable.vic_rate), null, ACTION_GIVE_FEEDBACK));
 
         items.add(new MainListFooterItem(getString(R.string.main_loading)));
         footerIndex = items.size() - 1;
@@ -198,41 +188,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         });
 
         adapter.swapItems(items);
-    }
-
-    private void prepareFeedbackDialog(FeedbackDialog dialog) {
-        dialog.setDebug(BuildConfig.DEBUG);
-
-        FeedbackSettings feedbackSettings = new FeedbackSettings();
-        //SUBMIT-CANCEL BUTTONS
-        feedbackSettings.setCancelButtonText(getString(R.string.main_feedback_cancel));
-        feedbackSettings.setSendButtonText(getString(R.string.main_feedback_send));
-
-        //DIALOG TEXT
-        feedbackSettings.setText(getString(R.string.main_feedback_body));
-        feedbackSettings.setYourComments("");
-        feedbackSettings.setTitle(getString(R.string.main_feedback_title));
-
-        //TOAST MESSAGE
-        feedbackSettings.setToast(getString(R.string.main_feedback_done));
-
-        //RADIO BUTTONS
-        feedbackSettings.setBugLabel(getString(R.string.main_feedback_bug));
-        feedbackSettings.setIdeaLabel(getString(R.string.main_feedback_idea));
-        feedbackSettings.setQuestionLabel(getString(R.string.main_feedback_question));
-
-        //RADIO BUTTONS ORIENTATION AND GRAVITY
-        feedbackSettings.setOrientation(LinearLayout.VERTICAL);
-        feedbackSettings.setGravity(Gravity.LEFT);
-
-        //DEVELOPER REPLIES
-        feedbackSettings.setReplyTitle(getString(R.string.main_feedback_reply_title));
-        feedbackSettings.setReplyCloseButtonText(getString(R.string.main_feedback_reply_button));
-        feedbackSettings.setReplyRateButtonText(getString(R.string.main_feedback_reply_rate));
-
-        feedbackSettings.setModal(true);
-
-        dialog.setSettings(feedbackSettings);
     }
 
     private void setAnimationState(float percent) {
@@ -274,7 +229,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override protected void onPause() {
         super.onPause();
-        feedbackDialog.dismiss();
     }
 
     @Override protected void onDestroy() {
@@ -289,8 +243,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showFeedbackDialog() {
-        Timber.d("Showing feedback dialog for API key: %s", feedbackApiKey);
-        feedbackDialog.show();
+        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
+        startActivity(feedbackIntent);
     }
 
     @Override public void showGreetingCaption() {
@@ -347,7 +301,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void showDemoGreeting() {
-        if(!isDemoDialogShown) {
+        if (!isDialogShown) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
             if (prev == null) {
@@ -355,21 +309,39 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                         .newInstance(getString(R.string.english_greeting_title),
                                      getString(R.string.english_greeting_body),
                                      getString(R.string.english_greeting_confirm));
-                demoDialog.setOnClickListener(v -> isDemoDialogShown = false);
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
                 demoDialog.show(ft, PARAM_DIALOG);
-                isDemoDialogShown = true;
+                isDialogShown = true;
             }
         }
     }
 
-    @Override public void onMenuItemClicked(String action) {
-        if (ACTION_SHOW_LICENSES.equals(action)) {
+    @Override public void showResponseToFeedback(String response) {
+        if (!isDialogShown) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
+            if (prev == null) {
+                MessageDialog demoDialog = MessageDialog
+                        .newInstance(getString(R.string.main_feedback_response_title), response,
+                                     getString(R.string.main_feedback_response_confirm));
+                demoDialog.setOnClickListener(v -> isDialogShown = false);
+                demoDialog.show(ft, PARAM_DIALOG);
+                isDialogShown = true;
+            }
+        }
+    }
+
+    @Override public void onMenuItemClicked(MainListElementItem item) {
+        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
             goToAboutAppPage();
-        } else if (ACTION_GIVE_FEEDBACK.equals(action)) {
+        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
             showFeedbackDialog();
         } else {
+            // TODO: 2017-01-24 presenter?
             Timber.d("Menu item clicked has literal as action");
-            goToSearch(action);
+            Intent categoryIntent = new Intent(this, CategoryActivity.class);
+            categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, item.getCategoryKey());
+            startActivity(categoryIntent);
         }
     }
 }

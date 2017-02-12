@@ -7,10 +7,14 @@
 
     <ImageView
         android:id="@+id/btn_back"
-        style="@style/BackArrow"/>
+        style="@style/BackArrow"
+        android:src="@drawable/ic_back_light"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_title"
-        style="@style/Text_Toolbar"
+        style="@style/Text_Body2.Primary"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginRight="@dimen/Details.Margin.Outer"
         android:text="@string/title_activity_about"/>
 </LinearLayout>

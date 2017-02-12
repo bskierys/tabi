@@ -14,26 +14,26 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.AggregateId;
+import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
 import pl.ipebk.tabi.presentation.model.place.Place;
+import pl.ipebk.tabi.presentation.model.place.PlaceDto;
 import pl.ipebk.tabi.presentation.model.place.PlaceFactory;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.presentation.model.place.LicensePlateDto;
-import pl.ipebk.tabi.presentation.model.place.PlaceDto;
+import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.RxSchedulersOverrideRule;
 import pl.ipebk.tabi.readmodel.PlaceType;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.test.common.utils.TestPlaceLocalizationHelper;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 import rx.Observable;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atMost;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -46,7 +46,7 @@ public class DetailsPresenterTest {
     @Mock Activity mockContext;
     @Mock ClipboardCopyMachine mockClipboardCopyMachine;
     @Mock MapScaleCalculator mockMapScaleCalculator;
-    private TestPlaceLocalizationHelper mockNameHelper;
+    @Mock PlaceLocalizationHelper placeLocalizationHelper;
     private PlaceFactory mockFactory;
     private DetailsPresenter detailsPresenter;
 
@@ -56,11 +56,11 @@ public class DetailsPresenterTest {
 
         when(mockMvpView.getMapHeightStream()).thenReturn(Observable.just(1));
         when(mockMvpView.getMapWidthStream()).thenReturn(Observable.just(1));
-        mockNameHelper = new TestPlaceLocalizationHelper(mockContext);
-        mockFactory = new PlaceFactory(mockNameHelper);
+        mockFactory = new PlaceFactory(placeLocalizationHelper);
 
         detailsPresenter = new DetailsPresenter(placeRepo, mockClipboardCopyMachine,
-                                                mockMapScaleCalculator, mockFactory);
+                                                mockMapScaleCalculator, mockFactory,
+                                                placeLocalizationHelper);
         detailsPresenter.attachView(mockMvpView);
     }
 
@@ -71,22 +71,24 @@ public class DetailsPresenterTest {
     // TODO: 2016-12-14 get rid of mock-driven tests
     @Test public void testStandardPlaceIsLoaded() {
         String name = "Malbork";
-        // TODO: 2016-12-14 factory class
         List<LicensePlateDto> plates = new ArrayList<>();
-        plates.add(LicensePlateDto.create("TAB",null));
-        PlaceDto malbork = PlaceDto.create(name, PlaceType.TOWN,name + "1",name + "2",name + "3", plates);
+        plates.add(LicensePlateDto.create("TAB", null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.TOWN, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
+        when(placeLocalizationHelper.formatVoivodeship(anyString())).thenReturn(malbork.voivodeship());
+        when(placeLocalizationHelper.formatPowiat(anyString())).thenReturn(malbork.powiat());
+        when(placeLocalizationHelper.formatGmina(anyString())).thenReturn(malbork.gmina());
+        when(placeLocalizationHelper.formatAdditionalInfo(any(), anyString())).thenReturn(malbork.gmina());
 
         detailsPresenter.loadPlace(1L, "k", SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         verify(mockMvpView).showPlaceName(name);
         verify(mockMvpView).showPlate("TAB");
-        verify(mockMvpView).showVoivodeship(contains(mockNameHelper.formatVoivodeship(name + "1")));
-        verify(mockMvpView).showPowiat(contains(mockNameHelper.formatPowiat(name + "2")));
-        verify(mockMvpView).showGmina(contains(mockNameHelper.formatGmina(name + "3")));
-        verify(mockMvpView).showSearchedText("k");
-        verify(mockMvpView).showAdditionalInfo(anyString());
+        verify(mockMvpView).showVoivodeship(contains(malbork.voivodeship()));
+        verify(mockMvpView).showPowiat(contains(malbork.powiat()));
+        verify(mockMvpView).showGmina(contains(malbork.gmina()));
+        verify(mockMvpView).showAdditionalInfo(malbork.gmina());
         verify(mockMvpView, atMost(2)).showMap(any());
     }
 
@@ -97,8 +99,8 @@ public class DetailsPresenterTest {
     @Test public void testSpecialPlaceIsLoaded() {
         String name = "Malbork";
         List<LicensePlateDto> plates = new ArrayList<>();
-        plates.add(LicensePlateDto.create("TAB",null));
-        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        plates.add(LicensePlateDto.create("TAB", null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
 
@@ -117,8 +119,8 @@ public class DetailsPresenterTest {
     @Test public void testShowOnMap() {
         String name = "Malbork";
         List<LicensePlateDto> plates = new ArrayList<>();
-        plates.add(LicensePlateDto.create("TAB",null));
-        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        plates.add(LicensePlateDto.create("TAB", null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
@@ -131,11 +133,11 @@ public class DetailsPresenterTest {
     @Test public void testSearchInGoogle() {
         String name = "Malbork";
         List<LicensePlateDto> plates = new ArrayList<>();
-        plates.add(LicensePlateDto.create("TAB",null));
-        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL,name + "1",name + "2",name + "3", plates);
+        plates.add(LicensePlateDto.create("TAB", null));
+        PlaceDto malbork = PlaceDto.create(name, PlaceType.SPECIAL, name + "1", name + "2", name + "3", plates);
 
         when(placeRepo.loadByIdObservable(agIdEq(new AggregateId(1L)))).thenReturn(Observable.just(malbork));
-        when(mockNameHelper.formatPlaceToSearch(any())).thenReturn(name);
+        when(placeLocalizationHelper.formatPlaceToSearch(any())).thenReturn(name);
         detailsPresenter.loadPlace(1L, null, SearchType.LICENSE_PLATE, PlaceListItemType.SEARCH);
 
         detailsPresenter.searchInGoogle();

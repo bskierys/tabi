@@ -1,6 +1,6 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-05-22
+* date: 2017-01-28
 * email: bskierys@gmail.com
 */
 package pl.ipebk.tabi.presentation.ui.search;
@@ -14,59 +14,51 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
-import pl.ipebk.tabi.readmodel.PlaceType;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * Adapter for items of type {@link PlaceAndPlateDto}. Some dependencies are filled by constructor, but you have to use
- * {@link #setType(SearchType)}, and {@link #setEventListener(PlaceFragmentEventListener)} before requesting any layout
- * to avoid errors.
+ * Adapter for items of type {@link PlaceAndPlateDto}.
  */
-public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
-    @Inject RandomTextProvider randomTextProvider;
-    @Inject PlaceAndPlateFactory itemFactory;
-
-    private boolean historical;
+public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
+    private RandomTextProvider randomTextProvider;
+    private PlaceAndPlateFactory itemFactory;
     private Context context;
+    private boolean historical;
+    private PlaceClickListener pClickListener;
     private SearchType type;
-    private PlaceFragmentEventListener eventListener;
 
-    public PlaceItemAdapter(Cursor cursor, Context context) {
+    public PlaceItemAdapter(Cursor cursor, Context context,
+                            RandomTextProvider randomTextProvider,
+                            PlaceAndPlateFactory itemFactory) {
         super(cursor);
         this.context = context;
-        App.get(context).getViewComponent().inject(this);
+        this.randomTextProvider = randomTextProvider;
+        this.itemFactory = itemFactory;
     }
 
     public void setHistorical(boolean historical) {
         this.historical = historical;
     }
 
+    public void setPlaceClickListener(PlaceClickListener clickListener) {
+        this.pClickListener = clickListener;
+    }
+
     public void setType(SearchType type) {
         this.type = type;
-    }
-
-    public void setEventListener(PlaceFragmentEventListener eventListener) {
-        this.eventListener = eventListener;
-    }
-
-    private void checkAllArgumentsFilled() {
-        checkNotNull(type, "Search type is not set");
-        checkNotNull(context, "Context is not set");
-        checkNotNull(eventListener, "PlaceFragmentEventListener is not set");
     }
 
     @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {
@@ -74,9 +66,10 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         return new ItemViewHolder(view);
     }
 
-    @Override protected RecyclerView.ViewHolder createSectionViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_place_header, parent, false);
-        return new HeaderViewHolder(view);
+    protected void checkAllArgumentsFilled() {
+        checkNotNull(type, "Search type is not set");
+        checkNotNull(context, "Context is not set");
+        checkNotNull(pClickListener, "PlaceClickListener is not set");
     }
 
     @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
@@ -93,31 +86,31 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         }
 
         Observable.just(cursor).first().map(this::cursorToItem)
-                .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
-                .subscribe(place -> {
-                    PlaceType type = place.placeType();
-                    if(type.ordinal() < PlaceType.SPECIAL.ordinal()){
-                        bindStandardPlaceViewHolder(holder, place);
-                    } else if(type == PlaceType.SPECIAL) {
-                        bindSpecialPlaceViewHolder(holder, place);
-                    } else if(type == PlaceType.RANDOM) {
-                        bindRandomPlaceViewHolder(holder, place);
-                    }
-                }, ex -> Timber.e(ex, "Error rendering row view"));
+                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
+                  .subscribe(place -> {
+                      PlaceType type = place.placeType();
+                      if (type.ordinal() < PlaceType.SPECIAL.ordinal()) {
+                          bindStandardPlaceViewHolder(holder, place);
+                      } else if (type == PlaceType.SPECIAL) {
+                          bindSpecialPlaceViewHolder(holder, place);
+                      } else if (type == PlaceType.RANDOM) {
+                          bindRandomPlaceViewHolder(holder, place);
+                      }
+                  }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        holder.root.setOnClickListener(v -> eventListener.onPlaceItemClicked(
-                        place.id(),
-                        place.plateString(),
-                        type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
-                                (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
+        holder.root.setOnClickListener(v -> pClickListener.onPlaceItemClicked(
+                place.id(),
+                place.plateString(),
+                type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
+                        (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
         holder.plateView.setText(place.plateString());
     }
 
     private void bindRandomPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        if(type == SearchType.PLACE){
+        if (type == SearchType.PLACE) {
             holder.placeNameView.setText(place.name());
             holder.plateView.setText(randomTextProvider.getUnknownPlatePlaceholder());
             holder.voivodeshipView.setText(context.getString(R.string.search_question_where));
@@ -165,47 +158,6 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         return subName.trim();
     }
 
-    private Integer getLastSectionIndex() {
-        int lastSection = -1;
-
-        for (Integer sectionIndex : sectionIndexes) {
-            if (lastSection < sectionIndex) {
-                lastSection = sectionIndex;
-            }
-        }
-
-        return lastSection < 0 ? null : lastSection;
-    }
-
-    @Override protected void bindHeaderViewHolder(RecyclerView.ViewHolder viewHolder,
-                                                  int position, Section section) {
-        checkAllArgumentsFilled();
-
-        HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
-
-        holder.header.setText(section.getTitle());
-        holder.root.setClickable(section.getClintEventId() != null);
-
-        if (section.getClintEventId() != null) {
-            holder.root.setOnClickListener((v) -> eventListener.onHeaderClicked(section.getClintEventId()));
-        }
-
-        // if section is last - add divider
-        if (position == getItemCount() - 1) {
-            holder.divider.setVisibility(View.VISIBLE);
-        } else {
-            holder.divider.setVisibility(View.GONE);
-        }
-
-        // if there are rows above - hide shadow
-        Integer lastSectionIndex = getLastSectionIndex();
-        if (lastSectionIndex != null && position == lastSectionIndex) {
-            holder.shadow.setVisibility(View.GONE);
-        } else {
-            holder.shadow.setVisibility(View.VISIBLE);
-        }
-    }
-
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root) View root;
         @BindView(R.id.txt_place_name) TextView placeNameView;
@@ -221,15 +173,7 @@ public class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
         }
     }
 
-    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.root) View root;
-        @BindView(R.id.txt_header) TextView header;
-        @BindView(R.id.shadow) View shadow;
-        @BindView(R.id.divider) ImageView divider;
-
-        public HeaderViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
+    public interface PlaceClickListener {
+        void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
     }
 }
