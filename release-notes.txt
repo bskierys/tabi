@@ -1,6 +1,13 @@
 Release Notes
+## [v0.2.2] (2017-02-12)
+- New tile icons 
+- Change about libraries page to match app design 
+- Special screen for voivodeship/category information 
+- Change app feedback dialog to match app design 
 ## [v0.2.1] (2017-01-21)
+- Search rows dividers are too short 
 - Doodle captions has too small leading 
+- Add presentation explanation 
 - Add english translation for app 
 ## [v0.2.0] (2017-01-05)
 - App version at the bottom of main screen 
