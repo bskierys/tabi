@@ -177,6 +177,7 @@ dependencies {
 
     // image downloading
     compile mobileDependencies.picasso
+    compile mobileDependencies.rxNetwork
 
     // icepick
     compile mobileDependencies.icepick
