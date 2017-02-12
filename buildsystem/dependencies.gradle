@@ -73,6 +73,7 @@ ext {
     retrofitVersion = '2.1.0'
     okLogVersion = '1.0.1'
     loggingInterceptorVersion = '3.3.0'
+    rxNetworkVersion = '0.7.0'
 
     mobileDependencies = [
             // Android
@@ -114,6 +115,7 @@ ext {
             // image downloading
             picasso                 : "com.squareup.picasso:picasso:${picassoVersion}",
             okhttp                  : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
+            rxNetwork               : "com.github.pwittchen:reactivenetwork:${rxNetworkVersion}",
 
             // Dagger
             javaxAnnotation         : "org.glassfish:javax.annotation:${javaxAnnotationVersion}",

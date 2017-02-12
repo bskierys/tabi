@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +51,9 @@ import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import pl.ipebk.tabi.utils.FontManager;
+import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
@@ -92,9 +96,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+    private Uri mapUri;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
+    private Subscription mapErrorSub;
 
     public static DetailsFragment newInstance(long placeId, String searchedPlate,
                                               PlaceListItemType itemType, SearchType searchType) {
@@ -188,6 +194,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onDestroy() {
         super.onDestroy();
+        RxUtil.unsubscribe(mapErrorSub);
         presenter.detachView();
     }
 
@@ -232,6 +239,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void showMap(Uri uri) {
+        this.mapUri = uri;
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(getActivity())
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
@@ -445,6 +453,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onError() {
         pinView.setVisibility(View.INVISIBLE);
+        mapErrorSub = ReactiveNetwork.observeNetworkConnectivity(getActivity())
+                                     .subscribeOn(Schedulers.io())
+                                     .filter(connectivity -> connectivity.getState() == NetworkInfo.State.CONNECTED)
+                                     .observeOn(AndroidSchedulers.mainThread())
+                                     .subscribe(con -> showMap(mapUri));
     }
     //endregion
 }
