@@ -27,16 +27,14 @@ import icepick.State;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
-import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
-import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
-import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
@@ -60,14 +58,16 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @BindView(R.id.ic_search) View searchIcon;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Lowest) float lowestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Highest) float highestSearchBarPosition;
+    @BindDimen(R.dimen.Main_Margin_Greeting_Doodle_Top) float lowestDoodlePosition;
 
     private float scrollPercent;
     private MainItemAdapter adapter;
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private CompositeSubscription scrollSubscriptions;
+    private Subscription scrollSubscription;
     @State boolean isDialogShown;
+    @State int scrolledY;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,21 +83,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
-        scrollSubscriptions = new CompositeSubscription();
 
-        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
-                                              .observeOn(AndroidSchedulers.mainThread())
-                                              .map(RecyclerViewScrollEvent::dy)
-                                              .doOnNext(dy -> doodleBack.setY(doodleBack.getY() - dy))
-                                              .doOnNext(dy -> doodleFront.setY(doodleFront.getY() - dy))
-                                              .subscribe());
-
-        scrollSubscriptions.add(RxRecyclerViewExtension.totalScrollEvents(recyclerView)
-                                                       .observeOn(AndroidSchedulers.mainThread())
-                                                       .map(RecyclerViewTotalScrollEvent::totalScrollY)
-                                                       .map(this::computePercentScrolled)
-                                                       .doOnNext(percent -> scrollPercent = percent)
-                                                       .subscribe(this::setAnimationState));
+        scrollSubscription = RxRecyclerView.scrollEvents(recyclerView)
+                                           .observeOn(AndroidSchedulers.mainThread())
+                                           .map(RecyclerViewScrollEvent::dy)
+                                           .map(y -> y += scrolledY)
+                                           .doOnNext(y -> scrolledY = y)
+                                           .map(this::computePercentScrolled)
+                                           .doOnNext(percent -> scrollPercent = percent)
+                                           .subscribe(this::setAnimationState);
     }
 
     private float computePercentScrolled(int scrollPosition) {
@@ -192,8 +186,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     private void setAnimationState(float percent) {
         float moveSearchTo = (lowestSearchBarPosition - highestSearchBarPosition)
-                * scrollPercent
-                + highestSearchBarPosition;
+                * percent + highestSearchBarPosition;
+
+        float diff = lowestDoodlePosition - lowestSearchBarPosition;
+        float moveDoodleTo = moveSearchTo + diff;
+
+        doodleBack.setY(moveDoodleTo);
+        doodleFront.setY(moveDoodleTo);
 
         searchBar.setY(moveSearchTo);
         searchBarContent.setY(moveSearchTo);
@@ -234,7 +233,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscriptions);
+        RxUtil.unsubscribe(scrollSubscription);
         presenter.detachView();
     }
 
@@ -273,7 +272,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     @Override public void goToSearch(String phrase) {
-        // TODO: 2016-06-03 different animation when tile is clicked
         AnimatorSet searchAnim = new AnimatorSet();
         searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
                                                                             highestSearchBarPosition))
@@ -337,7 +335,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
             showFeedbackDialog();
         } else {
-            // TODO: 2017-01-24 presenter?
             Timber.d("Menu item clicked has literal as action");
             Intent categoryIntent = new Intent(this, CategoryActivity.class);
             categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, item.getCategoryKey());
