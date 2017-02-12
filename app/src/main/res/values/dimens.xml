@@ -107,9 +107,10 @@
     <dimen name="Category.Toolbar.Limit">8dp</dimen>
     <dimen name="Category.Paragraph.Margin">8dp</dimen>
     <dimen name="Category.Padding.Info.Top">24dp</dimen>
+    <dimen name="Category.Padding.Info.Top.Icon">16dp</dimen>
     <dimen name="Category.Padding.Info.Bottom">12dp</dimen>
-    <dimen name="Category.Height.Info.Icon">30dp</dimen>
-    <dimen name="Category.Width.Info.Icon">16dp</dimen>
+    <dimen name="Category.Height.Info.Icon">40dp</dimen>
+    <dimen name="Category.Width.Info.Icon">20dp</dimen>
     <dimen name="Category.Margin.Left.NoButton">16dp</dimen>
     <dimen name="Category.Margin.Horizontal.MinusButton">40dp</dimen>
 

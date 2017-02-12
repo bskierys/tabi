@@ -8,13 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorBackgroundLight"
-        android:orientation="horizontal"
-        android:paddingBottom="@dimen/Category.Padding.Info.Bottom"
-        android:paddingTop="@dimen/Category.Padding.Info.Top">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="@dimen/Margin.Horizontal"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/Category.Padding.Info.Top.Icon">
 
             <ImageView
                 android:id="@+id/img_icon"
@@ -28,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingBottom="@dimen/Category.Padding.Info.Bottom"
+            android:paddingTop="@dimen/Category.Padding.Info.Top"
             android:paddingLeft="@dimen/Category.Margin.Horizontal.MinusButton"
             android:paddingRight="@dimen/Margin.Horizontal">
 
