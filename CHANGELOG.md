@@ -1,14 +1,27 @@
 # Change Log
 
+## [v0.2.2](https://github.com/bskierys/tabi/tree/v0.2.2) (2017-02-12)
+[Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.1...v0.2.2)
+
+**Closed issues:**
+
+- New tile icons [\#47](https://github.com/bskierys/tabi/issues/47)
+- Change about libraries page to match app design [\#46](https://github.com/bskierys/tabi/issues/46)
+- Special screen for voivodeship/category information [\#45](https://github.com/bskierys/tabi/issues/45)
+- Change app feedback dialog to match app design [\#38](https://github.com/bskierys/tabi/issues/38)
+- Remove ViewPagerIndicator as module [\#24](https://github.com/bskierys/tabi/issues/24)
+
 ## [v0.2.1](https://github.com/bskierys/tabi/tree/v0.2.1) (2017-01-21)
 [Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.0...v0.2.1)
 
 **Fixed bugs:**
 
+- Search rows dividers are too short [\#40](https://github.com/bskierys/tabi/issues/40)
 - Doodle captions has too small leading [\#23](https://github.com/bskierys/tabi/issues/23)
 
 **Closed issues:**
 
+- Add presentation explanation [\#31](https://github.com/bskierys/tabi/issues/31)
 - Add english translation for app [\#13](https://github.com/bskierys/tabi/issues/13)
 - Add code style settings to project and repository [\#2](https://github.com/bskierys/tabi/issues/2)
 
