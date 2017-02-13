@@ -7,10 +7,12 @@ package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.AnimatorSet;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,8 +32,10 @@ import android.widget.Toast;
 
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -66,7 +70,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private final static String ARG_ITEM_TYPE = "param_item_type";
 
     @Inject DetailsPresenter presenter;
-    @Inject Picasso picasso;
+    private Picasso picasso;
     @Inject AnimationCreator animationCreator;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
@@ -96,7 +100,6 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
-    private Uri mapUri;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
@@ -127,6 +130,10 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
+
+        picasso = new Picasso.Builder(getActivity())
+                .listener((picasso, uri, e) -> onError(e, uri))
+                .build();
 
         stopwatch = stopwatchManager.getDefaultStopwatch();
         stopwatch.reset();
@@ -239,7 +246,6 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void showMap(Uri uri) {
-        this.mapUri = uri;
         DoodleImage.Builder doodleBuilder = new DoodleImage.Builder(getActivity())
                 .height(mapView.getHeight())
                 .width(mapView.getWidth())
@@ -453,11 +459,29 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onError() {
         pinView.setVisibility(View.INVISIBLE);
-        mapErrorSub = ReactiveNetwork.observeNetworkConnectivity(getActivity())
-                                     .subscribeOn(Schedulers.io())
-                                     .filter(connectivity -> connectivity.getState() == NetworkInfo.State.CONNECTED)
-                                     .observeOn(AndroidSchedulers.mainThread())
-                                     .subscribe(con -> showMap(mapUri));
+    }
+
+    private void onError(Throwable e, Uri uri) {
+        Timber.e(e, "Failed to load image: %s", uri);
+
+        if(!isNetworkAvailable() || e instanceof UnknownHostException){
+            mapErrorSub = ReactiveNetwork.observeNetworkConnectivity(getActivity())
+                                         .subscribeOn(Schedulers.io())
+                                         .filter(connectivity -> connectivity.getState() == NetworkInfo.State.CONNECTED)
+                                         .observeOn(AndroidSchedulers.mainThread())
+                                         .subscribe(con -> showMap(uri));
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        if(isDetached()) {
+            return false;
+        }
+
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     //endregion
 }

@@ -27,16 +27,12 @@ import timber.log.Timber;
 @Module
 public class FragmentModule {
     private Fragment fragment;
-    private Picasso picasso;
     private FontManager fontManager;
 
     public FragmentModule(Fragment fragment) {
         this.fragment = fragment;
         this.fontManager = FontManager.getInstance();
         this.fontManager.initialize(providesContext(), R.xml.fonts);
-        picasso = new Picasso.Builder(providesContext())
-                .listener((picasso, uri, e) -> Timber.e(e, "Failed to load image: %s", uri))
-                .build();
     }
 
     @Provides Fragment provideFragment() {
@@ -45,10 +41,6 @@ public class FragmentModule {
 
     @Provides @FragmentContext Context providesContext() {
         return fragment.getContext();
-    }
-
-    @Provides Picasso providePicasso() {
-        return picasso;
     }
 
     @Provides FontManager provideFontManager() {

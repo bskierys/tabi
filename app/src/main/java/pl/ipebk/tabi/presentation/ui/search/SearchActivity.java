@@ -152,6 +152,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         boolean shouldShowKeyboard = getIntent().getBooleanExtra(PARAM_SHOW_KEYBOARD, false);
         String searchText = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
         getIntent().removeExtra(PARAM_SEARCH_TEXT);
+        getIntent().removeExtra(PARAM_SHOW_KEYBOARD);
 
         searchEditText.postDelayed(() -> prepareSearch(searchText, shouldShowKeyboard), KEYBOARD_SHOW_DELAY);
     }
@@ -175,7 +176,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
         if (searchText != null) {
             currentSearch = searchText;
-            showClearButton();
+            if (searchText.equals("")) {
+                hideClearButton();
+            } else {
+                showClearButton();
+            }
             presenter.startInitialSearchForText(searchText);
         }
 
