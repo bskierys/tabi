@@ -10,7 +10,8 @@
         android:id="@+id/wrp_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:transitionName="row_background"
+        android:background="@color/colorBackgroundLight"
         android:orientation="vertical">
 
         <ImageView

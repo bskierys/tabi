@@ -102,7 +102,7 @@ public class SearchPlaceItemAdapterTest {
 
         itemHolder.root.performClick();
 
-        verify(placeListener).onPlaceItemClicked(agIdEq(new AggregateId(10)), eq("TAB"),
+        verify(placeListener).onPlaceItemClicked(any(), agIdEq(new AggregateId(10)), eq("TAB"),
                                                  eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH));
     }
 

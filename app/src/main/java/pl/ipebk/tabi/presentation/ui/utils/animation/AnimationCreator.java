@@ -94,7 +94,7 @@ public class AnimationCreator {
         }
 
         public Animator createPanelEnterFadeInAnim(View target) {
-            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
+            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.6f, 1.0f)
                                         .setTarget(target).setInterpolator(new LinearInterpolator())
                                         .setDuration(PANEL_FADE_ANIM_DURATION).build();
         }

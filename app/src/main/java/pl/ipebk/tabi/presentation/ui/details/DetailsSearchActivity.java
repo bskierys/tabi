@@ -8,13 +8,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
@@ -34,6 +34,8 @@ public class DetailsSearchActivity extends BaseActivity {
     public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
     public final static String PARAM_ITEM_TYPE = "param_item_type";
 
+    private final static int ENTER_ANIMATION_LENGTH = 200;
+
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
     @BindView(R.id.editTxt_search) EditText searchedEditText;
@@ -52,6 +54,13 @@ public class DetailsSearchActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         toolbarIndicator.setVisibility(View.GONE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+        }
 
         prepareOverScroll();
         loadData();
@@ -110,10 +119,7 @@ public class DetailsSearchActivity extends BaseActivity {
     }
 
     @OnClick(R.id.btn_back) public void onBackButton() {
-        // TODO: 2016-03-30 animation on back
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, false);
-        startActivity(intent);
+        onBackPressed();
     }
 
     @OnClick(R.id.btn_clear) public void onClearButton() {

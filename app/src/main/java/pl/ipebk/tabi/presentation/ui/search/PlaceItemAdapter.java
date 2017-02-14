@@ -101,9 +101,8 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
 
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         holder.root.setOnClickListener(v -> pClickListener.onPlaceItemClicked(
-                place.id(),
-                place.plateString(),
-                type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
+                v, place.id(), place.plateString(), type,
+                place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
                         (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
 
         holder.plateView.setText(place.plateString());
@@ -174,6 +173,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     public interface PlaceClickListener {
-        void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+        void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
     }
 }

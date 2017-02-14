@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.presentation.ui.category;
 
+import android.view.View;
+
 import javax.inject.Inject;
 
 import pl.ipebk.tabi.presentation.localization.CategoryLocalizationHelper;
@@ -51,8 +53,8 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
                            e -> Timber.e(e, "Error during searching for places", e));
     }
 
-    public void loadPlaceDetails(AggregateId placeId, String searchedPlate) {
-        getMvpView().goToDetails(placeId, searchedPlate,
+    public void loadPlaceDetails(View view, AggregateId placeId, String searchedPlate) {
+        getMvpView().goToDetails(view, placeId, searchedPlate,
                                  localizationHelper.formatCategory(categoryKey),
                                  localizationHelper.getCategoryPlate(categoryKey));
     }

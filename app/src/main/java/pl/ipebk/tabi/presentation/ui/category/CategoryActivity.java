@@ -1,5 +1,6 @@
 package pl.ipebk.tabi.presentation.ui.category;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.PorterDuff;
@@ -130,7 +131,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
             adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
-            adapter.setPlaceClickListener((id, plate, sType, pType) -> presenter.loadPlaceDetails(id,plate));
+            adapter.setPlaceClickListener((v, id, plate, sType, pType) -> presenter.loadPlaceDetails(v, id, plate));
             adapter.setMoreInfoClickListener(this::launchUri);
         }
 
@@ -177,12 +178,18 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    @Override public void goToDetails(AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate) {
+    @Override public void goToDetails(View view, AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate) {
         Intent intent = new Intent(this, DetailsCategoryActivity.class);
         intent.putExtra(DetailsCategoryActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsCategoryActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_NAME, categoryName);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
-        startActivity(intent);
+
+        // TODO: 2017-02-14 refactor to base
+        // TODO: 2017-02-14 will not work below api 21
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
+            startActivity(intent, transitionActivityOptions.toBundle());
+        }
     }
 }

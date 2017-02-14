@@ -255,9 +255,9 @@ public class PlaceListFragmentTest {
             return eventListener;
         }
 
-        @Override public void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type,
+        @Override public void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type,
                                                  PlaceListItemType itemType) {
-            eventListener.onPlaceItemClicked(placeId, plateClicked, type, itemType);
+            eventListener.onPlaceItemClicked(view, placeId, plateClicked, type, itemType);
         }
 
         @Override public void onHeaderClicked(int eventId) {

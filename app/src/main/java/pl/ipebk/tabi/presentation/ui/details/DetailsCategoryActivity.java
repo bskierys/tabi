@@ -17,6 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
@@ -35,6 +36,8 @@ public class DetailsCategoryActivity extends BaseActivity {
     public final static String PARAM_CATEGORY_NAME = "param_category_name";
     public final static String PARAM_CATEGORY_PLATE = "param_category_plate";
 
+    private final static int ENTER_ANIMATION_LENGTH = 200;
+
     @BindView(R.id.txt_title) TextView toolbarTitle;
     @BindView(R.id.txt_plate) TextView toolbarPlate;
     @BindView(R.id.btn_back) ImageView backButton;
@@ -48,6 +51,13 @@ public class DetailsCategoryActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+        }
 
         try {
             String categoryName = getIntent().getStringExtra(PARAM_CATEGORY_NAME);

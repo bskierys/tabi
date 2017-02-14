@@ -1,17 +1,23 @@
 package pl.ipebk.tabi.presentation.ui.search;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -239,10 +245,12 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     //region View callbacks
-    @Override public void onPlaceItemClicked(AggregateId placeId, String plateClicked,
+    @Override public void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked,
                                              SearchType type, PlaceListItemType itemType) {
         if (placeId.isValid()) {
-            presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type, itemType);
+            // TODO: 2017-02-14 simplify parameters
+            this.goToPlaceDetails(view, placeId, searchEditText.getText().toString(), type, itemType);
+            presenter.placeSelected(placeId, plateClicked, type);
         }
     }
 
@@ -321,14 +329,19 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         keyboard.showSoftInput(searchEditText, 0);
     }
 
-    @Override public void goToPlaceDetails(AggregateId placeId, String searchedPlate,
+    public void goToPlaceDetails(View view, AggregateId placeId, String searchedPlate,
                                            SearchType searchType, PlaceListItemType itemType) {
+
         Intent intent = new Intent(this, DetailsSearchActivity.class);
         intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
-        startActivity(intent);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
+            startActivity(intent, transitionActivityOptions.toBundle());
+        }
     }
 
     @Override public void showInitialSearchInPlatesSection(Cursor cursor) {

@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,7 +33,6 @@ import android.widget.Toast;
 
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.net.UnknownHostException;
@@ -52,6 +52,7 @@ import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import pl.ipebk.tabi.utils.FontManager;
@@ -128,6 +129,13 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         View view = inflater.inflate(R.layout.content_details, container, false);
         ButterKnife.bind(this, view);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().getWindow().getSharedElementEnterTransition()
+                         .addListener(new SimpleTransitionListener.Builder()
+                                              .withOnStartAction(t -> animatePanel())
+                                              .withOnEndAction(t -> computeMapBounds()).build());
+        }
+
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
 
@@ -166,23 +174,27 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
 
-        mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                  .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
-            mapWrapper.post(() -> {
-                int totalHeight = mapWrapper.getHeight()
-                        - mapWrapper.getPaddingBottom()
-                        - mapWrapper.getPaddingTop();
-                int totalWidth = mapWrapper.getWidth()
-                        - mapWrapper.getPaddingLeft()
-                        - mapWrapper.getPaddingRight();
-
-                Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
-
-                float density = mapScaleCalculator.getScreenDensity();
-                mapHeightStream.onNext((int) (totalHeight / density));
-                mapWidthStream.onNext((int) (totalWidth / density));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                      .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                mapWrapper.post(this::computeMapBounds);
             });
-        });
+        }
+    }
+
+    private void computeMapBounds() {
+        int totalHeight = mapWrapper.getHeight()
+                - mapWrapper.getPaddingBottom()
+                - mapWrapper.getPaddingTop();
+        int totalWidth = mapWrapper.getWidth()
+                - mapWrapper.getPaddingLeft()
+                - mapWrapper.getPaddingRight();
+
+        Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
+
+        float density = mapScaleCalculator.getScreenDensity();
+        mapHeightStream.onNext((int) (totalHeight / density));
+        mapWidthStream.onNext((int) (totalWidth / density));
     }
 
     @Override public void onStart() {
@@ -192,7 +204,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             Uri uri = Uri.parse(preloadedSearchPhrase);
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
+    }
 
+    public void animatePanel() {
         AnimatorSet set = new AnimatorSet();
         set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
            .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
@@ -201,6 +215,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onDestroy() {
         super.onDestroy();
+        chromeTabHelper.unbindCustomTabsService(getActivity());
         RxUtil.unsubscribe(mapErrorSub);
         presenter.detachView();
     }
@@ -308,6 +323,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void enableActionButtons() {
+        panelCard.setVisibility(View.VISIBLE);
+        // TODO: 2017-02-14 this is hack to show panel after screen orientation change 
+        animatePanel();
         ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
             @Override public void apply(@NonNull Button view, int index) {
                 view.setVisibility(View.VISIBLE);
@@ -464,7 +482,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private void onError(Throwable e, Uri uri) {
         Timber.e(e, "Failed to load image: %s", uri);
 
-        if(!isNetworkAvailable() || e instanceof UnknownHostException){
+        if (!isNetworkAvailable() || e instanceof UnknownHostException) {
             mapErrorSub = ReactiveNetwork.observeNetworkConnectivity(getActivity())
                                          .subscribeOn(Schedulers.io())
                                          .filter(connectivity -> connectivity.getState() == NetworkInfo.State.CONNECTED)
@@ -474,7 +492,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     private boolean isNetworkAvailable() {
-        if(isDetached()) {
+        if (isDetached()) {
             return false;
         }
 
