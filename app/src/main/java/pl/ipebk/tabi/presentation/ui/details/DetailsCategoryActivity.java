@@ -49,11 +49,6 @@ public class DetailsCategoryActivity extends BaseActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(Window.FEATURE_ACTIVITY_TRANSITIONS);
-        }
-
         setContentView(R.layout.activity_details_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -62,11 +62,6 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(Window.FEATURE_ACTIVITY_TRANSITIONS);
-        }
-
         setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);

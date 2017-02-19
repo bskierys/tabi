@@ -1,13 +1,14 @@
 package pl.ipebk.tabi.presentation.ui.details;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -49,24 +50,12 @@ public class DetailsSearchActivity extends BaseActivity {
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(Window.FEATURE_ACTIVITY_TRANSITIONS);
-        }
-
         setContentView(R.layout.activity_details_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
         toolbarIndicator.setVisibility(View.GONE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
-            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
-        }
 
         prepareOverScroll();
         loadData();
@@ -117,6 +106,20 @@ public class DetailsSearchActivity extends BaseActivity {
         } else {
             clearButton.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override protected void handleEnterTransition(Transition transition) {
+        super.handleEnterTransition(transition);
+        transition.setDuration(ENTER_ANIMATION_LENGTH)
+                  .setInterpolator(new EaseQuadInOutInterpolator());
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @Override protected void handleReturnTransition(Transition transition) {
+        super.handleReturnTransition(transition);
+        transition.setDuration(ENTER_ANIMATION_LENGTH)
+                  .setInterpolator(new EaseQuadInOutInterpolator());
     }
 
     @Override protected void onDestroy() {

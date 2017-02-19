@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="BaseAppTheme.NoActionBar"/>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="BaseAppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="BaseAppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
+    </style>
+
+    <style name="AppTheme.Transparent" parent="AppTheme.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/UnderlinePageIndicatorStyle</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Placeholder" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@drawable/loading_screen</item>
+    </style>
+
+    <style name="UnderlinePageIndicatorStyle">
+        <item name="android:background">@color/white</item>
+        <item name="selectedColor">@color/colorPrimary</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+</resources>

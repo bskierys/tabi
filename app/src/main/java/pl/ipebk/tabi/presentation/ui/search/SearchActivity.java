@@ -85,11 +85,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().addFlags(Window.FEATURE_ACTIVITY_TRANSITIONS);
-        }
-
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
