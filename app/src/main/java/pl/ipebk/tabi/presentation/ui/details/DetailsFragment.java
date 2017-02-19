@@ -71,7 +71,6 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private final static String ARG_ITEM_TYPE = "param_item_type";
 
     @Inject DetailsPresenter presenter;
-    private Picasso picasso;
     @Inject AnimationCreator animationCreator;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
@@ -89,7 +88,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView(R.id.img_map) ImageView mapView;
     @BindView(R.id.wrap_map) ObservableSizeLayout mapWrapper;
     @BindView(R.id.img_pin) ImageView pinView;
-    @BindView(R.id.map_with_panel) View mapAndPanel;
+    @BindView(R.id.map_with_panel) ViewGroup mapAndPanel;
     @BindView(R.id.card_panel) CardView panelCard;
     @BindViews({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
@@ -101,6 +100,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+    private Picasso picasso;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
@@ -128,6 +128,8 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_details, container, false);
         ButterKnife.bind(this, view);
+
+        panelCard.setAlpha(0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().getWindow().getSharedElementEnterTransition()
@@ -204,6 +206,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             Uri uri = Uri.parse(preloadedSearchPhrase);
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
+
+        //animatePanel();
+
     }
 
     public void animatePanel() {
@@ -323,9 +328,6 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void enableActionButtons() {
-        panelCard.setVisibility(View.VISIBLE);
-        // TODO: 2017-02-14 this is hack to show panel after screen orientation change 
-        animatePanel();
         ButterKnife.apply(actionButtons, new ButterKnife.Action<Button>() {
             @Override public void apply(@NonNull Button view, int index) {
                 view.setVisibility(View.VISIBLE);
