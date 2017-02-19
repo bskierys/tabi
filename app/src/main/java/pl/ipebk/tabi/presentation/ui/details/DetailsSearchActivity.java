@@ -86,7 +86,16 @@ public class DetailsSearchActivity extends BaseActivity {
         overScrollSubscription = decorator.getReleaseEventStream()
                                           .filter(scroll -> scroll != null)
                                           .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
-                                          .subscribe(scroll -> Timber.d("Overscrolled"));
+                                          .subscribe(scroll -> onOverscrolled());
+    }
+
+    private void onOverscrolled(){
+        Timber.d("Screen overscrolled");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // going back without animation will be confusing. go back only when there is animation (API >= 21)
+            Timber.d("API over lollipop. Loading previous screen");
+            onBackPressed();
+        }
     }
 
     private void loadData() {
