@@ -47,8 +47,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         Icepick.restoreInstanceState(this, savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            handleEnterTransition(getWindow().getEnterTransition());
-            handleReturnTransition(getWindow().getReturnTransition());
             setTaskDescription();
         }
 
@@ -87,24 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         outState.putLong(KEY_ACTIVITY_ID, mActivityId);
         Icepick.saveInstanceState(this, outState);
     }
-
-    /**
-     * Method fired only on devices with lollipop or higher api. It allows you to handle enter transition. Includes api filtering. Remember to copy target api annotation
-     * when overrides
-     *
-     * @param transition Transition you can alter. ex. add listener
-     */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    protected void handleEnterTransition(Transition transition) {}
-
-    /**
-     * Method fired only on devices with lollipop or higher api. It allows you to handle return transition. Includes api filtering. Remember to copy target api annotation
-     * when overrides
-     *
-     * @param transition Transition you can alter. ex. add listener
-     */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    protected void handleReturnTransition(Transition transition) {}
 
     @Override public void startActivity(Intent intent) {
         super.startActivity(intent);

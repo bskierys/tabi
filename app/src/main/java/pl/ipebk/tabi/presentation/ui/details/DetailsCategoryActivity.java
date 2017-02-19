@@ -123,9 +123,4 @@ public class DetailsCategoryActivity extends BaseActivity {
     @OnClick(R.id.btn_back) public void onBackButton() {
         onBackPressed();
     }
-
-    @Override public void onBackPressed() {
-        Timber.d("Back pressed in activity");
-        super.onBackPressed();
-    }
 }

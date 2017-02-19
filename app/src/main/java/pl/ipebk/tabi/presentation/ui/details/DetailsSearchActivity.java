@@ -55,6 +55,13 @@ public class DetailsSearchActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
+                       .setInterpolator(new EaseQuadInOutInterpolator());
+        }
+
         toolbarIndicator.setVisibility(View.GONE);
 
         prepareOverScroll();
@@ -106,20 +113,6 @@ public class DetailsSearchActivity extends BaseActivity {
         } else {
             clearButton.setVisibility(View.INVISIBLE);
         }
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override protected void handleEnterTransition(Transition transition) {
-        super.handleEnterTransition(transition);
-        transition.setDuration(ENTER_ANIMATION_LENGTH)
-                  .setInterpolator(new EaseQuadInOutInterpolator());
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    @Override protected void handleReturnTransition(Transition transition) {
-        super.handleReturnTransition(transition);
-        transition.setDuration(ENTER_ANIMATION_LENGTH)
-                  .setInterpolator(new EaseQuadInOutInterpolator());
     }
 
     @Override protected void onDestroy() {

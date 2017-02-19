@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.CardView;
+import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -101,10 +102,12 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
     private Picasso picasso;
+    private boolean transitionUsed;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
     private Subscription mapErrorSub;
+    private Subscription delayedStartSub;
 
     public static DetailsFragment newInstance(long placeId, String searchedPlate,
                                               PlaceListItemType itemType, SearchType searchType) {
@@ -132,10 +135,15 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         panelCard.setAlpha(0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().getWindow().getSharedElementEnterTransition()
-                         .addListener(new SimpleTransitionListener.Builder()
-                                              .withOnStartAction(t -> animatePanel())
-                                              .withOnEndAction(t -> computeMapBounds()).build());
+            Transition tr = getActivity().getWindow().getSharedElementEnterTransition();
+            tr.addListener(new SimpleTransitionListener.Builder()
+                                   .withOnStartAction(t -> {
+                                       transitionUsed = true;
+                                       showPanel(true);
+                                   })
+                                   .withOnEndAction(t -> computeMapBounds()).build());
+        } else {
+            transitionUsed = false;
         }
 
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
@@ -207,21 +215,34 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
 
-        //animatePanel();
-
+        delayedStartSub = Observable.just(null)
+                                    .delay(100, TimeUnit.MILLISECONDS)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(n -> {
+                                        if (!transitionUsed) {
+                                            Timber.d("Transition not used in activity. starting delayed action");
+                                            showPanel(false);
+                                            computeMapBounds();
+                                        }
+                                    });
     }
 
-    public void animatePanel() {
-        AnimatorSet set = new AnimatorSet();
-        set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
-           .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
-        set.start();
+    public void showPanel(boolean animate) {
+        if (animate) {
+            AnimatorSet set = new AnimatorSet();
+            set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
+               .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
+            set.start();
+        } else {
+            panelCard.setAlpha(1f);
+        }
     }
 
     @Override public void onDestroy() {
         super.onDestroy();
         chromeTabHelper.unbindCustomTabsService(getActivity());
         RxUtil.unsubscribe(mapErrorSub);
+        RxUtil.unsubscribe(delayedStartSub);
         presenter.detachView();
     }
 

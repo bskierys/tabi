@@ -187,10 +187,11 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
 
         // TODO: 2017-02-14 refactor to base
-        // TODO: 2017-02-14 will not work below api 21
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
             startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
         }
     }
 }

@@ -341,6 +341,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
             startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
         }
     }
 
