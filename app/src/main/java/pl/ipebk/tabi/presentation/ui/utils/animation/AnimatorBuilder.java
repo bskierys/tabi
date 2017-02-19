@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
  */
 public class AnimatorBuilder {
     private String propertyName;
-    private float[] values;
+    private float[] floatValues;
     private Object target;
     private Long duration;
     private Long startDelay;
@@ -24,8 +24,8 @@ public class AnimatorBuilder {
         if (propertyName != null) {
             animation.setPropertyName(propertyName);
         }
-        if (values != null) {
-            animation.setFloatValues(values);
+        if (floatValues != null) {
+            animation.setFloatValues(floatValues);
         }
         if (target != null) {
             animation.setTarget(target);
@@ -53,7 +53,7 @@ public class AnimatorBuilder {
     }
 
     public AnimatorBuilder setFloatValues(float... values) {
-        this.values = values;
+        this.floatValues = values;
         return this;
     }
 

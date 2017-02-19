@@ -8,16 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -66,7 +63,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @BindView(R.id.txt_searched) TextView searchedText;
     @BindView(R.id.pager_search) ViewPager searchPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.indicator) SearchTabPageIndicator indicator;
+    @BindView(R.id.toolbar_tab_indicator) SearchTabPageIndicator indicator;
     @BindView(R.id.btn_clear) View clearButton;
     @State String currentSearch;
     @State boolean isFullySearched;
@@ -154,6 +151,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override protected void onResume() {
         super.onResume();
+
+        indicator.setVisibility(View.VISIBLE);
 
         boolean shouldShowKeyboard = getIntent().getBooleanExtra(PARAM_SHOW_KEYBOARD, false);
         String searchText = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
@@ -332,6 +331,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     public void goToPlaceDetails(View view, AggregateId placeId, String searchedPlate,
                                            SearchType searchType, PlaceListItemType itemType) {
 
+        indicator.setVisibility(View.GONE);
+
         Intent intent = new Intent(this, DetailsSearchActivity.class);
         intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
@@ -339,7 +340,9 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
+            Pair<View, String> p2 = Pair.create(view, "row_background");
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p2);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

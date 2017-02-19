@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
@@ -31,6 +32,7 @@ import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
 import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
@@ -188,7 +190,9 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
         // TODO: 2017-02-14 refactor to base
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, view, "row_background");
+            Pair<View, String> p2 = Pair.create(view, "row_background");
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p2);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:focusable="true"
+              android:background="@color/white"
               android:focusableInTouchMode="true"
               android:orientation="vertical">
 
+    <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
+        android:id="@+id/toolbar_tab_indicator"
+        style="@style/Text_Header.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/Search.Height.Tabs"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/Toolbar.Height.Min"
+        app:fades="false"
+        app:lineHeight="@dimen/Search.Height.Tabs.Underline"
+        app:selectedTextColor="@color/colorPrimary"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/Toolbar.Height.Min"
         android:gravity="center_vertical"
+        android:background="@color/colorPrimary"
         android:orientation="horizontal">
 
         <ImageView
@@ -48,13 +61,5 @@
             android:visibility="gone"/>
     </LinearLayout>
 
-    <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
-        android:id="@+id/indicator"
-        style="@style/Text_Header.Primary"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/Search.Height.Tabs"
-        android:background="@color/white"
-        app:fades="false"
-        app:lineHeight="@dimen/Search.Height.Tabs.Underline"
-        app:selectedTextColor="@color/colorPrimary"/>
-</LinearLayout>
+
+</RelativeLayout>

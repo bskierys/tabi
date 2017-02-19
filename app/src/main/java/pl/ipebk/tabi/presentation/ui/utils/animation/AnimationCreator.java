@@ -119,5 +119,17 @@ public class AnimationCreator {
             animator.play(scaleSet).with(elevation);
             return animator;
         }
+
+        public Animator createIndicatorBackAnim(View target, float startValue) {
+            AnimatorSet animator = new AnimatorSet();
+
+            ObjectAnimator margin = new AnimatorBuilder().setPropertyName("topMargin")
+                    .setFloatValues(startValue, 0f)
+                    .setTarget(new MarginProxy(target))
+                    .setDuration(500)
+                    .setInterpolator(new DecelerateInterpolator()).build();
+            animator.play(margin);
+            return animator;
+        }
     }
 }

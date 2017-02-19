@@ -1,18 +1,24 @@
 package pl.ipebk.tabi.presentation.ui.details;
 
-import android.annotation.TargetApi;
+import android.animation.Animator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Transformation;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,6 +32,7 @@ import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEf
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
 import timber.log.Timber;
@@ -41,10 +48,13 @@ public class DetailsSearchActivity extends BaseActivity {
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
     @BindView(R.id.editTxt_search) EditText searchedEditText;
-    @BindView(R.id.indicator) SearchTabPageIndicator toolbarIndicator;
+    @BindView(R.id.toolbar_tab_indicator) SearchTabPageIndicator toolbarIndicator;
     @BindView(R.id.btn_clear) View clearButton;
     // others
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
+
+    @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
+    @Inject AnimationCreator animationCreator;
 
     private Subscription overScrollSubscription;
 
@@ -54,6 +64,9 @@ public class DetailsSearchActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        getActivityComponent().inject(this);
+
+        ((RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams()).setMargins(0, 0, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
@@ -61,8 +74,6 @@ public class DetailsSearchActivity extends BaseActivity {
             getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
                        .setInterpolator(new EaseQuadInOutInterpolator());
         }
-
-        toolbarIndicator.setVisibility(View.GONE);
 
         prepareOverScroll();
         loadData();
@@ -78,18 +89,34 @@ public class DetailsSearchActivity extends BaseActivity {
 
         ObservableVerticalOverScrollBounceEffectDecorator decorator =
                 new ObservableVerticalOverScrollBounceEffectDecorator(
-                        new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f,
-                        VerticalOverScrollBounceEffectDecorator.DEFAULT_TOUCH_DRAG_MOVE_RATIO_BCK,
-                        -1
+                        new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f, 1f, -1
                 );
+
+        decorator.getScrollEventStream()
+                 .filter(scroll -> scroll != null)
+                 .filter(scroll -> scroll <= toolbarHeight)
+                 .subscribe(scroll -> {
+                     RelativeLayout.LayoutParams head_params = (RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams();
+                     head_params.setMargins(0, scroll.intValue(), 0, 0);
+                     toolbarIndicator.setLayoutParams(head_params);
+                     toolbarIndicator.requestLayout();
+                 });
 
         overScrollSubscription = decorator.getReleaseEventStream()
                                           .filter(scroll -> scroll != null)
-                                          .filter(scroll -> scroll >= marginOffset || scroll <= marginOffset * (-1))
-                                          .subscribe(scroll -> onOverscrolled());
+                                          .subscribe(scroll -> {
+                                              if(scroll >= marginOffset || scroll <= marginOffset * (-1)){
+                                                  onOverscrolled();
+                                              } else {
+                                                  Animator anim = animationCreator
+                                                          .getDetailsAnimator()
+                                                          .createIndicatorBackAnim(toolbarIndicator, scroll);
+                                                  anim.start();
+                                              }
+                                          });
     }
 
-    private void onOverscrolled(){
+    private void onOverscrolled() {
         Timber.d("Screen overscrolled");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // going back without animation will be confusing. go back only when there is animation (API >= 21)
