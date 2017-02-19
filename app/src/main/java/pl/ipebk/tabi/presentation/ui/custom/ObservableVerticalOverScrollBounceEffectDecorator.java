@@ -53,9 +53,7 @@ public class ObservableVerticalOverScrollBounceEffectDecorator extends VerticalO
 
     @Override protected void translateView(View view, float offset) {
         super.translateView(view, offset);
-        // TODO: 2017-02-19 connect with bck and fwd
-        //offset = offset * 3;
         lastOffset = offset;
-        scrollSubject.onNext(offset * 3);
+        scrollSubject.onNext(offset);
     }
 }

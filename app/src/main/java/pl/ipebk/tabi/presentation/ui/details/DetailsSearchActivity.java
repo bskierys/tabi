@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
@@ -66,6 +68,8 @@ public class DetailsSearchActivity extends BaseActivity {
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
 
+        toolbarIndicator.setViewPager(prepareFakePagerAdapter());
+
         ((RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams()).setMargins(0, 0, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -77,6 +81,29 @@ public class DetailsSearchActivity extends BaseActivity {
 
         prepareOverScroll();
         loadData();
+    }
+
+    // TODO: 2017-02-20 remove this hack 
+    private ViewPager prepareFakePagerAdapter() {
+        PagerAdapter pagerAdapter = new PagerAdapter() {
+            CharSequence[] titles = new CharSequence[] {"po tablicy", "po miejscu"};
+
+            @Override public int getCount() {
+                return titles.length;
+            }
+
+            @Override public boolean isViewFromObject(View view, Object object) {
+                return false;
+            }
+
+            @Override public CharSequence getPageTitle(int position) {
+                return titles[position];
+            }
+        };
+        ViewPager pager = new ViewPager(this);
+        pager.setAdapter(pagerAdapter);
+
+        return pager;
     }
 
     private void prepareOverScroll() {

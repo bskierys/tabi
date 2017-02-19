@@ -8,20 +8,26 @@
     tools:context=".presentation.ui.details.DetailsSearchActivity"
     tools:ignore="contentDescription">
 
-    <pl.ipebk.tabi.presentation.ui.custom.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        app:content="@layout/toolbar_content_search"/>
-
-    <!--  This relative layout is important. If it is removed,
-          layout will go above the toolbar when scrolled  -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-        <include layout="@layout/content_details_scroll"/>
+        <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:content="@layout/toolbar_content_search"/>
+
+        <!--  This relative layout is important. If it is removed,
+              layout will go above the toolbar when scrolled  -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/Toolbar.Height.Min"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include layout="@layout/content_details_scroll"/>
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

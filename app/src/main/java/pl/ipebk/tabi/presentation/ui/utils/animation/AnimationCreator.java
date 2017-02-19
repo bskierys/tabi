@@ -126,7 +126,7 @@ public class AnimationCreator {
             ObjectAnimator margin = new AnimatorBuilder().setPropertyName("topMargin")
                     .setFloatValues(startValue, 0f)
                     .setTarget(new MarginProxy(target))
-                    .setDuration(500)
+                    .setDuration(200)
                     .setInterpolator(new DecelerateInterpolator()).build();
             animator.play(margin);
             return animator;
