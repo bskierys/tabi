@@ -29,14 +29,14 @@ public class SimpleTransitionListener implements Transition.TransitionListener {
     }
 
     @Override public void onTransitionEnd(Transition transition) {
-        transition.removeListener(this);
+        //transition.removeListener(this);
         if (builder.endAction != null) {
             builder.endAction.call(transition);
         }
     }
 
     @Override public void onTransitionCancel(Transition transition) {
-        transition.removeListener(this);
+        //transition.removeListener(this);
         if (builder.cancelAction != null) {
             builder.cancelAction.call(transition);
         }

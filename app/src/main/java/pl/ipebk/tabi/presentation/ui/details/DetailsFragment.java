@@ -96,6 +96,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView((R.id.ic_row)) ImageView placeIcon;
     @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @BindView(R.id.img_placeholder) ImageView placeHolder;
+    @BindView(R.id.divider) View divider;
 
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
@@ -140,8 +141,18 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
                                    .withOnStartAction(t -> {
                                        transitionUsed = true;
                                        showPanel(true);
+                                       divider.setVisibility(View.INVISIBLE);
                                    })
-                                   .withOnEndAction(t -> computeMapBounds()).build());
+                                   .withOnEndAction(t -> {
+                                       computeMapBounds();
+                                       divider.setVisibility(View.VISIBLE);
+                                   }).build());
+            Transition tr2 = getActivity().getWindow().getSharedElementReturnTransition();
+            tr2.addListener(new SimpleTransitionListener.Builder()
+                                   .withOnStartAction(t -> {
+                                       divider.setVisibility(View.INVISIBLE);
+                                   })
+                                   .withOnEndAction(t -> divider.setVisibility(View.VISIBLE)).build());
         } else {
             transitionUsed = false;
         }

@@ -345,13 +345,19 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            // TODO: 2017-02-20 refactor
             Pair<View, String> p1 = Pair.create(indicator, "tab_indicator");
             Pair<View, String> p3 = Pair.create(searchInputWrap, "search_input");
             Pair<View, String> p2 = Pair.create(view, "row_background");
+            Pair<View, String> p6 = Pair.create(view.findViewById(R.id.txt_voivodeship), "voivodeship_name");
+            Pair<View, String> p7 = Pair.create(view.findViewById(R.id.txt_powiat), "powiat_name");
+            Pair<View, String> p8 = Pair.create(view.findViewById(R.id.txt_place_name), "place_name");
+            Pair<View, String> p9 = Pair.create(view.findViewById(R.id.ic_row), "place_icon");
+            Pair<View, String> p10 = Pair.create(view.findViewById(R.id.txt_plate), "place_plate");
             Pair<View, String> p4 = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
             Pair<View, String> p5 = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p1, p2, p3, p4, p5);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

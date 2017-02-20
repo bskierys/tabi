@@ -84,7 +84,7 @@ public class AnimationCreator {
 
     public class DetailsAnimator {
         private static final long PANEL_FADE_ANIM_DURATION = 100;
-        private static final long PANEL_SCALE_ANIM_DURATION = 400;
+        private static final long PANEL_SCALE_ANIM_DURATION = 3600;
         private float panelElevationStart;
         private float panelElevationEnd;
 

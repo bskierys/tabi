@@ -23,7 +23,8 @@
         </LinearLayout>
     </pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout>
 
-    <ImageView style="@style/Divider.Horizontal"/>
+    <ImageView style="@style/Divider.Horizontal"
+        android:id="@+id/divider"/>
 
     <ImageView
         android:id="@+id/img_placeholder"
@@ -37,12 +38,14 @@
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_voivodeship"
         style="@style/Details_Text.Description"
+        android:transitionName="voivodeship_name"
         android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
         tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView
         android:id="@+id/txt_powiat"
         style="@style/Details_Text.Description"
+        android:transitionName="powiat_name"
         tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.FontTextView

@@ -10,9 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Transformation;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -34,6 +31,7 @@ import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
 import timber.log.Timber;
@@ -44,7 +42,7 @@ public class DetailsSearchActivity extends BaseActivity {
     public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
     public final static String PARAM_ITEM_TYPE = "param_item_type";
 
-    private final static int ENTER_ANIMATION_LENGTH = 200;
+    private final static int ENTER_ANIMATION_LENGTH = 2000;
 
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
@@ -90,7 +88,7 @@ public class DetailsSearchActivity extends BaseActivity {
     // TODO: 2017-02-20 remove this hack
     private ViewPager prepareFakePagerAdapter() {
         PagerAdapter pagerAdapter = new PagerAdapter() {
-            CharSequence[] titles = new CharSequence[] {"po tablicy", "po miejscu"};
+            CharSequence[] titles = new CharSequence[]{"po tablicy", "po miejscu"};
 
             @Override public int getCount() {
                 return titles.length;
@@ -136,7 +134,7 @@ public class DetailsSearchActivity extends BaseActivity {
         overScrollSubscription = decorator.getReleaseEventStream()
                                           .filter(scroll -> scroll != null)
                                           .subscribe(scroll -> {
-                                              if(scroll >= marginOffset || scroll <= marginOffset * (-1)){
+                                              if (scroll >= marginOffset || scroll <= marginOffset * (-1)) {
                                                   onOverscrolled();
                                               } else {
                                                   Animator anim = animationCreator

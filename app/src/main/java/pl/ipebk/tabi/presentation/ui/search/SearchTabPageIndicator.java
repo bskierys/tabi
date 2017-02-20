@@ -169,7 +169,6 @@ public class SearchTabPageIndicator extends UnderlinePageIndicator {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int currentItem = mViewPager.getCurrentItem();
         if (itemCount == 0) {
             return;
         }
