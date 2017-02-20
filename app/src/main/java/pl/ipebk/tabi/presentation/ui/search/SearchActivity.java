@@ -15,9 +15,11 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
@@ -27,6 +29,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,8 +66,10 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @BindView(R.id.txt_searched) TextView searchedText;
     @BindView(R.id.pager_search) ViewPager searchPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.txt_search_wrap) View searchInputWrap;
     @BindView(R.id.toolbar_tab_indicator) SearchTabPageIndicator indicator;
     @BindView(R.id.btn_clear) View clearButton;
+    @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @State String currentSearch;
     @State boolean isFullySearched;
 
@@ -340,9 +345,13 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Pair<View, String> p1 = Pair.create(indicator, "tab_indicator");
+            Pair<View, String> p3 = Pair.create(searchInputWrap, "search_input");
             Pair<View, String> p2 = Pair.create(view, "row_background");
+            Pair<View, String> p4 = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
+            Pair<View, String> p5 = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p2);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p1, p2, p3, p4, p5);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

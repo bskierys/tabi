@@ -25,7 +25,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
-import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
@@ -57,6 +56,7 @@ public class DetailsSearchActivity extends BaseActivity {
 
     @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @Inject AnimationCreator animationCreator;
+    private SearchType searchType;
 
     private Subscription overScrollSubscription;
 
@@ -68,7 +68,11 @@ public class DetailsSearchActivity extends BaseActivity {
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
 
-        toolbarIndicator.setViewPager(prepareFakePagerAdapter());
+        searchType = (SearchType) getIntent().getSerializableExtra(PARAM_SEARCHED_TYPE);
+        ViewPager fakePager = prepareFakePagerAdapter();
+        toolbarIndicator.setViewPager(fakePager);
+        // TODO: 2017-02-20 not by ordinal
+        toolbarIndicator.setCurrentItem(searchType.ordinal());
 
         ((RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams()).setMargins(0, 0, 0, 0);
 
@@ -83,7 +87,7 @@ public class DetailsSearchActivity extends BaseActivity {
         loadData();
     }
 
-    // TODO: 2017-02-20 remove this hack 
+    // TODO: 2017-02-20 remove this hack
     private ViewPager prepareFakePagerAdapter() {
         PagerAdapter pagerAdapter = new PagerAdapter() {
             CharSequence[] titles = new CharSequence[] {"po tablicy", "po miejscu"};
@@ -157,7 +161,6 @@ public class DetailsSearchActivity extends BaseActivity {
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
         PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
-        SearchType searchType = (SearchType) intent.getSerializableExtra(PARAM_SEARCHED_TYPE);
 
         showSearchedText(searchedPlate);
 
