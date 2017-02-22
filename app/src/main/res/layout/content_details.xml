@@ -5,6 +5,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               tools:background="@color/white"
+              android:id="@+id/sceneRoot"
               tools:ignore="contentDescription">
 
     <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout

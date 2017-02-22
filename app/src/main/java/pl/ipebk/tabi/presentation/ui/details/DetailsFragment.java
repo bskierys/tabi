@@ -21,7 +21,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.CardView;
+import android.transition.Fade;
 import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -42,10 +44,12 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseQuadOutInterpolator;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
@@ -98,6 +102,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView(R.id.img_placeholder) ImageView placeHolder;
     @BindView(R.id.divider) View divider;
 
+    // TODO: 2017-02-21 remove this
+    @BindView(R.id.sceneRoot) ViewGroup sceneRoot;
+
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
@@ -136,23 +143,53 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         panelCard.setAlpha(0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition tr = getActivity().getWindow().getSharedElementEnterTransition();
-            tr.addListener(new SimpleTransitionListener.Builder()
-                                   .withOnStartAction(t -> {
-                                       transitionUsed = true;
-                                       showPanel(true);
-                                       divider.setVisibility(View.INVISIBLE);
-                                   })
-                                   .withOnEndAction(t -> {
-                                       computeMapBounds();
-                                       divider.setVisibility(View.VISIBLE);
-                                   }).build());
-            Transition tr2 = getActivity().getWindow().getSharedElementReturnTransition();
-            tr2.addListener(new SimpleTransitionListener.Builder()
-                                   .withOnStartAction(t -> {
-                                       divider.setVisibility(View.INVISIBLE);
-                                   })
-                                   .withOnEndAction(t -> divider.setVisibility(View.VISIBLE)).build());
+            Transition enterTransition = getActivity().getWindow().getSharedElementEnterTransition();
+            enterTransition.addListener(new SimpleTransitionListener.Builder()
+                                                .withOnStartAction(t -> {
+                                                    transitionUsed = true;
+                                                    showPanel(true);
+                                                })
+                                                .withOnEndAction(t -> computeMapBounds())
+                                                .unregisterOnEnd().build());
+            Transition returnTransition = getActivity().getWindow().getSharedElementReturnTransition();
+            returnTransition.addListener(new SimpleTransitionListener.Builder()
+                                                 .withOnStartAction(t -> divider.setVisibility(View.INVISIBLE))
+                                                 .withOnEndAction(t -> divider.setVisibility(View.VISIBLE)).build());
+            enterTransition.addListener(new SimpleTransitionListener.Builder()
+                                                 .withOnStartAction(t -> divider.setVisibility(View.INVISIBLE))
+                                                 .withOnEndAction(t -> divider.setVisibility(View.VISIBLE)).build());
+
+            getActivity().getWindow().getEnterTransition().addListener(new SimpleTransitionListener.Builder()
+                                                .withOnStartAction(t -> {
+                                                    gminaView.setVisibility(View.INVISIBLE);
+                                                    mapAndPanel.setVisibility(View.INVISIBLE);
+                                                    additionalInfoView.setVisibility(View.INVISIBLE);
+
+                                                    Transition t2 = new Fade(Fade.IN);
+                                                    t2.addTarget(gminaView);
+                                                    t2.addTarget(mapAndPanel);
+                                                    t2.addTarget(additionalInfoView);
+                                                    t2.setDuration(1500);
+                                                    t2.setStartDelay(500);
+                                                    t2.setInterpolator(new EaseQuadOutInterpolator());
+                                                    TransitionManager.beginDelayedTransition(sceneRoot, t2);
+                                                    gminaView.setVisibility(View.VISIBLE);
+                                                    mapAndPanel.setVisibility(View.VISIBLE);
+                                                    additionalInfoView.setVisibility(View.VISIBLE);
+                                                }).unregisterOnEnd().build());
+            getActivity().getWindow().getReturnTransition().addListener(new SimpleTransitionListener.Builder()
+                                                 .withOnStartAction(t -> {
+                                                     Transition t2 = new Fade(Fade.OUT);
+                                                     t2.addTarget(gminaView);
+                                                     t2.addTarget(mapAndPanel);
+                                                     t2.addTarget(additionalInfoView);
+                                                     t2.setDuration(1500);
+                                                     t2.setInterpolator(new EaseQuadOutInterpolator());
+                                                     TransitionManager.beginDelayedTransition(sceneRoot, t2);
+                                                     gminaView.setVisibility(View.INVISIBLE);
+                                                     mapAndPanel.setVisibility(View.INVISIBLE);
+                                                     additionalInfoView.setVisibility(View.INVISIBLE);
+                                                 }).build());
         } else {
             transitionUsed = false;
         }

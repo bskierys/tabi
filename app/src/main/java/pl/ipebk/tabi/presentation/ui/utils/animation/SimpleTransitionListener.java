@@ -29,14 +29,18 @@ public class SimpleTransitionListener implements Transition.TransitionListener {
     }
 
     @Override public void onTransitionEnd(Transition transition) {
-        //transition.removeListener(this);
+        if(builder.unregisterOnEnd) {
+            transition.removeListener(this);
+        }
         if (builder.endAction != null) {
             builder.endAction.call(transition);
         }
     }
 
     @Override public void onTransitionCancel(Transition transition) {
-        //transition.removeListener(this);
+        if(builder.unregisterOnEnd) {
+            transition.removeListener(this);
+        }
         if (builder.cancelAction != null) {
             builder.cancelAction.call(transition);
         }
@@ -61,6 +65,7 @@ public class SimpleTransitionListener implements Transition.TransitionListener {
         private Action1<Transition> cancelAction;
         private Action1<Transition> pauseAction;
         private Action1<Transition> resumeAction;
+        private boolean unregisterOnEnd;
 
         public Builder withOnStartAction(Action1<Transition> startAction) {
             this.startAction = startAction;
@@ -84,6 +89,11 @@ public class SimpleTransitionListener implements Transition.TransitionListener {
 
         public Builder withOnResumeAction(Action1<Transition> resumeAction) {
             this.resumeAction = resumeAction;
+            return this;
+        }
+
+        public Builder unregisterOnEnd() {
+            this.unregisterOnEnd = true;
             return this;
         }
 

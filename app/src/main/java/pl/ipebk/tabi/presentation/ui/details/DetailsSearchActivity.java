@@ -9,8 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -51,6 +54,7 @@ public class DetailsSearchActivity extends BaseActivity {
     @BindView(R.id.btn_clear) View clearButton;
     // others
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
+    @BindView(R.id.overlay_black) ImageView blackOverlay;
 
     @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @Inject AnimationCreator animationCreator;
@@ -75,6 +79,15 @@ public class DetailsSearchActivity extends BaseActivity {
         ((RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams()).setMargins(0, 0, 0, 0);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition t1 = new Fade(Fade.IN);
+            t1.addTarget(blackOverlay);
+            t1.setDuration(ENTER_ANIMATION_LENGTH);
+            getWindow().setEnterTransition(t1);
+            Transition t3 = new Fade(Fade.OUT);
+            t3.addTarget(blackOverlay);
+            t3.setDuration(ENTER_ANIMATION_LENGTH);
+            getWindow().setReturnTransition(t3);
+
             getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
                        .setInterpolator(new EaseQuadInOutInterpolator());
             getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
