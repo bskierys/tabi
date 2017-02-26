@@ -186,7 +186,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_NAME, categoryName);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Pair<View, String>[] transitions = new Pair[8];
             // shared elements
             transitions[0] = Pair.create(view, getString(R.string.trans_row_background));

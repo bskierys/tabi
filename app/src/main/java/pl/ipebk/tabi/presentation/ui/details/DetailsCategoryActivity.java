@@ -3,17 +3,11 @@ package pl.ipebk.tabi.presentation.ui.details;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.transition.Transition;
-import android.transition.TransitionManager;
-import android.view.View;
-import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,8 +17,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cimi.com.easeinterpolator.EaseCubicInOutInterpolator;
-import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
@@ -32,7 +24,6 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
-import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
@@ -115,7 +106,7 @@ public class DetailsCategoryActivity extends BaseActivity {
     }
 
     // TODO: 2017-02-19 refactor to common class
-    private void onOverscrolled(){
+    private void onOverscrolled() {
         Timber.d("Screen overscrolled");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // going back without animation will be confusing. go back only when there is animation (API >= 21)

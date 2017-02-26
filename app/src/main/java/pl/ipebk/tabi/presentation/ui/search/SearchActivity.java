@@ -252,7 +252,6 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @Override public void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked,
                                              SearchType type, PlaceListItemType itemType) {
         if (placeId.isValid()) {
-            // TODO: 2017-02-14 simplify parameters
             this.goToPlaceDetails(view, placeId, searchEditText.getText().toString(), type, itemType);
             presenter.placeSelected(placeId, plateClicked, type);
         }
@@ -334,7 +333,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     public void goToPlaceDetails(View view, AggregateId placeId, String searchedPlate,
-                                           SearchType searchType, PlaceListItemType itemType) {
+                                 SearchType searchType, PlaceListItemType itemType) {
 
         indicator.setVisibility(View.GONE);
 
@@ -344,7 +343,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Pair<View, String>[] transitions = new Pair[10];
             // shared elements
             transitions[0] = Pair.create(indicator, getString(R.string.trans_tab_indicator));
