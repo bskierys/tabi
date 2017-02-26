@@ -1,13 +1,17 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.animation.AnimatorSet;
+import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +32,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
@@ -329,15 +334,31 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         }
     }
 
-    @Override public void onMenuItemClicked(MainListElementItem item) {
+    @Override public void onMenuItemClicked(View target, MainListElementItem item) {
         if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
             goToAboutAppPage();
         } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
             showFeedbackDialog();
         } else {
             Timber.d("Menu item clicked has literal as action");
-            Intent categoryIntent = new Intent(this, CategoryActivity.class);
-            categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, item.getCategoryKey());
+            goToCategoryView(target, item.getCategoryKey());
+        }
+    }
+
+    private void goToCategoryView(View view, String categoryKey) {
+        Intent categoryIntent = new Intent(this, CategoryActivity.class);
+        categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Pair<View, String>[] transitions = new Pair[3];
+            // shared elements
+            transitions[0] = Pair.create(view, "main_card_bg");
+            // status and nav bar
+            transitions[1] = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
+            transitions[2] = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitions);
+            startActivity(categoryIntent, transitionActivityOptions.toBundle());
+        } else {
             startActivity(categoryIntent);
         }
     }

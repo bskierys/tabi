@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +32,8 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
@@ -50,6 +53,8 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Inject CustomTabActivityHelper chromeTabHelper;
 
     @BindView(R.id.toolbar_parent) View toolbar;
+    @BindView(R.id.content_container) View contentContainer;
+    @BindView(R.id.background_layout) View background;
     @BindView(R.id.place_list) RecyclerView recyclerView;
     @BindView(R.id.progress) ProgressBar progressBar;
     @BindView(R.id.txt_title) TextView title;
@@ -65,6 +70,22 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Transition eTr = getWindow().getSharedElementEnterTransition();
+            Transition rTr = getWindow().getSharedElementReturnTransition();
+            eTr.addListener(new SimpleTransitionListener.Builder()
+                                    .withOnStartAction(t -> {
+                                        contentContainer.setVisibility(View.INVISIBLE);
+                                        toolbar.setVisibility(View.INVISIBLE);
+                                    })
+                                    .withOnEndAction(t -> {
+                                        contentContainer.setVisibility(View.VISIBLE);
+                                        toolbar.setVisibility(View.VISIBLE);
+                                        background.setVisibility(View.GONE);
+                                    })
+                                    .build());
+        }
 
         presenter.attachView(this);
         progressBar.getIndeterminateDrawable().setColorFilter(

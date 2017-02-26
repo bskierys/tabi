@@ -105,7 +105,6 @@ public class DetailsCategoryActivity extends BaseActivity {
                                           .subscribe(scroll -> onOverscrolled());
     }
 
-    // TODO: 2017-02-19 refactor to common class
     private void onOverscrolled() {
         Timber.d("Screen overscrolled");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

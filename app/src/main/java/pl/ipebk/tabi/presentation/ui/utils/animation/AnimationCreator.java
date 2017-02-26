@@ -16,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
@@ -47,6 +49,10 @@ public class AnimationCreator {
 
     public DetailsAnimator getDetailsAnimator() {
         return new DetailsAnimator();
+    }
+
+    public CategoryAnimator getCategoryAnimator() {
+        return new CategoryAnimator();
     }
 
     public final class SearchBarAnimator {
@@ -103,7 +109,7 @@ public class AnimationCreator {
         }
     }
 
-    public class DetailsAnimator {
+    public final class DetailsAnimator {
         private static final long PANEL_FADE_ANIM_DURATION = 300;
         private static final long PANEL_SCALE_ANIM_DURATION = 400;
         private static final long INDICATOR_BACK_ANIM_DURATION = 200;
@@ -129,10 +135,11 @@ public class AnimationCreator {
 
         public Animator createPanelEnterFadeInAnim(View target) {
             long delay = (long) (PANEL_FADE_ANIM_DELAY * animSpeedScale);
+            long duration = (long) (PANEL_FADE_ANIM_DURATION * animSpeedScale);
             return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.6f, 1.0f)
                                         .setTarget(target).setInterpolator(new LinearInterpolator())
                                         .setStartDelay(delay)
-                                        .setDuration(PANEL_FADE_ANIM_DURATION).build();
+                                        .setDuration(duration).build();
         }
 
         public Animator createPanelEnterScaleAnim(View target) {
@@ -212,6 +219,20 @@ public class AnimationCreator {
             long duration = (long) (DETAIL_SHARED_DURATION * animSpeedScale);
             transition.setInterpolator(new EaseQuadInOutInterpolator())
                       .setDuration(duration);
+        }
+    }
+
+    public final class CategoryAnimator {
+        CategoryAnimator() {}
+
+        public Animation createItemEnterAnim(View target, int position) {
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
+            animation.setInterpolator(new EaseCubicOutInterpolator());
+            animation.setDuration(200);
+            if(position > 0) {
+                animation.setStartOffset(120);
+            }
+            return animation;
         }
     }
 }

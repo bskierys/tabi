@@ -8,6 +8,13 @@
     tools:context=".presentation.ui.category.CategoryActivity"
     tools:ignore="contentDescription">
 
+    <FrameLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="main_card_bg"
+        android:background="@color/white"/>
+
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
         android:id="@+id/toolbar_parent"
         android:layout_width="match_parent"
@@ -20,6 +27,7 @@
     <!--  This relative layout is important. If it is removed,
           layout will go above the toolbar when scrolled  -->
     <RelativeLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -42,5 +50,4 @@
 
         <ImageView style="@style/Shadow.2dp"/>
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

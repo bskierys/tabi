@@ -35,7 +35,7 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     private RandomTextProvider randomTextProvider;
     private PlaceAndPlateFactory itemFactory;
-    private Context context;
+    protected Context context;
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;

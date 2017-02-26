@@ -11,17 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cimi.com.easeinterpolator.EaseCubicOutInterpolator;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
@@ -36,6 +40,8 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
     private static CategoryInfo DEFAULT_INFO;
     private MoreInfoClickListener mClickListener;
     private String platesSectionName;
+    private AnimationCreator animCreator;
+    private int lastPosition = -1;
 
     public CategoryPlaceItemAdapter(Cursor cursor, Context context,
                                     RandomTextProvider randomTextProvider,
@@ -43,8 +49,9 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         super(cursor, context, randomTextProvider, itemFactory);
         platesSectionName = context.getString(R.string.category_plates_section);
         String noText = context.getString(R.string.default_resource_string);
-        DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText,
-                                                 context.getResources().getDrawable(R.drawable.vic_default));
+        // TODO: 2017-02-26 pass injected
+        animCreator = new AnimationCreator(context);
+        DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText, context.getResources().getDrawable(R.drawable.vic_default));
     }
 
     public void setCategoryInfo(CategoryInfo categoryInfo) {
@@ -85,6 +92,24 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         holder.title.setText(categoryInfo.title());
         holder.body.setText(categoryInfo.body());
         holder.moreButton.setOnClickListener(v -> mClickListener.onMoreInfoClick(categoryInfo.link()));
+    }
+
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+        setAnimation(viewHolder.itemView, position);
+    }
+
+    /**
+     * Here is the key method to apply the animation
+     */
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        if (position > lastPosition) {
+            AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
+            Animation animation = creator.createItemEnterAnim(viewToAnimate, position);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     public static class BigHeaderViewHolder extends RecyclerView.ViewHolder {
