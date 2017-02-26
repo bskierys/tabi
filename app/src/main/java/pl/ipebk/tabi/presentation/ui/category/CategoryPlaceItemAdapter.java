@@ -12,13 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cimi.com.easeinterpolator.EaseCubicOutInterpolator;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
@@ -99,11 +97,7 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         setAnimation(viewHolder.itemView, position);
     }
 
-    /**
-     * Here is the key method to apply the animation
-     */
-    private void setAnimation(View viewToAnimate, int position)
-    {
+    private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
             Animation animation = creator.createItemEnterAnim(viewToAnimate, position);

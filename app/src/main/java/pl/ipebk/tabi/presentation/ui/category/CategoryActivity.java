@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Fade;
 import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
@@ -23,6 +24,7 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseCubicInOutInterpolator;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.AggregateId;
@@ -72,9 +74,21 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         getActivityComponent().inject(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition eTr = getWindow().getSharedElementEnterTransition();
-            Transition rTr = getWindow().getSharedElementReturnTransition();
-            eTr.addListener(new SimpleTransitionListener.Builder()
+            Transition enterTransition = new Fade(Fade.IN);
+            enterTransition.setDuration(300);
+            getWindow().setEnterTransition(enterTransition);
+
+            Transition returnTransition = new Fade(Fade.OUT);
+            returnTransition.setDuration(100);
+            getWindow().setReturnTransition(returnTransition);
+
+            Transition estr = getWindow().getSharedElementEnterTransition();
+            Transition rstr = getWindow().getSharedElementReturnTransition();
+            estr.setDuration(300).setInterpolator(new EaseCubicInOutInterpolator());
+            rstr.setDuration(300).setInterpolator(new EaseCubicInOutInterpolator());
+
+            Transition etr = getWindow().getEnterTransition();
+            etr.addListener(new SimpleTransitionListener.Builder()
                                     .withOnStartAction(t -> {
                                         contentContainer.setVisibility(View.INVISIBLE);
                                         toolbar.setVisibility(View.INVISIBLE);
