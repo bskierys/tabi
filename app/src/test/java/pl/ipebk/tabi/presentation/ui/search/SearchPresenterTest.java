@@ -68,18 +68,6 @@ public class SearchPresenterTest {
         searchPresenter.detachView();
     }
 
-    @Test public void testPlaceSelected() throws Exception {
-        when(timeProvider.now()).thenReturn(new Date(10));
-        searchPresenter.placeSelected(new AggregateId(0), "TAB", "TAB", SearchType.PLACE, PlaceListItemType.SEARCH);
-        verify(mockMvpView).goToPlaceDetails(agIdEq(new AggregateId(0)), eq("TAB"), eq(SearchType.PLACE),
-                                             eq(PlaceListItemType.SEARCH));
-        verify(searchRepository).save(any(SearchHistory.class));
-    }
-
-    static AggregateId agIdEq(AggregateId expected) {
-        return argThat(new AggregateIdMatcher(expected));
-    }
-
     @Test public void testRefreshSearch() throws Exception {
         Cursor cursor = mock(Cursor.class);
         when(historyFinder.findHistoryPlaces(anyInt(),any(SearchType.class))).thenReturn(rx.Observable.just(cursor));

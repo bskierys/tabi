@@ -8,13 +8,13 @@
               android:focusableInTouchMode="true"
               android:orientation="vertical">
 
-    <pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator
+    <pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator
         android:id="@+id/toolbar_tab_indicator"
         style="@style/Text_Header.Primary"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Search.Height.Tabs"
         android:layout_marginTop="@dimen/Toolbar.Height.Min"
-        android:transitionName="tab_indicator"
+        android:transitionName="@string/trans_tab_indicator"
         app:fades="false"
         app:lineHeight="@dimen/Search.Height.Tabs.Underline"
         app:selectedTextColor="@color/colorPrimary"/>
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/Toolbar.Height.Min"
         android:id="@+id/txt_search_wrap"
-        android:transitionName="search_input"
+        android:transitionName="@string/trans_search_input"
         android:gravity="center_vertical"
         android:background="@color/colorPrimary"
         android:orientation="horizontal">
@@ -37,11 +37,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/txt_searched"
                 style="@style/Text_Toolbar"/>
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontEditText
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontEditText
                 android:id="@+id/editTxt_search"
                 style="@style/Text_Toolbar"
                 android:background="@android:color/transparent"

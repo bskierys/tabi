@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trans_tab_indicator" translatable="false">tab_indicator</string>
+    <string name="trans_search_input" translatable="false">search_input</string>
+    <string name="trans_row_background" translatable="false">row_background</string>
+    <string name="trans_voivodeship_name" translatable="false">voivodeship_name</string>
+    <string name="trans_powiat_name" translatable="false">powiat_name</string>
+    <string name="trans_place_name" translatable="false">place_name</string>
+    <string name="trans_place_icon" translatable="false">place_icon</string>
+    <string name="trans_place_plate" translatable="false">place_plate</string>
+</resources>

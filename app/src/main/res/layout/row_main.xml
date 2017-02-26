@@ -27,7 +27,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/vic_dol"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_category"
             style="@style/Text_Body2.Primary"
             android:gravity="center_horizontal"

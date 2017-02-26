@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.view.View;
 import android.view.Window;
@@ -16,9 +18,12 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseCubicInOutInterpolator;
 import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
@@ -28,6 +33,7 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
 import timber.log.Timber;
@@ -38,12 +44,13 @@ public class DetailsCategoryActivity extends BaseActivity {
     public final static String PARAM_CATEGORY_NAME = "param_category_name";
     public final static String PARAM_CATEGORY_PLATE = "param_category_plate";
 
-    private final static int ENTER_ANIMATION_LENGTH = 200;
+    @Inject AnimationCreator animationCreator;
 
     @BindView(R.id.txt_title) TextView toolbarTitle;
     @BindView(R.id.txt_plate) TextView toolbarPlate;
     @BindView(R.id.btn_back) ImageView backButton;
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
+    @BindView(R.id.overlay_black) ImageView blackOverlay;
 
     private Subscription overScrollSubscription;
 
@@ -53,12 +60,18 @@ public class DetailsCategoryActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        getActivityComponent().inject(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
-            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
+            AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+            Transition enterTransition = anim.createBgFadeInTransition(blackOverlay);
+            getWindow().setEnterTransition(enterTransition);
+
+            Transition returnTransition = anim.createBgFadeOutTransition(blackOverlay);
+            getWindow().setReturnTransition(returnTransition);
+
+            anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
+            anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
         }
 
         try {

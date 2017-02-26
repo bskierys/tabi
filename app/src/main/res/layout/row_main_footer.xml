@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:src="@color/colorPrimary"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_version"
         style="@style/Text_Body2.Primary"
         android:layout_width="match_parent"

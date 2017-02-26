@@ -22,7 +22,7 @@
         android:layout_above="@+id/btn_send"
         android:layout_below="@+id/toolbar">
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontEditText
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontEditText
             android:id="@+id/edit_issue"
             style="@style/Text_Body.Primary"
             android:layout_width="match_parent"

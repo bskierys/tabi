@@ -12,7 +12,7 @@
         android:transitionName="place_icon"
         android:src="@drawable/ic_doodle_search"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_place_name"
         android:transitionName="place_name"
         style="@style/Text_Title2.Primary"
@@ -23,7 +23,7 @@
         android:layout_weight="1"
         tools:text="@string/preview_place_name"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_plate"
         android:transitionName="place_plate"
         style="@style/Text_Title2.Primary"

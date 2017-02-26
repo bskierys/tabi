@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.indicator;
 
 import android.content.Context;
 import android.content.res.Resources;

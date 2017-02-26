@@ -64,7 +64,7 @@
             android:layout_marginRight="@dimen/Main.Margin.SearchBar.Horizontal"
             android:layout_marginTop="@dimen/Main.Margin.SearchBar.Top.Lowest">
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/txt_searched"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Main.Height.SearchBar.Inner"

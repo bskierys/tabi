@@ -28,11 +28,9 @@ import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
-import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
-import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
+import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
-import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
@@ -188,11 +186,20 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_NAME, categoryName);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
 
-        // TODO: 2017-02-14 refactor to base
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Pair<View, String> p2 = Pair.create(view, "row_background");
+            Pair<View, String>[] transitions = new Pair[8];
+            // shared elements
+            transitions[0] = Pair.create(view, getString(R.string.trans_row_background));
+            transitions[1] = Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name));
+            transitions[2] = Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name));
+            transitions[3] = Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name));
+            transitions[4] = Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon));
+            transitions[5] = Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate));
+            // status and nav bar
+            transitions[6] = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
+            transitions[7] = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, p2);
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitions);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

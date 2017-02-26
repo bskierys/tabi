@@ -29,14 +29,14 @@
             <include layout="@layout/row_place_name"/>
         </LinearLayout>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_voivodeship"
             style="@style/Details_Text.Description.Search"
             android:transitionName="voivodeship_name"
             tools:text="example text"
             android:layout_marginBottom="-6dp"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_powiat"
             style="@style/Details_Text.Description.Search"
             android:transitionName="powiat_name"

@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -3,7 +3,7 @@
 * date: 2016-02-26
 * email: bartlomiej.kierys@imed24.pl
 */
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

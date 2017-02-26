@@ -36,25 +36,25 @@
         android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
         android:visibility="gone"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_voivodeship"
         style="@style/Details_Text.Description"
-        android:transitionName="voivodeship_name"
+        android:transitionName="@string/trans_voivodeship_name"
         android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
         tools:text="example text"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_powiat"
         style="@style/Details_Text.Description"
-        android:transitionName="powiat_name"
+        android:transitionName="@string/trans_powiat_name"
         tools:text="example text"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_gmina"
         style="@style/Details_Text.Description"
         tools:text="example text"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_additional"
         style="@style/Details_Text.Description"
         android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"

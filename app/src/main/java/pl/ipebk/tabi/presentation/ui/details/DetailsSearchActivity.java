@@ -24,6 +24,7 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cimi.com.easeinterpolator.EaseCubicInOutInterpolator;
 import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import me.everything.android.ui.overscroll.adapters.ScrollViewOverScrollDecorAdapter;
 import pl.ipebk.tabi.R;
@@ -32,9 +33,9 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
-import pl.ipebk.tabi.presentation.ui.search.SearchTabPageIndicator;
+import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
-import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
+import pl.ipebk.tabi.presentation.ui.utils.animation.MarginProxy;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
 import timber.log.Timber;
@@ -44,8 +45,6 @@ public class DetailsSearchActivity extends BaseActivity {
     public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
     public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
     public final static String PARAM_ITEM_TYPE = "param_item_type";
-
-    private final static int ENTER_ANIMATION_LENGTH = 2000;
 
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
@@ -58,7 +57,6 @@ public class DetailsSearchActivity extends BaseActivity {
 
     @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @Inject AnimationCreator animationCreator;
-    private SearchType searchType;
 
     private Subscription overScrollSubscription;
 
@@ -70,55 +68,33 @@ public class DetailsSearchActivity extends BaseActivity {
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
 
-        searchType = (SearchType) getIntent().getSerializableExtra(PARAM_SEARCHED_TYPE);
-        ViewPager fakePager = prepareFakePagerAdapter();
-        toolbarIndicator.setViewPager(fakePager);
-        // TODO: 2017-02-20 not by ordinal
-        toolbarIndicator.setCurrentItem(searchType.ordinal());
-
-        ((RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams()).setMargins(0, 0, 0, 0);
+        prepareIndicator();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Transition t1 = new Fade(Fade.IN);
-            t1.addTarget(blackOverlay);
-            t1.setDuration(ENTER_ANIMATION_LENGTH);
-            getWindow().setEnterTransition(t1);
-            Transition t3 = new Fade(Fade.OUT);
-            t3.addTarget(blackOverlay);
-            t3.setDuration(ENTER_ANIMATION_LENGTH);
-            getWindow().setReturnTransition(t3);
+            AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+            Transition enterTransition = anim.createBgFadeInTransition(blackOverlay);
+            getWindow().setEnterTransition(enterTransition);
 
-            getWindow().getSharedElementEnterTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
-            getWindow().getSharedElementReturnTransition().setDuration(ENTER_ANIMATION_LENGTH)
-                       .setInterpolator(new EaseQuadInOutInterpolator());
+            Transition returnTransition = anim.createBgFadeOutTransition(blackOverlay);
+            getWindow().setReturnTransition(returnTransition);
+
+            anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
+            anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
         }
 
         prepareOverScroll();
         loadData();
     }
 
-    // TODO: 2017-02-20 remove this hack
-    private ViewPager prepareFakePagerAdapter() {
-        PagerAdapter pagerAdapter = new PagerAdapter() {
-            CharSequence[] titles = new CharSequence[]{"po tablicy", "po miejscu"};
+    private void prepareIndicator() {
+        SearchType searchType = (SearchType) getIntent().getSerializableExtra(PARAM_SEARCHED_TYPE);
+        // use static page indicator for fake hook to viewpager
+        toolbarIndicator.setViewPager(new StaticPageIndicatorViewPager(
+                this, getString(R.string.search_tab_plate), getString(R.string.search_tab_place)));
+        toolbarIndicator.setCurrentItem(searchType.ordinal());
 
-            @Override public int getCount() {
-                return titles.length;
-            }
-
-            @Override public boolean isViewFromObject(View view, Object object) {
-                return false;
-            }
-
-            @Override public CharSequence getPageTitle(int position) {
-                return titles[position];
-            }
-        };
-        ViewPager pager = new ViewPager(this);
-        pager.setAdapter(pagerAdapter);
-
-        return pager;
+        MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
+        indicatorMarginManager.setTopMargin(0);
     }
 
     private void prepareOverScroll() {
@@ -134,15 +110,12 @@ public class DetailsSearchActivity extends BaseActivity {
                         new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f, 1f, -1
                 );
 
+        MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
+
         decorator.getScrollEventStream()
                  .filter(scroll -> scroll != null)
                  .filter(scroll -> scroll <= toolbarHeight)
-                 .subscribe(scroll -> {
-                     RelativeLayout.LayoutParams head_params = (RelativeLayout.LayoutParams) toolbarIndicator.getLayoutParams();
-                     head_params.setMargins(0, scroll.intValue(), 0, 0);
-                     toolbarIndicator.setLayoutParams(head_params);
-                     toolbarIndicator.requestLayout();
-                 });
+                 .subscribe(scroll -> indicatorMarginManager.setTopMargin(scroll.intValue()));
 
         overScrollSubscription = decorator.getReleaseEventStream()
                                           .filter(scroll -> scroll != null)
@@ -172,6 +145,7 @@ public class DetailsSearchActivity extends BaseActivity {
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
         PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
+        SearchType searchType = (SearchType) getIntent().getSerializableExtra(PARAM_SEARCHED_TYPE);
 
         showSearchedText(searchedPlate);
 

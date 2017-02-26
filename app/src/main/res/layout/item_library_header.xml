@@ -25,14 +25,14 @@
         android:layout_marginTop="@dimen/Libraries.Margin.Title.Top"
         android:orientation="vertical">
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             style="@style/Text_Display.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/Paragraph.Margin.Display"
             android:text="@string/about_third_party_title"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             style="@style/Text_Body2.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

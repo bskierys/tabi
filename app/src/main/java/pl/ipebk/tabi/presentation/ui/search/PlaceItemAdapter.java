@@ -22,7 +22,7 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
-import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
 import timber.log.Timber;
