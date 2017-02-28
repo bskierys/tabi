@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -344,21 +346,26 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Pair<View, String>[] transitions = new Pair[10];
+            List<Pair<View, String>> transitions = new ArrayList<>();
             // shared elements
-            transitions[0] = Pair.create(indicator, getString(R.string.trans_tab_indicator));
-            transitions[1] = Pair.create(searchInputWrap, getString(R.string.trans_search_input));
-            transitions[2] = Pair.create(view, getString(R.string.trans_row_background));
-            transitions[3] = Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name));
-            transitions[4] = Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name));
-            transitions[5] = Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name));
-            transitions[6] = Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon));
-            transitions[7] = Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate));
+            transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
+            transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
+            transitions.add(Pair.create(view, getString(R.string.trans_row_background)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate)));
             // status and nav bar
-            transitions[8] = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
-            transitions[9] = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
+            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if(navigationBar!=null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitions);
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

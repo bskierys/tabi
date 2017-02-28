@@ -349,14 +349,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         Intent categoryIntent = new Intent(this, CategoryActivity.class);
         categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Pair<View, String>[] transitions = new Pair[3];
-            // shared elements
-            transitions[0] = Pair.create(view, "main_card_bg");
-            // status and nav bar
-            transitions[1] = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
-            transitions[2] = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            transitions.add(Pair.create(view, "main_card_bg"));
+            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if(navigationBar!=null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitions);
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
             startActivity(categoryIntent, transitionActivityOptions.toBundle());
         } else {
             startActivity(categoryIntent);

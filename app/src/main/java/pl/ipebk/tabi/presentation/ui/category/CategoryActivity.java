@@ -18,6 +18,9 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindDimen;
@@ -34,7 +37,6 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.DetailsCategoryActivity;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
-import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
@@ -73,6 +75,20 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
 
+        presenter.attachView(this);
+        progressBar.getIndeterminateDrawable().setColorFilter(
+                getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+
+        String categoryKey;
+        try {
+            categoryKey = getIntent().getStringExtra(EXTRA_CATEGORY_KEY);
+            if (categoryKey == null) {
+                throw new NullPointerException("Category key is null");
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Could not initialize CategoryActivity: category key was not passed");
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Transition enterTransition = new Fade(Fade.IN);
             enterTransition.setDuration(300);
@@ -92,6 +108,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
                                     .withOnStartAction(t -> {
                                         contentContainer.setVisibility(View.INVISIBLE);
                                         toolbar.setVisibility(View.INVISIBLE);
+                                        presenter.initCategory(categoryKey);
                                     })
                                     .withOnEndAction(t -> {
                                         contentContainer.setVisibility(View.VISIBLE);
@@ -99,20 +116,6 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
                                         background.setVisibility(View.GONE);
                                     })
                                     .build());
-        }
-
-        presenter.attachView(this);
-        progressBar.getIndeterminateDrawable().setColorFilter(
-                getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-
-        try {
-            String categoryKey = getIntent().getStringExtra(EXTRA_CATEGORY_KEY);
-            if (categoryKey == null) {
-                throw new NullPointerException("Category key is null");
-            }
-            presenter.initCategory(categoryKey);
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Could not initialize CategoryActivity: category key was not passed");
         }
 
         recyclerView.setLayoutManager(getLayoutManager());
@@ -222,19 +225,24 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Pair<View, String>[] transitions = new Pair[8];
+            List<Pair<View, String>> transitions = new ArrayList<>();
             // shared elements
-            transitions[0] = Pair.create(view, getString(R.string.trans_row_background));
-            transitions[1] = Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name));
-            transitions[2] = Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name));
-            transitions[3] = Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name));
-            transitions[4] = Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon));
-            transitions[5] = Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate));
+            transitions.add(Pair.create(view.findViewById(R.id.wrp_row), getString(R.string.trans_row_background)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name)));
+            transitions.add(Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate)));
             // status and nav bar
-            transitions[6] = Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
-            transitions[7] = Pair.create(findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
+            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if(navigationBar!=null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitions);
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
             startActivity(intent, transitionActivityOptions.toBundle());
         } else {
             startActivity(intent);

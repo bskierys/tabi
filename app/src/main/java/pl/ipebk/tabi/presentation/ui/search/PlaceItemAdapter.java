@@ -7,11 +7,13 @@ package pl.ipebk.tabi.presentation.ui.search;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -100,10 +102,21 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        holder.root.setOnClickListener(v -> pClickListener.onPlaceItemClicked(
-                v, place.id(), place.plateString(), type,
-                place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
-                        (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
+        holder.root.setOnClickListener(v -> {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.rowBackground.setTransitionName(context.getString(R.string.trans_row_background));
+                holder.placeNameView.setTransitionName(context.getString(R.string.trans_place_name));
+                holder.plateView.setTransitionName(context.getString(R.string.trans_place_plate));
+                holder.icon.setTransitionName(context.getString(R.string.trans_place_icon));
+                holder.voivodeshipView.setTransitionName(context.getString(R.string.trans_voivodeship_name));
+                holder.powiatView.setTransitionName(context.getString(R.string.trans_powiat_name));
+            }
+
+            pClickListener.onPlaceItemClicked(
+                    v, place.id(), place.plateString(), type,
+                    place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
+                            (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH));
+        });
 
         holder.plateView.setText(place.plateString());
     }
@@ -165,6 +178,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         @BindView(R.id.txt_powiat) TextView powiatView;
         @BindView(R.id.shadow) ImageView shadow;
         @BindView(R.id.ic_row) ImageView icon;
+        @BindView(R.id.wrp_row) LinearLayout rowBackground;
 
         public ItemViewHolder(View view) {
             super(view);

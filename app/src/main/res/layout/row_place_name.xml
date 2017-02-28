@@ -14,7 +14,6 @@
 
     <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_place_name"
-        android:transitionName="place_name"
         style="@style/Text_Title2.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,7 +24,6 @@
 
     <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_plate"
-        android:transitionName="place_plate"
         style="@style/Text_Title2.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
