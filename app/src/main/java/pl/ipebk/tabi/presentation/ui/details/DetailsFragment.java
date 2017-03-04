@@ -157,6 +157,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     private void setupEnterAndReturnTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            placeNameView.setTransitionName(getString(R.string.trans_place_name));
+            plateView.setTransitionName(getString(R.string.trans_place_plate));
+            placeIcon.setTransitionName(getString(R.string.trans_place_icon));
             animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
 
             Transition enterTransition = getActivity().getWindow().getEnterTransition();
