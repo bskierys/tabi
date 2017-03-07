@@ -103,7 +103,7 @@ public class SearchPlaceItemAdapterTest {
         itemHolder.root.performClick();
 
         verify(placeListener).onPlaceItemClicked(any(), agIdEq(new AggregateId(10)), eq("TAB"),
-                                                 eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH));
+                                                 eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH), anyInt());
     }
 
     @Test public void testBindSpecialPlace() throws Exception {

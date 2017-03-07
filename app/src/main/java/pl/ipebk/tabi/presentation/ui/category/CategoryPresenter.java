@@ -53,10 +53,10 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
                            e -> Timber.e(e, "Error during searching for places", e));
     }
 
-    public void loadPlaceDetails(View view, AggregateId placeId, String searchedPlate) {
+    public void loadPlaceDetails(View view, AggregateId placeId, String searchedPlate, int position) {
         getMvpView().goToDetails(view, placeId, searchedPlate,
                                  localizationHelper.formatCategory(categoryKey),
-                                 localizationHelper.getCategoryPlate(categoryKey));
+                                 localizationHelper.getCategoryPlate(categoryKey), position);
     }
 
     @Override public void detachView() {

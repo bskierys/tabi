@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:background="@color/white"
+              tools:background="@color/colorBackgroundLight"
               android:id="@+id/sceneRoot"
               tools:ignore="contentDescription">
 
@@ -39,14 +39,12 @@
     <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_voivodeship"
         style="@style/Details_Text.Description"
-        android:transitionName="@string/trans_voivodeship_name"
         android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
         tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_powiat"
         style="@style/Details_Text.Description"
-        android:transitionName="@string/trans_powiat_name"
         tools:text="example text"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView

@@ -3,4 +3,5 @@
     <dimen name="Main.Padding.DemoDialog.Vertical">24dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">16dp</dimen>
     <dimen name="Feedback.Margin.Top">0dp</dimen>
+    <dimen name="Height.Details">820dp</dimen>
 </resources>

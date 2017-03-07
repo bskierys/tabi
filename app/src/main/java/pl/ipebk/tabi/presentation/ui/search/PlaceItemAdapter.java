@@ -88,7 +88,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         }
 
         Observable.just(cursor).first().map(this::cursorToItem)
-                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
+                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place, position))
                   .subscribe(place -> {
                       PlaceType type = place.placeType();
                       if (type.ordinal() < PlaceType.SPECIAL.ordinal()) {
@@ -101,21 +101,22 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
                   }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
-    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place, int position) {
         holder.root.setOnClickListener(v -> {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.rowBackground.setTransitionName(context.getString(R.string.trans_row_background));
-                holder.placeNameView.setTransitionName(context.getString(R.string.trans_place_name));
-                holder.plateView.setTransitionName(context.getString(R.string.trans_place_plate));
-                holder.icon.setTransitionName(context.getString(R.string.trans_place_icon));
-                holder.voivodeshipView.setTransitionName(context.getString(R.string.trans_voivodeship_name));
-                holder.powiatView.setTransitionName(context.getString(R.string.trans_powiat_name));
+                // TODO: 2017-03-04 naming refactor
+                holder.rowBackground.setTransitionName(context.getString(R.string.trans_row_background) + Integer.toString(position));
+                holder.placeNameView.setTransitionName(context.getString(R.string.trans_place_name) + Integer.toString(position));
+                holder.plateView.setTransitionName(context.getString(R.string.trans_place_plate) + Integer.toString(position));
+                holder.icon.setTransitionName(context.getString(R.string.trans_place_icon) + Integer.toString(position));
+                holder.voivodeshipView.setTransitionName(context.getString(R.string.trans_voivodeship_name) + Integer.toString(position));
+                holder.powiatView.setTransitionName(context.getString(R.string.trans_powiat_name) + Integer.toString(position));
             }
 
             pClickListener.onPlaceItemClicked(
                     v, place.id(), place.plateString(), type,
                     place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
-                            (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH));
+                            (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH), position);
         });
 
         holder.plateView.setText(place.plateString());
@@ -187,6 +188,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     public interface PlaceClickListener {
-        void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+        void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType, int position);
     }
 }

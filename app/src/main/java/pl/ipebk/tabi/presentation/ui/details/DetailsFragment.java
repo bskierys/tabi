@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private final static String ARG_SEARCHED_PLATE = "param_searched_plate";
     private final static String ARG_SEARCHED_TYPE = "param_searched_type";
     private final static String ARG_ITEM_TYPE = "param_item_type";
+    private final static String ARG_ADAPTER_POSITION = "param_adapter_position";
 
     @Inject DetailsPresenter presenter;
     @Inject AnimationCreator animationCreator;
@@ -114,13 +116,14 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Subscription mapErrorSub;
     private Subscription delayedStartSub;
 
-    public static DetailsFragment newInstance(long placeId, String searchedPlate,
-                                              PlaceListItemType itemType, SearchType searchType) {
+    public static DetailsFragment newInstance(long placeId, String searchedPlate, PlaceListItemType itemType,
+                                              SearchType searchType, int position) {
         Bundle args = new Bundle();
 
         DetailsFragment fragment = new DetailsFragment();
         args.putLong(ARG_PLACE_ID, placeId);
         args.putString(ARG_SEARCHED_PLATE, searchedPlate);
+        args.putInt(ARG_ADAPTER_POSITION, position);
         args.putSerializable(ARG_ITEM_TYPE, itemType);
         args.putSerializable(ARG_SEARCHED_TYPE, searchType);
         fragment.setArguments(args);
@@ -157,9 +160,14 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     private void setupEnterAndReturnTransitions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            placeNameView.setTransitionName(getString(R.string.trans_place_name));
-            plateView.setTransitionName(getString(R.string.trans_place_plate));
-            placeIcon.setTransitionName(getString(R.string.trans_place_icon));
+            int position = getArguments().getInt(ARG_ADAPTER_POSITION);
+
+            placeNameView.setTransitionName(getString(R.string.trans_place_name) + Integer.toString(position));
+            plateView.setTransitionName(getString(R.string.trans_place_plate)+ Integer.toString(position));
+            placeIcon.setTransitionName(getString(R.string.trans_place_icon)+ Integer.toString(position));
+            voivodeshipView.setTransitionName(getString(R.string.trans_voivodeship_name)+ Integer.toString(position));
+            powiatView.setTransitionName(getString(R.string.trans_powiat_name)+ Integer.toString(position));
+
             animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
 
             Transition enterTransition = getActivity().getWindow().getEnterTransition();

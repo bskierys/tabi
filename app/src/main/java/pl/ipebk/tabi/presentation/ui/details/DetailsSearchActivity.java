@@ -39,6 +39,7 @@ public class DetailsSearchActivity extends BaseActivity {
     public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
     public final static String PARAM_SEARCHED_TYPE = "param_searched_type";
     public final static String PARAM_ITEM_TYPE = "param_item_type";
+    public final static String PARAM_ADAPTER_POSITION = "param_adapter_position";
 
     // toolbar
     @BindView(R.id.txt_searched) TextView searchedTextView;
@@ -140,10 +141,12 @@ public class DetailsSearchActivity extends BaseActivity {
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
         PlaceListItemType itemType = (PlaceListItemType) intent.getSerializableExtra(PARAM_ITEM_TYPE);
         SearchType searchType = (SearchType) getIntent().getSerializableExtra(PARAM_SEARCHED_TYPE);
+        int position = intent.getIntExtra(PARAM_ADAPTER_POSITION, -1);
 
         showSearchedText(searchedPlate);
 
-        DetailsFragment fragment = DetailsFragment.newInstance(placeId, searchedPlate, itemType, searchType);
+        // TODO: 2017-03-04 pass it
+        DetailsFragment fragment = DetailsFragment.newInstance(placeId, searchedPlate, itemType, searchType, position);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.content_container, fragment);

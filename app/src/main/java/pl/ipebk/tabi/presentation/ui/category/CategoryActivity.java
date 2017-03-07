@@ -170,7 +170,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
             adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
-            adapter.setPlaceClickListener((v, id, plate, sType, pType) -> presenter.loadPlaceDetails(v, id, plate));
+            adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> presenter.loadPlaceDetails(v, id, plate, pos));
             adapter.setMoreInfoClickListener(this::launchUri);
         }
 
@@ -217,22 +217,24 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    @Override public void goToDetails(View view, AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate) {
+    @Override public void goToDetails(View view, AggregateId placeId, String searchedPlate, String categoryName,
+                                      String categoryPlate, int position) {
         Intent intent = new Intent(this, DetailsCategoryActivity.class);
         intent.putExtra(DetailsCategoryActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsCategoryActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_NAME, categoryName);
         intent.putExtra(DetailsCategoryActivity.PARAM_CATEGORY_PLATE, categoryPlate);
+        intent.putExtra(DetailsCategoryActivity.PARAM_ADAPTER_POSITION, position);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
             // shared elements
-            transitions.add(Pair.create(view.findViewById(R.id.wrp_row), getString(R.string.trans_row_background)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate)));
+            transitions.add(Pair.create(view.findViewById(R.id.wrp_row), getString(R.string.trans_row_background) + Integer.toString(position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name) + Integer.toString(position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name) + Integer.toString(position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name) + Integer.toString(position)));
+            transitions.add(Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon) + Integer.toString(position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate) + Integer.toString(position)));
             // status and nav bar
             transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             View navigationBar = findViewById(android.R.id.navigationBarBackground);

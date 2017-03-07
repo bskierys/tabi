@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableVerticalOverScrollBounceEffectDecorator;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Subscription;
 import timber.log.Timber;
@@ -34,6 +37,7 @@ public class DetailsCategoryActivity extends BaseActivity {
     public final static String PARAM_SEARCHED_PLATE = "param_searched_plate";
     public final static String PARAM_CATEGORY_NAME = "param_category_name";
     public final static String PARAM_CATEGORY_PLATE = "param_category_plate";
+    public final static String PARAM_ADAPTER_POSITION = "param_adapter_position";
 
     @Inject AnimationCreator animationCreator;
 
@@ -42,6 +46,8 @@ public class DetailsCategoryActivity extends BaseActivity {
     @BindView(R.id.btn_back) ImageView backButton;
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
     @BindView(R.id.overlay_black) ImageView blackOverlay;
+    @BindView(R.id.content_container) View contentContainer;
+    @BindView(R.id.row_bg) View rowBackground;
 
     private Subscription overScrollSubscription;
 
@@ -54,11 +60,24 @@ public class DetailsCategoryActivity extends BaseActivity {
         getActivityComponent().inject(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int position = getIntent().getIntExtra(PARAM_ADAPTER_POSITION, -1);
+            rowBackground.setTransitionName(getString(R.string.trans_row_background) + Integer.toString(position));
+
             AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
             Transition enterTransition = anim.createBgFadeInTransition(blackOverlay);
+
+            enterTransition.addListener(new SimpleTransitionListener.Builder().withOnEndAction(t -> {
+                //rowBackground.setBackgroundColor(getResources().getColor(R.color.transparent));
+                scrollContainer.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+                rowBackground.getLayoutParams().height = scrollContainer.getHeight();
+            }).build());
             getWindow().setEnterTransition(enterTransition);
 
             Transition returnTransition = anim.createBgFadeOutTransition(blackOverlay);
+            returnTransition.addListener(new SimpleTransitionListener.Builder().withOnStartAction(t -> {
+                //rowBackground.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+                scrollContainer.setBackgroundColor(getResources().getColor(R.color.transparent));
+            }).build());
             getWindow().setReturnTransition(returnTransition);
 
             anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
@@ -118,14 +137,19 @@ public class DetailsCategoryActivity extends BaseActivity {
         Intent intent = getIntent();
         long placeId = intent.getLongExtra(PARAM_PLACE_ID, 0L);
         String searchedPlate = intent.getStringExtra(PARAM_SEARCHED_PLATE);
+        int position = intent.getIntExtra(PARAM_ADAPTER_POSITION, -1);
 
-        DetailsFragment fragment = DetailsFragment.newInstance(placeId, searchedPlate,
-                                                               PlaceListItemType.SEARCH,
-                                                               SearchType.LICENSE_PLATE);
+        DetailsFragment fragment = DetailsFragment.newInstance(placeId, searchedPlate, PlaceListItemType.SEARCH,
+                                                               SearchType.LICENSE_PLATE, position);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.content_container, fragment);
         ft.commit();
+    }
+
+    @Override public void onStart() {
+        super.onStart();
+
     }
 
     @Override protected void onDestroy() {
