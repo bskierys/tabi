@@ -100,7 +100,7 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
-            Animation animation = creator.createItemEnterAnim(viewToAnimate, position);
+            Animation animation = creator.createItemEnterAnim(position);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }

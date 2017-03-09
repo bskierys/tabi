@@ -30,7 +30,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +56,7 @@ import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
@@ -162,11 +162,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int position = getArguments().getInt(ARG_ADAPTER_POSITION);
 
-            placeNameView.setTransitionName(getString(R.string.trans_place_name) + Integer.toString(position));
-            plateView.setTransitionName(getString(R.string.trans_place_plate)+ Integer.toString(position));
-            placeIcon.setTransitionName(getString(R.string.trans_place_icon)+ Integer.toString(position));
-            voivodeshipView.setTransitionName(getString(R.string.trans_voivodeship_name)+ Integer.toString(position));
-            powiatView.setTransitionName(getString(R.string.trans_powiat_name)+ Integer.toString(position));
+            placeNameView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_name), position));
+            plateView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position));
+            placeIcon.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position));
+            voivodeshipView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position));
+            powiatView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position));
 
             animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
 
@@ -181,6 +181,10 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
                                                 .withOnEndAction(t -> {
                                                     divider.setVisibility(View.VISIBLE);
                                                     computeMapBounds();
+                                                    mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                                                              .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                                                        mapWrapper.post(this::computeMapBounds);
+                                                    });
                                                 })
                                                 .unregisterOnEnd().build());
             returnTransition.addListener(new SimpleTransitionListener.Builder()
@@ -314,7 +318,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void showPlaceName(String name) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getActivity().startPostponedEnterTransition();
         }
         placeNameView.setText(name);
@@ -569,7 +573,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     private boolean isNetworkAvailable() {
-        if (isDetached()) {
+        if (isDetached() || getActivity() == null) {
             return false;
         }
 

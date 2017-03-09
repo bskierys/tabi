@@ -223,9 +223,11 @@ public class AnimationCreator {
     }
 
     public final class CategoryAnimator {
+        private static final long CATEGORY_SHARED_DURATION = 300;
+
         CategoryAnimator() {}
 
-        public Animation createItemEnterAnim(View target, int position) {
+        public Animation createItemEnterAnim(int position) {
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
             animation.setInterpolator(new EaseCubicOutInterpolator());
             animation.setDuration(200);
@@ -233,6 +235,29 @@ public class AnimationCreator {
                 animation.setStartOffset(120);
             }
             return animation;
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        public void alterSharedTransition(Transition transition) {
+            long duration = (long) (CATEGORY_SHARED_DURATION * animSpeedScale);
+            transition.setInterpolator(new EaseCubicInOutInterpolator())
+                      .setDuration(duration);
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @NonNull public Transition createBgFadeInTransition() {
+            long duration = (long) (CATEGORY_SHARED_DURATION * animSpeedScale);
+            Transition transition = new Fade(Fade.IN);
+            transition.setDuration(duration);
+            return transition;
+        }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @NonNull public Transition createBgFadeOutTransition() {
+            long duration = (long) (100 * animSpeedScale);
+            Transition transition = new Fade(Fade.OUT);
+            transition.setDuration(duration);
+            return transition;
         }
     }
 }

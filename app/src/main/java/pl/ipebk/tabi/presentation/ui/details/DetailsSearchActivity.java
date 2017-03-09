@@ -1,6 +1,7 @@
 package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,8 +31,10 @@ import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.MarginProxy;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.RxUtil;
-import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class DetailsSearchActivity extends BaseActivity {
@@ -49,11 +52,12 @@ public class DetailsSearchActivity extends BaseActivity {
     // others
     @BindView(R.id.scroll_container) ScrollView scrollContainer;
     @BindView(R.id.overlay_black) ImageView blackOverlay;
+    @BindView(R.id.row_bg) View rowBackground;
 
     @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @Inject AnimationCreator animationCreator;
 
-    private Subscription overScrollSubscription;
+    private CompositeSubscription scrollSubscriptions;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,19 +70,35 @@ public class DetailsSearchActivity extends BaseActivity {
         prepareIndicator();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
-            Transition enterTransition = anim.createBgFadeInTransition(blackOverlay);
-            getWindow().setEnterTransition(enterTransition);
-
-            Transition returnTransition = anim.createBgFadeOutTransition(blackOverlay);
-            getWindow().setReturnTransition(returnTransition);
-
-            anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
-            anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
+            setupTransitions();
         }
 
         prepareOverScroll();
         loadData();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupTransitions() {
+        int position = getIntent().getIntExtra(PARAM_ADAPTER_POSITION, -1);
+        rowBackground.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_row_background), position));
+
+        AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+        Transition enterTransition = anim.createBgFadeInTransition(blackOverlay);
+        enterTransition.excludeTarget(scrollContainer, true);
+        enterTransition.addListener(new SimpleTransitionListener.Builder().withOnEndAction(t -> {
+            scrollContainer.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+            rowBackground.getLayoutParams().height = scrollContainer.getHeight();
+        }).build());
+        getWindow().setEnterTransition(enterTransition);
+
+        Transition returnTransition = anim.createBgFadeOutTransition(blackOverlay);
+        returnTransition.addListener(new SimpleTransitionListener.Builder().withOnStartAction(t -> {
+            scrollContainer.setBackgroundColor(getResources().getColor(R.color.transparent));
+        }).build());
+        getWindow().setReturnTransition(returnTransition);
+
+        anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
+        anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
     }
 
     private void prepareIndicator() {
@@ -93,8 +113,8 @@ public class DetailsSearchActivity extends BaseActivity {
     }
 
     private void prepareOverScroll() {
-        float marginOffset = getResources()
-                .getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
+        float marginOffset = getResources().getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
+        scrollSubscriptions = new CompositeSubscription();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             scrollContainer.setElevation(getResources().getDimensionPixelSize(R.dimen.Details_Elevation));
@@ -107,23 +127,27 @@ public class DetailsSearchActivity extends BaseActivity {
 
         MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
 
-        decorator.getScrollEventStream()
-                 .filter(scroll -> scroll != null)
-                 .filter(scroll -> scroll <= toolbarHeight)
-                 .subscribe(scroll -> indicatorMarginManager.setTopMargin(scroll.intValue()));
+        scrollSubscriptions.add(decorator.getScrollEventStream()
+                                         .filter(scroll -> scroll != null)
+                                         .filter(scroll -> scroll <= toolbarHeight)
+                                         .subscribe(scroll -> indicatorMarginManager.setTopMargin(scroll.intValue())));
 
-        overScrollSubscription = decorator.getReleaseEventStream()
-                                          .filter(scroll -> scroll != null)
-                                          .subscribe(scroll -> {
-                                              if (scroll >= marginOffset || scroll <= marginOffset * (-1)) {
-                                                  onOverscrolled();
-                                              } else {
-                                                  Animator anim = animationCreator
-                                                          .getDetailsAnimator()
-                                                          .createIndicatorBackAnim(toolbarIndicator, scroll);
-                                                  anim.start();
-                                              }
-                                          });
+        MarginProxy bgMarginManager = new MarginProxy(rowBackground);
+        scrollSubscriptions.add(decorator.getScrollEventStream().filter(scroll -> scroll != null)
+                                         .subscribe(scroll -> bgMarginManager.setTopMargin(scroll.intValue())));
+
+        scrollSubscriptions.add(decorator.getReleaseEventStream()
+                                         .filter(scroll -> scroll != null)
+                                         .subscribe(scroll -> {
+                                             if (scroll >= marginOffset || scroll <= marginOffset * (-1)) {
+                                                 onOverscrolled();
+                                             } else {
+                                                 Animator anim = animationCreator
+                                                         .getDetailsAnimator()
+                                                         .createIndicatorBackAnim(toolbarIndicator, scroll);
+                                                 anim.start();
+                                             }
+                                         }));
     }
 
     private void onOverscrolled() {
@@ -165,7 +189,7 @@ public class DetailsSearchActivity extends BaseActivity {
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(overScrollSubscription);
+        RxUtil.unsubscribe(scrollSubscriptions);
     }
 
     @OnClick(R.id.btn_back) public void onBackButton() {

@@ -99,7 +99,7 @@ public class PlaceListFragment extends BaseFragment {
             adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory);
             adapter.setHeaderClickListener(s -> fragmentEventListener.onHeaderClicked(s));
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> {
-                fragmentEventListener.onPlaceItemClicked(v, id, plate, sType, pType);
+                fragmentEventListener.onPlaceItemClicked(v, id, plate, sType, pType, pos);
             });
             adapter.setType(type);
         }

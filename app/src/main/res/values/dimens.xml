@@ -127,7 +127,6 @@
     <dimen name="Button.Icon.Square">56dp</dimen>
     <dimen name="Margin.Horizontal">56dp</dimen>
     <dimen name="Button.Height.Min">36dp</dimen>
-    <dimen name="Height.Details">-1.0px</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

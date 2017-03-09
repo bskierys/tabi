@@ -352,8 +352,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             List<Pair<View, String>> transitions = new ArrayList<>();
             transitions.add(Pair.create(view, "main_card_bg"));
             transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if(statusBar !=null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if(navigationBar!=null) {
+            if (navigationBar != null) {
                 transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
             }
 

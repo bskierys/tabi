@@ -42,6 +42,7 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -252,9 +253,9 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     //region View callbacks
     @Override public void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked,
-                                             SearchType type, PlaceListItemType itemType) {
+                                             SearchType type, PlaceListItemType itemType, int position) {
         if (placeId.isValid()) {
-            this.goToPlaceDetails(view, placeId, searchEditText.getText().toString(), type, itemType);
+            this.goToPlaceDetails(view, placeId, searchEditText.getText().toString(), type, itemType, position);
             presenter.placeSelected(placeId, plateClicked, type);
         }
     }
@@ -335,7 +336,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     public void goToPlaceDetails(View view, AggregateId placeId, String searchedPlate,
-                                 SearchType searchType, PlaceListItemType itemType) {
+                                 SearchType searchType, PlaceListItemType itemType, int position) {
 
         indicator.setVisibility(View.GONE);
 
@@ -344,22 +345,26 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
+        intent.putExtra(DetailsSearchActivity.PARAM_ADAPTER_POSITION, position);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
             // shared elements
-            transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
-            transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
-            transitions.add(Pair.create(view, getString(R.string.trans_row_background)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), getString(R.string.trans_voivodeship_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), getString(R.string.trans_powiat_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), getString(R.string.trans_place_name)));
-            transitions.add(Pair.create(view.findViewById(R.id.ic_row), getString(R.string.trans_place_icon)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), getString(R.string.trans_place_plate)));
+            transitions.add(Pair.create(indicator, SharedTransitionNaming.getName(getString(R.string.trans_tab_indicator), position)));
+            transitions.add(Pair.create(searchInputWrap, SharedTransitionNaming.getName(getString(R.string.trans_search_input), position)));
+            transitions.add(Pair.create(view, SharedTransitionNaming.getName(getString(R.string.trans_row_background), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), SharedTransitionNaming.getName(getString(R.string.trans_place_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.ic_row), SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
             // status and nav bar
-            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if(statusBar !=null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if(navigationBar!=null) {
+            if (navigationBar != null) {
                 transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
             }
 
