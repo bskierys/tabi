@@ -116,7 +116,7 @@
 
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
-    <dimen name="StatusBar">22dp</dimen>
+    <dimen name="StatusBar">24dp</dimen>
     <dimen name="Button.Secondary.Radius">32dp</dimen>
     <dimen name="Button.Secondary.Padding">8dp</dimen>
     <dimen name="Button.Secondary.Width">144dp</dimen>

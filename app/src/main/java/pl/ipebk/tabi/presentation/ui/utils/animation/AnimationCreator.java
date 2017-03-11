@@ -10,6 +10,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -180,6 +181,27 @@ public class AnimationCreator {
                                                          .setInterpolator(new DecelerateInterpolator()).build();
             animator.play(margin);
             return animator;
+        }
+
+        public Animator createDetailActionAnim(View target, Rect startBounds, Rect endBounds) {
+            long duration = (long) (200 * animSpeedScale);
+            AnimatorSet set = new AnimatorSet();
+            AnimatorBuilder builder = new AnimatorBuilder().setTarget(new SizeProxy(target))
+                                                               .setDuration(duration)
+                                                               .setInterpolator(new EaseCubicInOutInterpolator());
+            ObjectAnimator height = builder.setPropertyName("height")
+                                               .setFloatValues(startBounds.height(), endBounds.height()).build();
+            ObjectAnimator width = builder.setPropertyName("width")
+                                              .setFloatValues(startBounds.width(), endBounds.width()).build();
+            ObjectAnimator x = builder.setTarget(target)
+                                          .setPropertyName("x")
+                                          .setFloatValues(startBounds.left, endBounds.left).build();
+            ObjectAnimator y = builder.setTarget(target)
+                                          .setPropertyName("y")
+                                          .setFloatValues(startBounds.top, endBounds.top).build();
+            set.play(height).with(width).with(x).with(y);
+
+            return set;
         }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)

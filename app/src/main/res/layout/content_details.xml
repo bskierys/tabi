@@ -1,69 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:background="@color/colorBackgroundLight"
-              android:id="@+id/sceneRoot"
-              tools:ignore="contentDescription">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="contentDescription">
 
-    <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
-        android:id="@+id/wrap_place_header"
+    <LinearLayout
+        android:id="@+id/sceneRoot"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:background="@color/colorBackgroundLight">
 
-        <LinearLayout
+        <pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout
+            android:id="@+id/wrap_place_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:orientation="horizontal"
+                android:padding="@dimen/Details.Margin.Outer">
+
+                <include layout="@layout/row_place_name"/>
+            </LinearLayout>
+        </pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout>
+
+        <ImageView
+            android:id="@+id/divider"
+            style="@style/Divider.Horizontal"/>
+
+        <ImageView
+            android:id="@+id/img_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top"
-            android:orientation="horizontal"
-            android:padding="@dimen/Details.Margin.Outer">
+            android:contentDescription="@string/description_placeholder"
+            android:paddingLeft="@dimen/Details.Padding.Doodle.Horizontal"
+            android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
+            android:visibility="gone"/>
 
-            <include layout="@layout/row_place_name"/>
-        </LinearLayout>
-    </pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout>
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+            android:id="@+id/txt_voivodeship"
+            style="@style/Details_Text.Description"
+            android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
+            tools:text="example text"/>
 
-    <ImageView style="@style/Divider.Horizontal"
-        android:id="@+id/divider"/>
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+            android:id="@+id/txt_powiat"
+            style="@style/Details_Text.Description"
+            tools:text="example text"/>
 
-    <ImageView
-        android:id="@+id/img_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/description_placeholder"
-        android:paddingLeft="@dimen/Details.Padding.Doodle.Horizontal"
-        android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
-        android:visibility="gone"/>
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+            android:id="@+id/txt_gmina"
+            style="@style/Details_Text.Description"
+            tools:text="example text"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-        android:id="@+id/txt_voivodeship"
-        style="@style/Details_Text.Description"
-        android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
-        tools:text="example text"/>
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+            android:id="@+id/txt_additional"
+            style="@style/Details_Text.Description"
+            android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"
+            tools:text="example text"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-        android:id="@+id/txt_powiat"
-        style="@style/Details_Text.Description"
-        tools:text="example text"/>
+        <RelativeLayout
+            android:id="@+id/map_with_panel"
+            style="@style/Details_Map_Wrapper">
 
-    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-        android:id="@+id/txt_gmina"
-        style="@style/Details_Text.Description"
-        tools:text="example text"/>
+            <include layout="@layout/map_details"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-        android:id="@+id/txt_additional"
-        style="@style/Details_Text.Description"
-        android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"
-        tools:text="example text"/>
+            <include layout="@layout/panel_details"/>
+        </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/map_with_panel"
-        style="@style/Details_Map_Wrapper">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include layout="@layout/map_details"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/animation_bg_google"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundLight"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            android:visibility="invisible"/>
 
-        <include layout="@layout/panel_details"/>
+        <android.support.v7.widget.CardView
+            android:id="@+id/animation_bg_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBackgroundLight"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="8dp"
+            android:visibility="invisible"/>
     </RelativeLayout>
-</LinearLayout>
+
+</RelativeLayout>
+

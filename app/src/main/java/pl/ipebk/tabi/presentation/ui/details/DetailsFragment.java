@@ -5,12 +5,16 @@
 */
 package pl.ipebk.tabi.presentation.ui.details;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -26,9 +30,11 @@ import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Pair;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,9 +61,13 @@ import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
 import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
+import pl.ipebk.tabi.presentation.ui.utils.ViewUtil;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimatorBuilder;
+import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SizeProxy;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import pl.ipebk.tabi.utils.FontManager;
@@ -67,6 +77,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subjects.PublishSubject;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class DetailsFragment extends BaseFragment implements DetailsMvpView, Callback {
@@ -75,6 +86,8 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private final static String ARG_SEARCHED_TYPE = "param_searched_type";
     private final static String ARG_ITEM_TYPE = "param_item_type";
     private final static String ARG_ADAPTER_POSITION = "param_adapter_position";
+    private static final int BUTTON_PANEL_MAP_INDEX = 1;
+    private static final int BUTTON_PANEL_GOOGLE_INDEX = 0;
 
     @Inject DetailsPresenter presenter;
     @Inject AnimationCreator animationCreator;
@@ -103,6 +116,8 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView(R.id.img_placeholder) ImageView placeHolder;
     @BindView(R.id.divider) View divider;
     @BindView(R.id.sceneRoot) ViewGroup transitionSceneRoot;
+    @BindView(R.id.animation_bg_google) View animGoogleBg;
+    @BindView(R.id.animation_bg_map) View animMapBg;
 
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
@@ -115,6 +130,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
     private Subscription mapErrorSub;
     private Subscription delayedStartSub;
+    private CompositeSubscription animSubs;
 
     public static DetailsFragment newInstance(long placeId, String searchedPlate, PlaceListItemType itemType,
                                               SearchType searchType, int position) {
@@ -134,6 +150,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         super.onCreate(savedInstanceState);
         fragmentComponent().inject(this);
         presenter.attachView(this);
+        animSubs = new CompositeSubscription();
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -156,6 +173,27 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         Timber.d("Fragment layout creation time: %s", stopwatch.getElapsedTimeString());
 
         return view;
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        if(animGoogleBg.getVisibility() == View.VISIBLE) {
+            animateButtonBack(actionButtons.get(BUTTON_PANEL_GOOGLE_INDEX), animGoogleBg);
+        }
+        if(animMapBg.getVisibility() == View.VISIBLE) {
+            animateButtonBack(actionButtons.get(BUTTON_PANEL_MAP_INDEX), animMapBg);
+        }
+    }
+
+    private void animateButtonBack(View button, View mockBg) {
+        Rect buttonBounds = getButtonBounds(button);
+        Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
+
+        AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+        Animator animator = anim.createDetailActionAnim(mockBg, screenBounds, buttonBounds);
+
+        animSubs.add(RxAnimator.animationEnd(animator).subscribe(a -> mockBg.setVisibility(View.INVISIBLE)));
+        animator.start();
     }
 
     private void setupEnterAndReturnTransitions() {
@@ -298,6 +336,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         chromeTabHelper.unbindCustomTabsService(getActivity());
         RxUtil.unsubscribe(mapErrorSub);
         RxUtil.unsubscribe(delayedStartSub);
+        RxUtil.unsubscribe(animSubs);
         presenter.detachView();
     }
 
@@ -427,7 +466,21 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void startMapApp(Uri geoLocation) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Button mapButton = actionButtons.get(BUTTON_PANEL_MAP_INDEX);
+
+        Rect buttonBounds = getButtonBounds(mapButton);
+        Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
+
+        placeMockButtonInBounds(buttonBounds);
+
+        AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+        Animator animator = anim.createDetailActionAnim(animMapBg, buttonBounds, screenBounds);
+
+        animSubs.add(RxAnimator.animationEnd(animator).subscribe(a -> openGoogleMaps(geoLocation)));
+        animator.start();
+    }
+
+    private void openGoogleMaps(Uri geoLocation) {Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         intent.setPackage("com.google.android.apps.maps");
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -446,6 +499,42 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void startWebSearch(String searchPhrase) {
+        Button googleButton = actionButtons.get(BUTTON_PANEL_GOOGLE_INDEX);
+
+        Rect buttonBounds = getButtonBounds(googleButton);
+        Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
+
+        placeMockButtonInBounds(buttonBounds);
+
+        AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+        Animator animator = anim.createDetailActionAnim(animGoogleBg, buttonBounds, screenBounds);
+
+        animSubs.add(RxAnimator.animationEnd(animator).subscribe(a -> startChromeTab(searchPhrase)));
+        animator.start();
+    }
+
+    private void placeMockButtonInBounds(Rect buttonBounds) {
+        animGoogleBg.getLayoutParams().height = buttonBounds.height();
+        animGoogleBg.getLayoutParams().width = buttonBounds.width();
+        animGoogleBg.setY(buttonBounds.top);
+        animGoogleBg.setX(buttonBounds.left);
+        animGoogleBg.requestLayout();
+        animGoogleBg.setVisibility(View.VISIBLE);
+    }
+
+    @NonNull private Rect getButtonBounds(View googleButton) {
+        int toolbarHeight = getResources().getDimensionPixelSize(R.dimen.Toolbar_Height_Min)
+                + getResources().getDimensionPixelSize(R.dimen.StatusBar);
+
+        int left = ViewUtil.getRelativeLeft(googleButton);
+        int right = left + googleButton.getWidth();
+        int top = ViewUtil.getRelativeTop(googleButton) - toolbarHeight;
+        int bottom = top + googleButton.getHeight();
+
+        return new Rect(left, top, right, bottom);
+    }
+
+    private void startChromeTab(String searchPhrase) {
         String url = getSearchUrlForPhrase(searchPhrase);
         int primaryColor = getResources().getColor(R.color.white);
 
