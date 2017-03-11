@@ -48,14 +48,12 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     private AnimationCreator animCreator;
     private int lastPosition = -1;
 
-    public PlaceItemAdapter(Cursor cursor, Context context,
-                            RandomTextProvider randomTextProvider,
-                            PlaceAndPlateFactory itemFactory) {
+    public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
+                            PlaceAndPlateFactory itemFactory, AnimationCreator animationCreator) {
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
-        // TODO: 2017-02-26 pass injected
-        animCreator = new AnimationCreator(context);
+        animCreator = animationCreator;
         this.itemFactory = itemFactory;
     }
 

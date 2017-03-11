@@ -189,7 +189,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     public CategoryPlaceItemAdapter getAdapter() {
         if (adapter == null) {
 
-            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
+            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory, animationCreator);
             adapter.setType(SearchType.LICENSE_PLATE);
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> presenter.loadPlaceDetails(v, id, plate, pos));
             adapter.setMoreInfoClickListener(this::launchUri);
@@ -258,7 +258,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
             transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
-            if(statusBar !=null) {
+            if (statusBar != null) {
                 transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
