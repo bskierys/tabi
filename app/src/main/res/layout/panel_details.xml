@@ -8,7 +8,6 @@
     android:layout_height="@dimen/Details.Height.Button"
     android:layout_marginLeft="@dimen/Details.Margin.Outer"
     android:layout_marginRight="@dimen/Details.Margin.Outer"
-    android:alpha="0"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/Details.Radius.Panel"
     tools:ignore="contentDescription">

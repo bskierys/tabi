@@ -45,5 +45,5 @@ public interface SearchMvpView extends MvpView {
 
     void showKeyboard();
 
-    void goToPlaceDetails(AggregateId placeId, String searchedText, SearchType searchType, PlaceListItemType itemType);
+    //void goToPlaceDetails(AggregateId placeId, String searchedText, SearchType searchType, PlaceListItemType itemType);
 }

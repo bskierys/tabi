@@ -3,7 +3,7 @@
 * date: 2016-04-09
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.presentation.ui.search;
+package pl.ipebk.tabi.presentation.ui.custom.indicator;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.presentation.ui.custom.UnderlinePageIndicator;
 import pl.ipebk.tabi.utils.FontManager;
 
 /**

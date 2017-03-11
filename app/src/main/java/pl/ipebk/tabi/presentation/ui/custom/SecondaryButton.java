@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.custom.font.FontButton;
 
 /**
  * Instance of {@link android.widget.Button} that has apriopriate style for secondary behaviour

@@ -9,9 +9,10 @@
         android:layout_width="@dimen/Details.Width.Row.Icon"
         android:layout_height="@dimen/Details.Height.Row.Icon"
         android:scaleType="centerInside"
+        android:transitionName="place_icon"
         android:src="@drawable/ic_doodle_search"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_place_name"
         style="@style/Text_Title2.Primary"
         android:layout_width="0dp"
@@ -21,7 +22,7 @@
         android:layout_weight="1"
         tools:text="@string/preview_place_name"/>
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_plate"
         style="@style/Text_Title2.Primary"
         android:layout_width="wrap_content"

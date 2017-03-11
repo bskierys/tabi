@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package pl.ipebk.tabi.presentation.ui.details;
+package pl.ipebk.tabi.presentation.ui.custom.chromeTabs;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -23,6 +23,9 @@ import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
+
+import pl.ipebk.tabi.presentation.ui.details.ServiceConnection;
+import pl.ipebk.tabi.presentation.ui.details.ServiceConnectionCallback;
 
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.

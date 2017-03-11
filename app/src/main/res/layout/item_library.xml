@@ -21,7 +21,7 @@
         android:paddingRight="@dimen/Libraries.Padding.Card.Horizontal"
         android:paddingTop="@dimen/Libraries.Padding.Card.Vertical">
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/libraryName"
             style="@style/Text_Title2.Primary"
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:layout_height="@dimen/Libraries.ClickableTex.Height"
             android:layout_marginBottom="@dimen/Libraries.Paragraph.Break">
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/libraryCreator_label"
                 style="@style/Text_Small.Secondary"
                 android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                 android:layout_marginRight="@dimen/Libraries.Space.Click"
                 android:text="@string/about_author_prefix"/>
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/libraryCreator"
                 style="@style/Text_Body2.Accent"
                 android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                 tools:text="Creator"/>
         </RelativeLayout>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/libraryDescription"
             style="@style/Text_Body.Primary"
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             android:layout_height="@dimen/Libraries.ClickableTex.Height"
             android:layout_marginBottom="@dimen/Libraries.Margin.Button">
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/libraryLicense_label"
                 style="@style/Text_Small.Secondary"
                 android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_marginRight="@dimen/Libraries.Space.Click"
                 android:text="@string/about_license_prefix"/>
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/libraryLicense"
                 style="@style/Text_Body2.Accent"
                 android:layout_width="match_parent"

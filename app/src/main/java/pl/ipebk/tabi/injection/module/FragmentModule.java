@@ -8,8 +8,6 @@ package pl.ipebk.tabi.injection.module;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-import com.squareup.picasso.Picasso;
-
 import dagger.Module;
 import dagger.Provides;
 import pl.ipebk.tabi.R;
@@ -18,11 +16,10 @@ import pl.ipebk.tabi.injection.FragmentContext;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
-import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
+import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.MapScaleCalculator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.utils.FontManager;
-import timber.log.Timber;
 
 @Module
 public class FragmentModule {

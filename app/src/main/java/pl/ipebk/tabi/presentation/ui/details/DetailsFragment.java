@@ -6,6 +6,7 @@
 package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.AnimatorSet;
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +16,14 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.widget.CardView;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -32,7 +36,6 @@ import android.widget.Toast;
 
 import com.github.pwittchen.reactivenetwork.library.ReactiveNetwork;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Downloader;
 import com.squareup.picasso.Picasso;
 
 import java.net.UnknownHostException;
@@ -50,8 +53,11 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.ObservableSizeLayout;
+import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import pl.ipebk.tabi.utils.FontManager;
@@ -68,9 +74,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private final static String ARG_SEARCHED_PLATE = "param_searched_plate";
     private final static String ARG_SEARCHED_TYPE = "param_searched_type";
     private final static String ARG_ITEM_TYPE = "param_item_type";
+    private final static String ARG_ADAPTER_POSITION = "param_adapter_position";
 
     @Inject DetailsPresenter presenter;
-    private Picasso picasso;
     @Inject AnimationCreator animationCreator;
     @Inject StopwatchManager stopwatchManager;
     @Inject FontManager fontManager;
@@ -88,30 +94,36 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView(R.id.img_map) ImageView mapView;
     @BindView(R.id.wrap_map) ObservableSizeLayout mapWrapper;
     @BindView(R.id.img_pin) ImageView pinView;
-    @BindView(R.id.map_with_panel) View mapAndPanel;
+    @BindView(R.id.map_with_panel) ViewGroup mapAndPanel;
     @BindView(R.id.card_panel) CardView panelCard;
     @BindViews({R.id.btn_google_it, R.id.btn_map}) List<Button> actionButtons;
     // others
     @BindView((R.id.ic_row)) ImageView placeIcon;
     @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @BindView(R.id.img_placeholder) ImageView placeHolder;
+    @BindView(R.id.divider) View divider;
+    @BindView(R.id.sceneRoot) ViewGroup transitionSceneRoot;
 
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
+    private Picasso picasso;
+    private boolean transitionUsed;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
     private Subscription mapErrorSub;
+    private Subscription delayedStartSub;
 
-    public static DetailsFragment newInstance(long placeId, String searchedPlate,
-                                              PlaceListItemType itemType, SearchType searchType) {
+    public static DetailsFragment newInstance(long placeId, String searchedPlate, PlaceListItemType itemType,
+                                              SearchType searchType, int position) {
         Bundle args = new Bundle();
 
         DetailsFragment fragment = new DetailsFragment();
         args.putLong(ARG_PLACE_ID, placeId);
         args.putString(ARG_SEARCHED_PLATE, searchedPlate);
+        args.putInt(ARG_ADAPTER_POSITION, position);
         args.putSerializable(ARG_ITEM_TYPE, itemType);
         args.putSerializable(ARG_SEARCHED_TYPE, searchType);
         fragment.setArguments(args);
@@ -127,6 +139,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_details, container, false);
         ButterKnife.bind(this, view);
+        setupEnterAndReturnTransitions();
 
         doodleHeaderFont = fontManager.get("bebas-book", Typeface.NORMAL);
         doodleDescriptionFont = fontManager.get("montserrat", Typeface.NORMAL);
@@ -143,6 +156,66 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         Timber.d("Fragment layout creation time: %s", stopwatch.getElapsedTimeString());
 
         return view;
+    }
+
+    private void setupEnterAndReturnTransitions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int position = getArguments().getInt(ARG_ADAPTER_POSITION);
+
+            placeNameView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_name), position));
+            plateView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position));
+            placeIcon.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position));
+            voivodeshipView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position));
+            powiatView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position));
+
+            animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
+
+            Transition enterTransition = getActivity().getWindow().getEnterTransition();
+            Transition returnTransition = getActivity().getWindow().getReturnTransition();
+
+            enterTransition.addListener(new SimpleTransitionListener.Builder()
+                                                .withOnStartAction(t -> {
+                                                    transitionUsed = true;
+                                                    animateEnter();
+                                                    mapAndPanel.setVisibility(View.INVISIBLE);
+                                                })
+                                                .withOnEndAction(t -> {
+                                                    divider.setVisibility(View.VISIBLE);
+                                                    mapAndPanel.setVisibility(View.VISIBLE);
+                                                    computeMapBounds();
+                                                    mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                                                              .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                                                        mapWrapper.post(this::computeMapBounds);
+                                                    });
+                                                })
+                                                .unregisterOnEnd().build());
+            returnTransition.addListener(new SimpleTransitionListener.Builder()
+                                                 .withOnStartAction(t -> {
+                                                     panelCard.setVisibility(View.INVISIBLE);
+                                                     divider.setVisibility(View.INVISIBLE);
+                                                     gminaView.setVisibility(View.INVISIBLE);
+                                                     mapAndPanel.setVisibility(View.INVISIBLE);
+                                                     additionalInfoView.setVisibility(View.INVISIBLE);
+                                                 }).build());
+        } else {
+            transitionUsed = false;
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void animateEnter() {
+        gminaView.setVisibility(View.INVISIBLE);
+        divider.setVisibility(View.INVISIBLE);
+        additionalInfoView.setVisibility(View.INVISIBLE);
+
+        Transition fadeIn = animationCreator
+                .getDetailsAnimator()
+                .createContentFadeInTransition(gminaView, additionalInfoView);
+        TransitionManager.beginDelayedTransition(transitionSceneRoot, fadeIn);
+
+        gminaView.setVisibility(View.VISIBLE);
+        additionalInfoView.setVisibility(View.VISIBLE);
+        showPanel(true);
     }
 
     private void clearPreviewLayout() {
@@ -166,23 +239,27 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
 
-        mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                  .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
-            mapWrapper.post(() -> {
-                int totalHeight = mapWrapper.getHeight()
-                        - mapWrapper.getPaddingBottom()
-                        - mapWrapper.getPaddingTop();
-                int totalWidth = mapWrapper.getWidth()
-                        - mapWrapper.getPaddingLeft()
-                        - mapWrapper.getPaddingRight();
-
-                Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
-
-                float density = mapScaleCalculator.getScreenDensity();
-                mapHeightStream.onNext((int) (totalHeight / density));
-                mapWidthStream.onNext((int) (totalWidth / density));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                      .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                mapWrapper.post(this::computeMapBounds);
             });
-        });
+        }
+    }
+
+    private void computeMapBounds() {
+        int totalHeight = mapWrapper.getHeight()
+                - mapWrapper.getPaddingBottom()
+                - mapWrapper.getPaddingTop();
+        int totalWidth = mapWrapper.getWidth()
+                - mapWrapper.getPaddingLeft()
+                - mapWrapper.getPaddingRight();
+
+        Timber.d("Map bounds computed. Height: %d, width: %d", totalHeight, totalWidth);
+
+        float density = mapScaleCalculator.getScreenDensity();
+        mapHeightStream.onNext((int) (totalHeight / density));
+        mapWidthStream.onNext((int) (totalWidth / density));
     }
 
     @Override public void onStart() {
@@ -193,15 +270,34 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
 
-        AnimatorSet set = new AnimatorSet();
-        set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
-           .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
-        set.start();
+        delayedStartSub = Observable.just(null)
+                                    .delay(100, TimeUnit.MILLISECONDS)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(n -> {
+                                        if (!transitionUsed) {
+                                            Timber.d("Transition not used in activity. starting delayed action");
+                                            showPanel(false);
+                                            computeMapBounds();
+                                        }
+                                    });
+    }
+
+    public void showPanel(boolean animate) {
+        if (animate) {
+            AnimatorSet set = new AnimatorSet();
+            set.play(animationCreator.getDetailsAnimator().createPanelEnterScaleAnim(panelCard))
+               .with(animationCreator.getDetailsAnimator().createPanelEnterFadeInAnim(panelCard));
+            set.start();
+        } else {
+            panelCard.setAlpha(1f);
+        }
     }
 
     @Override public void onDestroy() {
         super.onDestroy();
+        chromeTabHelper.unbindCustomTabsService(getActivity());
         RxUtil.unsubscribe(mapErrorSub);
+        RxUtil.unsubscribe(delayedStartSub);
         presenter.detachView();
     }
 
@@ -222,6 +318,9 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void showPlaceName(String name) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getActivity().startPostponedEnterTransition();
+        }
         placeNameView.setText(name);
     }
 
@@ -464,7 +563,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private void onError(Throwable e, Uri uri) {
         Timber.e(e, "Failed to load image: %s", uri);
 
-        if(!isNetworkAvailable() || e instanceof UnknownHostException){
+        if (!isNetworkAvailable() || e instanceof UnknownHostException) {
             mapErrorSub = ReactiveNetwork.observeNetworkConnectivity(getActivity())
                                          .subscribeOn(Schedulers.io())
                                          .filter(connectivity -> connectivity.getState() == NetworkInfo.State.CONNECTED)
@@ -474,7 +573,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     private boolean isNetworkAvailable() {
-        if(isDetached()) {
+        if (isDetached() || getActivity() == null) {
             return false;
         }
 

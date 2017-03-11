@@ -3,7 +3,7 @@
 * date: 2016-03-13
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.font;
 
 import android.content.Context;
 import android.content.res.TypedArray;

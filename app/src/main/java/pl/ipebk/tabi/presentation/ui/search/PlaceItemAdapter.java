@@ -7,11 +7,14 @@ package pl.ipebk.tabi.presentation.ui.search;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -22,7 +25,9 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
-import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
 import timber.log.Timber;
@@ -33,19 +38,22 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
  * Adapter for items of type {@link PlaceAndPlateDto}.
  */
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
+    private static final int ADAPTER_VIEW_CAPACITY = 2;
     private RandomTextProvider randomTextProvider;
     private PlaceAndPlateFactory itemFactory;
-    private Context context;
+    protected Context context;
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;
+    private AnimationCreator animCreator;
+    private int lastPosition = -1;
 
-    public PlaceItemAdapter(Cursor cursor, Context context,
-                            RandomTextProvider randomTextProvider,
-                            PlaceAndPlateFactory itemFactory) {
+    public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
+                            PlaceAndPlateFactory itemFactory, AnimationCreator animationCreator) {
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
+        animCreator = animationCreator;
         this.itemFactory = itemFactory;
     }
 
@@ -72,6 +80,15 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         checkNotNull(pClickListener, "PlaceClickListener is not set");
     }
 
+    protected void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
+            Animation animation = creator.createItemEnterAnim(position);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
     @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
         checkAllArgumentsFilled();
 
@@ -86,7 +103,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         }
 
         Observable.just(cursor).first().map(this::cursorToItem)
-                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
+                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place, position))
                   .subscribe(place -> {
                       PlaceType type = place.placeType();
                       if (type.ordinal() < PlaceType.SPECIAL.ordinal()) {
@@ -99,12 +116,22 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
                   }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
-    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        holder.root.setOnClickListener(v -> pClickListener.onPlaceItemClicked(
-                place.id(),
-                place.plateString(),
-                type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
-                        (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place, int position) {
+        holder.root.setOnClickListener(v -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.rowBackground.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_row_background), position));
+                holder.placeNameView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_name), position));
+                holder.plateView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_plate), position));
+                holder.icon.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_icon), position));
+                holder.voivodeshipView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_voivodeship_name), position));
+                holder.powiatView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_powiat_name), position));
+            }
+
+            pClickListener.onPlaceItemClicked(
+                    v, place.id(), place.plateString(), type,
+                    place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
+                            (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH), position);
+        });
 
         holder.plateView.setText(place.plateString());
     }
@@ -143,6 +170,19 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         holder.icon.setImageResource(iconResourceId);
     }
 
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+        setAnimation(viewHolder.itemView, position);
+    }
+
+    @Override public Cursor swapCursor(Cursor newCursor) {
+        Cursor oldCursor = super.swapCursor(newCursor);
+        if (lastPosition > 0) {
+            lastPosition = ADAPTER_VIEW_CAPACITY;
+        }
+        return oldCursor;
+    }
+
     protected PlaceAndPlate cursorToItem(Cursor cursor) {
         return itemFactory.createFromCursor(cursor);
     }
@@ -166,6 +206,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         @BindView(R.id.txt_powiat) TextView powiatView;
         @BindView(R.id.shadow) ImageView shadow;
         @BindView(R.id.ic_row) ImageView icon;
+        @BindView(R.id.wrp_row) LinearLayout rowBackground;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -174,6 +215,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     public interface PlaceClickListener {
-        void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+        void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType, int position);
     }
 }

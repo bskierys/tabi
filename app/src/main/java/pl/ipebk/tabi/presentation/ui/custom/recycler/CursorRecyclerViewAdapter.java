@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.recycler;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;

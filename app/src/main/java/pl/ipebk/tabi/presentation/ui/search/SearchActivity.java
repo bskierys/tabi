@@ -1,17 +1,21 @@
 package pl.ipebk.tabi.presentation.ui.search;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -20,10 +24,13 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,7 +40,9 @@ import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
+import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -60,8 +69,10 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     @BindView(R.id.txt_searched) TextView searchedText;
     @BindView(R.id.pager_search) ViewPager searchPager;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.indicator) SearchTabPageIndicator indicator;
+    @BindView(R.id.txt_search_wrap) View searchInputWrap;
+    @BindView(R.id.toolbar_tab_indicator) SearchTabPageIndicator indicator;
     @BindView(R.id.btn_clear) View clearButton;
+    @BindDimen(R.dimen.Toolbar_Height_Min) int toolbarHeight;
     @State String currentSearch;
     @State boolean isFullySearched;
 
@@ -148,6 +159,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Override protected void onResume() {
         super.onResume();
+
+        indicator.setVisibility(View.VISIBLE);
 
         boolean shouldShowKeyboard = getIntent().getBooleanExtra(PARAM_SHOW_KEYBOARD, false);
         String searchText = getIntent().getStringExtra(PARAM_SEARCH_TEXT);
@@ -239,10 +252,11 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     }
 
     //region View callbacks
-    @Override public void onPlaceItemClicked(AggregateId placeId, String plateClicked,
-                                             SearchType type, PlaceListItemType itemType) {
+    @Override public void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked,
+                                             SearchType type, PlaceListItemType itemType, int position) {
         if (placeId.isValid()) {
-            presenter.placeSelected(placeId, searchEditText.getText().toString(), plateClicked, type, itemType);
+            this.goToPlaceDetails(view, placeId, searchEditText.getText().toString(), type, itemType, position);
+            presenter.placeSelected(placeId, plateClicked, type);
         }
     }
 
@@ -321,14 +335,46 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         keyboard.showSoftInput(searchEditText, 0);
     }
 
-    @Override public void goToPlaceDetails(AggregateId placeId, String searchedPlate,
-                                           SearchType searchType, PlaceListItemType itemType) {
+    public void goToPlaceDetails(View view, AggregateId placeId, String searchedPlate,
+                                 SearchType searchType, PlaceListItemType itemType, int position) {
+
+        indicator.setVisibility(View.GONE);
+
         Intent intent = new Intent(this, DetailsSearchActivity.class);
         intent.putExtra(DetailsSearchActivity.PARAM_PLACE_ID, placeId.getValue());
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_PLATE, searchedPlate);
         intent.putExtra(DetailsSearchActivity.PARAM_SEARCHED_TYPE, searchType);
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
-        startActivity(intent);
+        intent.putExtra(DetailsSearchActivity.PARAM_ADAPTER_POSITION, position);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            // shared elements
+            transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
+            transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
+            transitions.add(Pair.create(view, SharedTransitionNaming.getName(getString(R.string.trans_row_background), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), SharedTransitionNaming.getName(getString(R.string.trans_place_name), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.ic_row), SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position)));
+            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if (statusBar != null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override public void showInitialSearchInPlatesSection(Cursor cursor) {

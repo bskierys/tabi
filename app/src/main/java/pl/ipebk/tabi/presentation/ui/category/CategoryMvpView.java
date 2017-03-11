@@ -6,6 +6,7 @@
 package pl.ipebk.tabi.presentation.ui.category;
 
 import android.database.Cursor;
+import android.view.View;
 
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.ui.base.MvpView;
@@ -15,5 +16,5 @@ public interface CategoryMvpView extends MvpView {
     void showCategoryPlate(String plate);
     void showCategoryInfo(CategoryInfo info);
     void showPlates(Cursor cursor);
-    void goToDetails(AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate);
+    void goToDetails(View view, AggregateId placeId, String searchedPlate, String categoryName, String categoryPlate, int position);
 }
