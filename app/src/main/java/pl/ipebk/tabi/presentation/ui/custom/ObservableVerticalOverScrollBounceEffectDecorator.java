@@ -7,6 +7,7 @@ package pl.ipebk.tabi.presentation.ui.custom;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -73,12 +74,17 @@ public class ObservableVerticalOverScrollBounceEffectDecorator extends VerticalO
     }
 
     private long computeBackAnimationDuration() {
-        AnimatorSet a = (AnimatorSet) fakeBounceBackState.createAnimator();
-        long duration = 0;
-        for (Animator ad : a.getChildAnimations()) {
-            duration += ad.getDuration();
+        Animator animator = fakeBounceBackState.createAnimator();
+        if(animator instanceof AnimatorSet) {
+            AnimatorSet set = (AnimatorSet) fakeBounceBackState.createAnimator();
+            long duration = 0;
+            for (Animator ad : set.getChildAnimations()) {
+                duration += ad.getDuration();
+            }
+            return duration;
+        } else {
+            return animator.getDuration();
         }
-        return duration;
     }
 
     @Override protected void translateView(View view, float offset) {

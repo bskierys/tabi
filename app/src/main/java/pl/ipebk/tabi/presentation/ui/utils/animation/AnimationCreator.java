@@ -224,12 +224,14 @@ public class AnimationCreator {
 
     public final class CategoryAnimator {
         private static final long CATEGORY_SHARED_DURATION = 300;
+        private static final int LIST_ITEM_ENTER_DURATION = 300;
+        private static final int LIST_ITEM_ENTER_DELAY = 120;
 
         CategoryAnimator() {}
 
         public Animation createItemEnterAnim(int position) {
-            long duration = (long) (300 * animSpeedScale);
-            long delay = (long) (120 * animSpeedScale);
+            long duration = (long) (LIST_ITEM_ENTER_DURATION * animSpeedScale);
+            long delay = (long) (LIST_ITEM_ENTER_DELAY * animSpeedScale);
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
             animation.setInterpolator(new EaseCubicOutInterpolator());
             animation.setDuration(duration);
