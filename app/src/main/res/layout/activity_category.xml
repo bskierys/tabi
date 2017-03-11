@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/content_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root"
     tools:context=".presentation.ui.category.CategoryActivity"
     tools:ignore="contentDescription">
 
@@ -13,17 +13,18 @@
         android:id="@+id/background_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionName="main_card_bg"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:transitionName="@string/trans_main_card_bg"
+        tools:targetApi="LOLLIPOP"/>
 
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
         android:id="@+id/toolbar_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/white"
-        app:content="@layout/toolbar_content_category"/>
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:content="@layout/toolbar_content_category"
+        app:elevation="0dp"/>
 
     <!--  This relative layout is important. If it is removed,
           layout will go above the toolbar when scrolled  -->

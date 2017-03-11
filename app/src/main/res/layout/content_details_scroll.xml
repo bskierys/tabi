@@ -32,7 +32,5 @@
             android:layout_height="wrap_content"/>
     </ScrollView>
 
-
-
     <ImageView style="@style/Shadow.2dp"/>
 </merge>

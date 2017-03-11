@@ -228,11 +228,13 @@ public class AnimationCreator {
         CategoryAnimator() {}
 
         public Animation createItemEnterAnim(int position) {
+            long duration = (long) (300 * animSpeedScale);
+            long delay = (long) (120 * animSpeedScale);
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
             animation.setInterpolator(new EaseCubicOutInterpolator());
-            animation.setDuration(200);
+            animation.setDuration(duration);
             if(position > 0) {
-                animation.setStartOffset(120);
+                animation.setStartOffset(delay);
             }
             return animation;
         }

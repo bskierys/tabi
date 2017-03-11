@@ -38,8 +38,6 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
     private static CategoryInfo DEFAULT_INFO;
     private MoreInfoClickListener mClickListener;
     private String platesSectionName;
-    private AnimationCreator animCreator;
-    private int lastPosition = -1;
 
     public CategoryPlaceItemAdapter(Cursor cursor, Context context,
                                     RandomTextProvider randomTextProvider,
@@ -47,8 +45,6 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         super(cursor, context, randomTextProvider, itemFactory);
         platesSectionName = context.getString(R.string.category_plates_section);
         String noText = context.getString(R.string.default_resource_string);
-        // TODO: 2017-02-26 pass injected
-        animCreator = new AnimationCreator(context);
         DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText, context.getResources().getDrawable(R.drawable.vic_default));
     }
 
@@ -90,20 +86,6 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
         holder.title.setText(categoryInfo.title());
         holder.body.setText(categoryInfo.body());
         holder.moreButton.setOnClickListener(v -> mClickListener.onMoreInfoClick(categoryInfo.link()));
-    }
-
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        super.onBindViewHolder(viewHolder, position);
-        setAnimation(viewHolder.itemView, position);
-    }
-
-    private void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition) {
-            AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
-            Animation animation = creator.createItemEnterAnim(position);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     public static class BigHeaderViewHolder extends RecyclerView.ViewHolder {

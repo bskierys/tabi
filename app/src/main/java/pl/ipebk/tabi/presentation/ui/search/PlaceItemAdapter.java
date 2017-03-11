@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
@@ -36,12 +38,15 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
  * Adapter for items of type {@link PlaceAndPlateDto}.
  */
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
+    private static final int ADAPTER_VIEW_CAPACITY = 2;
     private RandomTextProvider randomTextProvider;
     private PlaceAndPlateFactory itemFactory;
     protected Context context;
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;
+    private AnimationCreator animCreator;
+    private int lastPosition = -1;
 
     public PlaceItemAdapter(Cursor cursor, Context context,
                             RandomTextProvider randomTextProvider,
@@ -49,6 +54,8 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
+        // TODO: 2017-02-26 pass injected
+        animCreator = new AnimationCreator(context);
         this.itemFactory = itemFactory;
     }
 
@@ -73,6 +80,15 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         checkNotNull(type, "Search type is not set");
         checkNotNull(context, "Context is not set");
         checkNotNull(pClickListener, "PlaceClickListener is not set");
+    }
+
+    protected void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
+            Animation animation = creator.createItemEnterAnim(position);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
@@ -154,6 +170,19 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         holder.voivodeshipView.setText(place.voivodeship());
         holder.powiatView.setText(place.powiat());
         holder.icon.setImageResource(iconResourceId);
+    }
+
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+        super.onBindViewHolder(viewHolder, position);
+        setAnimation(viewHolder.itemView, position);
+    }
+
+    @Override public Cursor swapCursor(Cursor newCursor) {
+        Cursor oldCursor = super.swapCursor(newCursor);
+        if (lastPosition > 0) {
+            lastPosition = ADAPTER_VIEW_CAPACITY;
+        }
+        return oldCursor;
     }
 
     protected PlaceAndPlate cursorToItem(Cursor cursor) {

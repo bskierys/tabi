@@ -8,4 +8,5 @@
     <string name="trans_place_name" translatable="false">place_name</string>
     <string name="trans_place_icon" translatable="false">place_icon</string>
     <string name="trans_place_plate" translatable="false">place_plate</string>
+    <string name="trans_main_card_bg" translatable="false">main_card_bg</string>
 </resources>

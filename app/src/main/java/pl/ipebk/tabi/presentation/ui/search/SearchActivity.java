@@ -350,8 +350,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
             // shared elements
-            transitions.add(Pair.create(indicator, SharedTransitionNaming.getName(getString(R.string.trans_tab_indicator), position)));
-            transitions.add(Pair.create(searchInputWrap, SharedTransitionNaming.getName(getString(R.string.trans_search_input), position)));
+            transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
+            transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
             transitions.add(Pair.create(view, SharedTransitionNaming.getName(getString(R.string.trans_row_background), position)));
             transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position)));
             transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position)));

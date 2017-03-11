@@ -177,9 +177,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
                                                 .withOnStartAction(t -> {
                                                     transitionUsed = true;
                                                     animateEnter();
+                                                    mapAndPanel.setVisibility(View.INVISIBLE);
                                                 })
                                                 .withOnEndAction(t -> {
                                                     divider.setVisibility(View.VISIBLE);
+                                                    mapAndPanel.setVisibility(View.VISIBLE);
                                                     computeMapBounds();
                                                     mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
                                                               .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
@@ -203,17 +205,15 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void animateEnter() {
         gminaView.setVisibility(View.INVISIBLE);
-        mapAndPanel.setVisibility(View.INVISIBLE);
         divider.setVisibility(View.INVISIBLE);
         additionalInfoView.setVisibility(View.INVISIBLE);
 
         Transition fadeIn = animationCreator
                 .getDetailsAnimator()
-                .createContentFadeInTransition(gminaView, mapAndPanel, additionalInfoView);
+                .createContentFadeInTransition(gminaView, additionalInfoView);
         TransitionManager.beginDelayedTransition(transitionSceneRoot, fadeIn);
 
         gminaView.setVisibility(View.VISIBLE);
-        mapAndPanel.setVisibility(View.VISIBLE);
         additionalInfoView.setVisibility(View.VISIBLE);
         showPanel(true);
     }
