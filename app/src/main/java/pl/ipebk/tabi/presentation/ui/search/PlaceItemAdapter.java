@@ -82,7 +82,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
 
     protected void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
-            AnimationCreator.CategoryAnimator creator = animCreator.getCategoryAnimator();
+            AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();
             Animation animation = creator.createItemEnterAnim(position);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;

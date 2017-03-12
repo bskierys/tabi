@@ -31,12 +31,14 @@
         <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_voivodeship"
             style="@style/Details_Text.Description.Search"
+            android:layout_marginLeft="@dimen/Margin.Horizontal"
             tools:text="example text"
             android:layout_marginBottom="-6dp"/>
 
         <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_powiat"
             style="@style/Details_Text.Description.Search"
+            android:layout_marginLeft="@dimen/Margin.Horizontal"
             tools:text="example text"
             android:layout_marginBottom="@dimen/Search.Margin.Row"/>
     </LinearLayout>

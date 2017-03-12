@@ -1,5 +1,6 @@
 package pl.ipebk.tabi.presentation.ui.search;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +29,7 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.test.common.assemblers.PlaceAndPlateDtoDtoAssembler;
 import pl.ipebk.tabi.test.common.injection.component.DaggerTestViewComponent;
 import pl.ipebk.tabi.test.common.injection.component.TestViewComponent;
@@ -45,6 +48,7 @@ public class SearchPlaceItemAdapterTest {
     @Mock List<PlaceAndPlateDto> mockItems;
     @Mock PlaceItemAdapter.PlaceClickListener placeListener;
     @Mock SearchPlaceItemAdapter.HeaderClickListener headerListener;
+    @Mock AnimationCreator animationCreator;
     @Mock Cursor cursor;
 
     private TestPlaceLocalizationHelper localizationHelper;
@@ -67,7 +71,7 @@ public class SearchPlaceItemAdapterTest {
         application.setViewComponent(testComponent);
 
         when(cursor.getCount()).thenReturn(1);
-        adapter = new TestablePlaceItemAdapter(cursor, application, randomProvider, factory);
+        adapter = new TestablePlaceItemAdapter(cursor, application, randomProvider, factory, animationCreator);
         adapter.setPlaceClickListener(placeListener);
         adapter.setHeaderClickListener(headerListener);
         adapter.setType(SearchType.LICENSE_PLATE);
@@ -180,8 +184,8 @@ public class SearchPlaceItemAdapterTest {
     public class TestablePlaceItemAdapter extends SearchPlaceItemAdapter {
         public TestablePlaceItemAdapter(Cursor cursor, Context context,
                                         RandomTextProvider randomTextProvider,
-                                        PlaceAndPlateFactory factory) {
-            super(cursor, context, randomTextProvider, factory);
+                                        PlaceAndPlateFactory factory, AnimationCreator animationCreator) {
+            super(cursor, context, randomTextProvider, factory, animationCreator);
         }
 
         @Override protected RecyclerView.ViewHolder createItemViewHolder(ViewGroup parent) {
@@ -195,6 +199,8 @@ public class SearchPlaceItemAdapterTest {
         @Override protected PlaceAndPlate cursorToItem(Cursor cursor) {
             return factory.createFromDto(mockItems.get(0));
         }
+
+        @Override protected void setAnimation(View viewToAnimate, int position) {}
     }
 
     public class TestModule extends TestViewModule {

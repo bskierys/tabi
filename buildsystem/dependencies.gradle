@@ -36,7 +36,7 @@ ext {
     androidApplicationId = 'pl.ipebk.tabi'
     androidVersionCode = readVersionCode()
     androidVersionName = readVersionName()
-    androidBuildToolsVersion = "24.0.0"
+    androidBuildToolsVersion = "25.0.2"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 24
     androidCompileSdkVersion = 24

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:focusable="true"
-              android:background="@color/white"
-              android:focusableInTouchMode="true"
-              android:orientation="vertical">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
     <pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator
         android:id="@+id/toolbar_tab_indicator"
@@ -17,16 +18,18 @@
         android:transitionName="@string/trans_tab_indicator"
         app:fades="false"
         app:lineHeight="@dimen/Search.Height.Tabs.Underline"
-        app:selectedTextColor="@color/colorPrimary"/>
+        app:selectedTextColor="@color/colorPrimary"
+        tools:targetApi="LOLLIPOP"/>
 
     <LinearLayout
+        android:id="@+id/txt_search_wrap"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Toolbar.Height.Min"
-        android:id="@+id/txt_search_wrap"
-        android:transitionName="@string/trans_search_input"
-        android:gravity="center_vertical"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:transitionName="@string/trans_search_input"
+        tools:targetApi="LOLLIPOP">
 
         <ImageView
             android:id="@+id/btn_back"

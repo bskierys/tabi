@@ -10,22 +10,30 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 
+import cimi.com.easeinterpolator.EaseCircularInInterpolator;
+import cimi.com.easeinterpolator.EaseCircularOutInterpolator;
+import cimi.com.easeinterpolator.EaseCubicInInterpolator;
 import cimi.com.easeinterpolator.EaseCubicInOutInterpolator;
 import cimi.com.easeinterpolator.EaseCubicOutInterpolator;
 import cimi.com.easeinterpolator.EaseQuadInOutInterpolator;
 import cimi.com.easeinterpolator.EaseQuadOutInterpolator;
+import cimi.com.easeinterpolator.EaseQuintInInterpolator;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.utils.ViewUtil;
 
 /**
  * Helper class to provide common animations across application
@@ -43,8 +51,8 @@ public class AnimationCreator {
         }
     }
 
-    public SearchBarAnimator getSearchAnimator() {
-        return new SearchBarAnimator();
+    public SearchAnimator getSearchAnimator() {
+        return new SearchAnimator();
     }
 
     public DetailsAnimator getDetailsAnimator() {
@@ -55,12 +63,14 @@ public class AnimationCreator {
         return new CategoryAnimator();
     }
 
-    public final class SearchBarAnimator {
+    public class SearchAnimator {
         private static final long SEARCH_BAR_MOVE_ANIM_DURATION = 400;
         private static final long SEARCH_BAR_SCALE_ANIM_DURATION = 500;
         private static final long SEARCH_BAR_SCALE_ANIM_DELAY = 0;
+        private static final int LIST_ITEM_ENTER_DURATION = 300;
+        private static final int LIST_ITEM_ENTER_DELAY = 120;
 
-        SearchBarAnimator() { }
+        SearchAnimator() { }
 
         public Animator createMoveAnim(View target, float startPos, float endPos) {
             long duration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
@@ -107,9 +117,21 @@ public class AnimationCreator {
                                         .setTarget(target).setInterpolator(new LinearInterpolator())
                                         .setDuration(duration).build();
         }
+
+        public Animation createItemEnterAnim(int position) {
+            long duration = (long) (LIST_ITEM_ENTER_DURATION * animSpeedScale);
+            long delay = (long) (LIST_ITEM_ENTER_DELAY * animSpeedScale);
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
+            animation.setInterpolator(new EaseCubicOutInterpolator());
+            animation.setDuration(duration);
+            if (position > 0) {
+                animation.setStartOffset(delay);
+            }
+            return animation;
+        }
     }
 
-    public final class DetailsAnimator {
+    public class DetailsAnimator {
         private static final long PANEL_FADE_ANIM_DURATION = 300;
         private static final long PANEL_SCALE_ANIM_DURATION = 400;
         private static final long INDICATOR_BACK_ANIM_DURATION = 200;
@@ -182,6 +204,27 @@ public class AnimationCreator {
             return animator;
         }
 
+        public Animator createDetailActionAnim(View target, Rect startBounds, Rect endBounds) {
+            long duration = (long) (400 * animSpeedScale);
+            AnimatorSet set = new AnimatorSet();
+            AnimatorBuilder builder = new AnimatorBuilder().setTarget(new SizeProxy(target))
+                                                           .setDuration(duration)
+                                                           .setInterpolator(new EaseCubicInOutInterpolator());
+            ObjectAnimator height = builder.setPropertyName("height")
+                                           .setFloatValues(startBounds.height(), endBounds.height()).build();
+            ObjectAnimator width = builder.setPropertyName("width")
+                                          .setFloatValues(startBounds.width(), endBounds.width()).build();
+            ObjectAnimator x = builder.setTarget(target)
+                                      .setPropertyName("x")
+                                      .setFloatValues(startBounds.left, endBounds.left).build();
+            ObjectAnimator y = builder.setTarget(target)
+                                      .setPropertyName("y")
+                                      .setFloatValues(startBounds.top, endBounds.top).build();
+            set.play(height).with(width).with(x).with(y);
+
+            return set;
+        }
+
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         @NonNull public Transition createContentFadeInTransition(View... targets) {
             long duration = (long) (DETAIL_CONTENT_DURATION * animSpeedScale);
@@ -220,26 +263,50 @@ public class AnimationCreator {
             transition.setInterpolator(new EaseQuadInOutInterpolator())
                       .setDuration(duration);
         }
+
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        public Animator createCopyAnim(Rect viewBounds, View target) {
+            long firstAnimDuration = (long) (400 * animSpeedScale);
+            long secondAnimDuration = (long) (400 * animSpeedScale);
+
+            int cx = viewBounds.width() / 2;
+            int cy = viewBounds.height() / 2;
+            int copyEndElevation = context.getResources().getDimensionPixelSize(R.dimen.Details_Elevation_Copy_Anim);
+
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            long motionEndPointY = ViewUtil.getScreenBounds(wm).bottom;
+            AnimatorSet fullAnimation = new AnimatorSet();
+
+            AnimatorSet firstAnim = new AnimatorSet();
+
+            Animator elevation = new AnimatorBuilder()
+                    .setFloatValues(0f, copyEndElevation).setDuration(firstAnimDuration)
+                    .setPropertyName("elevation").setTarget(target)
+                    .setInterpolator(new EaseCubicInInterpolator()).build();
+            firstAnim.play(elevation);
+
+            AnimatorSet secondAnim = new AnimatorSet();
+
+            Animator hideCircle = ViewAnimationUtils.createCircularReveal(target, cx, cy, viewBounds.width(), 32);
+            hideCircle.setDuration(secondAnimDuration);
+            hideCircle.setInterpolator(new EaseCubicOutInterpolator());
+
+            Animator moveOutOfScreen = new AnimatorBuilder()
+                    .setFloatValues(viewBounds.top, motionEndPointY)
+                    .setDuration(secondAnimDuration).setPropertyName("y").setTarget(target)
+                    .setInterpolator(new EaseCubicInInterpolator())
+                    .setPropertyName("y").build();
+
+            secondAnim.play(hideCircle).with(moveOutOfScreen);
+            fullAnimation.play(secondAnim).after(firstAnim);
+            return fullAnimation;
+        }
     }
 
-    public final class CategoryAnimator {
+    public class CategoryAnimator {
         private static final long CATEGORY_SHARED_DURATION = 300;
-        private static final int LIST_ITEM_ENTER_DURATION = 300;
-        private static final int LIST_ITEM_ENTER_DELAY = 120;
 
         CategoryAnimator() {}
-
-        public Animation createItemEnterAnim(int position) {
-            long duration = (long) (LIST_ITEM_ENTER_DURATION * animSpeedScale);
-            long delay = (long) (LIST_ITEM_ENTER_DELAY * animSpeedScale);
-            Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
-            animation.setInterpolator(new EaseCubicOutInterpolator());
-            animation.setDuration(duration);
-            if(position > 0) {
-                animation.setStartOffset(delay);
-            }
-            return animation;
-        }
 
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         public void alterSharedTransition(Transition transition) {
