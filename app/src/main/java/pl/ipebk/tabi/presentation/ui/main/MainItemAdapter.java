@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 
 class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NONE = -1;
@@ -29,11 +31,14 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private DoodleTextFormatter doodleTextFormatter;
     private List<MainListItem> categoryList;
     private final MenuItemClickListener listener;
+    private AnimationCreator animCreator;
+    private int lastPosition = -1;
 
     MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter,
-                    @NonNull MenuItemClickListener listener) {
+                    @NonNull MenuItemClickListener listener, AnimationCreator animationCreator) {
         this.categoryList = categoryList;
         this.listener = listener;
+        this.animCreator = animationCreator;
         this.doodleTextFormatter = doodleTextFormatter;
     }
 
@@ -81,11 +86,25 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             footerViewHolder.version.setText(item.getVersionName());
         }
+        setAnimation(holder.itemView, position);
+    }
+
+    public void resetAnimations() {
+        lastPosition = -1;
     }
 
     void refreshItem(MainListItem item, int index) {
         categoryList.set(index, item);
         notifyItemChanged(index);
+    }
+
+    protected void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();
+            Animation animation = creator.createItemEnterAnim(position);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override public int getItemCount() {

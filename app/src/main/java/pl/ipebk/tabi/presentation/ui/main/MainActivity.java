@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         manager = new BlockingLayoutManager(this, GRID_COLUMNS_NUMBER);
 
         recyclerView.setLayoutManager(manager);
-        adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
+        adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this, animationCreator);
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
 
@@ -209,6 +209,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onResume() {
         super.onResume();
         presenter.refreshView();
+        adapter.resetAnimations();
 
         float targetY;
         if (scrollPercent > 0) {
@@ -246,9 +247,28 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         presenter.goToSearch();
     }
 
-    @Override public void showFeedbackDialog() {
+    public void showFeedbackDialog(View card) {
         Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        startActivity(feedbackIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if(statusBar !=null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(feedbackIntent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(feedbackIntent);
+        }
     }
 
     @Override public void showGreetingCaption() {
@@ -298,9 +318,28 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         searchAnim.start();
     }
 
-    @Override public void goToAboutAppPage() {
+    public void goToAboutAppPage(View card) {
         Intent intent = new Intent(this, AboutAppActivity.class);
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if(statusBar !=null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override public void showDemoGreeting() {
@@ -336,9 +375,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void onMenuItemClicked(View target, MainListElementItem item) {
         if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
-            goToAboutAppPage();
+            goToAboutAppPage(target);
         } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
-            showFeedbackDialog();
+            showFeedbackDialog(target);
         } else {
             Timber.d("Menu item clicked has literal as action");
             goToCategoryView(target, item.getCategoryKey());
@@ -351,7 +390,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
             transitions.add(Pair.create(view, getString(R.string.trans_main_card_bg)));
-            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
             if(statusBar !=null) {

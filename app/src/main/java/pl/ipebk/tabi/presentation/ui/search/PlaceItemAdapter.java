@@ -53,7 +53,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
-        animCreator = animationCreator;
+        this.animCreator = animationCreator;
         this.itemFactory = itemFactory;
     }
 
