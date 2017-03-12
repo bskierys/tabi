@@ -46,10 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/info_wrap"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
+            android:layout_marginLeft="@dimen/Details.Margin.Outer"
+            android:layout_marginRight="@dimen/Details.Margin.Outer"
+            android:paddingBottom="@dimen/Details.Margin.Outer"
+            android:paddingTop="@dimen/Details.Margin.Outer"
             android:orientation="vertical">
             <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/txt_voivodeship"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:visibility="invisible"
             android:id="@+id/animation_info_bg"
-            app:cardCornerRadius="4dp"
+            app:cardCornerRadius="@dimen/Details.Radius.Corner.Anim"
             tools:targetApi="LOLLIPOP">
             <ImageView android:id="@+id/image_layer"
                 android:layout_width="match_parent"
@@ -105,8 +105,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBackgroundLight"
             tools:targetApi="LOLLIPOP"
-            android:elevation="2dp"
-            app:cardCornerRadius="4dp"
+            android:elevation="@dimen/Details.Elevation.Google.Anim"
+            app:cardCornerRadius="@dimen/Details.Radius.Corner.Anim"
             android:visibility="invisible"/>
 
         <android.support.v7.widget.CardView
@@ -115,8 +115,8 @@
             android:layout_height="wrap_content"
             android:background="@color/colorBackgroundLight"
             tools:targetApi="LOLLIPOP"
-            android:elevation="2dp"
-            app:cardCornerRadius="4dp"
+            android:elevation="@dimen/Details.Elevation.Google.Anim"
+            app:cardCornerRadius="@dimen/Details.Radius.Corner.Anim"
             android:visibility="invisible"/>
     </RelativeLayout>
 

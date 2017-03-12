@@ -225,7 +225,6 @@ dependencies {
     androidTestCompile(mobileDependencies.testrunner) {
         exclude module: 'support-annotations'
     }
-    compile 'com.android.support:support-v4:24.2.1'
 }
 
 // Log out test results to console

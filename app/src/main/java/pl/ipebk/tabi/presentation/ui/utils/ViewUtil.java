@@ -8,9 +8,15 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- * TODO: Generic description. Replace with real one.
+ * Set of static methods that can help with computing views bounds and position
  */
 public class ViewUtil {
+    /**
+     * Computes View left relative to whole screen.
+     * Warning: {@link View#setX(float)} will set position in parent not this relative one
+     *
+     * @param myView View to compute bound for
+     */
     public static int getRelativeLeft(View myView) {
         if (myView.getParent() == myView.getRootView()) {
             return myView.getLeft();
@@ -19,6 +25,12 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * Computes View right relative to whole screen.
+     * Warning: {@link View#setX(float)} will set position in parent not this relative one
+     *
+     * @param myView View to compute bound for
+     */
     public static int getRelativeRight(View myView) {
         if (myView.getParent() == myView.getRootView()) {
             return myView.getRight();
@@ -27,6 +39,12 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * Computes View top relative to whole screen.
+     * Warning: {@link View#setY(float)} will set position in parent not this relative one
+     *
+     * @param myView View to compute bound for
+     */
     public static int getRelativeTop(View myView) {
         if (myView.getParent() == myView.getRootView()) {
             return myView.getTop();
@@ -35,6 +53,12 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * Computes View bottom relative to whole screen.
+     * Warning: {@link View#setY(float)} will set position in parent not this relative one
+     *
+     * @param myView View to compute bound for
+     */
     public static int getRelativeBottom(View myView) {
         if (myView.getParent() == myView.getRootView()) {
             return myView.getBottom();
@@ -43,6 +67,11 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * Get bounds of whole screen
+     *
+     * @param manager Manager to get instance of {@link Display}
+     */
     public static Rect getScreenBounds(WindowManager manager) {
         Display display = manager.getDefaultDisplay();
         Point size = new Point();

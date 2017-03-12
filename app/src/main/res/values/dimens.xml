@@ -40,6 +40,8 @@
     <dimen name="Details.Elevation">3dp</dimen>
     <dimen name="Details.Height.Text.Description">22dp</dimen>
     <dimen name="Details.Elevation.Copy.Anim">16dp</dimen>
+    <dimen name="Details.Elevation.Google.Anim">8dp</dimen>
+    <dimen name="Details.Radius.Corner.Anim">4dp</dimen>
 
     <!--  SEARCH  -->
     <dimen name="Search.Height.Tabs">48dp</dimen>
