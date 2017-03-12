@@ -7,13 +7,12 @@ package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Point;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -30,13 +29,12 @@ import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Pair;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,11 +61,9 @@ import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.search.PlaceListItemType;
 import pl.ipebk.tabi.presentation.ui.utils.ViewUtil;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
-import pl.ipebk.tabi.presentation.ui.utils.animation.AnimatorBuilder;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
-import pl.ipebk.tabi.presentation.ui.utils.animation.SizeProxy;
 import pl.ipebk.tabi.presentation.utils.Stopwatch;
 import pl.ipebk.tabi.presentation.utils.StopwatchManager;
 import pl.ipebk.tabi.utils.FontManager;
@@ -115,9 +111,13 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @BindView(R.id.wrap_place_header) ObservableSizeLayout placeHeaderWrapper;
     @BindView(R.id.img_placeholder) ImageView placeHolder;
     @BindView(R.id.divider) View divider;
+    // animations
     @BindView(R.id.sceneRoot) ViewGroup transitionSceneRoot;
     @BindView(R.id.animation_bg_google) View animGoogleBg;
     @BindView(R.id.animation_bg_map) View animMapBg;
+    @BindView(R.id.animation_info_bg) View animInfoBg;
+    @BindView(R.id.info_wrap) View infoWrap;
+    @BindView(R.id.animation_root) View animationRoot;
 
     private String preloadedSearchPhrase;
     private Stopwatch stopwatch;
@@ -177,16 +177,16 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onResume() {
         super.onResume();
-        if(animGoogleBg.getVisibility() == View.VISIBLE) {
+        if (animGoogleBg.getVisibility() == View.VISIBLE) {
             animateButtonBack(actionButtons.get(BUTTON_PANEL_GOOGLE_INDEX), animGoogleBg);
         }
-        if(animMapBg.getVisibility() == View.VISIBLE) {
+        if (animMapBg.getVisibility() == View.VISIBLE) {
             animateButtonBack(actionButtons.get(BUTTON_PANEL_MAP_INDEX), animMapBg);
         }
     }
 
     private void animateButtonBack(View button, View mockBg) {
-        Rect buttonBounds = getButtonBounds(button);
+        Rect buttonBounds = getViewBounds(button);
         Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
 
         AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
@@ -349,7 +349,41 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @OnClick(R.id.btn_copy) public void onCopy() {
-        presenter.copyToClipboard();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Rect viewBounds = getViewBounds(infoWrap);
+            Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
+            screenBounds.bottom -= getToolbarHeight();
+
+            animationRoot.getLayoutParams().height = screenBounds.height();
+            animationRoot.getLayoutParams().width = screenBounds.width();
+            animationRoot.requestLayout();
+
+            placeMockViewInBounds(animInfoBg, viewBounds);
+            copyViewToImageView(infoWrap, (ImageView) animInfoBg.findViewById(R.id.image_layer));
+
+            AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+            Animator copyAnim = anim.createCopyAnim(viewBounds, animInfoBg);
+
+            animInfoBg.setVisibility(View.VISIBLE);
+            copyAnim.start();
+
+            animSubs.add(RxAnimator.animationEnd(copyAnim).subscribe(a -> {
+                presenter.copyToClipboard();
+                animInfoBg.setVisibility(View.INVISIBLE);
+                animationRoot.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
+                animationRoot.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+                animationRoot.requestLayout();
+            }));
+        } else {
+            presenter.copyToClipboard();
+        }
+    }
+
+    public void copyViewToImageView(View source, ImageView copyImageView) {
+        source.setDrawingCacheEnabled(true);
+        Bitmap copyImage = Bitmap.createBitmap(source.getDrawingCache());
+        source.setDrawingCacheEnabled(false);
+        copyImageView.setImageBitmap(copyImage);
     }
 
     @Override public void showPlaceIcon(int iconResId) {
@@ -468,10 +502,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @Override public void startMapApp(Uri geoLocation) {
         Button mapButton = actionButtons.get(BUTTON_PANEL_MAP_INDEX);
 
-        Rect buttonBounds = getButtonBounds(mapButton);
+        Rect buttonBounds = getViewBounds(mapButton);
         Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
 
-        placeMockButtonInBounds(buttonBounds);
+        placeMockViewInBounds(animMapBg, buttonBounds);
+        animMapBg.setVisibility(View.VISIBLE);
 
         AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
         Animator animator = anim.createDetailActionAnim(animMapBg, buttonBounds, screenBounds);
@@ -480,7 +515,8 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         animator.start();
     }
 
-    private void openGoogleMaps(Uri geoLocation) {Intent intent = new Intent(Intent.ACTION_VIEW);
+    private void openGoogleMaps(Uri geoLocation) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
         intent.setPackage("com.google.android.apps.maps");
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -501,10 +537,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     @Override public void startWebSearch(String searchPhrase) {
         Button googleButton = actionButtons.get(BUTTON_PANEL_GOOGLE_INDEX);
 
-        Rect buttonBounds = getButtonBounds(googleButton);
+        Rect buttonBounds = getViewBounds(googleButton);
         Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
 
-        placeMockButtonInBounds(buttonBounds);
+        placeMockViewInBounds(animGoogleBg, buttonBounds);
+        animGoogleBg.setVisibility(View.VISIBLE);
 
         AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
         Animator animator = anim.createDetailActionAnim(animGoogleBg, buttonBounds, screenBounds);
@@ -513,25 +550,28 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         animator.start();
     }
 
-    private void placeMockButtonInBounds(Rect buttonBounds) {
-        animGoogleBg.getLayoutParams().height = buttonBounds.height();
-        animGoogleBg.getLayoutParams().width = buttonBounds.width();
-        animGoogleBg.setY(buttonBounds.top);
-        animGoogleBg.setX(buttonBounds.left);
-        animGoogleBg.requestLayout();
-        animGoogleBg.setVisibility(View.VISIBLE);
+    private void placeMockViewInBounds(View view, Rect newBounds) {
+        view.getLayoutParams().height = newBounds.height();
+        view.getLayoutParams().width = newBounds.width();
+        view.setY(newBounds.top);
+        view.setX(newBounds.left);
+        view.requestLayout();
     }
 
-    @NonNull private Rect getButtonBounds(View googleButton) {
-        int toolbarHeight = getResources().getDimensionPixelSize(R.dimen.Toolbar_Height_Min)
-                + getResources().getDimensionPixelSize(R.dimen.StatusBar);
+    @NonNull private Rect getViewBounds(View view) {
+        int toolbarHeight = getToolbarHeight();
 
-        int left = ViewUtil.getRelativeLeft(googleButton);
-        int right = left + googleButton.getWidth();
-        int top = ViewUtil.getRelativeTop(googleButton) - toolbarHeight;
-        int bottom = top + googleButton.getHeight();
+        int left = ViewUtil.getRelativeLeft(view);
+        int right = left + view.getWidth();
+        int top = ViewUtil.getRelativeTop(view) - toolbarHeight;
+        int bottom = top + view.getHeight();
 
         return new Rect(left, top, right, bottom);
+    }
+
+    private int getToolbarHeight() {
+        return getResources().getDimensionPixelSize(R.dimen.Toolbar_Height_Min)
+                + getResources().getDimensionPixelSize(R.dimen.StatusBar);
     }
 
     private void startChromeTab(String searchPhrase) {

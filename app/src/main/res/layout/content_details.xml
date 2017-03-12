@@ -42,27 +42,35 @@
             android:paddingRight="@dimen/Details.Padding.Doodle.Horizontal"
             android:visibility="gone"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-            android:id="@+id/txt_voivodeship"
-            style="@style/Details_Text.Description"
-            android:layout_marginTop="@dimen/Details.Margin.Description.Horizontal"
-            tools:text="example text"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/info_wrap"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:orientation="vertical">
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+                android:id="@+id/txt_voivodeship"
+                style="@style/Details_Text.Description"
+                tools:text="example text"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-            android:id="@+id/txt_powiat"
-            style="@style/Details_Text.Description"
-            tools:text="example text"/>
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+                android:id="@+id/txt_powiat"
+                style="@style/Details_Text.Description"
+                tools:text="example text"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-            android:id="@+id/txt_gmina"
-            style="@style/Details_Text.Description"
-            tools:text="example text"/>
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+                android:id="@+id/txt_gmina"
+                style="@style/Details_Text.Description"
+                tools:text="example text"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
-            android:id="@+id/txt_additional"
-            style="@style/Details_Text.Description"
-            android:layout_marginBottom="@dimen/Details.Margin.Description.Horizontal"
-            tools:text="example text"/>
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+                android:id="@+id/txt_additional"
+                style="@style/Details_Text.Description"
+                tools:text="example text"/>
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/map_with_panel"
@@ -75,16 +83,30 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/animation_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:id="@+id/animation_info_bg"
+            app:cardCornerRadius="4dp"
+            tools:targetApi="LOLLIPOP">
+            <ImageView android:id="@+id/image_layer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:id="@+id/animation_bg_google"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorBackgroundLight"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp"
+            tools:targetApi="LOLLIPOP"
+            android:elevation="2dp"
+            app:cardCornerRadius="4dp"
             android:visibility="invisible"/>
 
         <android.support.v7.widget.CardView
@@ -92,8 +114,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorBackgroundLight"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp"
+            tools:targetApi="LOLLIPOP"
+            android:elevation="2dp"
+            app:cardCornerRadius="4dp"
             android:visibility="invisible"/>
     </RelativeLayout>
 
