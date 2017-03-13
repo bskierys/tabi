@@ -5,10 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:targetApi="LOLLIPOP"
-    android:transitionName="@string/trans_main_card_bg"
     android:background="@color/colorBackgroundLight"
     tools:context="pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity">
+
+    <FrameLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/trans_main_card_bg"
+        tools:targetApi="LOLLIPOP"/>
 
     <FrameLayout
         android:id="@+id/fake_toolbar"
@@ -22,6 +27,7 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/fake_toolbar"

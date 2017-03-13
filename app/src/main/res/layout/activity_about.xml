@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:targetApi="LOLLIPOP"
-    android:transitionName="@string/trans_main_card_bg"
     android:background="@color/colorBackground"
     tools:context=".presentation.ui.about.AboutAppActivity"
     tools:ignore="contentDescription">
+
+    <FrameLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/trans_main_card_bg"
+        tools:targetApi="LOLLIPOP"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"

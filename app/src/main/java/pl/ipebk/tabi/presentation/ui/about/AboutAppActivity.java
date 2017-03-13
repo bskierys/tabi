@@ -5,10 +5,13 @@
 */
 package pl.ipebk.tabi.presentation.ui.about;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
 import android.view.View;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -18,12 +21,16 @@ import com.mikepenz.aboutlibraries.entity.Library;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RxRecyclerViewExtension;
 import pl.ipebk.tabi.utils.RxUtil;
@@ -37,17 +44,25 @@ public class AboutAppActivity extends BaseActivity {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.libraries_list) RecyclerView librariesView;
     @BindView(R.id.appBar) View appBar;
+    @BindView(R.id.background_layout) View background;
+
     private LibraryAdapter adapter;
     private Subscription scrollSubscription;
+
     @BindDimen(R.dimen.Toolbar_Height_Min) int lowestSearchBarPosition;
+    @Inject AnimationCreator animationCreator;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        getActivityComponent().inject(this);
 
         initLibraries();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupTransition();
+        }
         getLoadLibsObservable().observeOn(AndroidSchedulers.mainThread())
                                .subscribeOn(Schedulers.newThread())
                                .subscribe(listItems -> {
@@ -60,6 +75,37 @@ public class AboutAppActivity extends BaseActivity {
                                                     .map(RecyclerViewTotalScrollEvent::totalScrollY)
                                                     .map(this::computePercentScrolled)
                                                     .subscribe(this::setAnimationState);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupTransition() {
+        AnimationCreator.CategoryAnimator anim = animationCreator.getCategoryAnimator();
+
+        Transition enterTransition = anim.createBgFadeInTransition();
+        enterTransition.addListener(new SimpleTransitionListener.Builder()
+                                            .withOnStartAction(t -> {
+                                                librariesView.setVisibility(View.INVISIBLE);
+                                                toolbar.setVisibility(View.INVISIBLE);
+                                                background.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+                                            })
+                                            .withOnEndAction(t -> {
+                                                librariesView.setVisibility(View.VISIBLE);
+                                                toolbar.setVisibility(View.VISIBLE);
+                                                background.setBackgroundColor(getResources().getColor(R.color.transparent));
+                                            })
+                                            .build());
+        getWindow().setEnterTransition(enterTransition);
+
+        Transition returnTransition = anim.createBgFadeOutTransition();
+        returnTransition.addListener(new SimpleTransitionListener.Builder()
+                                            .withOnStartAction(t -> {
+                                                background.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+                                            })
+                                            .build());
+        getWindow().setReturnTransition(returnTransition);
+
+        anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
+        anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
     }
 
     private float computePercentScrolled(int scrollPosition) {
