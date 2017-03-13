@@ -80,6 +80,13 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         checkNotNull(pClickListener, "PlaceClickListener is not set");
     }
 
+    /**
+     * Resets animation position, so animation will occur again
+     */
+    public void setLastAnimatedItem(int position) {
+        this.lastPosition = position;
+    }
+
     protected void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();

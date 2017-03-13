@@ -33,7 +33,8 @@
             android:name=".presentation.ui.details.DetailsSearchActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.search.SearchActivity"/>
@@ -42,7 +43,8 @@
             android:name=".presentation.ui.details.DetailsCategoryActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.search.SearchActivity"/>

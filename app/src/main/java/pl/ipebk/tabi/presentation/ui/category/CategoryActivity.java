@@ -18,6 +18,8 @@ import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,10 +49,12 @@ import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     public static final String EXTRA_CATEGORY_KEY = "extra_category_key";
+    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject CategoryPresenter presenter;
     @Inject LicensePlateFinder plateFinder;
@@ -72,15 +76,17 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
     private String categoryKey;
     private CategoryPlaceItemAdapter adapter;
-    private Subscription scrollSubscription;
+    private CompositeSubscription scrollSubscriptions;
     private Subscription delayedStartSub;
     private boolean transitionUsed;
+    private RecyclerView.LayoutManager manager;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+        scrollSubscriptions = new CompositeSubscription();
 
         presenter.attachView(this);
         progressBar.getIndeterminateDrawable().setColorFilter(
@@ -101,13 +107,22 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
             transitionUsed = false;
         }
 
-        recyclerView.setLayoutManager(getLayoutManager());
+        manager = getLayoutManager();
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(getAdapter());
 
-        scrollSubscription = RxRecyclerViewExtension.totalScrollEvents(recyclerView)
-                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                    .map(RecyclerViewTotalScrollEvent::totalScrollY)
-                                                    .subscribe(this::raiseToolbar);
+        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
+                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
+                                              .subscribe(event -> {
+                                                  LinearLayoutManager lm = (LinearLayoutManager) manager;
+                                                  int lastPosition = lm.findFirstVisibleItemPosition();
+                                                  adapter.setLastAnimatedItem(lastPosition);
+                                              }));
+
+        scrollSubscriptions.add(RxRecyclerViewExtension.totalScrollEvents(recyclerView)
+                                                       .observeOn(AndroidSchedulers.mainThread())
+                                                       .map(RecyclerViewTotalScrollEvent::totalScrollY)
+                                                       .subscribe(this::raiseToolbar));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -165,7 +180,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscription);
+        RxUtil.unsubscribe(scrollSubscriptions);
         RxUtil.unsubscribe(delayedStartSub);
         presenter.detachView();
     }

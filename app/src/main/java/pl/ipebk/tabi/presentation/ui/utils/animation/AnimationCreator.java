@@ -67,7 +67,7 @@ public class AnimationCreator {
         private static final long SEARCH_BAR_MOVE_ANIM_DURATION = 400;
         private static final long SEARCH_BAR_SCALE_ANIM_DURATION = 500;
         private static final long SEARCH_BAR_SCALE_ANIM_DELAY = 0;
-        private static final int LIST_ITEM_ENTER_DURATION = 300;
+        private static final int LIST_ITEM_ENTER_DURATION = 400;
         private static final int LIST_ITEM_ENTER_DELAY = 120;
 
         SearchAnimator() { }
@@ -122,6 +122,18 @@ public class AnimationCreator {
             long duration = (long) (LIST_ITEM_ENTER_DURATION * animSpeedScale);
             long delay = (long) (LIST_ITEM_ENTER_DELAY * animSpeedScale);
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
+            animation.setInterpolator(new EaseCubicOutInterpolator());
+            animation.setDuration(duration);
+            if (position > 0) {
+                animation.setStartOffset(delay);
+            }
+            return animation;
+        }
+
+        public Animation createMainItemEnterAnim(int position) {
+            long duration = (long) (LIST_ITEM_ENTER_DURATION * animSpeedScale);
+            long delay = (long) (LIST_ITEM_ENTER_DELAY * animSpeedScale);
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.main_item_enter);
             animation.setInterpolator(new EaseCubicOutInterpolator());
             animation.setDuration(duration);
             if (position > 0) {

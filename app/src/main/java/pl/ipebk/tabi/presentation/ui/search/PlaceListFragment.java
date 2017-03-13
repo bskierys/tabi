@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -20,6 +24,9 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
+import timber.log.Timber;
 
 /**
  * A fragment representing a list of Places.
@@ -28,6 +35,7 @@ public class PlaceListFragment extends BaseFragment {
     private static final String ARG_FRAGMENT_TYPE = "fragmentType";
     static final int SECTION_FIRST_POSITION = 0;
     static final int SECTION_SECOND_POSITION = 4;
+    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject RandomTextProvider randomTextProvider;
     @Inject PlaceAndPlateFactory placeFactory;
@@ -39,7 +47,9 @@ public class PlaceListFragment extends BaseFragment {
     private boolean viewCreated;
     private Cursor placeCursor;
     private SearchPlaceItemAdapter adapter;
+    private RecyclerView.LayoutManager manager;
     private PlaceFragmentEventListener fragmentEventListener;
+    private Subscription scrollSub;
 
     @SuppressWarnings("unused")
     public static PlaceListFragment newInstance(SearchType type) {
@@ -72,8 +82,17 @@ public class PlaceListFragment extends BaseFragment {
             getAdapter().changeCursor(placeCursor);
         }
 
-        recyclerView.setLayoutManager(getLayoutManager());
+        manager = getLayoutManager();
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        scrollSub = RxRecyclerView.scrollEvents(recyclerView)
+                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
+                                              .subscribe(event -> {
+                                                  LinearLayoutManager lm = (LinearLayoutManager) manager;
+                                                  int lastPosition = lm.findLastCompletelyVisibleItemPosition();
+                                                  adapter.setLastAnimatedItem(lastPosition);
+                                              });
 
         hideNoResultsImage();
         hideList();
@@ -172,6 +191,11 @@ public class PlaceListFragment extends BaseFragment {
         } else {
             throw new RuntimeException(context + " must implement PlaceFragmentEventListener");
         }
+    }
+
+    @Override public void onDestroy() {
+        super.onDestroy();
+        RxUtil.unsubscribe(scrollSub);
     }
 
     @Override public void onDetach() {

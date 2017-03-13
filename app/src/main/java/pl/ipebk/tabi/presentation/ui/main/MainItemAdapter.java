@@ -89,8 +89,11 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         setAnimation(holder.itemView, position);
     }
 
-    public void resetAnimations() {
-        lastPosition = -1;
+    /**
+     * Resets animation position, so animation will occur again
+     */
+    void setLastAnimatedItem(int position) {
+        this.lastPosition = position;
     }
 
     void refreshItem(MainListItem item, int index) {
@@ -101,7 +104,7 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();
-            Animation animation = creator.createItemEnterAnim(position);
+            Animation animation = creator.createMainItemEnterAnim(position);
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }

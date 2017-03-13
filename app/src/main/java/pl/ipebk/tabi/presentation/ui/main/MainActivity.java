@@ -20,6 +20,7 @@ import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -32,14 +33,13 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
-import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.utils.RxUtil;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
+    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private int bigHeaderIndex;
     private int footerIndex;
     private BlockingLayoutManager manager;
-    private Subscription scrollSubscription;
+    private CompositeSubscription scrollSubscriptions;
     @State boolean isDialogShown;
     @State int scrolledY;
 
@@ -82,21 +83,30 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
         presenter.attachView(this);
 
+        scrollSubscriptions = new CompositeSubscription();
         manager = new BlockingLayoutManager(this, GRID_COLUMNS_NUMBER);
 
         recyclerView.setLayoutManager(manager);
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this, animationCreator);
+
         prepareMenuItems();
         recyclerView.setAdapter(adapter);
+        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
+                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
+                                              .subscribe(event -> {
+                                                  int lastPosition = manager.findLastCompletelyVisibleItemPosition();
+                                                  Timber.d("Visible position: %d", lastPosition);
+                                                  adapter.setLastAnimatedItem(lastPosition);
+                                              }));
 
-        scrollSubscription = RxRecyclerView.scrollEvents(recyclerView)
-                                           .observeOn(AndroidSchedulers.mainThread())
-                                           .map(RecyclerViewScrollEvent::dy)
-                                           .map(y -> y += scrolledY)
-                                           .doOnNext(y -> scrolledY = y)
-                                           .map(this::computePercentScrolled)
-                                           .doOnNext(percent -> scrollPercent = percent)
-                                           .subscribe(this::setAnimationState);
+        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
+                                              .observeOn(AndroidSchedulers.mainThread())
+                                              .map(RecyclerViewScrollEvent::dy)
+                                              .map(y -> y += scrolledY)
+                                              .doOnNext(y -> scrolledY = y)
+                                              .map(this::computePercentScrolled)
+                                              .doOnNext(percent -> scrollPercent = percent)
+                                              .subscribe(this::setAnimationState));
     }
 
     private float computePercentScrolled(int scrollPosition) {
@@ -209,7 +219,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onResume() {
         super.onResume();
         presenter.refreshView();
-        adapter.resetAnimations();
 
         float targetY;
         if (scrollPercent > 0) {
@@ -239,7 +248,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscription);
+        RxUtil.unsubscribe(scrollSubscriptions);
         presenter.detachView();
     }
 
@@ -254,7 +263,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
-            if(statusBar !=null) {
+            if (statusBar != null) {
                 transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
@@ -325,7 +334,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
-            if(statusBar !=null) {
+            if (statusBar != null) {
                 transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
@@ -392,7 +401,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             transitions.add(Pair.create(view, getString(R.string.trans_main_card_bg)));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
-            if(statusBar !=null) {
+            if (statusBar != null) {
                 transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);
