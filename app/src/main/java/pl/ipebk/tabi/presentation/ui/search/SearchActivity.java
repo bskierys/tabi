@@ -1,5 +1,6 @@
 package pl.ipebk.tabi.presentation.ui.search;
 
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -42,7 +44,9 @@ import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.custom.DoodleImage;
 import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -65,6 +69,7 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
 
     @Inject SearchPresenter presenter;
     @Inject FontManager fontManager;
+    @Inject AnimationCreator animationCreator;
     @BindView(R.id.editTxt_search) EditText searchEditText;
     @BindView(R.id.txt_searched) TextView searchedText;
     @BindView(R.id.pager_search) ViewPager searchPager;
@@ -108,9 +113,28 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                        }
                    }, ex -> Timber.e(ex, "Page cannot be changed"));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setupTransition();
+        }
+
         searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
         prepareDoodleImages();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupTransition() {
+        AnimationCreator.CategoryAnimator anim = animationCreator.getCategoryAnimator();
+
+        Transition enterTransition = anim.createBgFadeInTransition();
+        getWindow().setEnterTransition(enterTransition);
+
+        Transition returnTransition = anim.createBgFadeOutTransition();
+        getWindow().setReturnTransition(returnTransition);
+
+        anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
+        anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
+        getWindow().getSharedElementEnterTransition().setDuration(500);
     }
 
     private void preparePlaceFragments() {
