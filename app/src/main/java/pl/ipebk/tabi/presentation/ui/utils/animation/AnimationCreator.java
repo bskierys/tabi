@@ -105,17 +105,51 @@ public class AnimationCreator {
         }
 
         public Animator createFadeOutAnim(View target) {
-            long duration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
-            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(1.0f, 0.0f)
-                                        .setTarget(target).setInterpolator(new LinearInterpolator())
-                                        .setDuration(duration).build();
+            return createFadeOutAnim(target, 1, false);
+        }
+
+        /**
+         * @param target Animation target
+         * @param factor factor to speed up or slow down anim
+         * @param useDelay whether or not delay should be added to sustain original duration
+         */
+        public Animator createFadeOutAnim(View target, float factor, boolean useDelay) {
+            long originalDuration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
+            long duration = (long) (originalDuration * factor);
+            long delay = Math.abs(originalDuration - duration);
+
+            AnimatorBuilder builder = new AnimatorBuilder();
+            builder.setPropertyName("alpha").setFloatValues(1.0f, 0.0f)
+                   .setTarget(target).setInterpolator(new LinearInterpolator())
+                   .setDuration(originalDuration);
+            if(useDelay) {
+                builder.setStartDelay(delay);
+            }
+            return builder.build();
         }
 
         public Animator createFadeInAnim(View target) {
-            long duration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
-            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
-                                        .setTarget(target).setInterpolator(new LinearInterpolator())
-                                        .setDuration(duration).build();
+            return createFadeInAnim(target, 1, false);
+        }
+
+        /**
+         * @param target Animation target
+         * @param factor factor to speed up or slow down anim
+         * @param useDelay whether or not delay should be added to sustain original duration
+         */
+        public Animator createFadeInAnim(View target, float factor, boolean useDelay) {
+            long originalDuration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
+            long duration = (long) (originalDuration * factor);
+            long delay = Math.abs(originalDuration - duration);
+
+            AnimatorBuilder builder = new AnimatorBuilder();
+            builder.setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
+                   .setTarget(target).setInterpolator(new LinearInterpolator())
+                   .setDuration(originalDuration);
+            if(useDelay) {
+                builder.setStartDelay(delay);
+            }
+            return builder.build();
         }
 
         public Animation createItemEnterAnim(int position) {

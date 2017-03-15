@@ -55,7 +55,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     private static final int GRID_COLUMNS_NUMBER = 2;
     private static final int GRID_COLUMNS_SINGLE = 1;
-    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject MainPresenter presenter;
     @Inject AnimationCreator animationCreator;
@@ -255,12 +254,16 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
         float currentY = searchBar.getY();
 
+        AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
+
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, currentY, targetY))
-                  .with(animationCreator.getSearchAnimator().createScaleDownAnim(searchBar))
-                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, currentY, targetY))
-                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchBarContent))
-                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchIcon));
+        searchAnim.play(anim.createMoveAnim(searchBar, currentY, targetY))
+                  .with(anim.createScaleDownAnim(searchBar))
+                  .with(anim.createMoveAnim(searchBarContent, currentY, targetY))
+                  .with(anim.createFadeInAnim(searchBarContent))
+                  .with(anim.createFadeInAnim(searchIcon))
+                  .with(anim.createFadeInAnim(doodleBack, 0.5f, true))
+                  .with(anim.createFadeInAnim(doodleFront, 0.5f, true));
 
         if (currentBarPos == 0) {
             searchAnim.start();
@@ -334,11 +337,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void goToSearch(String phrase) {
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
-                                                                            highestSearchBarPosition))
-                  .with(animationCreator.getSearchAnimator().createScaleUpAnim(searchBar))
-                  .with(animationCreator.getSearchAnimator().createFadeOutAnim(searchIcon))
-                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
+        AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
+        searchAnim.play(anim.createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
+                  .with(anim.createScaleUpAnim(searchBar))
+                  .with(anim.createFadeOutAnim(searchIcon))
+                  .with(anim.createFadeOutAnim(doodleFront, 0.5f, false))
+                  .with(anim.createFadeOutAnim(doodleBack, 0.5f, false))
+                  .with(anim.createMoveAnim(searchBarContent, searchBarContent.getY(),
                                                                             highestSearchBarPosition));
 
         animSubs.add(RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll()));

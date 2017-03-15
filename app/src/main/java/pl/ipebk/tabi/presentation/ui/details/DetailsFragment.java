@@ -236,6 +236,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
                                                      gminaView.setVisibility(View.INVISIBLE);
                                                      mapAndPanel.setVisibility(View.INVISIBLE);
                                                      additionalInfoView.setVisibility(View.INVISIBLE);
+                                                     placeHolder.setVisibility(View.INVISIBLE);
                                                  }).build());
         } else {
             transitionUsed = false;
