@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -21,7 +20,6 @@ import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -31,7 +29,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import icepick.State;
 import pl.ipebk.tabi.R;
-import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
@@ -42,7 +39,6 @@ import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.MarginProxy;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
-import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -213,7 +209,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     private void setAnimationState(float percent) {
-        if(paused) {
+        if (paused) {
             return;
         }
 
@@ -257,13 +253,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
 
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(anim.createMoveAnim(searchBar, currentY, targetY))
-                  .with(anim.createScaleDownAnim(searchBar))
-                  .with(anim.createMoveAnim(searchBarContent, currentY, targetY))
-                  .with(anim.createFadeInAnim(searchBarContent))
-                  .with(anim.createFadeInAnim(searchIcon))
-                  .with(anim.createFadeInAnim(doodleBack, 0.5f, true))
-                  .with(anim.createFadeInAnim(doodleFront, 0.5f, true));
+        AnimatorSet.Builder builder;
+        builder = searchAnim.play(anim.createMoveAnim(searchBar, currentY, targetY))
+                            .with(anim.createScaleDownAnim(searchBar))
+                            .with(anim.createMoveAnim(searchBarContent, currentY, targetY))
+                            .with(anim.createFadeInAnim(searchBarContent))
+                            .with(anim.createFadeInAnim(searchIcon));
+
+        if (scrollPercent == 0) {
+            builder.with(anim.createFadeInAnim(doodleBack, 0.5f, true))
+                   .with(anim.createFadeInAnim(doodleFront, 0.5f, true));
+        }
 
         if (currentBarPos == 0) {
             searchAnim.start();
@@ -338,13 +338,17 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @Override public void goToSearch(String phrase) {
         AnimatorSet searchAnim = new AnimatorSet();
         AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
-        searchAnim.play(anim.createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
-                  .with(anim.createScaleUpAnim(searchBar))
-                  .with(anim.createFadeOutAnim(searchIcon))
-                  .with(anim.createFadeOutAnim(doodleFront, 0.5f, false))
-                  .with(anim.createFadeOutAnim(doodleBack, 0.5f, false))
-                  .with(anim.createMoveAnim(searchBarContent, searchBarContent.getY(),
-                                                                            highestSearchBarPosition));
+        AnimatorSet.Builder builder;
+        builder = searchAnim.play(anim.createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
+                            .with(anim.createScaleUpAnim(searchBar))
+                            .with(anim.createFadeOutAnim(searchIcon))
+                            .with(anim.createMoveAnim(searchBarContent, searchBarContent.getY(),
+                                                      highestSearchBarPosition));
+
+        if (scrollPercent == 0) {
+            builder.with(anim.createFadeOutAnim(doodleFront, 0.5f, false))
+                   .with(anim.createFadeOutAnim(doodleBack, 0.5f, false));
+        }
 
         animSubs.add(RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll()));
         animSubs.add(RxAnimator.animationEnd(searchAnim)

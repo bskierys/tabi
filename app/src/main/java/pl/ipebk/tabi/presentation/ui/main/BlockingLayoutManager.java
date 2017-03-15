@@ -7,13 +7,7 @@ package pl.ipebk.tabi.presentation.ui.main;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.View;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.subjects.PublishSubject;
 
 /**
  * Custom implementation of {@link GridLayoutManager} that can be blocked for scrolling
