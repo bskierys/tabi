@@ -364,7 +364,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, phrase);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
-            transitions.add(Pair.create(fakeToolbar, getString(R.string.trans_search_input)));
+            View searchInput = fakeToolbar.findViewById(R.id.txt_search_wrap);
+            transitions.add(Pair.create(searchInput, getString(R.string.trans_search_input)));
             transitions.add(Pair.create(toolbarIndicator, getString(R.string.trans_tab_indicator)));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);

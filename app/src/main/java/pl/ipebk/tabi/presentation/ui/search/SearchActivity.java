@@ -126,15 +126,8 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
     private void setupTransition() {
         AnimationCreator.CategoryAnimator anim = animationCreator.getCategoryAnimator();
 
-        Transition enterTransition = anim.createBgFadeInTransition();
-        getWindow().setEnterTransition(enterTransition);
-
-        Transition returnTransition = anim.createBgFadeOutTransition();
-        getWindow().setReturnTransition(returnTransition);
-
         anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
         anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
-        getWindow().getSharedElementEnterTransition().setDuration(500);
     }
 
     private void preparePlaceFragments() {
