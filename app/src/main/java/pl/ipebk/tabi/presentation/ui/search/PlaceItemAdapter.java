@@ -150,11 +150,10 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
 
     private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
-        String[] nameParts = place.name().split(" ");
 
-        holder.powiatView.setText(place.voivodeship());
-        holder.placeNameView.setText(nameParts[0]);
-        holder.voivodeshipView.setText(getPlaceSubName(nameParts));
+        holder.powiatView.setText(context.getString(R.string.search_row_special_place));
+        holder.placeNameView.setText(place.name());
+        holder.voivodeshipView.setText(place.voivodeship());
         holder.icon.setImageResource(iconResourceId);
     }
 
@@ -169,17 +168,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
 
     protected PlaceAndPlate cursorToItem(Cursor cursor) {
         return itemFactory.createFromCursor(cursor);
-    }
-
-    private String getPlaceSubName(String[] words) {
-        String subName = "";
-        if (words.length > 1) {
-            for (int i = 1; i < words.length; i++) {
-                subName += words[i] + " ";
-            }
-        }
-
-        return subName.trim();
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
