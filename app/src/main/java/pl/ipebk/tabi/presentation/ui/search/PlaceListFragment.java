@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -20,6 +24,9 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
+import timber.log.Timber;
 
 /**
  * A fragment representing a list of Places.
@@ -39,6 +46,7 @@ public class PlaceListFragment extends BaseFragment {
     private boolean viewCreated;
     private Cursor placeCursor;
     private SearchPlaceItemAdapter adapter;
+    private RecyclerView.LayoutManager manager;
     private PlaceFragmentEventListener fragmentEventListener;
 
     @SuppressWarnings("unused")
@@ -72,7 +80,8 @@ public class PlaceListFragment extends BaseFragment {
             getAdapter().changeCursor(placeCursor);
         }
 
-        recyclerView.setLayoutManager(getLayoutManager());
+        manager = getLayoutManager();
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
         hideNoResultsImage();
@@ -82,6 +91,11 @@ public class PlaceListFragment extends BaseFragment {
         viewCreated = true;
 
         return view;
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        adapter.unlockRowClicks();
     }
 
     /**
@@ -96,7 +110,7 @@ public class PlaceListFragment extends BaseFragment {
      */
     public SearchPlaceItemAdapter getAdapter() {
         if (adapter == null) {
-            adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory, animationCreator);
+            adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory);
             adapter.setHeaderClickListener(s -> fragmentEventListener.onHeaderClicked(s));
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> {
                 fragmentEventListener.onPlaceItemClicked(v, id, plate, sType, pType, pos);

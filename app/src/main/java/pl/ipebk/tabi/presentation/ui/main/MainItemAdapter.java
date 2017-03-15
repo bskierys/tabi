@@ -30,8 +30,7 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<MainListItem> categoryList;
     private final MenuItemClickListener listener;
 
-    MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter,
-                    @NonNull MenuItemClickListener listener) {
+    MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter, @NonNull MenuItemClickListener listener) {
         this.categoryList = categoryList;
         this.listener = listener;
         this.doodleTextFormatter = doodleTextFormatter;

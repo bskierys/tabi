@@ -15,6 +15,7 @@ import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,6 +48,7 @@ import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class CategoryActivity extends BaseActivity implements CategoryMvpView {
@@ -60,6 +62,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Inject CustomTabActivityHelper chromeTabHelper;
     @Inject AnimationCreator animationCreator;
 
+    @BindView(R.id.content_root) View rootOfView;
     @BindView(R.id.toolbar_parent) View toolbar;
     @BindView(R.id.content_container) View contentContainer;
     @BindView(R.id.background_layout) View background;
@@ -72,15 +75,17 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
     private String categoryKey;
     private CategoryPlaceItemAdapter adapter;
-    private Subscription scrollSubscription;
+    private CompositeSubscription scrollSubscriptions;
     private Subscription delayedStartSub;
     private boolean transitionUsed;
+    private RecyclerView.LayoutManager manager;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         ButterKnife.bind(this);
         getActivityComponent().inject(this);
+        scrollSubscriptions = new CompositeSubscription();
 
         presenter.attachView(this);
         progressBar.getIndeterminateDrawable().setColorFilter(
@@ -101,13 +106,15 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
             transitionUsed = false;
         }
 
-        recyclerView.setLayoutManager(getLayoutManager());
-        recyclerView.setAdapter(getAdapter());
+        manager = getLayoutManager();
+        adapter = getAdapter();
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
 
-        scrollSubscription = RxRecyclerViewExtension.totalScrollEvents(recyclerView)
-                                                    .observeOn(AndroidSchedulers.mainThread())
-                                                    .map(RecyclerViewTotalScrollEvent::totalScrollY)
-                                                    .subscribe(this::raiseToolbar);
+        scrollSubscriptions.add(RxRecyclerViewExtension.totalScrollEvents(recyclerView)
+                                                       .observeOn(AndroidSchedulers.mainThread())
+                                                       .map(RecyclerViewTotalScrollEvent::totalScrollY)
+                                                       .subscribe(this::raiseToolbar));
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -123,9 +130,15 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
                                                 presenter.initCategory(categoryKey);
                                             })
                                             .withOnEndAction(t -> {
-                                                contentContainer.setVisibility(View.VISIBLE);
                                                 toolbar.setVisibility(View.VISIBLE);
                                                 background.setVisibility(View.GONE);
+                                                recyclerView.postDelayed(() -> {
+                                                    int lastVisibleRow = ((LinearLayoutManager) manager).findLastVisibleItemPosition();
+                                                    contentContainer.setVisibility(View.VISIBLE);
+                                                    for (int i = 0; i <= lastVisibleRow; i++) {
+                                                        animateRow(manager.findViewByPosition(i), i);
+                                                    }
+                                                }, 100);
                                             })
                                             .build());
         getWindow().setEnterTransition(enterTransition);
@@ -135,6 +148,12 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
         anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
         anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
+    }
+
+    public void animateRow(View viewToAnimate, int position) {
+        AnimationCreator.SearchAnimator creator = animationCreator.getSearchAnimator();
+        Animation animation = creator.createItemEnterAnim(position);
+        viewToAnimate.startAnimation(animation);
     }
 
     private void raiseToolbar(int scrolled) {
@@ -165,9 +184,14 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscription);
+        RxUtil.unsubscribe(scrollSubscriptions);
         RxUtil.unsubscribe(delayedStartSub);
         presenter.detachView();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        adapter.unlockRowClicks();
     }
 
     @Override protected void onStop() {
@@ -189,7 +213,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     public CategoryPlaceItemAdapter getAdapter() {
         if (adapter == null) {
 
-            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory, animationCreator);
+            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> presenter.loadPlaceDetails(v, id, plate, pos));
             adapter.setMoreInfoClickListener(this::launchUri);

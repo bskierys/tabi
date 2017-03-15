@@ -32,14 +32,16 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
-import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
+import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
+import pl.ipebk.tabi.presentation.ui.details.StaticPageIndicatorViewPager;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.search.SearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.presentation.ui.utils.animation.MarginProxy;
 import pl.ipebk.tabi.presentation.ui.utils.animation.RxAnimator;
 import pl.ipebk.tabi.utils.RxUtil;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
@@ -61,6 +63,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @BindView(R.id.txt_searched) TextView searchText;
     @BindView(R.id.search_bar_content) View searchBarContent;
     @BindView(R.id.ic_search) View searchIcon;
+    @BindView(R.id.toolbar_tab_indicator) SearchTabPageIndicator toolbarIndicator;
+    @BindView(R.id.fake_toolbar) View fakeToolbar;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Lowest) float lowestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Highest) float highestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_Greeting_Doodle_Top) float lowestDoodlePosition;
@@ -69,8 +73,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private MainItemAdapter adapter;
     private int bigHeaderIndex;
     private int footerIndex;
+    private boolean paused;
     private BlockingLayoutManager manager;
-    private Subscription scrollSubscription;
+    private CompositeSubscription scrollSubscriptions;
+    private CompositeSubscription animSubs;
     @State boolean isDialogShown;
     @State int scrolledY;
 
@@ -82,21 +88,25 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
         presenter.attachView(this);
 
+        scrollSubscriptions = new CompositeSubscription();
+        animSubs = new CompositeSubscription();
         manager = new BlockingLayoutManager(this, GRID_COLUMNS_NUMBER);
 
         recyclerView.setLayoutManager(manager);
         adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
+
         prepareMenuItems();
+        prepareToolbar();
         recyclerView.setAdapter(adapter);
 
-        scrollSubscription = RxRecyclerView.scrollEvents(recyclerView)
-                                           .observeOn(AndroidSchedulers.mainThread())
-                                           .map(RecyclerViewScrollEvent::dy)
-                                           .map(y -> y += scrolledY)
-                                           .doOnNext(y -> scrolledY = y)
-                                           .map(this::computePercentScrolled)
-                                           .doOnNext(percent -> scrollPercent = percent)
-                                           .subscribe(this::setAnimationState);
+        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
+                                              .observeOn(AndroidSchedulers.mainThread())
+                                              .map(RecyclerViewScrollEvent::dy)
+                                              .map(y -> y += scrolledY)
+                                              .doOnNext(y -> scrolledY = y)
+                                              .map(this::computePercentScrolled)
+                                              .doOnNext(percent -> scrollPercent = percent)
+                                              .subscribe(this::setAnimationState));
     }
 
     private float computePercentScrolled(int scrollPosition) {
@@ -106,9 +116,18 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         if (percent > 1) {
             percent = 0.99f;
         }
-        percent = 1 - percent;
 
         return percent;
+    }
+
+    private void prepareToolbar() {
+        // use static page indicator for fake hook to viewpager
+        toolbarIndicator.setViewPager(new StaticPageIndicatorViewPager(
+                this, getString(R.string.search_tab_plate), getString(R.string.search_tab_place)));
+        toolbarIndicator.setCurrentItem(0);
+
+        MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
+        indicatorMarginManager.setTopMargin(0);
     }
 
     private void prepareMenuItems() {
@@ -190,6 +209,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     }
 
     private void setAnimationState(float percent) {
+        if (paused) {
+            return;
+        }
+
+        percent = 1 - percent;
         float moveSearchTo = (lowestSearchBarPosition - highestSearchBarPosition)
                 * percent + highestSearchBarPosition;
 
@@ -208,37 +232,53 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override protected void onResume() {
         super.onResume();
+        paused = false;
+        fakeToolbar.setVisibility(View.INVISIBLE);
         presenter.refreshView();
 
+        animateSearchBack();
+    }
+
+    private void animateSearchBack() {
+        float currentBarPos = searchBar.getY();
         float targetY;
         if (scrollPercent > 0) {
-            targetY = highestSearchBarPosition + (lowestSearchBarPosition - highestSearchBarPosition) * scrollPercent;
+            targetY = highestSearchBarPosition + (lowestSearchBarPosition - highestSearchBarPosition) * (1 - scrollPercent);
         } else {
             targetY = lowestSearchBarPosition;
         }
 
         float currentY = searchBar.getY();
 
-        AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, currentY, targetY))
-                  .with(animationCreator.getSearchAnimator().createScaleDownAnim(searchBar))
-                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, currentY, targetY))
-                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchBarContent))
-                  .with(animationCreator.getSearchAnimator().createFadeInAnim(searchIcon));
+        AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
 
-        if (scrollPercent > 0) {
+        AnimatorSet searchAnim = new AnimatorSet();
+        AnimatorSet.Builder builder;
+        builder = searchAnim.play(anim.createMoveAnim(searchBar, currentY, targetY))
+                            .with(anim.createScaleDownAnim(searchBar))
+                            .with(anim.createMoveAnim(searchBarContent, currentY, targetY))
+                            .with(anim.createFadeInAnim(searchBarContent))
+                            .with(anim.createFadeInAnim(searchIcon));
+
+        if (scrollPercent == 0) {
+            builder.with(anim.createFadeInAnim(doodleBack, 0.5f, true))
+                   .with(anim.createFadeInAnim(doodleFront, 0.5f, true));
+        }
+
+        if (currentBarPos == 0) {
             searchAnim.start();
         }
     }
 
     @Override protected void onPause() {
         super.onPause();
+        paused = true;
     }
 
     @Override protected void onDestroy() {
         super.onDestroy();
 
-        RxUtil.unsubscribe(scrollSubscription);
+        RxUtil.unsubscribe(scrollSubscriptions);
         presenter.detachView();
     }
 
@@ -246,9 +286,28 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         presenter.goToSearch();
     }
 
-    @Override public void showFeedbackDialog() {
+    public void showFeedbackDialog(View card) {
         Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        startActivity(feedbackIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if (statusBar != null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(feedbackIntent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(feedbackIntent);
+        }
     }
 
     @Override public void showGreetingCaption() {
@@ -278,29 +337,81 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void goToSearch(String phrase) {
         AnimatorSet searchAnim = new AnimatorSet();
-        searchAnim.play(animationCreator.getSearchAnimator().createMoveAnim(searchBar, searchBar.getY(),
-                                                                            highestSearchBarPosition))
-                  .with(animationCreator.getSearchAnimator().createScaleUpAnim(searchBar))
-                  .with(animationCreator.getSearchAnimator().createFadeOutAnim(searchIcon))
-                  .with(animationCreator.getSearchAnimator().createMoveAnim(searchBarContent, searchBarContent.getY(),
-                                                                            highestSearchBarPosition));
+        AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
+        AnimatorSet.Builder builder;
+        builder = searchAnim.play(anim.createMoveAnim(searchBar, searchBar.getY(), highestSearchBarPosition))
+                            .with(anim.createScaleUpAnim(searchBar))
+                            .with(anim.createFadeOutAnim(searchIcon))
+                            .with(anim.createMoveAnim(searchBarContent, searchBarContent.getY(),
+                                                      highestSearchBarPosition));
 
-        RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll());
-        RxAnimator.animationEnd(searchAnim).doOnNext(a -> manager.unlockScroll())
-                  .map(a -> new Intent(MainActivity.this, SearchActivity.class))
-                  .doOnNext(intent -> {
-                      boolean shouldShowKeyboard = (phrase == null || phrase.equals(""));
-                      intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, shouldShowKeyboard);
-                  })
-                  .doOnNext(intent -> intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, phrase))
-                  .subscribe(MainActivity.this::startActivity);
+        if (scrollPercent == 0) {
+            builder.with(anim.createFadeOutAnim(doodleFront, 0.5f, false))
+                   .with(anim.createFadeOutAnim(doodleBack, 0.5f, false));
+        }
+
+        animSubs.add(RxAnimator.animationStart(searchAnim).subscribe(a -> manager.lockScroll()));
+        animSubs.add(RxAnimator.animationEnd(searchAnim)
+                               .subscribe(a -> {
+                                   manager.unlockScroll();
+                                   fakeToolbar.setVisibility(View.VISIBLE);
+                                   startSearchActivity(phrase);
+                               }));
 
         searchAnim.start();
     }
 
-    @Override public void goToAboutAppPage() {
+    private void startSearchActivity(String phrase) {
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        boolean shouldShowKeyboard = (phrase == null || phrase.equals(""));
+        intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, shouldShowKeyboard);
+        intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, phrase);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            View searchInput = fakeToolbar.findViewById(R.id.txt_search_wrap);
+            transitions.add(Pair.create(searchInput, getString(R.string.trans_search_input)));
+            transitions.add(Pair.create(toolbarIndicator, getString(R.string.trans_tab_indicator)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if (statusBar != null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    public void goToAboutAppPage(View card) {
         Intent intent = new Intent(this, AboutAppActivity.class);
-        startActivity(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            List<Pair<View, String>> transitions = new ArrayList<>();
+            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+            // status and nav bar
+            View statusBar = findViewById(android.R.id.statusBarBackground);
+            if (statusBar != null) {
+                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+            View navigationBar = findViewById(android.R.id.navigationBarBackground);
+            if (navigationBar != null) {
+                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+            }
+
+            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+            startActivity(intent, transitionActivityOptions.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     @Override public void showDemoGreeting() {
@@ -336,9 +447,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     @Override public void onMenuItemClicked(View target, MainListElementItem item) {
         if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
-            goToAboutAppPage();
+            goToAboutAppPage(target);
         } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
-            showFeedbackDialog();
+            showFeedbackDialog(target);
         } else {
             Timber.d("Menu item clicked has literal as action");
             goToCategoryView(target, item.getCategoryKey());
@@ -351,10 +462,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             List<Pair<View, String>> transitions = new ArrayList<>();
             transitions.add(Pair.create(view, getString(R.string.trans_main_card_bg)));
-            transitions.add(Pair.create(findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             // status and nav bar
             View statusBar = findViewById(android.R.id.statusBarBackground);
-            if(statusBar !=null) {
+            if (statusBar != null) {
                 transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
             }
             View navigationBar = findViewById(android.R.id.navigationBarBackground);

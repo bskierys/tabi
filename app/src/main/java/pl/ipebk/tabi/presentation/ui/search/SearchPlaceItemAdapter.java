@@ -32,8 +32,8 @@ public class SearchPlaceItemAdapter extends PlaceItemAdapter {
     private HeaderClickListener hClickListener;
 
     public SearchPlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
-                                  PlaceAndPlateFactory itemFactory, AnimationCreator animationCreator) {
-        super(cursor, context, randomTextProvider, itemFactory, animationCreator);
+                                  PlaceAndPlateFactory itemFactory) {
+        super(cursor, context, randomTextProvider, itemFactory);
     }
 
     public void setHeaderClickListener(HeaderClickListener hClickListener) {

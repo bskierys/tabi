@@ -67,8 +67,8 @@ public class AnimationCreator {
         private static final long SEARCH_BAR_MOVE_ANIM_DURATION = 400;
         private static final long SEARCH_BAR_SCALE_ANIM_DURATION = 500;
         private static final long SEARCH_BAR_SCALE_ANIM_DELAY = 0;
-        private static final int LIST_ITEM_ENTER_DURATION = 300;
-        private static final int LIST_ITEM_ENTER_DELAY = 120;
+        private static final int LIST_ITEM_ENTER_DURATION = 400;
+        private static final int LIST_ITEM_ENTER_DELAY = 80;
 
         SearchAnimator() { }
 
@@ -105,17 +105,51 @@ public class AnimationCreator {
         }
 
         public Animator createFadeOutAnim(View target) {
-            long duration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
-            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(1.0f, 0.0f)
-                                        .setTarget(target).setInterpolator(new LinearInterpolator())
-                                        .setDuration(duration).build();
+            return createFadeOutAnim(target, 1, false);
+        }
+
+        /**
+         * @param target Animation target
+         * @param factor factor to speed up or slow down anim
+         * @param useDelay whether or not delay should be added to sustain original duration
+         */
+        public Animator createFadeOutAnim(View target, float factor, boolean useDelay) {
+            long originalDuration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
+            long duration = (long) (originalDuration * factor);
+            long delay = Math.abs(originalDuration - duration);
+
+            AnimatorBuilder builder = new AnimatorBuilder();
+            builder.setPropertyName("alpha").setFloatValues(1.0f, 0.0f)
+                   .setTarget(target).setInterpolator(new LinearInterpolator())
+                   .setDuration(originalDuration);
+            if(useDelay) {
+                builder.setStartDelay(delay);
+            }
+            return builder.build();
         }
 
         public Animator createFadeInAnim(View target) {
-            long duration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
-            return new AnimatorBuilder().setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
-                                        .setTarget(target).setInterpolator(new LinearInterpolator())
-                                        .setDuration(duration).build();
+            return createFadeInAnim(target, 1, false);
+        }
+
+        /**
+         * @param target Animation target
+         * @param factor factor to speed up or slow down anim
+         * @param useDelay whether or not delay should be added to sustain original duration
+         */
+        public Animator createFadeInAnim(View target, float factor, boolean useDelay) {
+            long originalDuration = (long) (SEARCH_BAR_MOVE_ANIM_DURATION * animSpeedScale);
+            long duration = (long) (originalDuration * factor);
+            long delay = Math.abs(originalDuration - duration);
+
+            AnimatorBuilder builder = new AnimatorBuilder();
+            builder.setPropertyName("alpha").setFloatValues(0.0f, 1.0f)
+                   .setTarget(target).setInterpolator(new LinearInterpolator())
+                   .setDuration(originalDuration);
+            if(useDelay) {
+                builder.setStartDelay(delay);
+            }
+            return builder.build();
         }
 
         public Animation createItemEnterAnim(int position) {
@@ -124,9 +158,7 @@ public class AnimationCreator {
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.category_item_enter);
             animation.setInterpolator(new EaseCubicOutInterpolator());
             animation.setDuration(duration);
-            if (position > 0) {
-                animation.setStartOffset(delay);
-            }
+            animation.setStartOffset(delay * position);
             return animation;
         }
     }

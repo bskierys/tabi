@@ -46,7 +46,8 @@ public class DetailsSearchActivity extends DetailsActivity {
         loadData();
     }
 
-    private void prepareScrollEvents() {MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
+    private void prepareScrollEvents() {
+        MarginProxy indicatorMarginManager = new MarginProxy(toolbarIndicator);
 
         scrollSubscriptions.add(getScrollStream().filter(scroll -> scroll != null)
                                                  .filter(scroll -> scroll <= toolbarHeight)
