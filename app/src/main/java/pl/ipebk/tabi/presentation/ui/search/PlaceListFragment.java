@@ -35,7 +35,6 @@ public class PlaceListFragment extends BaseFragment {
     private static final String ARG_FRAGMENT_TYPE = "fragmentType";
     static final int SECTION_FIRST_POSITION = 0;
     static final int SECTION_SECOND_POSITION = 4;
-    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject RandomTextProvider randomTextProvider;
     @Inject PlaceAndPlateFactory placeFactory;
@@ -49,7 +48,6 @@ public class PlaceListFragment extends BaseFragment {
     private SearchPlaceItemAdapter adapter;
     private RecyclerView.LayoutManager manager;
     private PlaceFragmentEventListener fragmentEventListener;
-    private Subscription scrollSub;
 
     @SuppressWarnings("unused")
     public static PlaceListFragment newInstance(SearchType type) {
@@ -86,14 +84,6 @@ public class PlaceListFragment extends BaseFragment {
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
-        scrollSub = RxRecyclerView.scrollEvents(recyclerView)
-                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
-                                              .subscribe(event -> {
-                                                  LinearLayoutManager lm = (LinearLayoutManager) manager;
-                                                  int lastPosition = lm.findLastCompletelyVisibleItemPosition();
-                                                  adapter.setLastAnimatedItem(lastPosition);
-                                              });
-
         hideNoResultsImage();
         hideList();
 
@@ -115,7 +105,7 @@ public class PlaceListFragment extends BaseFragment {
      */
     public SearchPlaceItemAdapter getAdapter() {
         if (adapter == null) {
-            adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory, animationCreator);
+            adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory);
             adapter.setHeaderClickListener(s -> fragmentEventListener.onHeaderClicked(s));
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> {
                 fragmentEventListener.onPlaceItemClicked(v, id, plate, sType, pType, pos);
@@ -191,11 +181,6 @@ public class PlaceListFragment extends BaseFragment {
         } else {
             throw new RuntimeException(context + " must implement PlaceFragmentEventListener");
         }
-    }
-
-    @Override public void onDestroy() {
-        super.onDestroy();
-        RxUtil.unsubscribe(scrollSub);
     }
 
     @Override public void onDetach() {

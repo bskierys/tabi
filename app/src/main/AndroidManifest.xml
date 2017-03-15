@@ -52,7 +52,7 @@
         <activity
             android:name=".presentation.ui.about.AboutAppActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>
@@ -60,7 +60,7 @@
         <activity
             android:name=".presentation.ui.category.CategoryActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>        
@@ -69,7 +69,7 @@
             android:name=".presentation.ui.feedback.FeedbackTypeActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>

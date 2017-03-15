@@ -98,18 +98,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         manager = new BlockingLayoutManager(this, GRID_COLUMNS_NUMBER);
 
         recyclerView.setLayoutManager(manager);
-        adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this, animationCreator);
+        adapter = new MainItemAdapter(new ArrayList<>(), doodleTextFormatter, this);
 
         prepareMenuItems();
         prepareToolbar();
         recyclerView.setAdapter(adapter);
-        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
-                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
-                                              .subscribe(event -> {
-                                                  int lastPosition = manager.findLastCompletelyVisibleItemPosition();
-                                                  Timber.d("Visible position: %d", lastPosition);
-                                                  adapter.setLastAnimatedItem(lastPosition);
-                                              }));
 
         scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
                                               .observeOn(AndroidSchedulers.mainThread())

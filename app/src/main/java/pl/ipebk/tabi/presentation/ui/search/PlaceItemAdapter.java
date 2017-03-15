@@ -45,15 +45,11 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;
-    private AnimationCreator animCreator;
-    private int lastPosition = -1;
 
-    public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
-                            PlaceAndPlateFactory itemFactory, AnimationCreator animationCreator) {
+    public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider, PlaceAndPlateFactory itemFactory) {
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
-        this.animCreator = animationCreator;
         this.itemFactory = itemFactory;
     }
 
@@ -78,22 +74,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         checkNotNull(type, "Search type is not set");
         checkNotNull(context, "Context is not set");
         checkNotNull(pClickListener, "PlaceClickListener is not set");
-    }
-
-    /**
-     * Resets animation position, so animation will occur again
-     */
-    public void setLastAnimatedItem(int position) {
-        this.lastPosition = position;
-    }
-
-    protected void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition) {
-            AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();
-            Animation animation = creator.createItemEnterAnim(position);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     @Override protected void bindItemViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor, int position) {
@@ -175,19 +155,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         holder.voivodeshipView.setText(place.voivodeship());
         holder.powiatView.setText(place.powiat());
         holder.icon.setImageResource(iconResourceId);
-    }
-
-    @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        super.onBindViewHolder(viewHolder, position);
-        setAnimation(viewHolder.itemView, position);
-    }
-
-    @Override public Cursor swapCursor(Cursor newCursor) {
-        Cursor oldCursor = super.swapCursor(newCursor);
-        if (lastPosition > 0) {
-            lastPosition = ADAPTER_VIEW_CAPACITY;
-        }
-        return oldCursor;
     }
 
     protected PlaceAndPlate cursorToItem(Cursor cursor) {

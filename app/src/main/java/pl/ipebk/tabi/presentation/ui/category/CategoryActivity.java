@@ -15,10 +15,9 @@ import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,6 @@ import timber.log.Timber;
 
 public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     public static final String EXTRA_CATEGORY_KEY = "extra_category_key";
-    private static final int SCROLL_SAMPLE_PERIOD = 500;
 
     @Inject CategoryPresenter presenter;
     @Inject LicensePlateFinder plateFinder;
@@ -108,16 +106,9 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         }
 
         manager = getLayoutManager();
+        adapter = getAdapter();
         recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(getAdapter());
-
-        scrollSubscriptions.add(RxRecyclerView.scrollEvents(recyclerView)
-                                              .sample(SCROLL_SAMPLE_PERIOD, TimeUnit.MILLISECONDS)
-                                              .subscribe(event -> {
-                                                  LinearLayoutManager lm = (LinearLayoutManager) manager;
-                                                  int lastPosition = lm.findFirstVisibleItemPosition();
-                                                  adapter.setLastAnimatedItem(lastPosition);
-                                              }));
+        recyclerView.setAdapter(adapter);
 
         scrollSubscriptions.add(RxRecyclerViewExtension.totalScrollEvents(recyclerView)
                                                        .observeOn(AndroidSchedulers.mainThread())
@@ -138,9 +129,15 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
                                                 presenter.initCategory(categoryKey);
                                             })
                                             .withOnEndAction(t -> {
-                                                contentContainer.setVisibility(View.VISIBLE);
                                                 toolbar.setVisibility(View.VISIBLE);
                                                 background.setVisibility(View.GONE);
+                                                recyclerView.postDelayed(() -> {
+                                                    int lastVisibleRow = ((LinearLayoutManager) manager).findLastVisibleItemPosition();
+                                                    contentContainer.setVisibility(View.VISIBLE);
+                                                    for (int i = 0; i <= lastVisibleRow; i++) {
+                                                        animateRow(manager.findViewByPosition(i), i);
+                                                    }
+                                                }, 100);
                                             })
                                             .build());
         getWindow().setEnterTransition(enterTransition);
@@ -150,6 +147,12 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
 
         anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
         anim.alterSharedTransition(getWindow().getSharedElementReturnTransition());
+    }
+
+    public void animateRow(View viewToAnimate, int position) {
+        AnimationCreator.SearchAnimator creator = animationCreator.getSearchAnimator();
+        Animation animation = creator.createItemEnterAnim(position);
+        viewToAnimate.startAnimation(animation);
     }
 
     private void raiseToolbar(int scrolled) {
@@ -204,7 +207,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     public CategoryPlaceItemAdapter getAdapter() {
         if (adapter == null) {
 
-            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory, animationCreator);
+            adapter = new CategoryPlaceItemAdapter(null, this, randomTextProvider, placeFactory);
             adapter.setType(SearchType.LICENSE_PLATE);
             adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> presenter.loadPlaceDetails(v, id, plate, pos));
             adapter.setMoreInfoClickListener(this::launchUri);

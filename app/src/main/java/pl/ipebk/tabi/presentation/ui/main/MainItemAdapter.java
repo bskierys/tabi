@@ -31,14 +31,10 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private DoodleTextFormatter doodleTextFormatter;
     private List<MainListItem> categoryList;
     private final MenuItemClickListener listener;
-    private AnimationCreator animCreator;
-    private int lastPosition = -1;
 
-    MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter,
-                    @NonNull MenuItemClickListener listener, AnimationCreator animationCreator) {
+    MainItemAdapter(List<MainListItem> categoryList, DoodleTextFormatter doodleTextFormatter, @NonNull MenuItemClickListener listener) {
         this.categoryList = categoryList;
         this.listener = listener;
-        this.animCreator = animationCreator;
         this.doodleTextFormatter = doodleTextFormatter;
     }
 
@@ -86,28 +82,11 @@ class MainItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             footerViewHolder.version.setText(item.getVersionName());
         }
-        setAnimation(holder.itemView, position);
-    }
-
-    /**
-     * Resets animation position, so animation will occur again
-     */
-    void setLastAnimatedItem(int position) {
-        this.lastPosition = position;
     }
 
     void refreshItem(MainListItem item, int index) {
         categoryList.set(index, item);
         notifyItemChanged(index);
-    }
-
-    protected void setAnimation(View viewToAnimate, int position) {
-        if (position > lastPosition) {
-            AnimationCreator.SearchAnimator creator = animCreator.getSearchAnimator();
-            Animation animation = creator.createMainItemEnterAnim(position);
-            viewToAnimate.startAnimation(animation);
-            lastPosition = position;
-        }
     }
 
     @Override public int getItemCount() {
