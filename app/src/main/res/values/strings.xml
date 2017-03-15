@@ -148,6 +148,7 @@
     <string name="search_tab_unknown">WHATCHA WANT?</string>
     <string name="search_doodle_no_results_header">No results</string>
     <string name="search_doodle_no_results_description">This is not the result I was looking for</string>
+    <string name="search_row_special_place">special plates</string>
     <string name="search_question_where">where is it?</string>
     <string name="search_question_plates">wut plates urr there?</string>
     <string name="search_question_what">What is this place?</string>
