@@ -93,6 +93,11 @@ public class PlaceListFragment extends BaseFragment {
         return view;
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        adapter.unlockRowClicks();
+    }
+
     /**
      * Test methods to be replaced with mocks
      */

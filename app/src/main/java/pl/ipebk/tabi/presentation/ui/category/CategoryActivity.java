@@ -62,6 +62,7 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
     @Inject CustomTabActivityHelper chromeTabHelper;
     @Inject AnimationCreator animationCreator;
 
+    @BindView(R.id.content_root) View rootOfView;
     @BindView(R.id.toolbar_parent) View toolbar;
     @BindView(R.id.content_container) View contentContainer;
     @BindView(R.id.background_layout) View background;
@@ -186,6 +187,11 @@ public class CategoryActivity extends BaseActivity implements CategoryMvpView {
         RxUtil.unsubscribe(scrollSubscriptions);
         RxUtil.unsubscribe(delayedStartSub);
         presenter.detachView();
+    }
+
+    @Override protected void onResume() {
+        super.onResume();
+        adapter.unlockRowClicks();
     }
 
     @Override protected void onStop() {

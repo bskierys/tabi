@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +25,6 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
-import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
@@ -35,16 +33,16 @@ import timber.log.Timber;
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * Adapter for items of type {@link PlaceAndPlateDto}.
+ * Adapter for items of type {@link PlaceAndPlateDto}. This adapter is being blocked after every row click (to suppress animation bugs). Be sure to unlock it in onResume.
  */
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
-    private static final int ADAPTER_VIEW_CAPACITY = 2;
     private RandomTextProvider randomTextProvider;
     private PlaceAndPlateFactory itemFactory;
     protected Context context;
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;
+    private boolean blockClicks;
 
     public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider, PlaceAndPlateFactory itemFactory) {
         super(cursor);
@@ -103,8 +101,20 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
                   }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
+    /**
+     * This adapter is being blocked after every row click (to suppress animation bugs). Be sure to unlock it in onResume
+     */
+    public void unlockRowClicks() {
+        blockClicks = false;
+    }
+
     private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place, int position) {
         holder.root.setOnClickListener(v -> {
+            if (blockClicks) {
+                return;
+            }
+            blockClicks = true;
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.rowBackground.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_row_background), position));
                 holder.placeNameView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_name), position));

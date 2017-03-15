@@ -125,6 +125,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Typeface doodleDescriptionFont;
     private Picasso picasso;
     private boolean transitionUsed;
+    private boolean blockButtonClicks;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
@@ -177,6 +178,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
 
     @Override public void onResume() {
         super.onResume();
+        blockButtonClicks = false;
         if (animGoogleBg.getVisibility() == View.VISIBLE) {
             animateButtonBack(actionButtons.get(BUTTON_PANEL_GOOGLE_INDEX), animGoogleBg);
         }
@@ -341,14 +343,26 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @OnClick(R.id.btn_google_it) public void onSearchMore() {
+        if(blockButtonClicks) {
+            return;
+        }
+        blockButtonClicks = true;
         presenter.searchInGoogle();
     }
 
     @OnClick(R.id.btn_map) public void onShowOnMap() {
+        if(blockButtonClicks) {
+            return;
+        }
+        blockButtonClicks = true;
         presenter.showOnMap();
     }
 
     @OnClick(R.id.btn_copy) public void onCopy() {
+        if(blockButtonClicks) {
+            return;
+        }
+        blockButtonClicks = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Rect viewBounds = getViewBounds(infoWrap);
             Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
@@ -373,6 +387,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
                 animationRoot.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
                 animationRoot.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
                 animationRoot.requestLayout();
+                blockButtonClicks = false;
             }));
         } else {
             presenter.copyToClipboard();
