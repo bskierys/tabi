@@ -10,8 +10,8 @@
     android:transitionName="@string/trans_main_card_bg"
     android:background="@color/white"
     android:orientation="vertical"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="@dimen/Main.Radius.Row"
+    app:cardElevation="@dimen/Main.Elevation.Row">
 
     <LinearLayout
         android:layout_width="match_parent"
