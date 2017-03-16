@@ -95,7 +95,7 @@ public class PlaceListFragment extends BaseFragment {
 
     @Override public void onResume() {
         super.onResume();
-        adapter.unlockRowClicks();
+        getAdapter().unlockRowClicks();
     }
 
     /**

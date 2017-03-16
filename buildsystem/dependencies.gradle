@@ -58,7 +58,7 @@ ext {
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
-    robolectricVerion = '3.1.4'
+    robolectricVerion = '3.3.1'
     rxJavaVersion = '1.2.3'
     rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';

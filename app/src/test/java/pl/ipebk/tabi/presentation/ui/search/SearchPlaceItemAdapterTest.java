@@ -118,10 +118,10 @@ public class SearchPlaceItemAdapterTest {
 
         adapter.onBindViewHolder(itemHolder, cursor, 0);
 
-        assertThat(itemHolder.placeNameView).hasText("Name");
+        assertThat(itemHolder.placeNameView).hasText("Name this");
         assertThat(itemHolder.plateView).hasText("TAB");
-        assertThat(itemHolder.voivodeshipView).hasText("this");
-        assertThat(itemHolder.powiatView).hasText(localizationHelper.formatVoivodeship("voivodeship"));
+        assertThat(itemHolder.voivodeshipView).hasText(localizationHelper.formatVoivodeship("voivodeship"));
+        assertThat(itemHolder.powiatView).hasText("special plates");
     }
 
     @Test public void testBindHeader() throws Exception {
