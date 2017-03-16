@@ -59,8 +59,7 @@ public class DetailsPresenterTest {
         mockFactory = new PlaceFactory(placeLocalizationHelper);
 
         detailsPresenter = new DetailsPresenter(placeRepo, mockClipboardCopyMachine,
-                                                mockMapScaleCalculator, mockFactory,
-                                                placeLocalizationHelper);
+                                                mockMapScaleCalculator, mockFactory);
         detailsPresenter.attachView(mockMvpView);
     }
 

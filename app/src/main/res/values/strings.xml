@@ -20,6 +20,8 @@
     <!--  DETAILS  -->
     <string name="details_gmina" formatted="false">%s commune</string>
     <string name="details_powiat" formatted="false">%1$s %2$s district</string>
+    <string name="details_search_gmina" formatted="false" translatable="false">gmina %s</string>
+    <string name="details_search_powiat" formatted="false" translatable="false">powiat %1$s %2$s</string>
     <string name="details_powiat_territorial">land</string>
     <string name="details_additional_town">town</string>
     <string name="details_additional_part_of_town">part of town: %s</string>
@@ -74,6 +76,22 @@
     <string name="voivodeship_plate_zah" translatable="false">z</string>
     <string name="voivodeship_plate_slu" translatable="false">h</string>
     <string name="voivodeship_plate_woj" translatable="false">u</string>
+    <string name="voivodeship_search_dol" translatable="false">województwo dolnośląskie</string>
+    <string name="voivodeship_search_kuj" translatable="false">województwo kujawsko-pomorskie</string>
+    <string name="voivodeship_search_lod" translatable="false">województwo łódzkie</string>
+    <string name="voivodeship_search_lbl" translatable="false">województwo lubelskie</string>
+    <string name="voivodeship_search_lbu" translatable="false">województwo lubuskie</string>
+    <string name="voivodeship_search_mal" translatable="false">województwo małopolskie</string>
+    <string name="voivodeship_search_maz" translatable="false">województwo mazowieckie</string>
+    <string name="voivodeship_search_opo" translatable="false">województwo opolskie</string>
+    <string name="voivodeship_search_rze" translatable="false">województwo podkarpackie</string>
+    <string name="voivodeship_search_bie" translatable="false">województwo podlaskie</string>
+    <string name="voivodeship_search_pom" translatable="false">województwo pomorskie</string>
+    <string name="voivodeship_search_sla" translatable="false">województwo śląskie</string>
+    <string name="voivodeship_search_swi" translatable="false">województwo świętokrzyskie</string>
+    <string name="voivodeship_search_war" translatable="false">województwo warmińsko-mazurskie</string>
+    <string name="voivodeship_search_wie" translatable="false">województwo wielkopolskie</string>
+    <string name="voivodeship_search_zah" translatable="false">województwo zachodniopomorskie</string>
 
     <string name="category_title_dol">Wroclaw\'s Gnomes</string>
     <string name="category_title_kuj">The city of gingerbread</string>

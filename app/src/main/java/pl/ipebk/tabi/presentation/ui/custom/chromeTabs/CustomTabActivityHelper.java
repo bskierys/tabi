@@ -24,9 +24,6 @@ import android.support.customtabs.CustomTabsSession;
 
 import java.util.List;
 
-import pl.ipebk.tabi.presentation.ui.details.ServiceConnection;
-import pl.ipebk.tabi.presentation.ui.details.ServiceConnectionCallback;
-
 /**
  * This is a helper class to manage the connection to the Custom Tabs Service.
  */

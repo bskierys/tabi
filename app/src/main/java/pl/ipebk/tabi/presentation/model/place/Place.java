@@ -66,14 +66,14 @@ public class Place {
     }
 
     public String getFullInfo() {
-        return localizationHelper.formatPlaceInfo(this);
+        return localizationHelper.formatPlaceInfo(dto);
     }
 
     /**
      * @return String that can be put into search engine to search for place
      */
     public String getSearchPhrase() {
-        return localizationHelper.formatPlaceToSearch(this);
+        return localizationHelper.formatPlaceToSearch(dto);
     }
 
     public boolean hasAdditionalPlates() {
