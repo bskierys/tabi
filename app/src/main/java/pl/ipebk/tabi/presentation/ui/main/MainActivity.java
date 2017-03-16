@@ -236,7 +236,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         fakeToolbar.setVisibility(View.INVISIBLE);
         presenter.refreshView();
 
-        animateSearchBack();
+        searchBar.post(this::animateSearchBack);
     }
 
     private void animateSearchBack() {
@@ -248,15 +248,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             targetY = lowestSearchBarPosition;
         }
 
-        float currentY = searchBar.getY();
-
         AnimationCreator.SearchAnimator anim = animationCreator.getSearchAnimator();
 
         AnimatorSet searchAnim = new AnimatorSet();
         AnimatorSet.Builder builder;
-        builder = searchAnim.play(anim.createMoveAnim(searchBar, currentY, targetY))
+        builder = searchAnim.play(anim.createMoveAnim(searchBar, currentBarPos, targetY))
                             .with(anim.createScaleDownAnim(searchBar))
-                            .with(anim.createMoveAnim(searchBarContent, currentY, targetY))
+                            .with(anim.createMoveAnim(searchBarContent, currentBarPos, targetY))
                             .with(anim.createFadeInAnim(searchBarContent))
                             .with(anim.createFadeInAnim(searchIcon));
 

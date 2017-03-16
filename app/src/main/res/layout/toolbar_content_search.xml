@@ -48,7 +48,7 @@
                 android:id="@+id/editTxt_search"
                 style="@style/Text_Toolbar"
                 android:background="@android:color/transparent"
-                android:hint="@string/preview_search_hint"
+                tools:hint="@string/preview_search_hint"
                 android:imeOptions="actionSearch|flagNoExtractUi"
                 android:inputType="textNoSuggestions"
                 android:textColorHint="@color/white_semi_transparent"
