@@ -1,7 +1,33 @@
 # Change Log
 
+## [v0.2.3](https://github.com/bskierys/tabi/tree/v0.2.3) (2017-03-28)
+[Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.2...v0.2.3)
+
+**Fixed bugs:**
+
+- Robolectic tests are failing [\#52](https://github.com/bskierys/tabi/issues/52)
+- Tabi image not dissapearing when getting beck from details [\#50](https://github.com/bskierys/tabi/issues/50)
+- Rapid clicking on place row breaks shared animation [\#49](https://github.com/bskierys/tabi/issues/49)
+- Unable to load map on english version [\#48](https://github.com/bskierys/tabi/issues/48)
+- Wrongly computed search bar position when rotating phone [\#43](https://github.com/bskierys/tabi/issues/43)
+- Details screen unnecessary animation [\#41](https://github.com/bskierys/tabi/issues/41)
+- Map on details does not react to return of internet connection [\#39](https://github.com/bskierys/tabi/issues/39)
+- X sign not disappearing when clearing on details [\#9](https://github.com/bskierys/tabi/issues/9)
+
+**Closed issues:**
+
+- Full name visible in the row in special places [\#51](https://github.com/bskierys/tabi/issues/51)
+- Animation of opening voivodeship information [\#29](https://github.com/bskierys/tabi/issues/29)
+- Animation of search start [\#28](https://github.com/bskierys/tabi/issues/28)
+- Animation of details actions [\#27](https://github.com/bskierys/tabi/issues/27)
+- Animations of entering details [\#20](https://github.com/bskierys/tabi/issues/20)
+
 ## [v0.2.2](https://github.com/bskierys/tabi/tree/v0.2.2) (2017-02-12)
 [Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.1...v0.2.2)
+
+**Fixed bugs:**
+
+- Search rows dividers are too short [\#40](https://github.com/bskierys/tabi/issues/40)
 
 **Closed issues:**
 
@@ -9,6 +35,7 @@
 - Change about libraries page to match app design [\#46](https://github.com/bskierys/tabi/issues/46)
 - Special screen for voivodeship/category information [\#45](https://github.com/bskierys/tabi/issues/45)
 - Change app feedback dialog to match app design [\#38](https://github.com/bskierys/tabi/issues/38)
+- Add presentation explanation [\#31](https://github.com/bskierys/tabi/issues/31)
 - Remove ViewPagerIndicator as module [\#24](https://github.com/bskierys/tabi/issues/24)
 
 ## [v0.2.1](https://github.com/bskierys/tabi/tree/v0.2.1) (2017-01-21)
@@ -16,12 +43,10 @@
 
 **Fixed bugs:**
 
-- Search rows dividers are too short [\#40](https://github.com/bskierys/tabi/issues/40)
 - Doodle captions has too small leading [\#23](https://github.com/bskierys/tabi/issues/23)
 
 **Closed issues:**
 
-- Add presentation explanation [\#31](https://github.com/bskierys/tabi/issues/31)
 - Add english translation for app [\#13](https://github.com/bskierys/tabi/issues/13)
 - Add code style settings to project and repository [\#2](https://github.com/bskierys/tabi/issues/2)
 
