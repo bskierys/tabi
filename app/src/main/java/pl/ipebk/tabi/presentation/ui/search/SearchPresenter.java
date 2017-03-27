@@ -71,10 +71,7 @@ public class SearchPresenter extends BasePresenter<SearchMvpView> {
     }
 
     //region public methods
-    public void placeSelected(AggregateId placeId, String searchedPlate, String plateClicked,
-                              SearchType searchType, PlaceListItemType itemType) {
-        getMvpView().goToPlaceDetails(placeId, searchedPlate, searchType, itemType);
-
+    public void placeSelected(AggregateId placeId, String plateClicked, SearchType searchType) {
         Observable.just(historyFactory.create(placeId, plateClicked, searchType))
                   .observeOn(Schedulers.io())
                   .subscribe(historyRepository::save, ex -> {

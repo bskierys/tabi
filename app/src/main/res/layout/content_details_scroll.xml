@@ -4,19 +4,25 @@
        xmlns:tools="http://schemas.android.com/tools"
        android:layout_width="match_parent"
        android:layout_height="match_parent"
-       tools:showIn="@layout/activity_details_category"
-       app:layout_behavior="@string/appbar_scrolling_view_behavior">
+       app:layout_behavior="@string/appbar_scrolling_view_behavior"
+       tools:showIn="@layout/activity_details_category">
 
     <ImageView
+        android:id="@+id/overlay_black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@color/black_30"/>
+
+    <FrameLayout
+        android:id="@+id/row_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackgroundLight"/>
 
     <ScrollView
         android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackgroundLight"
         android:fillViewport="@bool/isPortrait"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

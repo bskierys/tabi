@@ -20,9 +20,9 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-def keystoreStorePass="default"
-def keystoreKeyAlias="default"
-def keystoreKeyPass="default"
+def keystoreStorePass = "default"
+def keystoreKeyAlias = "default"
+def keystoreKeyPass = "default"
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -79,27 +79,27 @@ android {
     }
 
     File signFile = rootProject.file('buildsystem/sign.properties')
-	if (signFile.exists()) {
-		Properties p = new Properties()
-		p.load(new FileInputStream(signFile))
-		
-		keystoreStorePass=p.storePassword
-		keystoreKeyAlias=p.keyAlias
-		keystoreKeyPass=p.keyPassword
-	} else {
-		keystoreStorePass=System.getenv('KEYSTORE_STORE_PASS')
-		keystoreKeyAlias=System.getenv('KEYSTORE_KEY_ALIAS')
-		keystoreKeyPass=System.getenv('KEYSTORE_KAY_PASS')
-	}
-	
-	signingConfigs {
-			release {
-				storeFile file("keystore/ipebk.jks")
-				storePassword keystoreStorePass
-				keyAlias keystoreKeyAlias
-				keyPassword keystoreKeyPass
-			}
-		}
+    if (signFile.exists()) {
+        Properties p = new Properties()
+        p.load(new FileInputStream(signFile))
+
+        keystoreStorePass = p.storePassword
+        keystoreKeyAlias = p.keyAlias
+        keystoreKeyPass = p.keyPassword
+    } else {
+        keystoreStorePass = System.getenv('KEYSTORE_STORE_PASS')
+        keystoreKeyAlias = System.getenv('KEYSTORE_KEY_ALIAS')
+        keystoreKeyPass = System.getenv('KEYSTORE_KAY_PASS')
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("keystore/ipebk.jks")
+            storePassword keystoreStorePass
+            keyAlias keystoreKeyAlias
+            keyPassword keystoreKeyPass
+        }
+    }
 
     buildTypes {
         release {
@@ -177,6 +177,7 @@ dependencies {
 
     // image downloading
     compile mobileDependencies.picasso
+    compile mobileDependencies.rxNetwork
 
     // icepick
     compile mobileDependencies.icepick
@@ -227,6 +228,6 @@ dependencies {
 }
 
 // Log out test results to console
-tasks.matching {it instanceof Test}.all {
+tasks.matching { it instanceof Test }.all {
     testLogging.events = ["failed", "passed", "skipped"]
 }

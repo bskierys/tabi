@@ -126,4 +126,14 @@
     <string name="library_inappfeedback_libraryVersion" translatable="false">v6</string>
     <string name="library_inappfeedback_isOpenSource" translatable="false">false</string>
     <string name="library_inappfeedback_licenseId" translatable="false">mit</string>
+
+    <string name="define_reactivenetwork" translatable="false"></string>
+    <string name="library_reactivenetwork_author" translatable="false">Piotr Wittchen</string>
+    <string name="library_reactivenetwork_authorWebsite" translatable="false">http://blog.wittchen.biz.pl/</string>
+    <string name="library_reactivenetwork_libraryName" translatable="false">ReactiveNetwork</string>
+    <string name="library_reactivenetwork_libraryDescription" translatable="false">ReactiveNetwork is an Android library listening network connection state and Internet connectivity with RxJava Observables</string>
+    <string name="library_reactivenetwork_libraryWebsite" translatable="false">https://github.com/pwittchen/ReactiveNetwork</string>
+    <string name="library_reactivenetwork_libraryVersion" translatable="false">0.7.0</string>
+    <string name="library_reactivenetwork_isOpenSource" translatable="false">true</string>
+    <string name="library_reactivenetwork_licenseId" translatable="false">apache_2_0</string>
 </resources>

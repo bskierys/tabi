@@ -5,6 +5,8 @@
 */
 package pl.ipebk.tabi.presentation.ui.search;
 
+import android.view.View;
+
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 
@@ -13,7 +15,7 @@ import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
  * fragment to be communicated to the activity and potentially other fragments contained in that activity.
  */
 public interface PlaceFragmentEventListener {
-    void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+    void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType, int position);
 
     void onHeaderClicked(int eventId);
 

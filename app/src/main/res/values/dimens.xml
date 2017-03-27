@@ -39,6 +39,9 @@
     <dimen name="Details.Padding.Panel.Button">12dp</dimen>
     <dimen name="Details.Elevation">3dp</dimen>
     <dimen name="Details.Height.Text.Description">22dp</dimen>
+    <dimen name="Details.Elevation.Copy.Anim">16dp</dimen>
+    <dimen name="Details.Elevation.Google.Anim">8dp</dimen>
+    <dimen name="Details.Radius.Corner.Anim">4dp</dimen>
 
     <!--  SEARCH  -->
     <dimen name="Search.Height.Tabs">48dp</dimen>
@@ -93,6 +96,8 @@
     <dimen name="Main.Padding.DemoDialog.Vertical">48dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Title">16dp</dimen>
     <dimen name="Main.Margin.DemoDialog.Body">32dp</dimen>
+    <dimen name="Main.Elevation.Row">2dp</dimen>
+    <dimen name="Main.Radius.Row">2dp</dimen>
 
     <!--  FEEDBACK  -->
     <dimen name="Feedback.Margin.Top">32dp</dimen>
@@ -116,7 +121,7 @@
 
     <!--  OTHERS  -->
     <dimen name="Shadows.Height.2dp">4dp</dimen>
-    <dimen name="StatusBar">22dp</dimen>
+    <dimen name="StatusBar">24dp</dimen>
     <dimen name="Button.Secondary.Radius">32dp</dimen>
     <dimen name="Button.Secondary.Padding">8dp</dimen>
     <dimen name="Button.Secondary.Width">144dp</dimen>

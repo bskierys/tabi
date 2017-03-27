@@ -5,7 +5,7 @@
               android:gravity="center_vertical"
               android:orientation="horizontal">
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         android:id="@+id/txt_title"
         style="@style/Text_Toolbar"/>
 </LinearLayout>

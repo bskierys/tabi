@@ -2,13 +2,16 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/Main.Height.Tile"
     android:layout_margin="@dimen/Main.Margin.Tile"
+    tools:targetApi="LOLLIPOP"
+    android:transitionName="@string/trans_main_card_bg"
     android:background="@color/white"
     android:orientation="vertical"
-    app:cardCornerRadius="2dp"
-    app:cardElevation="2dp">
+    app:cardCornerRadius="@dimen/Main.Radius.Row"
+    app:cardElevation="@dimen/Main.Elevation.Row">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +30,7 @@
             android:scaleType="centerInside"
             android:src="@drawable/vic_dol"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             android:id="@+id/txt_category"
             style="@style/Text_Body2.Primary"
             android:gravity="center_horizontal"

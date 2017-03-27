@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:context=".presentation.ui.search.SearchActivity"
                 tools:ignore="contentDescription"
                 tools:showIn="@layout/activity_search">
@@ -15,5 +13,5 @@
         android:layout_height="match_parent"/>
 
     <ImageView style="@style/Shadow.2dp"/>
-</RelativeLayout>
+</merge>
 

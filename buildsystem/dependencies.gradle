@@ -36,7 +36,7 @@ ext {
     androidApplicationId = 'pl.ipebk.tabi'
     androidVersionCode = readVersionCode()
     androidVersionName = readVersionName()
-    androidBuildToolsVersion = "24.0.0"
+    androidBuildToolsVersion = "25.0.2"
     androidMinSdkVersion = 16
     androidTargetSdkVersion = 24
     androidCompileSdkVersion = 24
@@ -58,7 +58,7 @@ ext {
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
-    robolectricVerion = '3.1.4'
+    robolectricVerion = '3.3.1'
     rxJavaVersion = '1.2.3'
     rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';
@@ -73,6 +73,7 @@ ext {
     retrofitVersion = '2.1.0'
     okLogVersion = '1.0.1'
     loggingInterceptorVersion = '3.3.0'
+    rxNetworkVersion = '0.7.0'
 
     mobileDependencies = [
             // Android
@@ -114,6 +115,7 @@ ext {
             // image downloading
             picasso                 : "com.squareup.picasso:picasso:${picassoVersion}",
             okhttp                  : "com.squareup.okhttp3:okhttp:${okhttpVersion}",
+            rxNetwork               : "com.github.pwittchen:reactivenetwork:${rxNetworkVersion}",
 
             // Dagger
             javaxAnnotation         : "org.glassfish:javax.annotation:${javaxAnnotationVersion}",

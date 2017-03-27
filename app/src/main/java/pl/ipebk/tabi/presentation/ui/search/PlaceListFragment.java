@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
+
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.ipebk.tabi.App;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.base.BaseFragment;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
+import pl.ipebk.tabi.utils.RxUtil;
+import rx.Subscription;
+import timber.log.Timber;
 
 /**
  * A fragment representing a list of Places.
@@ -32,6 +38,7 @@ public class PlaceListFragment extends BaseFragment {
 
     @Inject RandomTextProvider randomTextProvider;
     @Inject PlaceAndPlateFactory placeFactory;
+    @Inject AnimationCreator animationCreator;
     @BindView(R.id.img_no_results) ImageView noResultsImage;
     @BindView(R.id.place_list) RecyclerView recyclerView;
 
@@ -39,6 +46,7 @@ public class PlaceListFragment extends BaseFragment {
     private boolean viewCreated;
     private Cursor placeCursor;
     private SearchPlaceItemAdapter adapter;
+    private RecyclerView.LayoutManager manager;
     private PlaceFragmentEventListener fragmentEventListener;
 
     @SuppressWarnings("unused")
@@ -72,7 +80,8 @@ public class PlaceListFragment extends BaseFragment {
             getAdapter().changeCursor(placeCursor);
         }
 
-        recyclerView.setLayoutManager(getLayoutManager());
+        manager = getLayoutManager();
+        recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
 
         hideNoResultsImage();
@@ -82,6 +91,11 @@ public class PlaceListFragment extends BaseFragment {
         viewCreated = true;
 
         return view;
+    }
+
+    @Override public void onResume() {
+        super.onResume();
+        getAdapter().unlockRowClicks();
     }
 
     /**
@@ -98,7 +112,9 @@ public class PlaceListFragment extends BaseFragment {
         if (adapter == null) {
             adapter = new SearchPlaceItemAdapter(placeCursor, getActivity(), randomTextProvider, placeFactory);
             adapter.setHeaderClickListener(s -> fragmentEventListener.onHeaderClicked(s));
-            adapter.setPlaceClickListener((id, plate, sType, pType) -> fragmentEventListener.onPlaceItemClicked(id, plate, sType, pType));
+            adapter.setPlaceClickListener((v, id, plate, sType, pType, pos) -> {
+                fragmentEventListener.onPlaceItemClicked(v, id, plate, sType, pType, pos);
+            });
             adapter.setType(type);
         }
 

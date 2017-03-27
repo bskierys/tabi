@@ -24,8 +24,8 @@ import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.AggregateId;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
-import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
+import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.test.common.assemblers.PlaceAndPlateDtoDtoAssembler;
 import pl.ipebk.tabi.test.common.injection.component.DaggerTestViewComponent;
@@ -36,7 +36,12 @@ import pl.ipebk.tabi.test.common.utils.TestRandomTextProvider;
 import pl.ipebk.tabi.utils.AggregateIdMatcher;
 
 import static org.assertj.android.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
@@ -102,8 +107,8 @@ public class SearchPlaceItemAdapterTest {
 
         itemHolder.root.performClick();
 
-        verify(placeListener).onPlaceItemClicked(agIdEq(new AggregateId(10)), eq("TAB"),
-                                                 eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH));
+        verify(placeListener).onPlaceItemClicked(any(), agIdEq(new AggregateId(10)), eq("TAB"),
+                                                 eq(SearchType.LICENSE_PLATE), eq(PlaceListItemType.SEARCH), anyInt());
     }
 
     @Test public void testBindSpecialPlace() throws Exception {
@@ -113,10 +118,10 @@ public class SearchPlaceItemAdapterTest {
 
         adapter.onBindViewHolder(itemHolder, cursor, 0);
 
-        assertThat(itemHolder.placeNameView).hasText("Name");
+        assertThat(itemHolder.placeNameView).hasText("Name this");
         assertThat(itemHolder.plateView).hasText("TAB");
-        assertThat(itemHolder.voivodeshipView).hasText("this");
-        assertThat(itemHolder.powiatView).hasText(localizationHelper.formatVoivodeship("voivodeship"));
+        assertThat(itemHolder.voivodeshipView).hasText(localizationHelper.formatVoivodeship("voivodeship"));
+        assertThat(itemHolder.powiatView).hasText("special plates");
     }
 
     @Test public void testBindHeader() throws Exception {
@@ -169,7 +174,7 @@ public class SearchPlaceItemAdapterTest {
         assertThat(itemHolder.powiatView).doesNotContainText(localizationHelper.formatPowiat(name));
     }
 
-    private PlaceAndPlateDtoDtoAssembler assemblePlace(){
+    private PlaceAndPlateDtoDtoAssembler assemblePlace() {
         return new PlaceAndPlateDtoDtoAssembler();
     }
 

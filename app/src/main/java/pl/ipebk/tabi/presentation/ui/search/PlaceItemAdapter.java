@@ -7,11 +7,13 @@ package pl.ipebk.tabi.presentation.ui.search;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -22,7 +24,8 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlate;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
-import pl.ipebk.tabi.presentation.ui.custom.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
+import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import rx.Observable;
 import timber.log.Timber;
@@ -30,19 +33,18 @@ import timber.log.Timber;
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
 /**
- * Adapter for items of type {@link PlaceAndPlateDto}.
+ * Adapter for items of type {@link PlaceAndPlateDto}. This adapter is being blocked after every row click (to suppress animation bugs). Be sure to unlock it in onResume.
  */
 public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapter {
     private RandomTextProvider randomTextProvider;
     private PlaceAndPlateFactory itemFactory;
-    private Context context;
+    protected Context context;
     private boolean historical;
     private PlaceClickListener pClickListener;
     private SearchType type;
+    private boolean blockClicks;
 
-    public PlaceItemAdapter(Cursor cursor, Context context,
-                            RandomTextProvider randomTextProvider,
-                            PlaceAndPlateFactory itemFactory) {
+    public PlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider, PlaceAndPlateFactory itemFactory) {
         super(cursor);
         this.context = context;
         this.randomTextProvider = randomTextProvider;
@@ -86,7 +88,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         }
 
         Observable.just(cursor).first().map(this::cursorToItem)
-                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place))
+                  .doOnNext(place -> bindCommonFieldsInViewHolder(holder, place, position))
                   .subscribe(place -> {
                       PlaceType type = place.placeType();
                       if (type.ordinal() < PlaceType.SPECIAL.ordinal()) {
@@ -99,12 +101,34 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
                   }, ex -> Timber.e(ex, "Error rendering row view"));
     }
 
-    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
-        holder.root.setOnClickListener(v -> pClickListener.onPlaceItemClicked(
-                place.id(),
-                place.plateString(),
-                type, place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
-                        (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH)));
+    /**
+     * This adapter is being blocked after every row click (to suppress animation bugs). Be sure to unlock it in onResume
+     */
+    public void unlockRowClicks() {
+        blockClicks = false;
+    }
+
+    private void bindCommonFieldsInViewHolder(ItemViewHolder holder, PlaceAndPlate place, int position) {
+        holder.root.setOnClickListener(v -> {
+            if (blockClicks) {
+                return;
+            }
+            blockClicks = true;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.rowBackground.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_row_background), position));
+                holder.placeNameView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_name), position));
+                holder.plateView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_plate), position));
+                holder.icon.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_icon), position));
+                holder.voivodeshipView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_voivodeship_name), position));
+                holder.powiatView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_powiat_name), position));
+            }
+
+            pClickListener.onPlaceItemClicked(
+                    v, place.id(), place.plateString(), type,
+                    place.placeType() == PlaceType.RANDOM ? PlaceListItemType.RANDOM :
+                            (historical ? PlaceListItemType.HISTORICAL : PlaceListItemType.SEARCH), position);
+        });
 
         holder.plateView.setText(place.plateString());
     }
@@ -126,11 +150,10 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
 
     private void bindSpecialPlaceViewHolder(ItemViewHolder holder, PlaceAndPlate place) {
         int iconResourceId = historical ? R.drawable.ic_doodle_history : R.drawable.ic_doodle_search;
-        String[] nameParts = place.name().split(" ");
 
-        holder.powiatView.setText(place.voivodeship());
-        holder.placeNameView.setText(nameParts[0]);
-        holder.voivodeshipView.setText(getPlaceSubName(nameParts));
+        holder.powiatView.setText(context.getString(R.string.search_row_special_place));
+        holder.placeNameView.setText(place.name());
+        holder.voivodeshipView.setText(place.voivodeship());
         holder.icon.setImageResource(iconResourceId);
     }
 
@@ -147,17 +170,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         return itemFactory.createFromCursor(cursor);
     }
 
-    private String getPlaceSubName(String[] words) {
-        String subName = "";
-        if (words.length > 1) {
-            for (int i = 1; i < words.length; i++) {
-                subName += words[i] + " ";
-            }
-        }
-
-        return subName.trim();
-    }
-
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.root) View root;
         @BindView(R.id.txt_place_name) TextView placeNameView;
@@ -166,6 +178,7 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
         @BindView(R.id.txt_powiat) TextView powiatView;
         @BindView(R.id.shadow) ImageView shadow;
         @BindView(R.id.ic_row) ImageView icon;
+        @BindView(R.id.wrp_row) LinearLayout rowBackground;
 
         public ItemViewHolder(View view) {
             super(view);
@@ -174,6 +187,6 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
     }
 
     public interface PlaceClickListener {
-        void onPlaceItemClicked(AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType);
+        void onPlaceItemClicked(View view, AggregateId placeId, String plateClicked, SearchType type, PlaceListItemType itemType, int position);
     }
 }

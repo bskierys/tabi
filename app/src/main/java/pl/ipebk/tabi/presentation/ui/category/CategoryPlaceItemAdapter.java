@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
@@ -37,14 +39,12 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
     private MoreInfoClickListener mClickListener;
     private String platesSectionName;
 
-    public CategoryPlaceItemAdapter(Cursor cursor, Context context,
-                                    RandomTextProvider randomTextProvider,
+    public CategoryPlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
                                     PlaceAndPlateFactory itemFactory) {
         super(cursor, context, randomTextProvider, itemFactory);
         platesSectionName = context.getString(R.string.category_plates_section);
         String noText = context.getString(R.string.default_resource_string);
-        DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText,
-                                                 context.getResources().getDrawable(R.drawable.vic_default));
+        DEFAULT_INFO = new AutoValue_CategoryInfo(noText, noText, noText, context.getResources().getDrawable(R.drawable.vic_default));
     }
 
     public void setCategoryInfo(CategoryInfo categoryInfo) {

@@ -10,6 +10,7 @@ import android.content.res.Resources;
 
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.place.Place;
+import pl.ipebk.tabi.presentation.model.place.PlaceDto;
 import pl.ipebk.tabi.readmodel.PlaceType;
 import timber.log.Timber;
 
@@ -19,6 +20,7 @@ import timber.log.Timber;
 public class PlaceLocalizationHelper {
     private final static String POWIAT_REPLACE_FORMAT = "$z$";
     private final static String VOIVODESHIP_NAME_RESOURCE_KEY = "voivodeship_name_";
+    private final static String VOIVODESHIP_SEARCH_RESOURCE_KEY = "voivodeship_search_";
 
     private Context context;
 
@@ -27,20 +29,33 @@ public class PlaceLocalizationHelper {
     }
 
     public String formatVoivodeship(String voivodeship) {
-        String resourceName = VOIVODESHIP_NAME_RESOURCE_KEY + voivodeship.replace("#", "");
-        String voivodeshipName;
-        try {
-            voivodeshipName = getStringResourceForKey(resourceName);
-        } catch (Resources.NotFoundException e) {
-            Timber.e(e, "Could not found resource for name: %s", resourceName);
-            voivodeshipName = context.getString(R.string.default_resource_string);
-        }
-        return voivodeshipName;
+        String resourceName = getVoivodeshipResourceKey(VOIVODESHIP_NAME_RESOURCE_KEY, voivodeship);
+        return getStringResourceForKeyWithHandling(resourceName);
+    }
+
+    private String formatVoivodeshipToSearch(String voivodeship) {
+        String resourceName = getVoivodeshipResourceKey(VOIVODESHIP_SEARCH_RESOURCE_KEY, voivodeship);
+        return getStringResourceForKeyWithHandling(resourceName);
+    }
+
+    private String getVoivodeshipResourceKey(String prefix, String voivodeship) {
+        return prefix + voivodeship.replace("#", "");
     }
 
     private String getStringResourceForKey(String key) throws Resources.NotFoundException {
         int resourceId = context.getResources().getIdentifier(key, "string", context.getPackageName());
         return context.getString(resourceId);
+    }
+
+    private String getStringResourceForKeyWithHandling(String resourceName) {
+        String key;
+        try {
+            key = getStringResourceForKey(resourceName);
+        } catch (Resources.NotFoundException e) {
+            Timber.e(e, "Could not found resource for name: %s", resourceName);
+            key = context.getString(R.string.default_resource_string);
+        }
+        return key;
     }
 
     public String formatPowiat(String powiat) {
@@ -55,8 +70,21 @@ public class PlaceLocalizationHelper {
         return fullName.trim().replaceAll("\\s+", " ");
     }
 
+    private String formatPowiatToSearch(String powiat) {
+        if (powiat.contains(POWIAT_REPLACE_FORMAT)) {
+            powiat = powiat.replace(POWIAT_REPLACE_FORMAT, "").trim();
+        }
+
+        String fullName = context.getString(R.string.details_search_powiat, powiat, "").trim();
+        return fullName.trim().replaceAll("\\s+", " ");
+    }
+
     public String formatGmina(String gmina) {
         return context.getString(R.string.details_gmina, gmina);
+    }
+
+    private String formatGminaToSearch(String gmina) {
+        return context.getString(R.string.details_search_gmina, gmina);
     }
 
     /**
@@ -94,15 +122,15 @@ public class PlaceLocalizationHelper {
      *
      * @param place Instance of {@link Place} to format.
      */
-    public String formatPlaceInfo(Place place) {
+    public String formatPlaceInfo(PlaceDto place) {
         StringBuilder builder = new StringBuilder();
-        builder.append(place.getName());
+        builder.append(place.name());
         builder.append(", ");
-        builder.append(formatVoivodeship(place.getVoivodeship()));
+        builder.append(formatVoivodeship(place.voivodeship()));
         builder.append(", ");
-        builder.append(formatPowiat(place.getPowiat()));
+        builder.append(formatPowiat(place.powiat()));
         builder.append(", ");
-        builder.append(formatGmina(place.getGmina()));
+        builder.append(formatGmina(place.gmina()));
         builder.append(", ");
         builder.append(context.getString(R.string.details_country));
         return builder.toString();
@@ -111,9 +139,17 @@ public class PlaceLocalizationHelper {
     /**
      * Formats place data into format that is understandable by search engines.
      */
-    public String formatPlaceToSearch(Place place) {
-        String land = context.getString(R.string.details_powiat_territorial);
-        String formattedPlace = place.toString().replace(land, "").replace("(", "").replace(")","");
-        return formattedPlace + "," + context.getString(R.string.details_country);
+    public String formatPlaceToSearch(PlaceDto place) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(place.name());
+        builder.append(",");
+        builder.append(formatGminaToSearch(place.gmina()));
+        builder.append(",");
+        builder.append(formatPowiatToSearch(place.powiat()));
+        builder.append(",");
+        builder.append(formatVoivodeshipToSearch(place.voivodeship()));
+        builder.append(",");
+        builder.append(context.getString(R.string.details_country));
+        return builder.toString();
     }
 }

@@ -9,6 +9,13 @@
     tools:context="pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity">
 
     <FrameLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionName="@string/trans_main_card_bg"
+        tools:targetApi="LOLLIPOP"/>
+
+    <FrameLayout
         android:id="@+id/fake_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/Toolbar.Height.Min">
@@ -20,6 +27,7 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/fake_toolbar"
@@ -30,14 +38,14 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             style="@style/Text_Display.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/feedback_title"/>
 
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             style="@style/Text_Body2.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

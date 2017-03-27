@@ -1,32 +1,32 @@
 /*
 * author: Bartlomiej Kierys
-* date: 2016-03-13
+* date: 2017-01-17
 * email: bskierys@gmail.com
 */
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.font;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.Button;
 
 /**
- * TextView with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
+ * Button with custom fonts. Custom font may be applied by fontFamily attribute or by {@link FontDecorator}
  */
-public class FontTextView extends TextView {
+public class FontButton extends Button {
     private FontDecorator decorator;
 
-    public FontTextView(Context context) {
+    public FontButton(Context context) {
         super(context);
         decorator = new FontDecorator(context, this);
     }
 
-    public FontTextView(Context context, AttributeSet attrs) {
+    public FontButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         decorator = new FontDecorator(context, this);
         decorator.initFromAttributes(attrs);
     }
 
-    public FontTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FontButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         decorator = new FontDecorator(context, this);
         decorator.initFromAttributes(attrs);

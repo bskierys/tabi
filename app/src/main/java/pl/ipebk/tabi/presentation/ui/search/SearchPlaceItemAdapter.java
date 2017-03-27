@@ -20,6 +20,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDto;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
+import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
@@ -30,8 +31,7 @@ import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 public class SearchPlaceItemAdapter extends PlaceItemAdapter {
     private HeaderClickListener hClickListener;
 
-    public SearchPlaceItemAdapter(Cursor cursor, Context context,
-                                  RandomTextProvider randomTextProvider,
+    public SearchPlaceItemAdapter(Cursor cursor, Context context, RandomTextProvider randomTextProvider,
                                   PlaceAndPlateFactory itemFactory) {
         super(cursor, context, randomTextProvider, itemFactory);
     }

@@ -9,7 +9,7 @@
               android:paddingRight="@dimen/Main.Padding.DemoDialog.Horizontal"
               android:paddingTop="@dimen/Main.Padding.DemoDialog.Vertical">
 
-    <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+    <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
         style="@style/Text_Display.Primary"
         android:id="@+id/txt_title"
         android:layout_weight="0"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1">
-        <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+        <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
             style="@style/Text_Body.Primary"
             android:id="@+id/txt_body"
             android:layout_width="wrap_content"

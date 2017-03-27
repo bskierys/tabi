@@ -31,6 +31,8 @@ import rx.subjects.BehaviorSubject;
 import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
+    private static final String POLISH_LOCALE_CODE = "pl";
+
     private PlaceRepository repository;
     private Observable<Place> placeOnce;
     private BehaviorSubject<Place> placeSubject;
@@ -39,19 +41,16 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private PlaceFactory placeFactory;
     private ClipboardCopyMachine clipboardCopyMachine;
     private MapScaleCalculator mapScaleCalculator;
-    private PlaceLocalizationHelper localizationHelper;
 
     private Subscription loadMapSubscription;
     private Subscription loadPlaceSubscription;
 
     @Inject public DetailsPresenter(PlaceRepository repository, ClipboardCopyMachine clipboardCopyMachine,
-                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory,
-                                    PlaceLocalizationHelper localizationHelper) {
+                                    MapScaleCalculator mapScaleCalculator, PlaceFactory placeFactory) {
         this.repository = repository;
         this.clipboardCopyMachine = clipboardCopyMachine;
         this.placeFactory = placeFactory;
         this.mapScaleCalculator = mapScaleCalculator;
-        this.localizationHelper = localizationHelper;
     }
 
     @Override public void attachView(DetailsMvpView mvpView) {
@@ -169,8 +168,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         int scale = mapScaleCalculator.getMapScale();
 
         String size = String.format(Locale.getDefault(), "%dx%d", width, height);
-        String language = Locale.getDefault().getLanguage();
-        String placeName = localizationHelper.formatPlaceToSearch(place);
+        String placeName = place.getSearchPhrase();
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http");
@@ -183,7 +181,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         builder.appendQueryParameter("scale", Integer.toString(scale));
         builder.appendQueryParameter("size", size);
         builder.appendQueryParameter("maptype", "roadmap");
-        builder.appendQueryParameter("language", language);
+        builder.appendQueryParameter("language", POLISH_LOCALE_CODE);
 
         return builder.build();
     }

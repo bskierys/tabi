@@ -7,8 +7,6 @@ package pl.ipebk.tabi.injection.module;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,21 +18,18 @@ import pl.ipebk.tabi.infrastructure.finders.DaoPlaceFinder;
 import pl.ipebk.tabi.infrastructure.finders.DaoSearchHistoryFinder;
 import pl.ipebk.tabi.infrastructure.repositories.DaoPlaceRepository;
 import pl.ipebk.tabi.infrastructure.repositories.DaoSearchHistoryRepository;
-import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
 import pl.ipebk.tabi.presentation.SqliteDatabaseLoader;
 import pl.ipebk.tabi.presentation.localization.CategoryLocalizationHelper;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
-import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.CalendarSearchTimeProvider;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchHistoryRepository;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchTimeProvider;
 import pl.ipebk.tabi.presentation.ui.details.ClipboardCopyMachine;
-import pl.ipebk.tabi.presentation.ui.details.CustomTabActivityHelper;
+import pl.ipebk.tabi.presentation.ui.custom.chromeTabs.CustomTabActivityHelper;
 import pl.ipebk.tabi.presentation.ui.details.MapScaleCalculator;
 import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
-import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.readmodel.LicensePlateFinder;
 import pl.ipebk.tabi.readmodel.PlaceFinder;

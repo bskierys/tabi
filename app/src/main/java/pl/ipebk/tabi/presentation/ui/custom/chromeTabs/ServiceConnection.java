@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package pl.ipebk.tabi.presentation.ui.details;
+package pl.ipebk.tabi.presentation.ui.custom.chromeTabs;
 
 import android.content.ComponentName;
 import android.support.customtabs.CustomTabsClient;

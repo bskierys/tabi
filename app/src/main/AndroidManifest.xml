@@ -3,6 +3,7 @@
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".App"
@@ -32,7 +33,8 @@
             android:name=".presentation.ui.details.DetailsSearchActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.search.SearchActivity"/>
@@ -41,7 +43,8 @@
             android:name=".presentation.ui.details.DetailsCategoryActivity"
             android:label="@string/title_activity_details"
             android:parentActivityName=".presentation.ui.search.SearchActivity"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme.Transparent"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.search.SearchActivity"/>
@@ -49,7 +52,7 @@
         <activity
             android:name=".presentation.ui.about.AboutAppActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>
@@ -57,7 +60,7 @@
         <activity
             android:name=".presentation.ui.category.CategoryActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>        
@@ -66,7 +69,7 @@
             android:name=".presentation.ui.feedback.FeedbackTypeActivity"
             android:parentActivityName=".presentation.ui.main.MainActivity"
             android:noHistory="true"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.Transparent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".presentation.ui.main.MainActivity"/>

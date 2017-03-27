@@ -1,4 +1,4 @@
-package pl.ipebk.tabi.presentation.ui.custom;
+package pl.ipebk.tabi.presentation.ui.custom.recycler;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import pl.ipebk.tabi.presentation.ui.custom.recycler.SectionedCursorRecyclerViewAdapter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

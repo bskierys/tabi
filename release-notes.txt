@@ -1,13 +1,26 @@
 Release Notes
+## [v0.2.3] (2017-03-28)
+- Tabi image not dissapearing when getting beck from details 
+- Rapid clicking on place row breaks shared animation 
+- Unable to load map on english version 
+- Wrongly computed search bar position when rotating phone 
+- Details screen unnecessary animation 
+- Map on details does not react to return of internet connection 
+- X sign not disappearing when clearing on details 
+- Full name visible in the row in special places 
+- Animation of opening voivodeship information 
+- Animation of search start 
+- Animation of details actions 
+- Animations of entering details 
 ## [v0.2.2] (2017-02-12)
+- Search rows dividers are too short 
 - New tile icons 
 - Change about libraries page to match app design 
 - Special screen for voivodeship/category information 
 - Change app feedback dialog to match app design 
-## [v0.2.1] (2017-01-21)
-- Search rows dividers are too short 
-- Doodle captions has too small leading 
 - Add presentation explanation 
+## [v0.2.1] (2017-01-21)
+- Doodle captions has too small leading 
 - Add english translation for app 
 ## [v0.2.0] (2017-01-05)
 - App version at the bottom of main screen 

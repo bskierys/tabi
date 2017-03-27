@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/content_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,20 +9,30 @@
     tools:context=".presentation.ui.category.CategoryActivity"
     tools:ignore="contentDescription">
 
+    <FrameLayout
+        android:id="@+id/background_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:transitionName="@string/trans_main_card_bg"
+        tools:targetApi="LOLLIPOP"/>
+
     <pl.ipebk.tabi.presentation.ui.custom.Toolbar
         android:id="@+id/toolbar_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:elevation="0dp"
-        android:theme="@style/AppTheme.AppBarOverlay"
         android:background="@color/white"
-        app:content="@layout/toolbar_content_category"/>
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:content="@layout/toolbar_content_category"
+        app:elevation="0dp"/>
 
     <!--  This relative layout is important. If it is removed,
           layout will go above the toolbar when scrolled  -->
     <RelativeLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ProgressBar
@@ -42,5 +53,4 @@
 
         <ImageView style="@style/Shadow.2dp"/>
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

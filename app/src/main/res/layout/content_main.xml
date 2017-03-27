@@ -23,6 +23,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <pl.ipebk.tabi.presentation.ui.custom.Toolbar
+            android:id="@+id/fake_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:content="@layout/toolbar_content_search"/>
+
         <ImageView
             android:id="@+id/img_tabi_back"
             style="@style/Main_Doodle"
@@ -64,7 +71,7 @@
             android:layout_marginRight="@dimen/Main.Margin.SearchBar.Horizontal"
             android:layout_marginTop="@dimen/Main.Margin.SearchBar.Top.Lowest">
 
-            <pl.ipebk.tabi.presentation.ui.custom.FontTextView
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
                 android:id="@+id/txt_searched"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/Main.Height.SearchBar.Inner"
