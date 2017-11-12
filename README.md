@@ -10,7 +10,9 @@
 
 Every license plate in Poland is connected to district a car comes from. This car with „DOL” licence plate, do you where it is from? Or this big city – Krakow – what license plates are used in there? 
 
-Tabi will help you answer this questions
+Tabi will help you answer this questions.
+
+<a href='https://play.google.com/store/apps/details?id=pl.ipebk.tabi&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
 
 ## Main features
 
@@ -21,10 +23,11 @@ Tabi will help you answer this questions
 
 ## Screens
 
-[sreens here]
-
-<img src = "https://github.com/bskierys/tabi/blob/master/design/final/details_exit_pull.gif" width = "300">
-<img src = "https://github.com/bskierys/tabi/blob/master/design/final/main_tile_click.gif" width = "300">
+<p align="center">
+    <a href="marketing/promocyjne/github_screens.png">
+        <img src="marketing/promocyjne/github_screens.png" width="800"/>
+    </a>
+</p>
 
 ## Architecture
 
