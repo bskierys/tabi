@@ -1,6 +1,14 @@
 # Change Log
 
-## [v0.2.3](https://github.com/bskierys/tabi/tree/v0.2.3) (2017-03-28)
+## [v0.2.4](https://github.com/bskierys/tabi/tree/v0.2.4) (2017-11-15)
+[Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.3...v0.2.4)
+
+**Closed issues:**
+
+- English Google Play page [\#57](https://github.com/bskierys/tabi/issues/57)
+- Prepare github page [\#5](https://github.com/bskierys/tabi/issues/5)
+
+## [v0.2.3](https://github.com/bskierys/tabi/tree/v0.2.3) (2017-03-27)
 [Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.2...v0.2.3)
 
 **Fixed bugs:**
