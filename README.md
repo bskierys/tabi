@@ -6,20 +6,21 @@
     </a>
 </p>
 
-**Search for Polish license plates**
+**Discover license plates of Poland**
 
-Every license plate in Poland is connected to district a car comes from. This car with „DOL” licence plate, do you where it is from? Or this big city – Krakow – what license plates are used in there? 
+Every license plate in Poland is connected to a country district. 
+This car with „DOL” license plate, do you know where it’s from? Or this big city – Krakow – what license plates are used in there? 
 
-Tabi will help you answer this questions.
+Tabi is here for you to answer this questions.
 
 <a href='https://play.google.com/store/apps/details?id=pl.ipebk.tabi&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
 
 ## Main features
 
-- Search through large database of license plates from Poland
-- Find any town or village in Poland
-- Find out more about found place
-- Discover new license plates every time you enter the app
+- Search through large database of Polish license plates
+- Find every town or village in Poland
+- Learn more about the place you found
+- Discover new license plates every day
 
 ## Screens
 
