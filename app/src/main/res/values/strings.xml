@@ -26,7 +26,7 @@
     <string name="details_additional_town">town</string>
     <string name="details_additional_part_of_town">part of town: %s</string>
     <string name="details_additional_village">village</string>
-    <string name="details_additional_other_plates">other plates</string>
+    <string name="details_additional_other_plates">other plates:</string>
     <string name="details_country">Poland</string>
     <string name="details_doodle_loading_header">Hold on a minute&#8230;</string>
     <string name="details_doodle_loading_description">I\'m marking the territory</string>
