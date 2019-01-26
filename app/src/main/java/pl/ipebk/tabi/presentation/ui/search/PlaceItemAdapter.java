@@ -7,7 +7,6 @@ package pl.ipebk.tabi.presentation.ui.search;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,14 +114,12 @@ public abstract class PlaceItemAdapter extends SectionedCursorRecyclerViewAdapte
             }
             blockClicks = true;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.rowBackground.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_row_background), position));
-                holder.placeNameView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_name), position));
-                holder.plateView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_plate), position));
-                holder.icon.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_icon), position));
-                holder.voivodeshipView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_voivodeship_name), position));
-                holder.powiatView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_powiat_name), position));
-            }
+            holder.rowBackground.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_row_background), position));
+            holder.placeNameView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_name), position));
+            holder.plateView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_plate), position));
+            holder.icon.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_place_icon), position));
+            holder.voivodeshipView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_voivodeship_name), position));
+            holder.powiatView.setTransitionName(SharedTransitionNaming.getName(context.getString(R.string.trans_powiat_name), position));
 
             pClickListener.onPlaceItemClicked(
                     v, place.id(), place.plateString(), type,

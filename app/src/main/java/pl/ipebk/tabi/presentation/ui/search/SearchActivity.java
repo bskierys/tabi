@@ -1,20 +1,17 @@
 package pl.ipebk.tabi.presentation.ui.search;
 
-import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -46,7 +43,6 @@ import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.DetailsSearchActivity;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SharedTransitionNaming;
-import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.utils.FontManager;
 import pl.ipebk.tabi.utils.RxUtil;
 import rx.Observable;
@@ -113,16 +109,13 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
                        }
                    }, ex -> Timber.e(ex, "Page cannot be changed"));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setupTransition();
-        }
+        setupTransition();
 
         searchedText.setVisibility(View.GONE);
         preparePlaceFragments();
         prepareDoodleImages();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setupTransition() {
         AnimationCreator.CategoryAnimator anim = animationCreator.getCategoryAnimator();
 
@@ -364,34 +357,30 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         intent.putExtra(DetailsSearchActivity.PARAM_ITEM_TYPE, itemType);
         intent.putExtra(DetailsSearchActivity.PARAM_ADAPTER_POSITION, position);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            // shared elements
-            transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
-            transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
-            transitions.add(Pair.create(view, SharedTransitionNaming.getName(getString(R.string.trans_row_background), position)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), SharedTransitionNaming.getName(getString(R.string.trans_place_name), position)));
-            transitions.add(Pair.create(view.findViewById(R.id.ic_row), SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position)));
-            transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(intent, transitionActivityOptions.toBundle());
-        } else {
-            startActivity(intent);
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        // shared elements
+        transitions.add(Pair.create(indicator, getString(R.string.trans_tab_indicator)));
+        transitions.add(Pair.create(searchInputWrap, getString(R.string.trans_search_input)));
+        transitions.add(Pair.create(view, SharedTransitionNaming.getName(getString(R.string.trans_row_background), position)));
+        transitions.add(Pair.create(view.findViewById(R.id.txt_voivodeship), SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position)));
+        transitions.add(Pair.create(view.findViewById(R.id.txt_powiat), SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position)));
+        transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), SharedTransitionNaming.getName(getString(R.string.trans_place_name), position)));
+        transitions.add(Pair.create(view.findViewById(R.id.ic_row), SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position)));
+        transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
+        // status and nav bar
+        View statusBar = findViewById(android.R.id.statusBarBackground);
+        if (statusBar != null) {
+            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
         }
+        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+        if (navigationBar != null) {
+            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+
+        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+        startActivity(intent, transitionActivityOptions.toBundle());
     }
 
     @Override public void showInitialSearchInPlatesSection(Cursor cursor) {

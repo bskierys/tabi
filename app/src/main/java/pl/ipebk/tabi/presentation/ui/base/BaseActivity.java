@@ -1,19 +1,16 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2016-02-11
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2016-02-11
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.presentation.ui.base;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +43,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription();
-        }
+        setTaskDescription();
 
         // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
@@ -68,7 +63,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         activityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTaskDescription() {
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(

@@ -1,8 +1,8 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2016-12-26
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2016-12-26
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.presentation.ui.about;
 
 import android.annotation.TargetApi;
@@ -45,12 +45,10 @@ public class AboutAppActivity extends BaseActivity {
     @BindView(R.id.libraries_list) RecyclerView librariesView;
     @BindView(R.id.appBar) View appBar;
     @BindView(R.id.background_layout) View background;
-
-    private LibraryAdapter adapter;
-    private Subscription scrollSubscription;
-
     @BindDimen(R.dimen.Toolbar_Height_Min) int lowestSearchBarPosition;
     @Inject AnimationCreator animationCreator;
+    private LibraryAdapter adapter;
+    private Subscription scrollSubscription;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +58,7 @@ public class AboutAppActivity extends BaseActivity {
         getActivityComponent().inject(this);
 
         initLibraries();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setupTransition();
-        }
+        setupTransition();
         getLoadLibsObservable().observeOn(AndroidSchedulers.mainThread())
                                .subscribeOn(Schedulers.newThread())
                                .subscribe(listItems -> {
@@ -98,10 +94,10 @@ public class AboutAppActivity extends BaseActivity {
 
         Transition returnTransition = anim.createBgFadeOutTransition();
         returnTransition.addListener(new SimpleTransitionListener.Builder()
-                                            .withOnStartAction(t -> {
-                                                background.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
-                                            })
-                                            .build());
+                                             .withOnStartAction(t -> {
+                                                 background.setBackgroundColor(getResources().getColor(R.color.colorBackgroundLight));
+                                             })
+                                             .build());
         getWindow().setReturnTransition(returnTransition);
 
         anim.alterSharedTransition(getWindow().getSharedElementEnterTransition());
