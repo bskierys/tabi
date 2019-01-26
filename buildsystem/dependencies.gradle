@@ -45,7 +45,7 @@ ext {
     javaxAnnotationVersion = '10.0-b28'
     daggerVersion = '2.8'
     androidSupportVersion = '24.2.1'
-    sqliteAssetHelperVersion = '2.0.1'
+    sqliteAssetHelperVersion = '2.0.7'
     sqlbriteVersion = '0.8.0'
     junitVersion = '4.12'
     mockitoTwoVersion = '2.2.26'
@@ -123,7 +123,8 @@ ext {
             dagger                  : "com.google.dagger:dagger:${daggerVersion}",
 
             // SQLite
-            sqliteAssetHelper       : "com.readystatesoftware.sqliteasset:sqliteassethelper:${sqliteAssetHelperVersion}",
+            // Original library version has a bug and is no longer maintained. We use forked version.
+            sqliteAssetHelper       : "com.github.ranaparamveer:android-sqlite-asset-helper:${sqliteAssetHelperVersion}",
             sqlbrite                : "com.squareup.sqlbrite:sqlbrite:${sqlbriteVersion}",
 
             // overscroll

@@ -7,6 +7,7 @@ package pl.ipebk.tabi.presentation.ui.main;
 
 import javax.inject.Inject;
 
+import io.fabric.sdk.android.InitializationException;
 import pl.ipebk.tabi.BuildConfig;
 import com.suredigit.inappfeedback.FeedbackClient;
 import pl.ipebk.tabi.presentation.DatabaseLoader;
@@ -94,7 +95,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(v -> {
                 }, e -> {
-                    Timber.e("Error initializing database");
+                    String message = "Error initializing database";
+                    Timber.e(message);
+                    throw new RuntimeException(message);
                 }, () -> {
                     getMvpView().hideLoading();
                     Timber.d("Initializing time: %s", stopwatch.getElapsedTimeString());
