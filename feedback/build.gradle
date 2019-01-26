@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -50,31 +48,31 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
 
     // auto-value
-    apt mobileDependencies.autoValueGson
-    provided mobileDependencies.autoValueGson
+    annotationProcessor mobileDependencies.autoValueGson
+    implementation mobileDependencies.autoValueGson
 
     // RxJava
-    compile mobileDependencies.rxjava
-    compile mobileDependencies.rxandroid
+    api mobileDependencies.rxjava
+    api mobileDependencies.rxandroid
 
-    compile mobileDependencies.pine
+    api mobileDependencies.pine
 
     // Retrofit
-    compile (mobileDependencies.retrofit){
+    api (mobileDependencies.retrofit){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
-    compile (mobileDependencies.retrofitConverter){
+    api (mobileDependencies.retrofitConverter){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
-    compile (mobileDependencies.retrofitRxAdapter){
+    api (mobileDependencies.retrofitRxAdapter){
         exclude group: "com.squareup.okhttp3", module: "okhttp"
     }
-    compile (mobileDependencies.okLog)
-    compile (mobileDependencies.loggingInterceptor)
+    api (mobileDependencies.okLog)
+    api (mobileDependencies.loggingInterceptor)
 
-    testCompile mobileDependencies.junit
+    testImplementation mobileDependencies.junit
 }

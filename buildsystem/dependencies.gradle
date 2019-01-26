@@ -36,10 +36,10 @@ ext {
     androidApplicationId = 'pl.ipebk.tabi'
     androidVersionCode = readVersionCode()
     androidVersionName = readVersionName()
-    androidBuildToolsVersion = "25.0.2"
-    androidMinSdkVersion = 16
-    androidTargetSdkVersion = 24
-    androidCompileSdkVersion = 24
+    androidBuildToolsVersion = "28.0.3"
+    androidMinSdkVersion = 21
+    androidTargetSdkVersion = 28
+    androidCompileSdkVersion = 28
 
     //Libraries
     javaxAnnotationVersion = '10.0-b28'
@@ -58,7 +58,7 @@ ext {
     icepickVersion = '3.2.0'
     androidTestVersion = '0.4.1'
     espressoVersion = '2.2.1'
-    robolectricVerion = '3.3.1'
+    robolectricVerion = '4.1'
     rxJavaVersion = '1.2.3'
     rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';
@@ -68,7 +68,7 @@ ext {
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';
     autoValueVersion = '1.2';
-    autoValueGsonVersion = '0.4.4';
+    autoValueGsonVersion = '0.8.0';
     aboutLibrariesVersion = "5.9.1@aar";
     retrofitVersion = '2.1.0'
     okLogVersion = '1.0.1'
@@ -138,7 +138,7 @@ ext {
             // Unit test dependencies
             junit                   : "junit:junit:${junitVersion}",
             robolectric             : "org.robolectric:robolectric:${robolectricVerion}",
-            robolectric_shadows     : "org.robolectric:shadows-support-v4:${robolectricVerion}",
+            robolectric_shadows     : "org.robolectric:shadows-supportv4:${robolectricVerion}",
             mockitoTwo              : "org.mockito:mockito-core:${mockitoTwoVersion}",
             mockitoOne              : "org.mockito:mockito-core:${mockitoOneVersion}",
             assertj                 : "org.assertj:assertj-core:${assertjVersion}",

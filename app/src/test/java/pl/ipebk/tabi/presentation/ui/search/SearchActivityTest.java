@@ -44,7 +44,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.*;
 import static org.assertj.android.api.Assertions.assertThat;
 
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
 public class SearchActivityTest {
     // TODO: 2016-12-14 repositories should be taken from  app component not config persistant component - that breaks the tests

@@ -20,7 +20,7 @@ import pl.ipebk.tabi.R;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+@Config(sdk = Build.VERSION_CODES.LOLLIPOP)
 @RunWith(RobolectricTestRunner.class)
 public class DoodleTextFormatterTest {
     Context context;
