@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import pl.ipebk.tabi.BuildConfig;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.localization.PlaceLocalizationHelper;
 import pl.ipebk.tabi.presentation.model.AggregateId;
@@ -32,6 +33,7 @@ import timber.log.Timber;
 
 public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
     private static final String POLISH_LOCALE_CODE = "pl";
+    private static final String GOOGLE_CLOUD_API_KEY = BuildConfig.GCApiKey;
 
     private PlaceRepository repository;
     private Observable<Place> placeOnce;
@@ -171,7 +173,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         String placeName = place.getSearchPhrase();
 
         Uri.Builder builder = new Uri.Builder();
-        builder.scheme("http");
+        builder.scheme("https");
         builder.authority("maps.googleapis.com");
         builder.appendPath("maps");
         builder.appendPath("api");
@@ -182,6 +184,7 @@ public class DetailsPresenter extends BasePresenter<DetailsMvpView> {
         builder.appendQueryParameter("size", size);
         builder.appendQueryParameter("maptype", "roadmap");
         builder.appendQueryParameter("language", POLISH_LOCALE_CODE);
+        builder.appendQueryParameter("key", GOOGLE_CLOUD_API_KEY);
 
         return builder.build();
     }

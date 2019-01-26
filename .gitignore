@@ -35,6 +35,7 @@ feedback/feedback.iml
 *.priv
 /local.properties
 /buildsystem/sign.properties
+/buildsystem/keys.properties
 /app/fabric.properties
 
 # fabric

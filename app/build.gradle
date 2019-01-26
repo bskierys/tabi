@@ -21,6 +21,7 @@ repositories {
 def keystoreStorePass = "default"
 def keystoreKeyAlias = "default"
 def keystoreKeyPass = "default"
+def gCloudApiKey = "default"
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -93,6 +94,14 @@ android {
         keystoreKeyPass = System.getenv('KEYSTORE_KAY_PASS')
     }
 
+    File apiKeysFile = rootProject.file('buildsystem/keys.properties')
+    if (apiKeysFile.exists()) {
+        Properties p = new Properties()
+        p.load(new FileInputStream(apiKeysFile))
+
+        gCloudApiKey = p.googleCloud_ApiKey
+    }
+
     signingConfigs {
         release {
             storeFile file("keystore/ipebk.jks")
@@ -107,11 +116,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            buildConfigField 'String', "GCApiKey", gCloudApiKey
         }
 
         debug {
             versionNameSuffix " Debug"
             debuggable true
+            buildConfigField 'String', "GCApiKey", gCloudApiKey
         }
     }
 
