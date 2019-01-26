@@ -68,7 +68,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Lowest) float lowestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Highest) float highestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_Greeting_Doodle_Top) float lowestDoodlePosition;
-
+    @State boolean isDialogShown;
+    @State int scrolledY;
     private float scrollPercent;
     private MainItemAdapter adapter;
     private int bigHeaderIndex;
@@ -77,8 +78,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private BlockingLayoutManager manager;
     private CompositeSubscription scrollSubscriptions;
     private CompositeSubscription animSubs;
-    @State boolean isDialogShown;
-    @State int scrolledY;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -286,26 +285,22 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
 
     public void showFeedbackDialog(View card) {
         Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(feedbackIntent, transitionActivityOptions.toBundle());
-        } else {
-            startActivity(feedbackIntent);
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+        // status and nav bar
+        View statusBar = findViewById(android.R.id.statusBarBackground);
+        if (statusBar != null) {
+            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
         }
+        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+        if (navigationBar != null) {
+            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+
+        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+        startActivity(feedbackIntent, transitionActivityOptions.toBundle());
     }
 
     @Override public void showGreetingCaption() {
@@ -421,21 +416,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                         .newInstance(getString(R.string.english_greeting_title),
                                      getString(R.string.english_greeting_body),
                                      getString(R.string.english_greeting_confirm));
-                demoDialog.setOnClickListener(v -> isDialogShown = false);
-                demoDialog.show(ft, PARAM_DIALOG);
-                isDialogShown = true;
-            }
-        }
-    }
-
-    @Override public void showResponseToFeedback(String response) {
-        if (!isDialogShown) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
-            if (prev == null) {
-                MessageDialog demoDialog = MessageDialog
-                        .newInstance(getString(R.string.main_feedback_response_title), response,
-                                     getString(R.string.main_feedback_response_confirm));
                 demoDialog.setOnClickListener(v -> isDialogShown = false);
                 demoDialog.show(ft, PARAM_DIALOG);
                 isDialogShown = true;

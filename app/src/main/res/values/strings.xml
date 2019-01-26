@@ -222,24 +222,18 @@
     <string name="main_doodle_caption_feedback">Got any *remarks?* Go to the bottom of this page</string>
     <string name="main_version">Version %s</string>
     <string name="main_loading">loading&#8230;</string>
-    <string name="main_feedback_response_title">Response</string>
-    <string name="main_feedback_response_confirm">Close</string>
 
     <!--  FEEDBACK  -->
     <string name="feedback_title">Describe to us your remarks</string>
     <string name="feedback_subtitle">What is bothering you?</string>
     <string name="feedback_button_bug">Bug</string>
-    <string name="feedback_title_bug">Describe to us your problem</string>
-    <string name="feedback_hint_bug">What is wrong?</string>
     <string name="feedback_button_idea">Idea</string>
-    <string name="feedback_title_idea">Describe to us your idea</string>
-    <string name="feedback_hint_idea">What\'s on your mind?</string>
     <string name="feedback_button_question">Question</string>
-    <string name="feedback_title_question">Describe to us your question</string>
-    <string name="feedback_hint_question">What do you want to ask?</string>
-    <string name="feedback_send">Send</string>
-    <string name="feedback_sending">Sending feedback&#8230;</string>
-    <string name="main_feedback_done">Thanks for opinion</string>
+    <string name="feedback_email_chooser_title">Feedback? Send us an email!</string>
+    <string name="feedback_email_subject">Feedback about the Tabi app</string>
+    <string name="feedback_email_body_bug">Hi! There is a bug in the app.</string>
+    <string name="feedback_email_body_idea">Hi! I have an idea to improve the app. What do you think about it?</string>
+    <string name="feedback_email_body_question">Hi! I have a question regarding the app.</string>
 
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">true</bool>

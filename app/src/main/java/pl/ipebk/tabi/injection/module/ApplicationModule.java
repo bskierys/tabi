@@ -14,8 +14,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.suredigit.inappfeedback.Feedback;
-import com.suredigit.inappfeedback.FeedbackClient;
 
 import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
@@ -64,10 +62,6 @@ public class ApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(application);
-    }
-
-    @Provides public FeedbackClient provideFeedbackClient() {
-        return Feedback.getClient();
     }
 
     @Provides public RandomTextProvider provideRandomTextProvider() {

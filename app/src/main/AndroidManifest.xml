@@ -75,16 +75,6 @@
                 android:value=".presentation.ui.main.MainActivity"/>
         </activity>
 
-        <activity android:name=".presentation.ui.feedback.FeedbackEntryActivity"
-                  android:parentActivityName=".presentation.ui.feedback.FeedbackTypeActivity"
-                  android:windowSoftInputMode="adjustResize"
-                  android:noHistory="true"
-                  android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".presentation.ui.feedback.FeedbackTypeActivity"/>
-        </activity>
-
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="b6da5b975f1016a9f9d5bbd45ef7244f820af050"/>

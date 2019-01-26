@@ -167,24 +167,18 @@
     <string name="main_doodle_caption_feedback">Masz jakieś *uwagi?* Zjedź na dół strony.</string>
     <string name="main_version">Wersja %s</string>
     <string name="main_loading">ładuję&#8230;</string>
-    <string name="main_feedback_response_title">Odpowiedź</string>
-    <string name="main_feedback_response_confirm">Zamknij</string>
 
     <!--  FEEDBACK  -->
     <string name="feedback_title">Zgłoś nam swoje uwagi</string>
     <string name="feedback_subtitle">Co Ci leży na sercu?</string>
     <string name="feedback_button_bug">Błąd</string>
-    <string name="feedback_title_bug">Zgłoś nam swój problem</string>
-    <string name="feedback_hint_bug">Co jest nie tak?</string>
     <string name="feedback_button_idea">Pomysł</string>
-    <string name="feedback_title_idea">Zgłoś nam swój pomysł</string>
-    <string name="feedback_hint_idea">Zaproponuj coś od siebie&#8230;</string>
     <string name="feedback_button_question">Pytanie</string>
-    <string name="feedback_title_question">Zgłoś nam swoje pytanie</string>
-    <string name="feedback_hint_question">O co chcesz zapytać?</string>
-    <string name="feedback_send">Wyślij</string>
-    <string name="feedback_sending">Wysyłanie uwag&#8230;</string>
-    <string name="main_feedback_done">Dziękujemy za opinię</string>
+    <string name="feedback_email_chooser_title">Uwagi? Napisz do nas email!</string>
+    <string name="feedback_email_subject">Uwagi na temat aplikacji Tabi</string>
+    <string name="feedback_email_body_bug">Cześć! Chyba znalazłem błąd w aplikacji.</string>
+    <string name="feedback_email_body_idea">Cześć! Mam pomysł na ulepszenie aplikacji. Co ty na to?</string>
+    <string name="feedback_email_body_question">Cześć! Mam pytanie dotyczące aplikacji.</string>
 
     <!--  MAIN ENGLISH GREETING  -->
     <bool name="use_english_greeting">false</bool>

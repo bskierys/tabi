@@ -145,7 +145,6 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
-    api project(':feedback')
 
     // auto-value
     annotationProcessor mobileDependencies.autoValueGson
