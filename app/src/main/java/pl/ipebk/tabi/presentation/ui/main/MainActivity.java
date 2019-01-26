@@ -448,4 +448,9 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
         startActivity(categoryIntent, transitionActivityOptions.toBundle());
     }
+
+    @Override
+    protected void overrideDefaultExitTransition() {
+        // do not override the transition
+    }
 }

@@ -82,11 +82,19 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override public void startActivity(Intent intent) {
         super.startActivity(intent);
+        overrideDefaultEnterTransition();
+    }
+
+    protected void overrideDefaultEnterTransition() {
         overridePendingTransition(0, 0);
     }
 
     @Override public void onBackPressed() {
         super.onBackPressed();
+        overrideDefaultExitTransition();
+    }
+
+    protected void overrideDefaultExitTransition() {
         overridePendingTransition(0, 0);
     }
 }
