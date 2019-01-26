@@ -136,6 +136,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         bigHeaderIndex = 0;
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
+        items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
+                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
+                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
                                           getResources().getDrawable(R.drawable.vic_dol), "d", "dol"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
@@ -168,10 +172,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                                           getResources().getDrawable(R.drawable.vic_wie), "p", "wie"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
                                           getResources().getDrawable(R.drawable.vic_zah), "z", "zah"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
-                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
-                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
