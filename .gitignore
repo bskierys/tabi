@@ -29,11 +29,14 @@ feedback/feedback.iml
 **/.idea/dictionaries
 **/.idea/.name
 **/.idea/vcs.xml
+**/.idea/caches/
+**/.idea/assetWizardSettings.xml
 
 # private files
 *.priv
 /local.properties
 /buildsystem/sign.properties
+/buildsystem/keys.properties
 /app/fabric.properties
 
 # fabric

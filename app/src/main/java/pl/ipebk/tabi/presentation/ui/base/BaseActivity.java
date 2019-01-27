@@ -1,21 +1,24 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2016-02-11
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2016-02-11
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.presentation.ui.base;
 
-import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
+import android.util.Pair;
+import android.view.View;
+import android.view.Window;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -46,9 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setTaskDescription();
-        }
+        setTaskDescription();
 
         // Create the ActivityComponent and reuses cached ConfigPersistentComponent if this is
         // being called after a configuration change.
@@ -68,7 +69,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         activityComponent = configPersistentComponent.activityComponent(new ActivityModule(this));
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setTaskDescription() {
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(
@@ -88,11 +88,39 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override public void startActivity(Intent intent) {
         super.startActivity(intent);
+        overrideDefaultEnterTransition();
+    }
+
+    protected void overrideDefaultEnterTransition() {
         overridePendingTransition(0, 0);
     }
 
     @Override public void onBackPressed() {
         super.onBackPressed();
+        overrideDefaultExitTransition();
+    }
+
+    protected void overrideDefaultExitTransition() {
         overridePendingTransition(0, 0);
+    }
+
+    protected void startActivityWithTransition(Intent intent, List<Pair<View, String>> transitions) {
+        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+        startActivity(intent, transitionActivityOptions.toBundle());
+    }
+
+    protected List<Pair<View, String>> createStatusAndNavTransition() {
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        View statusBar = findViewById(android.R.id.statusBarBackground);
+        if (statusBar != null) {
+            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+        if (navigationBar != null) {
+            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+        return transitions;
     }
 }

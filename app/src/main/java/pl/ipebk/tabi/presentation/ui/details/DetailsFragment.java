@@ -1,13 +1,12 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2017-01-28
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2017-01-28
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.presentation.ui.details;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +18,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -124,13 +122,11 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     private Typeface doodleHeaderFont;
     private Typeface doodleDescriptionFont;
     private Picasso picasso;
-    private boolean transitionUsed;
     private boolean blockButtonClicks;
 
     private PublishSubject<Integer> mapWidthStream = PublishSubject.create();
     private PublishSubject<Integer> mapHeightStream = PublishSubject.create();
     private Subscription mapErrorSub;
-    private Subscription delayedStartSub;
     private CompositeSubscription animSubs;
 
     public static DetailsFragment newInstance(long placeId, String searchedPlate, PlaceListItemType itemType,
@@ -199,51 +195,45 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     private void setupEnterAndReturnTransitions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int position = getArguments().getInt(ARG_ADAPTER_POSITION);
+        int position = getArguments().getInt(ARG_ADAPTER_POSITION);
 
-            placeNameView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_name), position));
-            plateView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position));
-            placeIcon.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position));
-            voivodeshipView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position));
-            powiatView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position));
+        placeNameView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_name), position));
+        plateView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position));
+        placeIcon.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position));
+        voivodeshipView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_voivodeship_name), position));
+        powiatView.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_powiat_name), position));
 
-            animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
+        animationCreator.getDetailsAnimator().prepareViewForPanelAnim(panelCard);
 
-            Transition enterTransition = getActivity().getWindow().getEnterTransition();
-            Transition returnTransition = getActivity().getWindow().getReturnTransition();
+        Transition enterTransition = getActivity().getWindow().getEnterTransition();
+        Transition returnTransition = getActivity().getWindow().getReturnTransition();
 
-            enterTransition.addListener(new SimpleTransitionListener.Builder()
-                                                .withOnStartAction(t -> {
-                                                    transitionUsed = true;
-                                                    animateEnter();
-                                                    mapAndPanel.setVisibility(View.INVISIBLE);
-                                                })
-                                                .withOnEndAction(t -> {
-                                                    divider.setVisibility(View.VISIBLE);
-                                                    mapAndPanel.setVisibility(View.VISIBLE);
-                                                    computeMapBounds();
-                                                    mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                                                              .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
-                                                        mapWrapper.post(this::computeMapBounds);
-                                                    });
-                                                })
-                                                .unregisterOnEnd().build());
-            returnTransition.addListener(new SimpleTransitionListener.Builder()
-                                                 .withOnStartAction(t -> {
-                                                     panelCard.setVisibility(View.INVISIBLE);
-                                                     divider.setVisibility(View.INVISIBLE);
-                                                     gminaView.setVisibility(View.INVISIBLE);
-                                                     mapAndPanel.setVisibility(View.INVISIBLE);
-                                                     additionalInfoView.setVisibility(View.INVISIBLE);
-                                                     placeHolder.setVisibility(View.INVISIBLE);
-                                                 }).build());
-        } else {
-            transitionUsed = false;
-        }
+        enterTransition.addListener(new SimpleTransitionListener.Builder()
+                                            .withOnStartAction(t -> {
+                                                animateEnter();
+                                                mapAndPanel.setVisibility(View.INVISIBLE);
+                                            })
+                                            .withOnEndAction(t -> {
+                                                divider.setVisibility(View.VISIBLE);
+                                                mapAndPanel.setVisibility(View.VISIBLE);
+                                                computeMapBounds();
+                                                mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                                                          .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+                                                    mapWrapper.post(this::computeMapBounds);
+                                                });
+                                            })
+                                            .unregisterOnEnd().build());
+        returnTransition.addListener(new SimpleTransitionListener.Builder()
+                                             .withOnStartAction(t -> {
+                                                 panelCard.setVisibility(View.INVISIBLE);
+                                                 divider.setVisibility(View.INVISIBLE);
+                                                 gminaView.setVisibility(View.INVISIBLE);
+                                                 mapAndPanel.setVisibility(View.INVISIBLE);
+                                                 additionalInfoView.setVisibility(View.INVISIBLE);
+                                                 placeHolder.setVisibility(View.INVISIBLE);
+                                             }).build());
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void animateEnter() {
         gminaView.setVisibility(View.INVISIBLE);
         divider.setVisibility(View.INVISIBLE);
@@ -280,12 +270,10 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             presenter.loadPlace(placeId, searchedPlate, searchType, itemType);
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
-                      .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
-                mapWrapper.post(this::computeMapBounds);
-            });
-        }
+        mapWrapper.getBoundsStream().filter(bounds -> bounds.height() > 0)
+                  .throttleLast(100, TimeUnit.MILLISECONDS).subscribe(bounds -> {
+            mapWrapper.post(this::computeMapBounds);
+        });
     }
 
     private void computeMapBounds() {
@@ -310,17 +298,6 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
             Uri uri = Uri.parse(preloadedSearchPhrase);
             chromeTabHelper.mayLaunchUrl(uri, null, null);
         }
-
-        delayedStartSub = Observable.just(null)
-                                    .delay(100, TimeUnit.MILLISECONDS)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(n -> {
-                                        if (!transitionUsed) {
-                                            Timber.d("Transition not used in activity. starting delayed action");
-                                            showPanel(false);
-                                            computeMapBounds();
-                                        }
-                                    });
     }
 
     public void showPanel(boolean animate) {
@@ -338,13 +315,12 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
         super.onDestroy();
         chromeTabHelper.unbindCustomTabsService(getActivity());
         RxUtil.unsubscribe(mapErrorSub);
-        RxUtil.unsubscribe(delayedStartSub);
         RxUtil.unsubscribe(animSubs);
         presenter.detachView();
     }
 
     @OnClick(R.id.btn_google_it) public void onSearchMore() {
-        if(blockButtonClicks) {
+        if (blockButtonClicks) {
             return;
         }
         blockButtonClicks = true;
@@ -352,7 +328,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @OnClick(R.id.btn_map) public void onShowOnMap() {
-        if(blockButtonClicks) {
+        if (blockButtonClicks) {
             return;
         }
         blockButtonClicks = true;
@@ -360,39 +336,35 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @OnClick(R.id.btn_copy) public void onCopy() {
-        if(blockButtonClicks) {
+        if (blockButtonClicks) {
             return;
         }
         blockButtonClicks = true;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Rect viewBounds = getViewBounds(infoWrap);
-            Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
-            screenBounds.bottom -= getToolbarHeight();
+        Rect viewBounds = getViewBounds(infoWrap);
+        Rect screenBounds = ViewUtil.getScreenBounds(getActivity().getWindowManager());
+        screenBounds.bottom -= getToolbarHeight();
 
-            animationRoot.getLayoutParams().height = screenBounds.height();
-            animationRoot.getLayoutParams().width = screenBounds.width();
-            animationRoot.requestLayout();
+        animationRoot.getLayoutParams().height = screenBounds.height();
+        animationRoot.getLayoutParams().width = screenBounds.width();
+        animationRoot.requestLayout();
 
-            placeMockViewInBounds(animInfoBg, viewBounds);
-            copyViewToImageView(infoWrap, (ImageView) animInfoBg.findViewById(R.id.image_layer));
+        placeMockViewInBounds(animInfoBg, viewBounds);
+        copyViewToImageView(infoWrap, (ImageView) animInfoBg.findViewById(R.id.image_layer));
 
-            AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
-            Animator copyAnim = anim.createCopyAnim(viewBounds, animInfoBg);
+        AnimationCreator.DetailsAnimator anim = animationCreator.getDetailsAnimator();
+        Animator copyAnim = anim.createCopyAnim(viewBounds, animInfoBg);
 
-            animInfoBg.setVisibility(View.VISIBLE);
-            copyAnim.start();
+        animInfoBg.setVisibility(View.VISIBLE);
+        copyAnim.start();
 
-            animSubs.add(RxAnimator.animationEnd(copyAnim).subscribe(a -> {
-                presenter.copyToClipboard();
-                animInfoBg.setVisibility(View.INVISIBLE);
-                animationRoot.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
-                animationRoot.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
-                animationRoot.requestLayout();
-                blockButtonClicks = false;
-            }));
-        } else {
+        animSubs.add(RxAnimator.animationEnd(copyAnim).subscribe(a -> {
             presenter.copyToClipboard();
-        }
+            animInfoBg.setVisibility(View.INVISIBLE);
+            animationRoot.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
+            animationRoot.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
+            animationRoot.requestLayout();
+            blockButtonClicks = false;
+        }));
     }
 
     public void copyViewToImageView(View source, ImageView copyImageView) {
@@ -407,9 +379,7 @@ public class DetailsFragment extends BaseFragment implements DetailsMvpView, Cal
     }
 
     @Override public void showPlaceName(String name) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getActivity().startPostponedEnterTransition();
-        }
+        getActivity().startPostponedEnterTransition();
         placeNameView.setText(name);
     }
 

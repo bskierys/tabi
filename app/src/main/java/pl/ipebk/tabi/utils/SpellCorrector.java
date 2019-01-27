@@ -68,7 +68,7 @@ public class SpellCorrector {
     }
 
     private String replaceSpecialCharacters(String original) {
-        String strippedOutOfSpecialCharacters = original.replaceAll("[^\\p{L}\\p{Z}\\-]", "");
+        String strippedOutOfSpecialCharacters = original.replaceAll("[^\\p{L}\\p{N}\\p{Z}\\-]", "");
         return strippedOutOfSpecialCharacters.replace("-", " ");
     }
 }

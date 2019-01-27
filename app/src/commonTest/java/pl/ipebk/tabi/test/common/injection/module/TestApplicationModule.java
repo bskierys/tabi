@@ -13,9 +13,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.suredigit.inappfeedback.FeedbackClient;
 
-import pl.ipebk.tabi.infrastructure.views.DatabaseViewPlaceAndPlateDtoFactory;
 import pl.ipebk.tabi.injection.ApplicationContext;
 import pl.ipebk.tabi.presentation.model.place.PlaceRepository;
 import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateDtoFactory;
@@ -76,10 +74,6 @@ public class TestApplicationModule {
 
     @Provides public SharedPreferences provideSharedPreferences() {
         return mock(SharedPreferences.class);
-    }
-
-    @Provides public FeedbackClient provideFeedbackClient() {
-        return mock(FeedbackClient.class);
     }
 
     @Provides PlaceAndPlateDtoFactory providePlaceAndPlateFactory() {

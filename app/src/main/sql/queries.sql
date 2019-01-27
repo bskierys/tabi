@@ -46,3 +46,7 @@ f2.plate as searched_plate,f2.plate_end as searched_plate_end FROM (
 SELECT COUNT(*) FROM places WHERE place_type < 5;
 -- ilość tablic
 SELECT COUNT(*) FROM places WHERE place_type < 5 AND has_own_plate = 1
+
+-- znajdź miejsca i tablice dla danego województwa (kategorii)
+SELECT _id, place_name, place_type, voivodeship, powiat, plate as searched_plate, plate_end as searched_plate_end FROM places
+WHERE voivodeship='#dpc' ORDER BY searched_plate;

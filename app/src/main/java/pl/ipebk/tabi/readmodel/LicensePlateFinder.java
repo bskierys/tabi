@@ -18,4 +18,5 @@ import rx.Observable;
  */
 public interface LicensePlateFinder {
     Observable<Cursor> findPlacesForPlateStart(String plateStart, Integer limit);
+    Observable<Cursor> findPlacesForVoivodeship(String voivodeshipKey);
 }

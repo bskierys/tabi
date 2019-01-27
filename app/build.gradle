@@ -12,8 +12,6 @@ buildscript {
 
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.getkeepsafe.dexcount'
 
 repositories {
@@ -23,6 +21,7 @@ repositories {
 def keystoreStorePass = "default"
 def keystoreKeyAlias = "default"
 def keystoreKeyPass = "default"
+def gCloudApiKey = "default"
 
 android {
     def globalConfiguration = rootProject.extensions.getByName("ext")
@@ -68,6 +67,9 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 
     testOptions.unitTests.all {
@@ -92,6 +94,14 @@ android {
         keystoreKeyPass = System.getenv('KEYSTORE_KAY_PASS')
     }
 
+    File apiKeysFile = rootProject.file('buildsystem/keys.properties')
+    if (apiKeysFile.exists()) {
+        Properties p = new Properties()
+        p.load(new FileInputStream(apiKeysFile))
+
+        gCloudApiKey = p.googleCloud_ApiKey
+    }
+
     signingConfigs {
         release {
             storeFile file("keystore/ipebk.jks")
@@ -106,11 +116,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            buildConfigField 'String', "GCApiKey", gCloudApiKey
         }
 
         debug {
             versionNameSuffix " Debug"
             debuggable true
+            buildConfigField 'String', "GCApiKey", gCloudApiKey
         }
     }
 
@@ -131,36 +143,35 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(dir: 'libs', include: ['*.jar'])
     def mobileDependencies = rootProject.ext.mobileDependencies
-    compile project(':feedback')
 
     // auto-value
-    apt mobileDependencies.autoValueGson
-    provided mobileDependencies.autoValueGson
+    annotationProcessor mobileDependencies.autoValueGson
+    implementation mobileDependencies.autoValueGson
 
     // Android
-    compile mobileDependencies.appcompat
-    compile mobileDependencies.support
-    compile mobileDependencies.design
-    compile mobileDependencies.cardview
-    compile mobileDependencies.recyclerView
-    compile mobileDependencies.customtabs
+    api mobileDependencies.appcompat
+    api mobileDependencies.support
+    api mobileDependencies.design
+    api mobileDependencies.cardview
+    api mobileDependencies.recyclerView
+    api mobileDependencies.customtabs
 
     // RxJava
-    compile mobileDependencies.rxjava
-    compile mobileDependencies.rxandroid
-    compile mobileDependencies.rxbinding
-    compile mobileDependencies.rxbinding_recyclerview
-    compile mobileDependencies.rxbinding_support
+    api mobileDependencies.rxjava
+    api mobileDependencies.rxandroid
+    api mobileDependencies.rxbinding
+    api mobileDependencies.rxbinding_recyclerview
+    api mobileDependencies.rxbinding_support
 
     // butterknife
-    compile mobileDependencies.butterknife
-    apt mobileDependencies.butterknife_compiler
+    implementation mobileDependencies.butterknife
+    annotationProcessor mobileDependencies.butterknife_compiler
 
     // overscroll
-    compile mobileDependencies.overscroll
-    compile(mobileDependencies.aboutLibraries) {
+    api mobileDependencies.overscroll
+    api(mobileDependencies.aboutLibraries) {
         transitive = true
         exclude group: "com.android.support", module: "appcompat-v7"
         exclude group: "com.android.support", module: "cardview-v7"
@@ -169,60 +180,60 @@ dependencies {
     }
 
     // logs
-    compile mobileDependencies.pine
-    compile mobileDependencies.timbertreeutils
-    compile(mobileDependencies.crashlytics) {
+    api mobileDependencies.pine
+    api mobileDependencies.timbertreeutils
+    api(mobileDependencies.crashlytics) {
         transitive = true;
     }
 
     // image downloading
-    compile mobileDependencies.picasso
-    compile mobileDependencies.rxNetwork
+    api mobileDependencies.picasso
+    api mobileDependencies.rxNetwork
 
     // icepick
-    compile mobileDependencies.icepick
-    provided mobileDependencies.icepickProcessor
+    implementation mobileDependencies.icepick
+    annotationProcessor mobileDependencies.icepickProcessor
 
     // sqlite
-    compile mobileDependencies.sqliteAssetHelper
-    compile mobileDependencies.sqlbrite
+    api mobileDependencies.sqliteAssetHelper
+    api mobileDependencies.sqlbrite
 
     // dagger
-    compile mobileDependencies.dagger
-    apt mobileDependencies.daggerCompiler
-    testApt mobileDependencies.daggerCompiler
-    androidTestApt mobileDependencies.daggerCompiler
-    provided mobileDependencies.javaxAnnotation
+    implementation mobileDependencies.dagger
+    annotationProcessor mobileDependencies.daggerCompiler
+    testAnnotationProcessor mobileDependencies.daggerCompiler
+    androidTestAnnotationProcessor mobileDependencies.daggerCompiler
+    annotationProcessor mobileDependencies.javaxAnnotation
 
     // unit
-    testCompile mobileDependencies.junit
-    testCompile mobileDependencies.mockitoTwo
-    testCompile mobileDependencies.robolectric
-    testCompile mobileDependencies.robolectric_shadows
-    testCompile mobileDependencies.assertj
-    testCompile(mobileDependencies.assertj_android) {
+    testImplementation mobileDependencies.junit
+    testImplementation mobileDependencies.mockitoTwo
+    testImplementation mobileDependencies.robolectric
+    testImplementation mobileDependencies.robolectric_shadows
+    testImplementation mobileDependencies.assertj
+    testImplementation(mobileDependencies.assertj_android) {
         exclude group: "com.android.support", module: "support-annotations"
         exclude group: "com.android.support", module: "support-v4"
     }
-    testCompile(mobileDependencies.assertj_android_recycler) {
+    testImplementation(mobileDependencies.assertj_android_recycler) {
         exclude group: "com.android.support", module: "support-annotations"
         exclude group: "com.android.support", module: "support-v4"
     }
 
     // integration
-    androidTestCompile mobileDependencies.mockitoOne
-    androidTestCompile mobileDependencies.dexmaker
-    androidTestCompile mobileDependencies.dexmaker_mockito
-    androidTestCompile(mobileDependencies.testrules) {
+    androidTestImplementation mobileDependencies.mockitoOne
+    androidTestImplementation mobileDependencies.dexmaker
+    androidTestImplementation mobileDependencies.dexmaker_mockito
+    androidTestImplementation(mobileDependencies.testrules) {
         exclude module: 'support-annotations'
     }
-    androidTestCompile(mobileDependencies.espresso) {
+    androidTestImplementation(mobileDependencies.espresso) {
         exclude module: 'support-annotations'
     }
-    androidTestCompile(mobileDependencies.espressointents) {
+    androidTestImplementation(mobileDependencies.espressointents) {
         exclude module: 'support-annotations'
     }
-    androidTestCompile(mobileDependencies.testrunner) {
+    androidTestImplementation(mobileDependencies.testrunner) {
         exclude module: 'support-annotations'
     }
 }

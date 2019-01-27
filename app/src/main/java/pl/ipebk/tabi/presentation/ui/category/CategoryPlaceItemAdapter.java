@@ -11,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +22,6 @@ import pl.ipebk.tabi.presentation.model.placeandplate.PlaceAndPlateFactory;
 import pl.ipebk.tabi.presentation.model.searchhistory.SearchType;
 import pl.ipebk.tabi.presentation.ui.search.PlaceItemAdapter;
 import pl.ipebk.tabi.presentation.ui.search.RandomTextProvider;
-import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 
 import static com.jakewharton.rxbinding.internal.Preconditions.checkNotNull;
 
@@ -58,7 +56,7 @@ public class CategoryPlaceItemAdapter extends PlaceItemAdapter {
     }
 
     @Override protected RecyclerView.ViewHolder createSectionViewHolder(ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category_big_header, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_category_big_header_extended, parent, false);
         return new BigHeaderViewHolder(view);
     }
 

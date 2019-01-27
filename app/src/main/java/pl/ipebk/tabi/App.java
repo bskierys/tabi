@@ -1,8 +1,8 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2016-02-11
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2016-02-11
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi;
 
 import android.app.Application;
@@ -14,13 +14,12 @@ import com.github.bskierys.pine.Pine;
 import net.ypresto.timbertreeutils.CrashlyticsLogExceptionTree;
 
 import io.fabric.sdk.android.Fabric;
-import com.suredigit.inappfeedback.Feedback;
-import pl.ipebk.tabi.injection.component.DaggerViewComponent;
-import pl.ipebk.tabi.injection.component.ViewComponent;
 import pl.ipebk.tabi.injection.component.ApplicationComponent;
 import pl.ipebk.tabi.injection.component.DaggerApplicationComponent;
-import pl.ipebk.tabi.injection.module.ViewModule;
+import pl.ipebk.tabi.injection.component.DaggerViewComponent;
+import pl.ipebk.tabi.injection.component.ViewComponent;
 import pl.ipebk.tabi.injection.module.ApplicationModule;
+import pl.ipebk.tabi.injection.module.ViewModule;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -34,10 +33,8 @@ public class App extends Application {
     @Override public void onCreate() {
         super.onCreate();
 
-        Feedback.init(this, "AF-8DE6899E68E4-F6");
         if (BuildConfig.DEBUG) {
-            Timber.plant(new Pine.Builder().addPackageReplacePattern(getPackageName(),"TABI")
-                                           .addPackageReplacePattern("cm.srdgt.nppfdbck", "FEEDBACK")
+            Timber.plant(new Pine.Builder().addPackageReplacePattern(getPackageName(), "TABI")
                                            .addPackageReplacePattern("cm.gthb.smnprcc.klg", "OKLOG").grow());
         } else {
             Fabric.with(this, new Crashlytics());

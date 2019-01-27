@@ -33,7 +33,7 @@ import timber.log.Timber;
 @Singleton
 public class DatabaseOpenHelper extends SQLiteAssetHelper implements DatabaseHelperInterface {
     private static final String DATABASE_NAME = "tabi.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     protected static SQLiteDatabase db;
     protected BriteDatabase briteDb;

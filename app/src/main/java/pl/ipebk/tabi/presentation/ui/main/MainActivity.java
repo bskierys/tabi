@@ -1,17 +1,14 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.animation.AnimatorSet;
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +29,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.category.OtherPlatesActivity;
 import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.StaticPageIndicatorViewPager;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
@@ -47,6 +45,7 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final String ACTION_SHOW_LICENSES = "licenses";
     private static final String ACTION_GIVE_FEEDBACK = "rate";
+    private static final String ACTION_GO_TO_OTHER_PLATES = "oth";
     private static final String PARAM_DIALOG = "dialog";
 
     private static final int GRID_COLUMNS_NUMBER = 2;
@@ -68,7 +67,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Lowest) float lowestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_SearchBar_Top_Highest) float highestSearchBarPosition;
     @BindDimen(R.dimen.Main_Margin_Greeting_Doodle_Top) float lowestDoodlePosition;
-
+    @State boolean isDialogShown;
+    @State int scrolledY;
     private float scrollPercent;
     private MainItemAdapter adapter;
     private int bigHeaderIndex;
@@ -77,8 +77,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
     private BlockingLayoutManager manager;
     private CompositeSubscription scrollSubscriptions;
     private CompositeSubscription animSubs;
-    @State boolean isDialogShown;
-    @State int scrolledY;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,49 +136,56 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         bigHeaderIndex = 0;
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
-        items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
-                                          getResources().getDrawable(R.drawable.vic_dol), "d", "dol"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
-                                          getResources().getDrawable(R.drawable.vic_kuj), "c", "kuj"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
-                                          getResources().getDrawable(R.drawable.vic_lod), "e", "lod"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
-                                          getResources().getDrawable(R.drawable.vic_lbl), "l", "lbl"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
-                                          getResources().getDrawable(R.drawable.vic_lbu), "f", "lbu"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
-                                          getResources().getDrawable(R.drawable.vic_mal), "k", "mal"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
-                                          getResources().getDrawable(R.drawable.vic_maz), "w", "maz"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
-                                          getResources().getDrawable(R.drawable.vic_opo), "o", "opo"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
-                                          getResources().getDrawable(R.drawable.vic_rze), "r", "rze"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
-                                          getResources().getDrawable(R.drawable.vic_bie), "b", "bie"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
-                                          getResources().getDrawable(R.drawable.vic_pom), "g", "pom"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
-                                          getResources().getDrawable(R.drawable.vic_sla), "s", "sla"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
-                                          getResources().getDrawable(R.drawable.vic_swi), "t", "swi"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_war),
-                                          getResources().getDrawable(R.drawable.vic_war), "n", "war"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
-                                          getResources().getDrawable(R.drawable.vic_wie), "p", "wie"));
-        items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
-                                          getResources().getDrawable(R.drawable.vic_zah), "z", "zah"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
-                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
+                                          getResources().getDrawable(R.drawable.vic_slu), "slu"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
-                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
+                                          getResources().getDrawable(R.drawable.vic_woj), "woj"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dpc),
+                                          getResources().getDrawable(R.drawable.vic_dpc), "dpc"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_oth),
+                                          getResources().getDrawable(R.drawable.vic_oth), ACTION_GO_TO_OTHER_PLATES));
+
+        items.add(new MainListHeaderItem(getString(R.string.main_list_header_voivodeships)));
+
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
+                                          getResources().getDrawable(R.drawable.vic_dol), "dol"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
+                                          getResources().getDrawable(R.drawable.vic_kuj), "kuj"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
+                                          getResources().getDrawable(R.drawable.vic_lod), "lod"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
+                                          getResources().getDrawable(R.drawable.vic_lbl), "lbl"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
+                                          getResources().getDrawable(R.drawable.vic_lbu), "lbu"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
+                                          getResources().getDrawable(R.drawable.vic_mal), "mal"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
+                                          getResources().getDrawable(R.drawable.vic_maz), "maz"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
+                                          getResources().getDrawable(R.drawable.vic_opo), "opo"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
+                                          getResources().getDrawable(R.drawable.vic_rze), "rze"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
+                                          getResources().getDrawable(R.drawable.vic_bie), "bie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
+                                          getResources().getDrawable(R.drawable.vic_pom), "pom"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
+                                          getResources().getDrawable(R.drawable.vic_sla), "sla"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
+                                          getResources().getDrawable(R.drawable.vic_swi), "swi"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_war),
+                                          getResources().getDrawable(R.drawable.vic_war), "war"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
+                                          getResources().getDrawable(R.drawable.vic_wie), "wie"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
+                                          getResources().getDrawable(R.drawable.vic_zah), "zah"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_licenses),
-                                          getResources().getDrawable(R.drawable.vic_licenses), null, ACTION_SHOW_LICENSES));
+                                          getResources().getDrawable(R.drawable.vic_licenses), ACTION_SHOW_LICENSES));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rate),
-                                          getResources().getDrawable(R.drawable.vic_rate), null, ACTION_GIVE_FEEDBACK));
+                                          getResources().getDrawable(R.drawable.vic_rate), ACTION_GIVE_FEEDBACK));
 
         items.add(new MainListFooterItem(getString(R.string.main_loading)));
         footerIndex = items.size() - 1;
@@ -284,30 +289,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         presenter.goToSearch();
     }
 
-    public void showFeedbackDialog(View card) {
-        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(feedbackIntent, transitionActivityOptions.toBundle());
-        } else {
-            startActivity(feedbackIntent);
-        }
-    }
-
     @Override public void showGreetingCaption() {
         showCaption(getString(R.string.main_doodle_caption));
     }
@@ -364,52 +345,54 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         boolean shouldShowKeyboard = (phrase == null || phrase.equals(""));
         intent.putExtra(SearchActivity.PARAM_SHOW_KEYBOARD, shouldShowKeyboard);
         intent.putExtra(SearchActivity.PARAM_SEARCH_TEXT, phrase);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            View searchInput = fakeToolbar.findViewById(R.id.txt_search_wrap);
-            transitions.add(Pair.create(searchInput, getString(R.string.trans_search_input)));
-            transitions.add(Pair.create(toolbarIndicator, getString(R.string.trans_tab_indicator)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
 
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        View searchInput = fakeToolbar.findViewById(R.id.txt_search_wrap);
+        transitions.add(Pair.create(searchInput, getString(R.string.trans_search_input)));
+        transitions.add(Pair.create(toolbarIndicator, getString(R.string.trans_tab_indicator)));
+        transitions.addAll(createStatusAndNavTransition());
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(intent, transitionActivityOptions.toBundle());
+        startActivityWithTransition(intent, transitions);
+    }
+
+    @Override public void onMenuItemClicked(View target, MainListElementItem item) {
+        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
+            goToAboutAppPage(target);
+        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
+            showFeedbackDialog(target);
+        } else if (ACTION_GO_TO_OTHER_PLATES.equals(item.getCategoryKey())) {
+            goToOtherPlatesScreen(target);
         } else {
-            startActivity(intent);
+            Timber.d("Menu item clicked has literal as action");
+            goToCategoryView(target, item.getCategoryKey());
         }
     }
 
-    public void goToAboutAppPage(View card) {
-        Intent intent = new Intent(this, AboutAppActivity.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
+    private void goToAboutAppPage(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, AboutAppActivity.class), card);
+    }
 
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+    private void startActivityWithBasicCardTransition(Intent intent, View card) {
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
+        transitions.addAll(createStatusAndNavTransition());
 
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(intent, transitionActivityOptions.toBundle());
-        } else {
-            startActivity(intent);
-        }
+        startActivityWithTransition(intent, transitions);
+    }
+
+    private void goToCategoryView(View card, String categoryKey) {
+        Intent categoryIntent = new Intent(this, CategoryActivity.class);
+        categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
+
+        startActivityWithBasicCardTransition(categoryIntent, card);
+    }
+
+    private void showFeedbackDialog(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, FeedbackTypeActivity.class), card);
+    }
+
+    private void goToOtherPlatesScreen(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, OtherPlatesActivity.class), card);
     }
 
     @Override public void showDemoGreeting() {
@@ -428,54 +411,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         }
     }
 
-    @Override public void showResponseToFeedback(String response) {
-        if (!isDialogShown) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag(PARAM_DIALOG);
-            if (prev == null) {
-                MessageDialog demoDialog = MessageDialog
-                        .newInstance(getString(R.string.main_feedback_response_title), response,
-                                     getString(R.string.main_feedback_response_confirm));
-                demoDialog.setOnClickListener(v -> isDialogShown = false);
-                demoDialog.show(ft, PARAM_DIALOG);
-                isDialogShown = true;
-            }
-        }
-    }
-
-    @Override public void onMenuItemClicked(View target, MainListElementItem item) {
-        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
-            goToAboutAppPage(target);
-        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
-            showFeedbackDialog(target);
-        } else {
-            Timber.d("Menu item clicked has literal as action");
-            goToCategoryView(target, item.getCategoryKey());
-        }
-    }
-
-    private void goToCategoryView(View view, String categoryKey) {
-        Intent categoryIntent = new Intent(this, CategoryActivity.class);
-        categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            List<Pair<View, String>> transitions = new ArrayList<>();
-            transitions.add(Pair.create(view, getString(R.string.trans_main_card_bg)));
-            // status and nav bar
-            View statusBar = findViewById(android.R.id.statusBarBackground);
-            if (statusBar != null) {
-                transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-            View navigationBar = findViewById(android.R.id.navigationBarBackground);
-            if (navigationBar != null) {
-                transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-            }
-
-            Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-            ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-            startActivity(categoryIntent, transitionActivityOptions.toBundle());
-        } else {
-            startActivity(categoryIntent);
-        }
+    @Override
+    protected void overrideDefaultExitTransition() {
+        // do not override the transition
     }
 }

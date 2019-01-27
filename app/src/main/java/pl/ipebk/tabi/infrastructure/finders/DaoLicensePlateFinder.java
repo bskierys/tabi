@@ -35,6 +35,10 @@ public class DaoLicensePlateFinder implements LicensePlateFinder {
         return dao.getPlacesForPlateStart(plateStart, limit);
     }
 
+    @Override public Observable<Cursor> findPlacesForVoivodeship(String voivodeship) {
+        return dao.getPlacesForVoivodeshipName(voivodeship);
+    }
+
     List<PlaceAndPlateDto> findPlaceListForPlateStart(String plateStart, Integer limit){
         return dao.getPlaceListForPlateStart(plateStart, limit);
     }

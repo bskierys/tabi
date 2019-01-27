@@ -1,7 +1,5 @@
 package pl.ipebk.tabi.presentation.ui.details;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.view.View;
@@ -49,9 +47,7 @@ public abstract class DetailsActivity extends BaseActivity {
         blackOverlay = (ImageView) findViewById(R.id.overlay_black);
         rowBackground = findViewById(R.id.row_bg);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setupTransitions();
-        }
+        setupTransitions();
         prepareOverScroll();
     }
 
@@ -60,7 +56,6 @@ public abstract class DetailsActivity extends BaseActivity {
         RxUtil.unsubscribe(scrollSubscriptions);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void setupTransitions() {
         int position = getIntent().getIntExtra(PARAM_ADAPTER_POSITION, -1);
         rowBackground.setTransitionName(SharedTransitionNaming.getName(getString(R.string.trans_row_background), position));
@@ -88,9 +83,7 @@ public abstract class DetailsActivity extends BaseActivity {
         float marginOffset = getResources().getDimensionPixelOffset(R.dimen.Details_Height_Release_Scroll);
         scrollSubscriptions = new CompositeSubscription();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            scrollContainer.setElevation(getResources().getDimensionPixelSize(R.dimen.Details_Elevation));
-        }
+        scrollContainer.setElevation(getResources().getDimensionPixelSize(R.dimen.Details_Elevation));
 
         overscrollDecorator = new ObservableVerticalOverScrollBounceEffectDecorator(
                 new ScrollViewOverScrollDecorAdapter(scrollContainer), 3f, 1f, -1
@@ -123,11 +116,7 @@ public abstract class DetailsActivity extends BaseActivity {
 
     protected void onOverscrolled() {
         Timber.d("Screen overscrolled");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // going back without animation will be confusing. go back only when there is animation (API >= 21)
-            Timber.d("API over lollipop. Loading previous screen");
-            onBackPressed();
-        }
+        onBackPressed();
     }
 
     protected abstract void onNotOverscrolled(Float scroll);

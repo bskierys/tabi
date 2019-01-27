@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SpellCorrectorTest {
-    private static final String SPECIAL_CHARACTERS = "~`!@#$%^&*_+=\\|/'\"\';:<>,.?(){}[]0123456789";
+    private static final String SPECIAL_CHARACTERS = "~`!@#$%^&*_+=\\|/'\"\';:<>,.?(){}[]";
     private static final String DIACRITICS = "ęóąśłżźćńĘÓĄŚŁŻŹĆŃ";
     private static final String DIACRITICS_EQUIVALENTS = "eoaslzzcnEOASLZZCN";
 
@@ -47,9 +47,9 @@ public class SpellCorrectorTest {
     //endregion
 
     //region Clean for search
-    @Test public void testRemoveNumbers() throws Exception {
-        String original = "z9k";
-        String expected = "zk";
+    @Test public void testDoNotRemoveNumbers() throws Exception {
+        String original = "wd0123456789";
+        String expected = "wd0123456789";
         String actual = corrector.cleanForSearch(original);
 
         Assert.assertEquals(expected, actual);
@@ -104,7 +104,7 @@ public class SpellCorrectorTest {
     }
 
     @Test public void testCleanSearchRealExample() throws Exception {
-        String original = "  --swidnik-zdroj9";
+        String original = "  --swidnik-zdroj%*)";
         String expected = "swidnik zdroj";
         String actual = corrector.cleanForSearch(original);
 

@@ -110,7 +110,7 @@ public class PlaceLocalizationHelper {
 
         String otherPlates = "";
         if (place.hasAdditionalPlates()) {
-            otherPlates = ", " + context.getString(R.string.details_additional_other_plates)
+            otherPlates = ", " + context.getString(R.string.details_additional_other_plates) + " "
                     + place.platesToStringExceptMatchingPattern(searchedPlate);
         }
 

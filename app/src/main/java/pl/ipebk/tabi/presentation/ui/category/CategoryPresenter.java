@@ -1,11 +1,16 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2017-01-23
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2017-01-23
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.presentation.ui.category;
 
+import android.database.Cursor;
 import android.view.View;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -21,6 +26,8 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
+    private static final Set<String> KEYS_TO_DISPLAY_BY_VOIVODESHIP = new HashSet<>(Arrays.asList("dpc"));
+
     private CategoryLocalizationHelper localizationHelper;
     private LicensePlateFinder plateFinder;
     private Subscription searchSubscription;
@@ -45,9 +52,8 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
 
         searchSubscription = Observable
                 .just(categoryKey)
-                .map(localizationHelper::getCategoryPlate)
                 .subscribeOn(Schedulers.io())
-                .flatMap(plate -> plateFinder.findPlacesForPlateStart(plate, null))
+                .flatMap(this::findPlacesForCategoryKey)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(cursor -> getMvpView().showPlates(cursor),
                            e -> Timber.e(e, "Error during searching for places", e));
@@ -57,6 +63,14 @@ public class CategoryPresenter extends BasePresenter<CategoryMvpView> {
         getMvpView().goToDetails(view, placeId, searchedPlate,
                                  localizationHelper.formatCategory(categoryKey),
                                  localizationHelper.getCategoryPlate(categoryKey), position);
+    }
+
+    private Observable<Cursor> findPlacesForCategoryKey(String categoryKey) {
+        if (KEYS_TO_DISPLAY_BY_VOIVODESHIP.contains(categoryKey)) {
+            return plateFinder.findPlacesForVoivodeship("#" + categoryKey);
+        } else {
+            return plateFinder.findPlacesForPlateStart(localizationHelper.getCategoryPlate(categoryKey), null);
+        }
     }
 
     @Override public void detachView() {
