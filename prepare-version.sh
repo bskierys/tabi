@@ -45,7 +45,7 @@ read_auth() {
 }
 
 generate_changelog() {
-	github_changelog_generator -u bskierys -p tabi --token ${auth_token} --include-labels bug,feature,ci --output ${changelog_file} --no-verbose --future-release ${version}
+	github_changelog_generator -u bskierys -p tabi --token ${auth_token} --include-labels bug,feature,ci --output ${changelog_file} --no-verbose --future-release ${version} --cache_log /dev/null
 }
 
 generate_release_notes() {

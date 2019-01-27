@@ -1,5 +1,21 @@
 # Change Log
 
+## [v0.2.5](https://github.com/bskierys/tabi/tree/v0.2.5) (2019-01-27)
+[Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.4...v0.2.5)
+
+**Fixed bugs:**
+
+- App does not load but hangs on loading screen [\#59](https://github.com/bskierys/tabi/issues/59)
+- Other places displayed without whitespace [\#55](https://github.com/bskierys/tabi/issues/55)
+
+**Closed issues:**
+
+- Add adaptive icon to the app [\#60](https://github.com/bskierys/tabi/issues/60)
+- Change feedback client [\#58](https://github.com/bskierys/tabi/issues/58)
+- Automate publishing to google play [\#42](https://github.com/bskierys/tabi/issues/42)
+- Changing greeting and caption on main screen [\#35](https://github.com/bskierys/tabi/issues/35)
+- App onboarding [\#34](https://github.com/bskierys/tabi/issues/34)
+
 ## [v0.2.4](https://github.com/bskierys/tabi/tree/v0.2.4) (2017-11-15)
 [Full Changelog](https://github.com/bskierys/tabi/compare/v0.2.3...v0.2.4)
 
