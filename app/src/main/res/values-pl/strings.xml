@@ -176,6 +176,17 @@
     <string name="main_version">Wersja %s</string>
     <string name="main_loading">ładuję&#8230;</string>
 
+    <!--  OTHER PLATES  -->
+    <string name="other_classic_car_title">Tablice zabytkowe</string>
+    <string name="other_classic_car_body">Mają żółte tło, a po prawej stronie symbol pojazdu zabytkowego. Są wydawane do samochodów i motocykli, które mają ponad 25 lat, nie są produkowane od co najmniej 15 lat i są wpisane do rejestru dóbr kultury.</string>
+    <string name="other_classic_car_link">https://pl.wikipedia.org/wiki/Tablice_rejestracyjne_w_Polsce#Tablice_zabytkowe</string>
+    <string name="other_custom_title">Tablice indywidualne</string>
+    <string name="other_custom_body">Właściciel sam ustala treść wyróżnika pojazdu. Indywidualny wyróżnik pojazdu nie może zawierać treści obraźliwych lub niezgodnych z zasadami współżycia społecznego.</string>
+    <string name="other_custom_link">https://www.dlakierowcy.info/serwis.php?s=1900&amp;pok=47512&amp;id=4472982</string>
+    <string name="other_temporary_title">Tablice tymczasowe</string>
+    <string name="other_temporary_body">Tablice tymczasowe mają białe tło i czerwone znaki i są wydawane dla pojazdów rejestrowanych czasowo. Wydaje się je na wniosek właściciela.</string>
+    <string name="other_temporary_link">https://pl.wikipedia.org/wiki/Tablice_rejestracyjne_w_Polsce#Tablice_tymczasowe</string>
+
     <!--  FEEDBACK  -->
     <string name="feedback_title">Zgłoś nam swoje uwagi</string>
     <string name="feedback_subtitle">Co Ci leży na sercu?</string>

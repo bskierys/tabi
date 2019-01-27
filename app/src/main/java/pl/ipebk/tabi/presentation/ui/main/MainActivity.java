@@ -1,7 +1,6 @@
 package pl.ipebk.tabi.presentation.ui.main;
 
 import android.animation.AnimatorSet;
-import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +29,7 @@ import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.category.OtherPlatesActivity;
 import pl.ipebk.tabi.presentation.ui.custom.indicator.SearchTabPageIndicator;
 import pl.ipebk.tabi.presentation.ui.details.StaticPageIndicatorViewPager;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
@@ -138,48 +137,48 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
-                                          getResources().getDrawable(R.drawable.vic_slu),"slu"));
+                                          getResources().getDrawable(R.drawable.vic_slu), "slu"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
-                                          getResources().getDrawable(R.drawable.vic_woj),"woj"));
+                                          getResources().getDrawable(R.drawable.vic_woj), "woj"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_dpc),
-                                          getResources().getDrawable(R.drawable.vic_dpc),"dpc"));
+                                          getResources().getDrawable(R.drawable.vic_dpc), "dpc"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_oth),
-                                          getResources().getDrawable(R.drawable.vic_oth),ACTION_GO_TO_OTHER_PLATES));
+                                          getResources().getDrawable(R.drawable.vic_oth), ACTION_GO_TO_OTHER_PLATES));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_voivodeships)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
-                                          getResources().getDrawable(R.drawable.vic_dol),"dol"));
+                                          getResources().getDrawable(R.drawable.vic_dol), "dol"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
-                                          getResources().getDrawable(R.drawable.vic_kuj),"kuj"));
+                                          getResources().getDrawable(R.drawable.vic_kuj), "kuj"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
-                                          getResources().getDrawable(R.drawable.vic_lod),"lod"));
+                                          getResources().getDrawable(R.drawable.vic_lod), "lod"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
-                                          getResources().getDrawable(R.drawable.vic_lbl),"lbl"));
+                                          getResources().getDrawable(R.drawable.vic_lbl), "lbl"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
-                                          getResources().getDrawable(R.drawable.vic_lbu),"lbu"));
+                                          getResources().getDrawable(R.drawable.vic_lbu), "lbu"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
-                                          getResources().getDrawable(R.drawable.vic_mal),"mal"));
+                                          getResources().getDrawable(R.drawable.vic_mal), "mal"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
-                                          getResources().getDrawable(R.drawable.vic_maz),"maz"));
+                                          getResources().getDrawable(R.drawable.vic_maz), "maz"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
-                                          getResources().getDrawable(R.drawable.vic_opo),"opo"));
+                                          getResources().getDrawable(R.drawable.vic_opo), "opo"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
-                                          getResources().getDrawable(R.drawable.vic_rze),"rze"));
+                                          getResources().getDrawable(R.drawable.vic_rze), "rze"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
-                                          getResources().getDrawable(R.drawable.vic_bie),"bie"));
+                                          getResources().getDrawable(R.drawable.vic_bie), "bie"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
-                                          getResources().getDrawable(R.drawable.vic_pom),"pom"));
+                                          getResources().getDrawable(R.drawable.vic_pom), "pom"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
-                                          getResources().getDrawable(R.drawable.vic_sla),"sla"));
+                                          getResources().getDrawable(R.drawable.vic_sla), "sla"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
-                                          getResources().getDrawable(R.drawable.vic_swi),"swi"));
+                                          getResources().getDrawable(R.drawable.vic_swi), "swi"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_war),
-                                          getResources().getDrawable(R.drawable.vic_war),"war"));
+                                          getResources().getDrawable(R.drawable.vic_war), "war"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
-                                          getResources().getDrawable(R.drawable.vic_wie),"wie"));
+                                          getResources().getDrawable(R.drawable.vic_wie), "wie"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
-                                          getResources().getDrawable(R.drawable.vic_zah),"zah"));
+                                          getResources().getDrawable(R.drawable.vic_zah), "zah"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
@@ -290,26 +289,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         presenter.goToSearch();
     }
 
-    public void showFeedbackDialog(View card) {
-        Intent feedbackIntent = new Intent(this, FeedbackTypeActivity.class);
-        List<Pair<View, String>> transitions = new ArrayList<>();
-        transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
-        // status and nav bar
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        if (statusBar != null) {
-            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        if (navigationBar != null) {
-            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-
-        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-        startActivity(feedbackIntent, transitionActivityOptions.toBundle());
-    }
-
     @Override public void showGreetingCaption() {
         showCaption(getString(R.string.main_doodle_caption));
     }
@@ -371,45 +350,49 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         View searchInput = fakeToolbar.findViewById(R.id.txt_search_wrap);
         transitions.add(Pair.create(searchInput, getString(R.string.trans_search_input)));
         transitions.add(Pair.create(toolbarIndicator, getString(R.string.trans_tab_indicator)));
-        // status and nav bar
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        if (statusBar != null) {
-            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        if (navigationBar != null) {
-            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
+        transitions.addAll(createStatusAndNavTransition());
 
-        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-        startActivity(intent, transitionActivityOptions.toBundle());
+        startActivityWithTransition(intent, transitions);
     }
 
-    public void goToAboutAppPage(View card) {
-        Intent intent = new Intent(this, AboutAppActivity.class);
+    @Override public void onMenuItemClicked(View target, MainListElementItem item) {
+        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
+            goToAboutAppPage(target);
+        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
+            showFeedbackDialog(target);
+        } else if (ACTION_GO_TO_OTHER_PLATES.equals(item.getCategoryKey())) {
+            goToOtherPlatesScreen(target);
+        } else {
+            Timber.d("Menu item clicked has literal as action");
+            goToCategoryView(target, item.getCategoryKey());
+        }
+    }
 
+    private void goToAboutAppPage(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, AboutAppActivity.class), card);
+    }
+
+    private void startActivityWithBasicCardTransition(Intent intent, View card) {
         List<Pair<View, String>> transitions = new ArrayList<>();
         transitions.add(Pair.create(card, getString(R.string.trans_main_card_bg)));
-        // status and nav bar
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        if (statusBar != null) {
-            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        if (navigationBar != null) {
-            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
+        transitions.addAll(createStatusAndNavTransition());
 
-        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-        startActivity(intent, transitionActivityOptions.toBundle());
+        startActivityWithTransition(intent, transitions);
     }
 
-    private void goToOtherPlatesScreen(View target) {
+    private void goToCategoryView(View card, String categoryKey) {
+        Intent categoryIntent = new Intent(this, CategoryActivity.class);
+        categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
 
+        startActivityWithBasicCardTransition(categoryIntent, card);
+    }
+
+    private void showFeedbackDialog(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, FeedbackTypeActivity.class), card);
+    }
+
+    private void goToOtherPlatesScreen(View card) {
+        startActivityWithBasicCardTransition(new Intent(this, OtherPlatesActivity.class), card);
     }
 
     @Override public void showDemoGreeting() {
@@ -426,41 +409,6 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
                 isDialogShown = true;
             }
         }
-    }
-
-    @Override public void onMenuItemClicked(View target, MainListElementItem item) {
-        if (ACTION_SHOW_LICENSES.equals(item.getCategoryKey())) {
-            goToAboutAppPage(target);
-        } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
-            showFeedbackDialog(target);
-        } else if (ACTION_GO_TO_OTHER_PLATES.equals(item.getCategoryKey())) {
-            goToOtherPlatesScreen(target);
-        } else {
-            Timber.d("Menu item clicked has literal as action");
-            goToCategoryView(target, item.getCategoryKey());
-        }
-    }
-
-    private void goToCategoryView(View view, String categoryKey) {
-        Intent categoryIntent = new Intent(this, CategoryActivity.class);
-        categoryIntent.putExtra(CategoryActivity.EXTRA_CATEGORY_KEY, categoryKey);
-
-        List<Pair<View, String>> transitions = new ArrayList<>();
-        transitions.add(Pair.create(view, getString(R.string.trans_main_card_bg)));
-        // status and nav bar
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        if (statusBar != null) {
-            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        if (navigationBar != null) {
-            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-
-        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-        startActivity(categoryIntent, transitionActivityOptions.toBundle());
     }
 
     @Override

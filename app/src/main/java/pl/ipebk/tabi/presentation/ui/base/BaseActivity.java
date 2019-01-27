@@ -6,13 +6,19 @@
 package pl.ipebk.tabi.presentation.ui.base;
 
 import android.app.ActivityManager;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
+import android.view.View;
+import android.view.Window;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -96,5 +102,25 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void overrideDefaultExitTransition() {
         overridePendingTransition(0, 0);
+    }
+
+    protected void startActivityWithTransition(Intent intent, List<Pair<View, String>> transitions) {
+        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
+
+        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
+        startActivity(intent, transitionActivityOptions.toBundle());
+    }
+
+    protected List<Pair<View, String>> createStatusAndNavTransition() {
+        List<Pair<View, String>> transitions = new ArrayList<>();
+        View statusBar = findViewById(android.R.id.statusBarBackground);
+        if (statusBar != null) {
+            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+        View navigationBar = findViewById(android.R.id.navigationBarBackground);
+        if (navigationBar != null) {
+            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+        }
+        return transitions;
     }
 }

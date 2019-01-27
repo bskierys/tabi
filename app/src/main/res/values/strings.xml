@@ -230,6 +230,17 @@
     <string name="main_doodle_caption_feedback">Got any *remarks?* Go to the bottom of this page</string>
     <string name="main_version">Version %s</string>
     <string name="main_loading">loading&#8230;</string>
+    
+    <!--  OTHER PLATES  -->
+    <string name="other_classic_car_title">Classic cars</string>
+    <string name="other_classic_car_body">Only cars older than 25 years, out of production for 15 years and containing at least 75% of original parts are eligible to be use plates with black text on a yellow background and an additional picture of a vintage car on the right side.</string>
+    <string name="other_classic_car_link">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Classic_cars</string>
+    <string name="other_custom_title">Custom plates</string>
+    <string name="other_custom_body">Each custom number starts with the letter denoting voivodeship and a single digit, followed by the gap. This digit and next characters can be picked by the owner.</string>
+    <string name="other_custom_link">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Custom_plates</string>
+    <string name="other_temporary_title">Temporary and export plates</string>
+    <string name="other_temporary_body">These plates use red text on a white background. The plates wear a seal with month and year of validation.</string>
+    <string name="other_temporary_link">https://www.dlakierowcy.info/serwis.php?s=1900&amp;pok=47512&amp;id=4472981</string>
 
     <!--  FEEDBACK  -->
     <string name="feedback_title">Describe to us your remarks</string>

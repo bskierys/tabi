@@ -367,20 +367,9 @@ public class SearchActivity extends BaseActivity implements PlaceFragmentEventLi
         transitions.add(Pair.create(view.findViewById(R.id.txt_place_name), SharedTransitionNaming.getName(getString(R.string.trans_place_name), position)));
         transitions.add(Pair.create(view.findViewById(R.id.ic_row), SharedTransitionNaming.getName(getString(R.string.trans_place_icon), position)));
         transitions.add(Pair.create(view.findViewById(R.id.txt_plate), SharedTransitionNaming.getName(getString(R.string.trans_place_plate), position)));
-        // status and nav bar
-        View statusBar = findViewById(android.R.id.statusBarBackground);
-        if (statusBar != null) {
-            transitions.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
-        }
-        View navigationBar = findViewById(android.R.id.navigationBarBackground);
-        if (navigationBar != null) {
-            transitions.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
-        }
+        transitions.addAll(createStatusAndNavTransition());
 
-        Pair<View, String>[] transitionsArray = transitions.toArray(new Pair[transitions.size()]);
-
-        ActivityOptions transitionActivityOptions = ActivityOptions.makeSceneTransitionAnimation(this, transitionsArray);
-        startActivity(intent, transitionActivityOptions.toBundle());
+        startActivityWithTransition(intent, transitions);
     }
 
     @Override public void showInitialSearchInPlatesSection(Cursor cursor) {

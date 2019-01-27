@@ -10,6 +10,7 @@ import pl.ipebk.tabi.injection.PerActivity;
 import pl.ipebk.tabi.injection.module.ActivityModule;
 import pl.ipebk.tabi.presentation.ui.about.AboutAppActivity;
 import pl.ipebk.tabi.presentation.ui.category.CategoryActivity;
+import pl.ipebk.tabi.presentation.ui.category.OtherPlatesActivity;
 import pl.ipebk.tabi.presentation.ui.details.DetailsActivity;
 import pl.ipebk.tabi.presentation.ui.feedback.FeedbackTypeActivity;
 import pl.ipebk.tabi.presentation.ui.main.MainActivity;
@@ -32,4 +33,6 @@ public interface ActivityComponent {
     void inject(AboutAppActivity activity);
 
     void inject(FeedbackTypeActivity activity);
+
+    void inject(OtherPlatesActivity activity);
 }
