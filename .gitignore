@@ -30,6 +30,7 @@ feedback/feedback.iml
 **/.idea/.name
 **/.idea/vcs.xml
 **/.idea/caches/
+**/.idea/assetWizardSettings.xml
 
 # private files
 *.priv
