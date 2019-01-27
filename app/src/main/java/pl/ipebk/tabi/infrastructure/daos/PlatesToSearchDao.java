@@ -1,8 +1,8 @@
 /*
-* author: Bartlomiej Kierys
-* date: 2016-12-04
-* email: bskierys@gmail.com
-*/
+ * author: Bartlomiej Kierys
+ * date: 2016-12-04
+ * email: bskierys@gmail.com
+ */
 package pl.ipebk.tabi.infrastructure.daos;
 
 import android.database.Cursor;
@@ -28,11 +28,29 @@ public class PlatesToSearchDao extends ViewDao<PlaceAndPlateDto> {
     }
 
     /**
-     * @param plateStart PlateModel start to search in plates. Plates are searched in main, or additional plates of
-     * model
+     * @param voivodeship Voivodeship name to look for
+     * @return List of places with from given voivodeship
+     */
+    public Observable<Cursor> getPlacesForVoivodeshipName(String voivodeship) {
+        String argument = "\'" + voivodeship + "\'";
+        String projection = BaseColumns._ID + "," +
+                PlacesTable.COLUMN_NAME + "," +
+                PlacesTable.COLUMN_PLACE_TYPE + "," +
+                PlacesTable.COLUMN_VOIVODESHIP + "," +
+                PlacesTable.COLUMN_POWIAT + "," +
+                PlacesTable.COLUMN_PLATE + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE + "," +
+                PlacesTable.COLUMN_PLATE_END + " AS " + PlacesTable.COLUMN_SEARCHED_PLATE_END;
+        String query = "SELECT " + projection + " FROM "
+                + PlacesTable.TABLE_NAME + " WHERE " + PlacesTable.COLUMN_VOIVODESHIP + "=" + argument
+                + " ORDER BY " + PlacesTable.COLUMN_SEARCHED_PLATE + ";";
+        return db.createQuery(view.getName(), query).map(SqlBrite.Query::run);
+    }
+
+    /**
+     * @param plateStart PlateModel start to search in plates. Plates are searched in main, or additional plates of model
      * @param limit Additional parameter. You can limit number of returned rows
-     * @return List of places that plate starts with given letters. Outcome can be limited and is sorted firstly by
-     * plate length (two letter plates are more important for user and comes first) and then alphabetically.
+     * @return List of places that plate starts with given letters. Outcome can be limited and is sorted firstly by plate length (two letter plates are more important for
+     * user and comes first) and then alphabetically.
      */
     public Observable<Cursor> getPlacesForPlateStart(String plateStart, Integer limit) {
         Pair<String, String[]> sql = getPlacesForPlateStartSql(plateStart, limit);
@@ -62,7 +80,7 @@ public class PlatesToSearchDao extends ViewDao<PlaceAndPlateDto> {
 
         String orderFormat = " SELECT " + view.getQualifiedColumnsCommaSeparated(null) + " FROM ( " + selectGrouped +
                 " ) as w WHERE " + PlacesTable.COLUMN_SEARCHED_PLATE + " LIKE %s ORDER BY " +
-                PlacesTable.COLUMN_PLACE_TYPE +" ASC, length( " + PlacesTable.COLUMN_SEARCHED_PLATE + " ) ASC, " +
+                PlacesTable.COLUMN_PLACE_TYPE + " ASC, length( " + PlacesTable.COLUMN_SEARCHED_PLATE + " ) ASC, " +
                 PlacesTable.COLUMN_SEARCHED_PLATE + " ASC, " + PlacesTable.COLUMN_SEARCHED_PLATE_END + " ASC ";
 
         String placeLikePattern = "\'" + plateStart + "%\'";

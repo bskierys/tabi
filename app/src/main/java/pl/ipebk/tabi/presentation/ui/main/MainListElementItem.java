@@ -13,16 +13,14 @@ import android.graphics.drawable.Drawable;
 class MainListElementItem extends MainListItem {
     private String elementName;
     private Drawable elementIcon;
-    private String plateStart;
     private String categoryKey;
 
     /**
      * Constructor for {@link MainListElementItem} Object
      */
-    public MainListElementItem(String elementName, Drawable elementIcon, String plateStart, String categoryKey) {
+    public MainListElementItem(String elementName, Drawable elementIcon, String categoryKey) {
         this.elementName = elementName;
         this.elementIcon = elementIcon;
-        this.plateStart = plateStart;
         this.categoryKey = categoryKey;
     }
 
@@ -32,10 +30,6 @@ class MainListElementItem extends MainListItem {
 
     Drawable getElementIcon() {
         return elementIcon;
-    }
-
-    String getPlateStart() {
-        return plateStart;
     }
 
     public String getCategoryKey() {

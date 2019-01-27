@@ -58,6 +58,7 @@
     <string name="voivodeship_name_zah">West Pomerania Province</string>
     <string name="voivodeship_name_slu">Security Services</string>
     <string name="voivodeship_name_woj">Military Plates</string>
+    <string name="voivodeship_name_dpc">Diplomatic Plates</string>
     <string name="voivodeship_plate_dol" translatable="false">d</string>
     <string name="voivodeship_plate_kuj" translatable="false">c</string>
     <string name="voivodeship_plate_lod" translatable="false">e</string>
@@ -76,6 +77,7 @@
     <string name="voivodeship_plate_zah" translatable="false">z</string>
     <string name="voivodeship_plate_slu" translatable="false">h</string>
     <string name="voivodeship_plate_woj" translatable="false">u</string>
+    <string name="voivodeship_plate_dpc" translatable="false">w001-w115</string>
     <string name="voivodeship_search_dol" translatable="false">województwo dolnośląskie</string>
     <string name="voivodeship_search_kuj" translatable="false">województwo kujawsko-pomorskie</string>
     <string name="voivodeship_search_lod" translatable="false">województwo łódzkie</string>
@@ -111,6 +113,7 @@
     <string name="category_title_zah">Sea of adventure</string>
     <string name="category_title_slu">To serve and protect</string>
     <string name="category_title_woj">How to recognize the military forces?</string>
+    <string name="category_title_dpc">Blue license plates for diplomacy</string>
 
     <string name="category_body_dol">One of Wrocław\’s most popular, memorable and iconic attractions is not a cathedral, not a castle or monument, but a legion of
         little people: Gnomes.</string>
@@ -132,6 +135,7 @@
     <string name="category_body_zah">For sailing enthusiasts, Westpomerania is a true paradise. Picturesque water trails, unique water reservoirs of diversified specificity, landscape values and hospitable ports.</string>
     <string name="category_body_slu">Vehicles utilised used by the Polish Ministry of Internal Affairs and Administration use licence plates beginning with "H", instead of the voivodeship code.</string>
     <string name="category_body_woj">The Polish military uses licence plates beginning with "U" instead of the voivodeship code. The following letter denotes the usage of the vehicle.</string>
+    <string name="category_body_dpc">White symbols on blue background. First three digits indicate country or organization.</string>
 
     <string name="category_link_dol">https://www.inyourpocket.com/wroclaw/Gnomenclature_70297f</string>
     <string name="category_link_kuj">http://www.visittorun.pl/237,l2.html</string>
@@ -151,6 +155,7 @@
     <string name="category_link_zah">http://seaofadventure.eu/?page_id=658</string>
     <string name="category_link_slu">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
     <string name="category_link_woj">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Service_plates</string>
+    <string name="category_link_dpc">https://en.wikipedia.org/wiki/Vehicle_registration_plates_of_Poland#Diplomatic_plates</string>
 
     <!--  CATEGORY  -->
     <string name="category_read_more">Read more</string>
@@ -193,6 +198,7 @@
 
     <!--  MAIN  -->
     <string name="main_list_header_browse">BROWSE</string>
+    <string name="main_list_header_voivodeships">VOIVODESHIPS</string>
     <string name="main_list_header_about_app">ABOUT APP</string>
     <string name="main_list_header_none"> </string>
     <string name="main_list_element_dol">Lower Silesia</string>
@@ -213,6 +219,8 @@
     <string name="main_list_element_zah">West Pomerania</string>
     <string name="main_list_element_slu">Security Services</string>
     <string name="main_list_element_woj">Military Plates</string>
+    <string name="main_list_element_dpc">Diplomatic Plates</string>
+    <string name="main_list_element_oth">Other Plates</string>
     <string name="main_list_element_licenses">Third-party libraries</string>
     <string name="main_list_element_rate">Send us your remarks</string>
     <string name="main_doodle_greeting">Hi! My name is Tabi!</string>

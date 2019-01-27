@@ -42,6 +42,7 @@
     <string name="voivodeship_name_zah">województwo zachodniopomorskie</string>
     <string name="voivodeship_name_slu">służby bezpieczeństwa</string>
     <string name="voivodeship_name_woj">tablice wojskowe</string>
+    <string name="voivodeship_name_dpc">tablice dyplomatyczne</string>
 
     <string name="category_title_dol">Wrocław - miasto krasnali</string>
     <string name="category_title_kuj">Piernikowe miasto</string>
@@ -61,6 +62,7 @@
     <string name="category_title_zah">Morze przygody</string>
     <string name="category_title_slu">W służbie Ojczyznie</string>
     <string name="category_title_woj">Jak rozpoznać wojsko?</string>
+    <string name="category_title_dpc">Niebieskie tablice dyplomatów</string>
 
     <string name="category_body_dol">We wrocławskim Podziemnym Mieście Krasnali żyje blisko trzysta skrzatów. I ciągle wprowadzają się nowe.</string>
     <string name="category_body_kuj">Najsłynniejszym produktem wytwarzanym w Toruniu są pierniki toruńskie. Tradycja wypieku w mieście Kopernika tych aromatycznych ciastek jest niemal tak długa jak historia Torunia.</string>
@@ -80,6 +82,8 @@
     <string name="category_body_zah">Pomorze Zachodnie to prawdziwy raj dla miłośników żeglarstwa. Malownicze szlaki wodne, wyjątkowe akweny o zróżnicowanej specyfice i walorach krajobrazowych, wreszcie gościnne przystanie. </string>
     <string name="category_body_slu">Służby publiczne takie jak Policja, Służba Celna, CBA, BOR, ABW czy Straż Graniczna mają przydzielone specjalne tablice rejestracyjne.</string>
     <string name="category_body_woj">Wojskowa rejestracja zawiera 2 litery i 4 – 5 cyfr. Zawsze zaczyna się od litery U, kolejna zaś określa przeznaczenie pojazdu.</string>
+    <string name="category_body_dpc">Tablice wydawane dla pojazdów misji dyplomatycznych i konsularnych innych państw i organizacji narodowych w Polsce oraz ich
+        personelu, korzystających z przywilejów i immunitetów dyplomatycznych.</string>
 
     <string name="category_link_dol">http://krasnale.pl/wszystko-o-krasnoludkach/skad-sie-wziely-krasnale-we-wroclawiu/</string>
     <string name="category_link_kuj">http://www.torun.pl/pl/turystyka/tylko-w-toruniu/torunskie-pierniki</string>
@@ -99,6 +103,7 @@
     <string name="category_link_zah">http://morzeprzygody.eu/?page_id=658</string>
     <string name="category_link_slu">http://mojafirma.infor.pl/moto/niezbednik/artykul/270185,Tablice-rejestracyjne-aut-nalezacych-do-sluzb-publicznych.html</string>
     <string name="category_link_woj">http://mojafirma.infor.pl/moto/niezbednik/artykul/270185,Tablice-rejestracyjne-aut-nalezacych-do-sluzb-publicznych.html</string>
+    <string name="category_link_dpc">https://www.dlakierowcy.info/serwis.php?s=1900&amp;pok=47512&amp;id=4472980</string>
 
     <!--  CATEGORY  -->
     <string name="category_read_more">Czytaj dalej</string>
@@ -138,6 +143,7 @@
 
     <!--  MAIN  -->
     <string name="main_list_header_browse">PRZEGLĄDAJ</string>
+    <string name="main_list_header_voivodeships">WOJEWÓDZTWA</string>
     <string name="main_list_header_about_app">O APLIKACJI</string>
     <string name="main_list_header_none"> </string>
     <string name="main_list_element_dol">dolnośląskie</string>
@@ -158,6 +164,8 @@
     <string name="main_list_element_zah">zachodnio-pomorskie</string>
     <string name="main_list_element_slu">służby bezpieczeństwa</string>
     <string name="main_list_element_woj">tablice wojskowe</string>
+    <string name="main_list_element_dpc">tablice dyplomatyczne</string>
+    <string name="main_list_element_oth">inne tablice</string>
     <string name="main_list_element_licenses">licencje bibliotek zewnętrznych</string>
     <string name="main_list_element_rate">zgłoś nam swoje uwagi</string>
     <string name="main_doodle_greeting">Hej! Jestem Tabi!</string>

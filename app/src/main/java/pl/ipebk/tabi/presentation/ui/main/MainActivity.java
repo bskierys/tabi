@@ -46,6 +46,7 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainMvpView, MainItemAdapter.MenuItemClickListener {
     private static final String ACTION_SHOW_LICENSES = "licenses";
     private static final String ACTION_GIVE_FEEDBACK = "rate";
+    private static final String ACTION_GO_TO_OTHER_PLATES = "oth";
     private static final String PARAM_DIALOG = "dialog";
 
     private static final int GRID_COLUMNS_NUMBER = 2;
@@ -137,48 +138,55 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_browse)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_slu),
-                                          getResources().getDrawable(R.drawable.vic_slu), "h", "slu"));
+                                          getResources().getDrawable(R.drawable.vic_slu),"slu"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_woj),
-                                          getResources().getDrawable(R.drawable.vic_woj), "u", "woj"));
+                                          getResources().getDrawable(R.drawable.vic_woj),"woj"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_dpc),
+                                          getResources().getDrawable(R.drawable.vic_dpc),"dpc"));
+        items.add(new MainListElementItem(getString(R.string.main_list_element_oth),
+                                          getResources().getDrawable(R.drawable.vic_oth),ACTION_GO_TO_OTHER_PLATES));
+
+        items.add(new MainListHeaderItem(getString(R.string.main_list_header_voivodeships)));
+
         items.add(new MainListElementItem(getString(R.string.main_list_element_dol),
-                                          getResources().getDrawable(R.drawable.vic_dol), "d", "dol"));
+                                          getResources().getDrawable(R.drawable.vic_dol),"dol"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_kuj),
-                                          getResources().getDrawable(R.drawable.vic_kuj), "c", "kuj"));
+                                          getResources().getDrawable(R.drawable.vic_kuj),"kuj"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lod),
-                                          getResources().getDrawable(R.drawable.vic_lod), "e", "lod"));
+                                          getResources().getDrawable(R.drawable.vic_lod),"lod"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lbl),
-                                          getResources().getDrawable(R.drawable.vic_lbl), "l", "lbl"));
+                                          getResources().getDrawable(R.drawable.vic_lbl),"lbl"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_lbu),
-                                          getResources().getDrawable(R.drawable.vic_lbu), "f", "lbu"));
+                                          getResources().getDrawable(R.drawable.vic_lbu),"lbu"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_mal),
-                                          getResources().getDrawable(R.drawable.vic_mal), "k", "mal"));
+                                          getResources().getDrawable(R.drawable.vic_mal),"mal"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_maz),
-                                          getResources().getDrawable(R.drawable.vic_maz), "w", "maz"));
+                                          getResources().getDrawable(R.drawable.vic_maz),"maz"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_opo),
-                                          getResources().getDrawable(R.drawable.vic_opo), "o", "opo"));
+                                          getResources().getDrawable(R.drawable.vic_opo),"opo"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rze),
-                                          getResources().getDrawable(R.drawable.vic_rze), "r", "rze"));
+                                          getResources().getDrawable(R.drawable.vic_rze),"rze"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_bie),
-                                          getResources().getDrawable(R.drawable.vic_bie), "b", "bie"));
+                                          getResources().getDrawable(R.drawable.vic_bie),"bie"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_pom),
-                                          getResources().getDrawable(R.drawable.vic_pom), "g", "pom"));
+                                          getResources().getDrawable(R.drawable.vic_pom),"pom"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_sla),
-                                          getResources().getDrawable(R.drawable.vic_sla), "s", "sla"));
+                                          getResources().getDrawable(R.drawable.vic_sla),"sla"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_swi),
-                                          getResources().getDrawable(R.drawable.vic_swi), "t", "swi"));
+                                          getResources().getDrawable(R.drawable.vic_swi),"swi"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_war),
-                                          getResources().getDrawable(R.drawable.vic_war), "n", "war"));
+                                          getResources().getDrawable(R.drawable.vic_war),"war"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_wie),
-                                          getResources().getDrawable(R.drawable.vic_wie), "p", "wie"));
+                                          getResources().getDrawable(R.drawable.vic_wie),"wie"));
         items.add(new MainListElementItem(getString(R.string.main_list_element_zah),
-                                          getResources().getDrawable(R.drawable.vic_zah), "z", "zah"));
+                                          getResources().getDrawable(R.drawable.vic_zah),"zah"));
 
         items.add(new MainListHeaderItem(getString(R.string.main_list_header_about_app)));
 
         items.add(new MainListElementItem(getString(R.string.main_list_element_licenses),
-                                          getResources().getDrawable(R.drawable.vic_licenses), null, ACTION_SHOW_LICENSES));
+                                          getResources().getDrawable(R.drawable.vic_licenses), ACTION_SHOW_LICENSES));
         items.add(new MainListElementItem(getString(R.string.main_list_element_rate),
-                                          getResources().getDrawable(R.drawable.vic_rate), null, ACTION_GIVE_FEEDBACK));
+                                          getResources().getDrawable(R.drawable.vic_rate), ACTION_GIVE_FEEDBACK));
 
         items.add(new MainListFooterItem(getString(R.string.main_loading)));
         footerIndex = items.size() - 1;
@@ -400,6 +408,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
         startActivity(intent, transitionActivityOptions.toBundle());
     }
 
+    private void goToOtherPlatesScreen(View target) {
+
+    }
+
     @Override public void showDemoGreeting() {
         if (!isDialogShown) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -421,6 +433,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MainItemA
             goToAboutAppPage(target);
         } else if (ACTION_GIVE_FEEDBACK.equals(item.getCategoryKey())) {
             showFeedbackDialog(target);
+        } else if (ACTION_GO_TO_OTHER_PLATES.equals(item.getCategoryKey())) {
+            goToOtherPlatesScreen(target);
         } else {
             Timber.d("Menu item clicked has literal as action");
             goToCategoryView(target, item.getCategoryKey());
