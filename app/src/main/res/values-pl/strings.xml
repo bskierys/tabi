@@ -162,7 +162,7 @@
     <string name="main_list_element_swi">świętokrzyskie</string>
     <string name="main_list_element_war">warmińsko-mazurskie</string>
     <string name="main_list_element_wie">wielkopolskie</string>
-    <string name="main_list_element_zah">zachodnio-pomorskie</string>
+    <string name="main_list_element_zah">zachodnio\u200bpomorskie</string>
     <string name="main_list_element_slu">służby bezpieczeństwa</string>
     <string name="main_list_element_woj">tablice wojskowe</string>
     <string name="main_list_element_dpc">tablice dyplomatyczne</string>

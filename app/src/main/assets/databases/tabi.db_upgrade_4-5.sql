@@ -1,0 +1,2 @@
+UPDATE places SET place_name = "Służba Ochrony Państwa", place_name_to_lower = "służba ochrony państwa", place_name_to_lower_no_diacritics = "sluzba ochrony panstwa" WHERE place_name = "Biuro Ochrony Rządu";
+UPDATE places SET place_name = "Stargard", place_name_to_lower = "stargard", place_name_to_lower_no_diacritics = "stargard", gmina = "Stargard" WHERE place_name = "Stargard Szczeciński";
