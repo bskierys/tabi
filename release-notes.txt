@@ -1,14 +1,13 @@
 Release Notes
+## [v0.2.6] (2019-05-07)
+- Fixed minor naming errors;
+- Add Privacy Policy 
 ## [v0.2.5] (2019-01-27)
-- Fixed: App does not load but hangs on loading screen;
-- Fixed: Other places displayed without whitespace;
-- Add license plates W001-W115;
-- Add adaptive icon to the app;
-- Change feedback client (fallback to email);
-- New Categories: Diplomatic Plates and Other Plates;
-- Special license plates moved to screen top;
-- Fixed: Maps don't load on details screen;
-- Min Android version bumped to 5.0;
+- App does not load but hangs on loading screen 
+- Other places displayed without whitespace 
+- Add license plates W001-W115 
+- Add adaptive icon to the app 
+- Change feedback client 
 ## [v0.2.4] (2017-11-15)
 - English Google Play page 
 ## [v0.2.3] (2017-03-27)
