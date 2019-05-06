@@ -37,6 +37,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_third_party_description"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <pl.ipebk.tabi.presentation.ui.custom.font.FontTextView
+                android:id="@+id/btn_privacy_policy"
+                style="@style/Text_Body2.Accent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_third_party_privacy_policy"/>
+        </LinearLayout>
     </LinearLayout>
 
     <ProgressBar

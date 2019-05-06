@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.custom.SecondaryButton;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import timber.log.Timber;
 
 /**
@@ -42,11 +43,13 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private List<LibsItem> libraries;
     protected Context context;
+    private DoodleTextFormatter doodleTextFormatter;
     private BackClickListener backListener;
 
-    public LibraryAdapter(Context context, List<LibsItem> libraries) {
+    public LibraryAdapter(Context context, List<LibsItem> libraries, DoodleTextFormatter doodleTextFormatter) {
         this.libraries = libraries;
         this.context = context;
+        this.doodleTextFormatter = doodleTextFormatter;
     }
 
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -66,6 +69,10 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             HeaderViewHolder holder = (HeaderViewHolder) viewHolder;
             holder.progress.getIndeterminateDrawable().setColorFilter(
                     context.getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            holder.privacyPolicy.setText(
+                    doodleTextFormatter.formatClickableText(context.getString(R.string.about_third_party_privacy_policy)),
+                    TextView.BufferType.SPANNABLE);
+            holder.privacyPolicy.setOnClickListener(v -> openPrivacyPolicy(context));
             if(backListener != null) {
                 holder.backArrow.setOnClickListener(v -> backListener.onBackClicked());
             }
@@ -124,6 +131,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @BindView(R.id.progress) ProgressBar progress;
         @BindView(R.id.btn_back) ImageView backArrow;
+        @BindView(R.id.btn_privacy_policy) TextView privacyPolicy;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
@@ -188,6 +196,11 @@ public class LibraryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } catch (Exception ex) {
             Timber.e("Could not open license for: %s", library.getLibraryName());
         }
+    }
+
+    private void openPrivacyPolicy(Context ctx) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(ctx.getString(R.string.privacy_policy_uri)));
+        ctx.startActivity(browserIntent);
     }
 
     public void appendList(List<LibsItem> list) {

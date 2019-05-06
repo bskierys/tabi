@@ -140,6 +140,7 @@
     <!--  ABOUT APP  -->
     <string name="about_third_party_title">Licencje bibliotek zewnętrznych</string>
     <string name="about_third_party_description">Biblioteki zewnętrzne, które pomogły nam zbudować tą aplikację.</string>
+    <string name="about_third_party_privacy_policy">Zapoznaj się z naszą *Polityką Prywatności*.</string>
 
     <!--  MAIN  -->
     <string name="main_list_header_browse">PRZEGLĄDAJ</string>

@@ -63,7 +63,7 @@ ext {
     rxAndroidVersion = '1.2.1'
     rxBindingVersion = '0.4.0';
     timberUtilsVersion = '1.0.0';
-    crashlyticsVersion = '2.5.6@aar';
+    crashlyticsVersion = '2.10.0@aar';
     overscrollVersion = '1.0.1';
     assertjVersion = '2.0.0';
     assertjAndroidVersion = '1.1.1';

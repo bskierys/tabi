@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pl.ipebk.tabi.R;
 import pl.ipebk.tabi.presentation.ui.base.BaseActivity;
+import pl.ipebk.tabi.presentation.ui.main.DoodleTextFormatter;
 import pl.ipebk.tabi.presentation.ui.utils.animation.AnimationCreator;
 import pl.ipebk.tabi.presentation.ui.utils.animation.SimpleTransitionListener;
 import pl.ipebk.tabi.presentation.ui.utils.rxbinding.RecyclerViewTotalScrollEvent;
@@ -47,6 +48,7 @@ public class AboutAppActivity extends BaseActivity {
     @BindView(R.id.background_layout) View background;
     @BindDimen(R.dimen.Toolbar_Height_Min) int lowestSearchBarPosition;
     @Inject AnimationCreator animationCreator;
+    @Inject DoodleTextFormatter doodleTextFormatter;
     private LibraryAdapter adapter;
     private Subscription scrollSubscription;
 
@@ -135,7 +137,7 @@ public class AboutAppActivity extends BaseActivity {
 
         List<LibraryAdapter.LibsItem> adapterItems = new ArrayList<>();
         adapterItems.add(new LibraryAdapter.LibsItem(null));
-        adapter = new LibraryAdapter(this, adapterItems);
+        adapter = new LibraryAdapter(this, adapterItems, doodleTextFormatter);
         adapter.setBackListener(this::onBackButton);
         librariesView.setAdapter(adapter);
     }
