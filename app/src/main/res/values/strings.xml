@@ -192,6 +192,7 @@
     <!--  ABOUT APP  -->
     <string name="about_third_party_title">Third-party libraries licenses</string>
     <string name="about_third_party_description">Third-party libraries that has helped us to build this app.</string>
+    <string name="about_third_party_privacy_policy">Read our *Privacy Policy*.</string>
     <string name="about_button_text" translatable="false">Go to webpage</string>
     <string name="about_author_prefix" translatable="false">by </string>
     <string name="about_license_prefix" translatable="false">licensed under </string>
@@ -263,11 +264,8 @@
 
     <string name="app_name" translatable="false">Tabi</string>
     <string name="action_settings">Settings</string>
-    <string name="feedback_api_key" translatable="false">AF-8DE6899E68E4-F6</string>
+    <string name="privacy_policy_uri" translatable="false">https://tabi.flycricket.io/privacy.html</string>
     <string name="title_activity_search" translatable="false">SearchActivity</string>
     <string name="title_activity_details" translatable="false">DetailsActivity</string>
     <string name="title_activity_about">Third-party libraries</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

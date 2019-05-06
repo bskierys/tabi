@@ -31,6 +31,14 @@ public class DoodleTextFormatter {
     }
 
     public SpannableString formatDoodleCaption(String base) {
+        return formatSpannable(base, R.style.Main_Text_Caption_Small, R.style.Main_Text_Caption_Large);
+    }
+
+    public SpannableString formatClickableText(String base) {
+        return formatSpannable(base, R.style.Text_Body2_Primary, R.style.Text_Body2_Accent);
+    }
+
+    private SpannableString formatSpannable(String base, int normalStyle, int accentedStyle) {
         List<Integer> positions = getSpanKeyPoints(base);
         if (positions.size() % 2 == 1) {
             throw new IllegalArgumentException("Invalid number of asterisks in base text");
@@ -43,9 +51,9 @@ public class DoodleTextFormatter {
         for (int i = 0; i < spanCount; i++) {
             TextAppearanceSpan span;
             if (i % 2 == 0) {
-                span = new TextAppearanceSpan(context, R.style.Main_Text_Caption_Small);
+                span = new TextAppearanceSpan(context, normalStyle);
             } else {
-                span = new TextAppearanceSpan(context, R.style.Main_Text_Caption_Large);
+                span = new TextAppearanceSpan(context, accentedStyle);
             }
 
             text.setSpan(span, positions.get(i), positions.get(i + 1), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
